@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+
+
+	{% block stylesheets %}
+
+	<link rel="stylesheet" href="{{ asset('bundles/coobixadmin/css/reset.css') }}" type="text/css" media="all" />
+	<link rel="stylesheet" href="{{ asset('bundles/coobixadmin/css/layout.css') }}" type="text/css" media="all" />
+	<link rel="stylesheet" href="{{ asset('bundles/coobixadmin/css/typo.css') }}" type="text/css" media="all" />
+	<link rel="stylesheet" href="{{ asset('bundles/coobixadmin/css/buscador.css') }}" type="text/css" media="all" />
+	
+	<link rel="stylesheet" href="{{ asset('bundles/coobixadmin/css/layout_nico.css') }}" type="text/css" media="all" />
+	
+	<link rel="stylesheet" href="{{ asset('bundles/coobixadmin/css/layout_diego.css') }}" type="text/css" media="all" />
+	
+	<script type="text/javascript" src="{{ asset('bundles/coobixadmin/js/jquery.1.8.js') }}" /></script>
+	<script type="text/javascript" src="{{ asset('bundles/coobixadmin/js/componentes/buscador.js') }}" /></script>
+	<script type="text/javascript" src="{{ asset('bundles/coobixadmin/js/componentes/eliminar.js') }}" /></script>
+
+	
+
+	{% endblock stylesheets %}
+
+    {% block javascripts %}
+	
+	{% endblock javascripts %}
+
+    </head>
+    <body>
+	{% block header %}
+	<div id="header">
+		<div class="account_cont">
+			
+			<span class="left txt_white txt3">Hola {{ app.user.nombre }}</span>
+			
+			<span class="left txt_green txt3">&nbsp;|&nbsp;</span>
+			
+			<a href="{{ path('fos_user_security_logout') }}" id="btnLogOut" class="txt_white txt3">
+				Salir
+			</a>
+		</div>
+	</div> 
+	{% endblock header %}
+	
+	{#
+	{% block secondary_bar %}
+	<div id="secondary_bar">
+		<div class="header_secundary_bar">
+			
+			<div class="breadcrumbs">
+				<a href="{{ path('admin_dashboard') }}">Administrador</a>
+
+			</div>
+			<a href="{{ path('admin_dashboard') }}">Administrador</a>
+			
+		</div>
+		
+		<div class="breadcrumbs_container">
+			
+					{% block breadcrumb_in %}
+
+					{% endblock breadcrumb_in %} 
+			
+		
+	</div>
+	{% endblock secondary_bar %}
+#}
+
+	
+	{% block sidebar %}
+	<div id="sidebar" class="column border_radius">
+	
+		<div class="menu">
+		{##}
+		{#
+
+			{% for key, role in app.user.getroles() %}
+				{% if role == 'ROLE_USER' %}
+		#}	
+		
+
+		
+			<div class="menuTab">
+				<div class="tabTit txt3" id="clienteTit">Clientes</div>
+				<ul class="tabUl">
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('cliente') }}">Listar Clientes</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('cliente_new') }}">Crear Cliente</a></li>
+				</ul>	
+			</div>
+			
+
+			
+			
+			<div class="menuTab">
+				<div class="tabTit txt3" id="pedidoTit">Pedidos</div>
+				<ul class="tabUl">
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('pedido') }}">Listar Pedidos</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('pedido_new') }}">Crear Pedido</a></li>
+					
+					<li class="sepItemsTabUl"></li>
+					
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('relevamiento') }}">Listar Relevamientos</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('relevamiento_new') }}">Crear Relevamiento</a></li>
+					
+					<li class="sepItemsTabUl"></li>
+					
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('presupuesto') }}">Listar Presupuestos</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('presupuesto_new') }}">Crear Presupuesto</a></li>
+					
+				</ul>	
+			</div>
+			
+			
+			
+			
+			<div class="menuTab">
+				<div class="tabTit txt3" id="miAccountTit">Usuarios</div>
+				<ul class="tabUl"> 
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('usuario') }}">Listar Usuarios</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('usuario_new') }}">Crear Usuario</a></li>
+				</ul>	
+			</div>
+			
+			<div class="menuTab">
+				<div class="tabTit txt3" id="logTit">Logs</div>
+				<ul class="tabUl">
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('log') }}">Listar Logs</a></li>
+				</ul>	
+			</div>
+			
+			
+			
+			{#
+			<div class="menuTab">
+				<div class="tabTit txt3" id="miAccountTit">Pedidos</div>
+				<ul class="tabUl">
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('pedido') }}">Listar Pedidos</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('pedido_new') }}">Crear Pedido</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('presupuesto') }}">Listar Presupuestos</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('presupuesto_new') }}">Crear Presupuesto</a></li>
+				</ul>	
+			</div>
+			
+			<div class="menuTab">
+				<div class="tabTit txt3" id="miAccountTit">Productos</div>
+				<ul class="tabUl">
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('producto') }}">Listar Producto</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('producto_new') }}">Crear Producto</a></li>
+				</ul>	
+			</div>
+			#}
+			
+		{#
+				{% endif %}
+			{% endfor %}
+		#}
+		
+
+	</div>	
+		
+	</div>
+	{% endblock sidebar %}
+
+	
+	{% block main %}
+	<div id="main" class="column">
+		<div class="main_path">
+			{%block main_path%}
+			{%endblock main_path%}
+		</div>
+		{% block main_content %}
+		
+		
+		{#
+		{% block alerts %}
+		<div class="alert alert_info">
+			Welcome to the free MediaLoot admin panel template, this could be an informative message.
+		</div>
+
+		<div class="alert ">A Warning Alert</div>
+
+		<div class="alert alert_warning">A Warning Alert</div>
+		
+		<div class="alert alert_error">An Error Message</div>
+		
+		<div class="alert alert_success">A Success Message</div>
+		{% endblock alerts %}
+
+
+		
+
+
+
+		{% block otros %}
+		<div class="module width_full">
+			<div class="module_header">
+				<h3>Stats</h3>
+			</div>
+			<div class="module_content">
+				<div class="stats_graph">
+					<img src="http://chart.apis.google.com/chart?chxr=0,0,3000&chxt=y&chs=520x140&cht=lc&chco=76A4FB,80C65A&chd=s:Tdjpsvyvttmiihgmnrst,OTbdcfhhggcTUTTUadfk&chls=2|2&chma=40,20,20,30" width="520" height="140" alt="" />
+				</div>
+				
+				<div class="stats_overview">
+					<div class="overview_today">
+						<p class="overview_day">Today</p>
+						<p class="overview_count">1,876</p>
+						<p class="overview_type">Hits</p>
+						<p class="overview_count">2,103</p>
+						<p class="overview_type">Views</p>
+					</div>
+					<div class="overview_previous">
+						<p class="overview_day">Yesterday</p>
+						<p class="overview_count">1,646</p>
+						<p class="overview_type">Hits</p>
+						<p class="overview_count">2,054</p>
+						<p class="overview_type">Views</p>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div><!-- end of stats article -->
+		
+		
+		
+		<div class="module width_quarter">
+			<div><h3>Messages</h3></div>
+			<div class="message_list">
+				<div class="module_content">
+					<div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
+					<p><strong>John Doe</strong></p></div>
+					<div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
+					<p><strong>John Doe</strong></p></div>
+					<div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
+					<p><strong>John Doe</strong></p></div>
+					<div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
+					<p><strong>John Doe</strong></p></div>
+					<div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
+					<p><strong>John Doe</strong></p></div>
+				</div>
+			</div>
+			<div class="module_footer">
+				<form class="post_message">
+					<input type="text" value="Message" onfocus="if(!this._haschanged){this.value=''};this._haschanged=true;">
+					<input type="submit" class="btn_post_message" value=""/>
+				</form>
+			</div>
+		</div><!-- end of messages article -->
+		
+		<div class="clear"></div>
+		
+		
+		{% endblock otros %}
+#}
+		
+		
+		
+
+		{% endblock main_content %}
+		<div class="spacer"></div>
+	</div>
+	{% endblock main %}
+
+	{%block javascript_extra%}
+	
+	{%endblock javascript_extra%}
+
+    </body>
+</html>

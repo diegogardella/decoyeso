@@ -1,0 +1,52 @@
+presupuesto:
+    pattern:  /{pararouting}
+    defaults: { _controller: "PedidoBundle:Presupuesto:index", pararouting:index }
+    requirements:
+        pararouting: buscar
+
+presupuesto_new:
+    pattern:  /{pedido}/new
+    defaults: { _controller: "PedidoBundle:Presupuesto:new", pedido:0 }
+
+presupuesto_copia:
+    pattern:  /{id}/copia
+    defaults: { _controller: "PedidoBundle:Presupuesto:copia" }
+
+presupuesto_create:
+    pattern:  /create
+    defaults: { _controller: "PedidoBundle:Presupuesto:create" }
+    requirements: { _method: post }
+
+presupuesto_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "PedidoBundle:Presupuesto:edit" }
+
+presupuesto_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "PedidoBundle:Presupuesto:update" }
+    requirements: { _method: post }
+
+presupuesto_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "PedidoBundle:Presupuesto:delete" }
+    requirements: { _method: post }
+    
+presupuesto_imprimir:
+    pattern:  /{id}/imprimir
+    defaults: { _controller: "PedidoBundle:Presupuesto:imprimir" }
+
+
+presupuesto_arreglar:
+    pattern:  /{id}/arreglar
+    defaults: { _controller: "PedidoBundle:Presupuesto:arreglar" }
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,7 @@
+parameters:
+#    ubicacion.example.class: Decoyeso\UbicacionBundle\Example
+
+services:
+#    ubicacion.example:
+#        class: %ubicacion.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

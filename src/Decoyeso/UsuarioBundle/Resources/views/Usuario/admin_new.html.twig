@@ -1,0 +1,33 @@
+{% extends "CoobixAdminBundle:Default:new.html.twig" %}
+
+
+
+{% block breadcrumb_in %}
+<div class="breadcrumbs">
+<a href="{{ path('usuario') }}" class="current" >Usuarios</a>
+<div class="breadcrumb_divider"></div> 
+<a href="{{ path('usuario_new') }}" class="current" >Crear</a>
+</div>
+{% endblock breadcrumb_in %} 
+
+{% block errorMsj %}
+	{% if errorMsj is defined %}
+		{% for er in errorMsj %}
+			{{ er }} <br>
+		{% endfor %}
+	{% endif%}
+{% endblock errorMsj %}
+
+
+
+{% block module_tit %}
+Crear Usuario
+{% endblock module_tit %}
+
+{% block create_path %}
+{{ path('usuario_create') }}
+{% endblock create_path %}
+
+{% block list_path %}
+{{ path('usuario') }}
+{% endblock list_path %}

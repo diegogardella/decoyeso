@@ -1,0 +1,234 @@
+{% extends "CoobixAdminBundle:Default:new.html.twig" %}
+
+
+
+{% block breadcrumb_in %}
+
+{% endblock breadcrumb_in %} 
+
+{%block main_path%}
+
+	
+	{% if entity.pedido %}
+		<ul>
+			<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.obra}}</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_edit',{'id':entity.id}) }}">Presupuesto:{{ entity.numero }}</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_copia',{'id':entity.id}) }}">Crear Presupuesto</a></li>
+		</ul>
+	{% endif %}	
+		
+{%endblock main_path%}
+
+{% block module_tit %}
+Crear Presupuesto
+{% endblock module_tit %}
+
+
+
+{% block form_content %}
+		{% block errorMsj %}{% endblock errorMsj %}
+		
+		<form action="{% block create_path %}{{ path('presupuesto_create') }}{% endblock create_path %}" method="post" id="presupuestoForm" {{ form_enctype(form) }}>
+		<div class="formPresupuestoCont">
+		<br>
+		<br>	
+	
+		{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+		{{ form_errors(form) }}
+		
+		{{ form_errors(form.nombre) }}
+		{{ form_row(form.nombre) }}
+		
+		{{ form_errors(form.pedido) }}
+		{{ form_row(form.pedido) }}
+		
+		{{ form_errors(form.mostrarFirmas) }}
+		{{ form_row(form.mostrarFirmas) }}
+		
+		{{ form_errors(form.mostrarColumnas) }}
+		{{ form_row(form.mostrarColumnas) }}
+		
+		<div class="fix"><br><br><br></div>
+				
+		<table id="tablaItemsPresupuesto">
+			<tr>
+				<td class="titItems txt3"></td>
+				<td class="titItems txt3 NpresupuestoCol0">DESIGNACION</td>
+				<td class="titItems txt3 NpresupuestoCol1">UNIDAD</td>
+				<td class="titItems txt3 NpresupuestoCol2">CANTIDAD</td>
+				<td class="titItems txt3 NpresupuestoCol3">PRECIO UNIT.</td>
+				<td class="titItems txt3 NpresupuestoCol4">PRECIO VTA S/IVA</td>
+				<td class="titItems txt3 NpresupuestoCol5">PRECIO VTA C/IVA</td>
+				<td class="titItems txt3 NpresupuestoCol6">PRECIO TOTAL</td>
+			</tr>
+			
+			{% set items = entity.getItems %}
+	
+			{% set i = 0 %}
+			{% for item in items %}
+			<tr class="NpresupuestoTr{{ i }}">
+				<td class="">
+				
+				<input type="checkbox"  name="check_{{ i }}" value ="{{ i }}" 
+				
+				{% if (item.check != null ) %}  
+				checked="checked"
+				{% endif %}
+				
+				class="checkCasillero">
+				</td>
+				<td class="NpresupuestoCol0">
+				<input type="text" value="{{ item.designacion }}" name="designacion_{{ i }}" class="inputLargo">
+				</td>
+				<td class="NpresupuestoCol1">
+				<input type="text" value="{{ item.unidad }}" name="unidad_{{ i }}" class="inputCorto">
+				</td>
+				<td class="NpresupuestoCol2">
+				<input type="text" value="{{ item.cantidad }}" name="cantidad_{{ i }}" class="inputCorto inputCantidad">
+				</td>
+				<td class="NpresupuestoCol3">
+				<input type="text" value="{{ item.precioUnitario }}" name="precioUnitario_{{ i }}" class="inputCorto precioUnitario">
+				</td>
+				<td class="NpresupuestoCol4">
+				<input type="text" value="{{ item.precioVtaSinIva }}" name="precioVtaSinIva_{{ i }}" class="inputCorto ">
+				</td>
+				<td class="NpresupuestoCol5">
+				<input type="text" value="{{ item.precioVtaConIva }}" name="precioVtaConIva_{{ i }}" class="inputCorto ">
+				</td>
+				<td class="NpresupuestoCol6">
+				<input type="text" value="{{ item.precioTotal }}" name="precioTotal_{{ i }}" class="inputCorto inputPrecioTotal">
+				</td>
+			</tr>
+			{% set i = i + 1 %}
+	 		{% endfor %}	
+		</table>
+		
+		<div class="NbtnAgregarFila">
+			
+			<span class="NimagenAgregar left"></span>
+			
+			<span class="left txt3">&nbsp;Agregar Fila</span>
+		</div>
+		
+		<input type="hidden" name="numFilas" id="numFilas" value="0">
+		
+		<div class="fix"></div>
+	<br/>
+	<div class="fix"></div>
+	<table class="presupuestoSubTotal">
+			<tr class="presupuestoTits">
+				<td class="titSubtotal"><span class="txt3">SUBTOTAL</span> </td>
+				<td class="precioSubtotal">
+				
+					<span class="txt3 signo_peso">$</span>
+					<span class="txt3">
+				
+					{{ form_errors(form.subTotal) }}
+					{{ form_widget(form.subTotal) }}
+
+					</span> </td>			
+			</tr>
+	</table>
+	
+<div class="fix"></div>
+	<br/>
+	<div class="fix"></div>
+	
+	<div class="fix"></div>
+	<table class="presupuestoTotal">
+			<tr class="presupuestoTits">
+				<td class="titTotal"><span class="txt3">TOTAL</span> </td>
+				<td class="precioTotal">
+					<span class="txt3 signo_peso">$</span>
+					<span class="txt3">
+						{{ form_errors(form.total) }}
+						{{ form_widget(form.total) }}
+					
+
+				</span> </td>			
+			</tr>
+	</table>
+	
+		<div class="fix"></div>
+		<br/>
+	<table class="presupuestoEntrega">
+			<tr class="presupuestoTits">
+				<td class="titEntrega"><span class="txt3">ENTREGA EN EFECTIVO</span> </td>
+				<td class="precioEntrega">
+				{{ form_errors(form.precioEntrega) }}
+				<span class="txt3 signo_peso">$</span>
+							
+				{{ form_widget(form.precioEntrega) }}
+				
+				 </td>
+				<td class="precioTextoEntrega"><span class="txt3">
+				{{ form_errors(form.precioTextoEntrega) }}{{ form_widget(form.precioTextoEntrega) }}
+				
+				</span> </td>		
+			</tr>
+			
+			<tr class="presupuestoTits">
+				<td class="titEntrega"><span class="txt3">SALDO</span> </td>
+				<td class="precioEntrega">
+				{{ form_errors(form.precioSaldo) }}
+				<span class="txt3 signo_peso">$</span>
+				{{ form_widget(form.precioSaldo) }}
+				 </td>
+				<td class=""></td>		
+			</tr>
+			
+			
+	</table>
+	
+	<br/><br/>
+
+
+	<table class="presupuestoEntrega">
+			<tr class="">
+				<td class="">
+					<span class="txt3">
+					FORMA DE PAGO: {{ form_errors(form.formaPago) }}{{ form_widget(form.formaPago) }}
+					</span> 
+				</td>	
+			</tr>
+	</table>
+	
+	<br/><br/>
+	
+	<table class="presupuestoEntrega">
+			<tr class="">
+				<td class="">
+					<span class="txt3">Observación:</span> 
+				</td>
+					
+			</tr>
+			<tr class="">
+				<td class="">
+					<span class="txt3">
+							{{ form_errors(form.observacion) }}
+							{{ form_widget(form.observacion) }}
+					</span> 
+				</td>
+					
+			</tr>
+	</table>
+	
+	{{ form_row(form._token) }}
+	</div>	
+		
+		<div class="fix"></div>
+		<p>
+			<button class="btn_green_button right" type="submit">Guardar cambios</button>
+		</p>
+		
+		<div class="fix"></div>
+				
+		</form>
+		{% endblock form_content %}
+
+{% block list_path %}{{ path('presupuesto') }}{% endblock list_path %}
+
+{% block javascript_extra %}
+	<script type="text/javascript" src="{{ asset('bundles/pedido/js/presupuesto.js') }}" /></script>
+{% endblock javascript_extra %}

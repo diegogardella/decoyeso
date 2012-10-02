@@ -1,0 +1,7 @@
+ClientesBundle_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: "ClientesBundle:Default:index" }
+
+ClientesBundle:
+    resource: "@ClientesBundle/Resources/config/routing/cliente.yml"
+    prefix:   /cliente

@@ -1,0 +1,353 @@
+{% extends "CoobixAdminBundle:Default:edit.html.twig" %}
+
+{% block breadcrumb_in %}
+
+{% endblock breadcrumb_in %} 
+
+{%block main_path%}
+<ul>
+	<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.obra}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_edit',{'id':entity.id}) }}">Presupuesto: {{entity.numero}}</a></li>
+</ul>
+{%endblock main_path%}
+
+{% block module_header%}
+		<div class="module_header">
+			<div id="tituloContenido" class="module_tit txt3">Datos del Presupuesto</div>
+			
+			
+			
+			<form action="{{ path('presupuesto_delete', { 'id': entity.id }) }}" method="post">
+				{{ form_widget(delete_form) }}
+				<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
+			</form>
+
+			<a  class="btn_blue right" href="{{path('presupuesto')}}">
+				Ir al listado
+			</a>
+
+			
+				<a class="btn_blue right" href="{{ path('presupuesto_copia', { 'id': entity.id }) }}">
+					<span class="copy_icon"></span>
+					Copiar
+				</a>
+				<a target="_blank" class="btn_blue right" href="{{ path('presupuesto_imprimir', { 'id': entity.id }) }}">
+					<span class="print_icon"></span>
+					Imprimir
+				</a>
+						
+		</div>
+{% endblock module_header%}
+
+
+{% block form_content %}
+		{% block errorMsj %}{% endblock errorMsj %}
+		
+		
+		
+		
+		<form action="{% block update_path %}{{ path('presupuesto_update', { 'id': entity.id }) }}{% endblock update_path %}" method="post" id="presupuestoForm" {{ form_enctype(edit_form) }}>
+		<div class="formPresupuestoCont">
+		
+		{{ form_errors(edit_form) }}
+		<br>
+
+		<table class="presupuestoDatos">
+			<tr>
+				<td> 
+					<span class="txt3">OBRA:</span>
+					<span class="txt4">{{ entity.getPedido.getObra }}</span>
+				</td>
+				<td>
+					<span class="txt3">TELEFONO:</span>
+					<span class="txt4">{{ entity.getPedido.getCliente.getTelefono }} </span>
+				
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<span class="txt3">PROPIETARIO:</span>
+				<span class="txt4">{{ entity.getPedido.getCliente }}</span>
+				</td>
+				<td>
+				<span class="txt3">CELULAR:</span>
+				<span class="txt4">{{ entity.getPedido.getCliente.Celular }}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<span class="txt3">DIRECCION:</span>
+				<span class="txt4">
+				{% if (entity.getPedido.getCliente.getBarrio)  %}
+				B&deg; {{ entity.getPedido.getCliente.getBarrio }}.
+				{% endif %}
+				
+				{% if (entity.getPedido.getCliente.getBarrio)  %}
+				{{ entity.getPedido.getCliente.getCalle }}
+				{% endif %}
+				
+				{% if (entity.getPedido.getCliente.getBarrio)  %}
+				{{ entity.getPedido.getCliente.getNumeroCalle }}
+				{% endif %}
+				</span>
+				</td>
+				<td>
+				<span class="txt3">MAIL:</span>
+				<span class="txt4">{{ entity.getPedido.getCliente.getEmail }}</span>
+				</td>
+			</tr>
+			
+		</table>
+	<br>	
+	
+		
+		
+		<table class="presupuestoNumero">
+			<tr>
+				<td>
+				<span class="txt3">PRESUPUESTO NRO: </span> 
+				<span class="txt4">{{ entity.getNumero }}</span>
+				</td>
+				
+			</tr>			
+		</table>
+		<br>	
+	
+		{% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+		
+
+				
+		<br>
+		<table class="presupuesto">
+			<tr class="presupuestoTits">
+				{% if (0 in entity.mostrarColumnas) %}
+				<td class="tit1"><span class="txt3">DESIGNACION</span></td>
+				{% endif %}
+				{% if (1 in entity.mostrarColumnas) %}
+				<td class="tit2"><span class="txt3">UNIDAD</span></td>
+				{% endif %}
+				{% if (2 in entity.mostrarColumnas) %}
+				<td class="tit3"><span class="txt3">CANTIDAD</span></td>
+				{% endif %}
+				{% if (3 in entity.mostrarColumnas) %}
+				<td class="tit4"><span class="txt3">PRECIO UNITARIO</span></td>
+				{% endif %}
+				{% if (4 in entity.mostrarColumnas) %}
+				<td class="tit5"><span class="txt3">PRECIO VTA S/IVA</span></td>
+				{% endif %}
+				{% if (5 in entity.mostrarColumnas) %}
+				<td class="tit5"><span class="txt3">PRECIO VTA C/IVA</span></td>
+				{% endif %}
+				{% if (6 in entity.mostrarColumnas) %}
+				<td class="tit5"><span class="txt3">PRECIO TOTAL</span></td>
+				{% endif %}	
+			</tr>
+			
+			
+			{% set items = entity.getItems %}
+	
+			{% set i = 0 %}
+			{% for item in items %}
+			 
+			<tr class="presupuestoItems
+			
+			{% if (item.check != null ) %}  
+			NfondoGris
+			{% endif %}
+			"
+			>
+				{% if (0 in entity.getMostrarColumnas) %}
+				<td class="item0">
+					<span class="txt4">&nbsp;{{ item.designacion }}</span>
+				</td>
+				{% endif %}
+				{% if (1 in entity.mostrarColumnas) %}
+				<td class="item1">
+					<span class="txt4">{{ item.unidad }}</span>
+				</td>
+				{% endif %}
+				{% if (2 in entity.mostrarColumnas) %}
+				<td class="item2">
+					<span class="txt4">
+					{% if (item.cantidad) %}
+						{{ item.cantidad|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>
+				</td>
+				{% endif %}
+				{% if (3 in entity.mostrarColumnas) %}
+				<td class="item3">
+					<span class="txt4">
+					{% if (item.precioUnitario) %}
+						{{ item.precioUnitario|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>
+				</td>
+				{% endif %}
+				{% if (4 in entity.mostrarColumnas) %}
+				<td class="item5">
+					<span class="txt4">
+					{% if (item.precioVtaSinIva) %}
+						{{ item.precioVtaSinIva|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>
+				</td>
+				{% endif %}
+				{% if (5 in entity.mostrarColumnas) %}
+				<td class="item6">
+					<span class="txt4">
+					{% if (item.precioVtaSinIva) %}
+						{{ item.precioVtaSinIva|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>
+				</td>
+				{% endif %}
+				{% if (6 in entity.mostrarColumnas) %}
+				<td class="item4">
+					<span class="txt4">
+					{% if (item.precioTotal) %}
+						{{ item.precioTotal|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>				
+				</td>
+				{% endif %}
+			</tr>
+			{% set i = i + 1 %}
+	 		{% endfor %}	
+		</table>
+		
+		<div class="fix"></div>
+		<br/>
+		<div class="fix"></div>
+		
+		<table class="presupuestoSubTotal">
+			<tr class="presupuestoTits">
+				<td class="titSubtotal">
+					<span class="txt3">SUBTOTAL</span> 
+				</td>
+				<td class="precioSubtotal">
+					<span class="txt4">
+						{% if (entity.subTotal) %}
+						$ {{ entity.subTotal|number_format(2, ',', '.') }}
+						{% endif %}
+					</span> 
+				</td>			
+			</tr>
+		</table>
+	
+		<div class="fix"></div>
+		<br/>
+		<div class="fix"></div>
+
+		<table class="presupuestoTotal">
+				<tr class="presupuestoTits">
+					<td class="titTotal"><span class="txt3">TOTAL</span> </td>
+					<td class="precioTotal">
+						<span class="txt4">
+							{% if (entity.total) %}
+							$ {{ entity.total|number_format(2, ',', '.') }}
+							{% endif %}
+						</span> 
+					</td>			
+				</tr>
+		</table>
+	
+		<div class="fix"></div>
+		<br/>
+		<div class="fix"></div>
+		
+		<table class="presupuestoEntrega">
+			<tr class="presupuestoTits">
+				<td class="titEntrega"><span class="txt3">ENTREGA EN EFECTIVO</span> </td>
+				<td class="precioEntrega">
+					<span class="txt4">
+					{% if (entity.precioEntrega) %}
+					$ {{ entity.precioEntrega|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>
+				</td>
+				<td class="precioTextoEntrega">
+					<span class="txt4"> 
+					{{ entity.precioTextoEntrega }}
+					</span>
+				</td>		
+			</tr>
+			
+			<tr class="presupuestoTits">
+				<td class="titEntrega"><span class="txt3">SALDO</span> </td>
+				<td class="precioEntrega">
+					<span class="txt4">
+					{% if (entity.precioSaldo) %}
+					$ {{ entity.precioSaldo|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>
+				</td>
+				<td class=""></td>		
+			</tr>
+		</table>
+	
+		<div class="fix"></div>
+		<br/>
+		<div class="fix"></div>
+
+		<table class="presupuestoEntrega">
+			<tr class="">
+				<td class="">
+					<span class="txt3">
+						Acepto del presente Presupuesto prestando conformidad para su realización.
+					</span> 
+				</td>	
+			</tr>
+		</table>
+		
+		<div class="fix"></div>
+		<br/>
+		<div class="fix"></div>
+		{% if (entity.formaPago) %}
+		<table class="presupuestoEntrega">
+			<tr class="">
+				<td class="">
+					<span class="txt3">
+					FORMA DE PAGO: 
+					</span> 
+					<span class="txt4">
+					{{ entity.formaPago }} 
+					</span> 
+				</td>	
+			</tr>
+		</table>
+		{% endif %}
+		
+		<br/>
+		{% if (entity.observacion) %}
+		<table class="presupuestoEntrega">
+			<tr class="">
+				<td class="">
+					<span class="txt3">Observación:</span> 
+					<span class="Ntxt5">
+							{{ entity.observacion }} 
+					</span>
+			</tr>
+		</table>
+		{% endif %}
+	
+{{ form_row(edit_form._token) }}
+
+
+		<div class="fix"></div>
+</div>
+		{% block form_record_actions %}
+			<div class="fix"></div>
+		{% endblock form_record_actions %}
+
+		</form>
+		
+		
+		
+		<div class="fix"></div>
+		{% endblock form_content %}
+
+
+
+

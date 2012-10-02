@@ -1,0 +1,30 @@
+{% extends "CoobixAdminBundle:Default:edit.html.twig" %}
+
+{% block breadcrumb_in %}
+<div class="breadcrumbs">
+<a href="{{ path('usuario_list') }}" class="current" >Usuarios</a>
+<div class="breadcrumb_divider"></div> 
+<a href="{{ path('usuario_edit', { 'id': entity.id }) }}" class="current" >Editar</a>
+</div>
+{% endblock breadcrumb_in %} 
+
+{% block module_tit %}Editar Usuario{% endblock module_tit %}
+
+{% block update_path %}
+{{ path('usuario_update', { 'id': entity.id }) }}
+{% endblock update_path %}
+
+{% block list_path %}
+{{ path('usuario') }}
+{% endblock list_path %}
+
+
+{% if (app.user.id == entity.id) %}
+	{% block delete_btn %}
+		
+	{% endblock delete_btn %}
+{% else %}
+	{% block delete_path %}
+			{{ path('usuario_delete', { 'id': entity.id }) }}
+		{% endblock delete_path %}
+{% endif %}

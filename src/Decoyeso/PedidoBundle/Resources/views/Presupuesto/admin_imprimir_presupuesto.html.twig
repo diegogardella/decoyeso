@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+	
+		<base href="{{ app.request.scheme ~ '://' ~ app.request.httpHost }}" />
+
+	{% block stylesheets %}
+{#
+	<link rel="stylesheet" href="{{ asset('bundles/coobixadmin/css/reset.css') }}" type="text/css" media="all" />
+	<link rel="stylesheet" href="{{ asset('bundles/coobixadmin/css/layout.css') }}" type="text/css" media="all" />
+	<link rel="stylesheet" href="{{ asset('bundles/coobixadmin/css/typo.css') }}" type="text/css" media="all" />
+#}
+	<style>
+	
+/* Formulario Presupuesto */
+table{border-collapse:collapse;border-spacing:0;}
+
+	
+.txt3 {
+font-family:"Lucida Grande",tahoma,arial,helvetica,sans-serif;
+color:#333;
+font-size:13.5px;
+font-weight:bold;
+line-height:13px;
+}
+
+.txt4 {
+font-family:"Lucida Grande",tahoma,arial,helvetica,sans-serif;
+color:#333;
+font-size:13.5px;
+
+line-height:13px;
+}
+
+#presupuestoForm {
+	float: left;
+	width: 100%;
+
+}
+
+.imgPresupuesto {
+	width: 231px;
+	height: 95px;
+	margin: 0 auto;
+	
+	display: block;
+}
+
+.txtDir, .txtUrl, .txtMail {
+	margin: 0 auto;
+	display: block;
+	width: 500px;
+	text-align: center;
+}
+
+
+.inputLargo {
+	width: 400px;
+}
+
+.field_widget input.inputCorto ,.inputCorto {
+	width: 100px;
+}
+
+.presupuestoNumero, .presupuestoEncabezado, .presupuestoDatos, .presupuesto, .presupuestoTotal, .formPresupuestoCont, .presupuestoEntrega {
+	width: 700px;
+}
+		
+.presupuestoSaldo {
+	width: 830px;
+}
+		
+.presupuestoEncabezado {			
+	text-align: center;
+}
+		
+.presupuestoDatos {
+		
+}
+
+.presupuestoDatos td {
+	width: 50%;
+}
+
+.presupuestoNumero {
+	text-align: center;
+}
+
+.presupuesto {
+}
+
+.presupuestoTits {
+	text-align: center;
+}
+
+.tit1  {
+	width: 500px;
+	border: 1px solid;
+}
+
+.tit2, .tit3, .tit4, .tit5  {
+	width: 75px;
+	border: 1px solid;
+}
+
+ .item2, .item3, .item4, .item5 {
+	text-align: center;
+}
+
+.presupuestoSubTotal {
+	float:right;
+	width: 320px
+}
+
+.titSubtotal {
+	width: 236px;
+	border: 1px solid;
+}
+
+.precioSubtotal {
+	width: 112px;
+	border: 1px solid;
+}
+
+.titTotal {
+	width: 725px;
+	border: 1px solid;
+}
+
+.precioTotal {
+	width: 112px;
+	border: 1px solid;
+}
+		
+.titEntrega, .titSaldo {
+	width: 400px;
+	border: 1px solid;
+	text-align: left;
+}
+
+.precioEntrega {
+	width: 200px;
+	border: 1px solid;
+}
+		
+.precioTextoEntrega {
+	width: 200px;
+	border: 1px solid;
+}
+	
+.field_widget input.input190 ,.input190 {
+	width: 190px;
+}
+
+.NdisplayNone {
+	display: none;
+}
+
+.NvisibilityHidden {
+	visibility: hidden;
+}
+
+.NobservacionPresupuesto {
+width:100%;
+height:100px;
+}
+
+.NfondoGris {
+	background-color: #C5C1BA;
+}
+
+.Ntxt5 {
+    color: #333333;
+    font-family: "Lucida Grande",tahoma,arial,helvetica,sans-serif;
+    font-size: 10.5px;
+    line-height: 20px;
+}
+	
+	
+	
+	</style>
+
+	{% endblock stylesheets %}
+
+
+    </head>
+    <body>
+		<div class="formPresupuestoCont">
+
+		<table class="presupuestoEncabezado">
+			<tr> 
+				<td> <img class="imgPresupuesto" src="http://{{app.request.server.get('HTTP_HOST') }}/decoyeso/web/imagenes/logo_decoyeso.jpg" />	</td>
+			</tr>
+			<tr>
+			
+				<td>
+					<span class="txt3">	CORONEL LAGOS 307 TEL/FAX (380) 4420842 LA RIOJA </span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<span class="txt3"> www.placasdecoyeso.com.ar </span>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<span class="txt3">	Mail: info@placasdecoyeso.com.ar </span>
+				</td>
+			</tr>			
+		</table>
+		
+
+	<br>	
+
+		
+		
+
+		<table class="presupuestoDatos">
+			<tr>
+				<td> 
+					<span class="txt3">OBRA:</span>
+					<span class="txt4">{{ entity.getPedido.getObra }}</span>
+				</td>
+				<td>
+					<span class="txt3">TELEFONO:</span>
+					<span class="txt4">{{ entity.getPedido.getCliente.getTelefono }} </span>
+				
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<span class="txt3">PROPIETARIO:</span>
+				<span class="txt4">{{ entity.getPedido.getCliente }}</span>
+				</td>
+				<td>
+				<span class="txt3">CELULAR:</span>
+				<span class="txt4">{{ entity.getPedido.getCliente.Celular }}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<span class="txt3">DIRECCION:</span>
+				<span class="txt4">
+				{% if (entity.getPedido.getCliente.getBarrio)  %}
+				B&deg; {{ entity.getPedido.getCliente.getBarrio }}.
+				{% endif %}
+				
+				{% if (entity.getPedido.getCliente.getBarrio)  %}
+				{{ entity.getPedido.getCliente.getCalle }}
+				{% endif %}
+				
+				{% if (entity.getPedido.getCliente.getBarrio)  %}
+				{{ entity.getPedido.getCliente.getNumeroCalle }}
+				{% endif %}
+				</span>
+				</td>
+				<td>
+				<span class="txt3">MAIL:</span>
+				<span class="txt4">{{ entity.getPedido.getCliente.getEmail }}</span>
+				</td>
+			</tr>
+			
+		</table>
+	<br>	
+	
+		
+		
+		<table class="presupuestoNumero">
+			<tr>
+				<td>
+				<span class="txt3">PRESUPUESTO NRO: </span> 
+				<span class="txt4">{{ entity.getNumero }}</span>
+				</td>
+				
+			</tr>			
+		</table>
+		<br>	
+				
+		<table class="presupuesto">
+			<tr class="presupuestoTits">
+				{% if (0 in entity.mostrarColumnas) %}
+				<td class="tit1"><span class="txt3">DESIGNACION</span></td>
+				{% endif %}
+				{% if (1 in entity.mostrarColumnas) %}
+				<td class="tit2"><span class="txt3">UNIDAD</span></td>
+				{% endif %}
+				{% if (2 in entity.mostrarColumnas) %}
+				<td class="tit3"><span class="txt3">CANTIDAD</span></td>
+				{% endif %}
+				{% if (3 in entity.mostrarColumnas) %}
+				<td class="tit4"><span class="txt3">PRECIO UNITARIO</span></td>
+				{% endif %}
+				{% if (4 in entity.mostrarColumnas) %}
+				<td class="tit5"><span class="txt3">PRECIO VTA S/IVA</span></td>
+				{% endif %}
+				{% if (5 in entity.mostrarColumnas) %}
+				<td class="tit5"><span class="txt3">PRECIO VTA C/IVA</span></td>
+				{% endif %}
+				{% if (6 in entity.mostrarColumnas) %}
+				<td class="tit5"><span class="txt3">PRECIO TOTAL</span></td>
+				{% endif %}
+			</tr>
+		
+			{% set items = entity.getItems %}
+	
+			{% set i = 0 %}
+			{% for item in items %}
+			{% set i = i + 1 %}
+
+			<tr class="presupuestoItems
+			
+			{% if (item.check != null ) %}  
+			NfondoGris
+			{% endif %}
+			"
+			>
+				{% if (0 in entity.getMostrarColumnas) %}
+				<td class="item0">
+					<span class="txt4">&nbsp;{{ item.designacion }}</span>
+				</td>
+				{% endif %}
+				{% if (1 in entity.mostrarColumnas) %}
+				<td class="item1">
+					<span class="txt4">{{ item.unidad }}</span>
+				</td>
+				{% endif %}
+				{% if (2 in entity.mostrarColumnas) %}
+				<td class="item2">
+					<span class="txt4">
+					{% if (item.cantidad) %}
+						{{ item.cantidad|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>
+				</td>
+				{% endif %}
+				{% if (3 in entity.mostrarColumnas) %}
+				<td class="item3">
+					<span class="txt4">
+					{% if (item.precioUnitario) %}
+						{{ item.precioUnitario|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>
+				</td>
+				{% endif %}
+				{% if (4 in entity.mostrarColumnas) %}
+				<td class="item5">
+					<span class="txt4">
+					{% if (item.precioVtaSinIva) %}
+						{{ item.precioVtaSinIva|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>
+				</td>
+				{% endif %}
+				{% if (5 in entity.mostrarColumnas) %}
+				<td class="item6">
+					<span class="txt4">
+					{% if (item.precioVtaSinIva) %}
+						{{ item.precioVtaSinIva|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>
+				</td>
+				{% endif %}
+				{% if (6 in entity.mostrarColumnas) %}
+				<td class="item4">
+					<span class="txt4">
+					{% if (item.precioTotal) %}
+						{{ item.precioTotal|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>				
+				</td>
+				{% endif %}
+			</tr>
+			
+	 		{% endfor %}	
+		</table>
+		
+		<div class="fix"></div>
+
+		
+		<table class="presupuestoSubTotal">
+			<tr class="presupuestoTits">
+				<td class="titSubtotal">
+					<span class="txt3">SUBTOTAL</span> 
+				</td>
+				<td class="precioSubtotal">
+					<span class="txt4">
+						{% if (entity.subTotal) %}
+						$ {{ entity.subTotal|number_format(2, ',', '.') }}
+						{% endif %}
+					</span> 
+				</td>			
+			</tr>
+		</table>
+	
+		<div class="fix"></div>
+		<br/><br/>
+		<div class="fix"></div>
+	
+		<table class="presupuestoTotal">
+				<tr class="presupuestoTits">
+					<td class="titTotal"><span class="txt3">TOTAL</span> </td>
+					<td class="precioTotal">
+						<span class="txt4">
+							{% if (entity.total) %}
+							$ {{ entity.total|number_format(2, ',', '.') }}
+							{% endif %}
+						</span> 
+					</td>			
+				</tr>
+		</table>
+	
+		<div class="fix"></div>
+		<br/>
+		<div class="fix"></div>
+		
+		<table class="presupuestoEntrega">
+			<tr class="presupuestoTits">
+				<td class="titEntrega"><span class="txt3">ENTREGA EN EFECTIVO</span> </td>
+				<td class="precioEntrega">
+					<span class="txt4">
+					{% if (entity.precioEntrega) %}
+					$ {{ entity.precioEntrega|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>
+				</td>
+				<td class="precioTextoEntrega">
+					<span class="txt4">
+					{{ entity.precioTextoEntrega }}
+					</span> 
+				</td>		
+			</tr>
+			
+			<tr class="presupuestoTits">
+				<td class="titEntrega"><span class="txt3">SALDO</span> </td>
+				<td class="precioEntrega">
+					<span class="txt4">
+					{% if (entity.precioSaldo) %}
+					$ {{ entity.precioSaldo|number_format(2, ',', '.') }}
+					{% endif %}
+					</span>
+				</td>
+				<td class=""></td>		
+			</tr>
+		</table>
+		
+		<div class="fix"></div>
+		<br/>
+		<div class="fix"></div>
+
+		<table class="presupuestoEntrega">
+			<tr class="">
+				<td class="">
+					<span class="txt3">
+						Acepto del presente Presupuesto prestando conformidad para su realización.
+					</span> 
+				</td>
+			</tr>
+		</table>
+		
+		<div class="fix"></div>
+		<br/>
+		<div class="fix"></div>
+		{% if (entity.formaPago) %}
+		<table class="presupuestoEntrega">
+			<tr class="">
+				<td class="">
+					<span class="txt3">
+					FORMA DE PAGO: 
+					</span> 
+					<span class="txt4">
+					{{ entity.formaPago }}
+					</span> 
+				</td>	
+			</tr>
+		</table>
+		{% endif %}
+		{% if (entity.observacion) %}
+		<table class="presupuestoEntrega">
+			<tr class="">
+				<td class="">
+					<span class="txt3">Observación:</span> 
+					<span class="Ntxt5">
+							{{ entity.observacion }} 
+					</span>
+			</tr>
+		</table>
+		{% endif %}
+		{% if (entity.observacion) %}
+		<br/><br/><br/><br/><br/><br/>
+		<table class="presupuestoEntrega">
+			<tr class="">
+				<td class=""><span class="txt3">Firma - Aclaración ENCARGADO DECOYESO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> </td>
+				<td class=""><span class="txt3">Firma - Aclaración CLIENTE</span> </td>	
+			</tr>
+		</table>
+		{% endif %}
+
+
+
+
+</div>
+    </body>
+</html>
+

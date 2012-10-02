@@ -1,0 +1,36 @@
+{% extends "CoobixAdminBundle:Default:new.html.twig" %}
+
+
+
+{% block breadcrumb_in %}
+') }}
+<div class="breadcrumbs">
+<a href="{{ path('cliente') }}" class="current" >Clientes</a>
+<div class="breadcrumb_divider"></div> 
+<a href="{{ path('cliente_new') }}" class="current" >Crear</a>
+</div>
+{% endblock breadcrumb_in %} 
+
+{% block module_tit %}
+Crear Cliente
+{% endblock module_tit %}
+
+{% block create_path %}
+{{ path('cliente_create') }}
+{% endblock create_path %}
+
+{% block list_path %}
+{{ path('cliente') }}
+{% endblock list_path %}
+
+
+{% block javascript_extra %}
+
+<script type="text/javascript">
+	var urlDepartamento="{{url('ubicacion_cargar_departamento')}}";
+	var urlLocalidad="{{url('ubicacion_cargar_localidad')}}";
+</script>
+
+<script type="text/javascript" src="{{ asset('bundles/clientes/js/cliente.js') }}" /> </script>
+{% endblock javascript_extra %}
+

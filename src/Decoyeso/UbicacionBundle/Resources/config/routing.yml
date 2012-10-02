@@ -1,0 +1,11 @@
+UbicacionBundle_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: UbicacionBundle:Default:index }
+
+ubicacion_cargar_departamento:
+    pattern: cargarDepartamento/ubicacion
+    defaults: { _controller: UbicacionBundle:Default:cargarDepartamento }
+    
+ubicacion_cargar_localidad:
+    pattern: cargarLocalidad/ubicacion
+    defaults: { _controller: UbicacionBundle:Default:cargarLocalidad }    

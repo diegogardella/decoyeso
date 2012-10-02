@@ -1,0 +1,32 @@
+log:
+    pattern:  /{pararouting}
+    defaults: { _controller: "LogBundle:Log:index", pararouting:index }
+    requirements:
+        pararouting: buscar
+
+log_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "LogBundle:Log:show" }
+
+log_new:
+    pattern:  /new
+    defaults: { _controller: "LogBundle:Log:new" }
+
+log_create:
+    pattern:  /create
+    defaults: { _controller: "LogBundle:Log:create" }
+    requirements: { _method: post }
+
+log_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "LogBundle:Log:edit" }
+
+log_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "LogBundle:Log:update" }
+    requirements: { _method: post }
+
+log_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "LogBundle:Log:delete" }
+    requirements: { _method: post }

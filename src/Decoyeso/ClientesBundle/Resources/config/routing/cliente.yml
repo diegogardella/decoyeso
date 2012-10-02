@@ -1,0 +1,32 @@
+cliente:
+    pattern:  /{pararouting}
+    defaults: { _controller: "ClientesBundle:Cliente:index", pararouting:index }
+    requirements:
+        pararouting: buscar
+
+cliente_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "ClientesBundle:Cliente:show" }
+
+cliente_new:
+    pattern:  /new
+    defaults: { _controller: "ClientesBundle:Cliente:new" }
+
+cliente_create:
+    pattern:  /create
+    defaults: { _controller: "ClientesBundle:Cliente:create" }
+    requirements: { _method: post }
+
+cliente_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "ClientesBundle:Cliente:edit" }
+
+cliente_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "ClientesBundle:Cliente:update" }
+    requirements: { _method: post }
+
+cliente_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "ClientesBundle:Cliente:delete" }
+    requirements: { _method: post }

@@ -1,0 +1,276 @@
+{% extends "CoobixAdminBundle:Default:edit.html.twig" %}
+
+{% block breadcrumb_in %}
+
+{% endblock breadcrumb_in %} 
+
+{%block main_path%}
+<ul>
+	<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.obra}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_edit',{'id':entity.id}) }}">Presupuesto: {{entity.numero}}</a></li>
+</ul>
+{%endblock main_path%}
+
+{% block module_header%}
+		<div class="module_header">
+			<div id="tituloContenido" class="module_tit txt3">Datos del presupuesto</div>
+			
+			
+			
+			<form action="{{ path('presupuesto_delete', { 'id': entity.id }) }}" method="post">
+				{{ form_widget(delete_form) }}
+				<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
+			</form>
+
+			<a id="pedidoListarBtn" class="btn_blue right" href="{{path('presupuesto')}}">Ir al listado</a>
+
+						
+		</div>
+{% endblock module_header%}
+
+
+{% block form_content %}
+		{% block errorMsj %}{% endblock errorMsj %}
+		
+		
+		
+		
+		<form action="{% block update_path %}{{ path('presupuesto_update', { 'id': entity.id }) }}{% endblock update_path %}" method="post" id="presupuestoForm" {{ form_enctype(edit_form) }}>
+		<div class="formPresupuestoCont">
+		
+		{{ form_errors(edit_form) }}
+		<br>
+
+		<table class="presupuestoDatos">
+			<tr>
+				<td> 
+					<span class="txt3">OBRA:</span>
+					<span class="txt4">{{ entity.getPedido.getObra }}</span>
+				</td>
+				<td>
+					<span class="txt3">TELEFONO:</span>
+					<span class="txt4">{{ entity.getPedido.getCliente.getTelefono }} </span>
+				
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<span class="txt3">PROPIETARIO:</span>
+				<span class="txt4">NOMBRE PROPIETARIO</span>
+				</td>
+				<td>
+				<span class="txt3">CELULAR:</span>
+				<span class="txt4">{{ entity.getPedido.getCliente.Celular }}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<span class="txt3">DIRECCION:</span>
+				<span class="txt4">{{ entity.getPedido.getCliente.getBarrio }} {{ entity.getPedido.getCliente.getCalle }} {{ entity.getPedido.getCliente.getNumero }}</span>
+				</td>
+				<td>
+				<span class="txt3">MAIL:</span>
+				<span class="txt4">{{ entity.getPedido.getCliente.getEmail }}</span>
+				</td>
+			</tr>
+			
+		</table>
+	<br>	
+	
+		
+		
+		<table class="presupuestoNumero">
+			<tr>
+				<td>
+				<span class="txt3">PROESUPUESTO NRO </span> 
+				<span class="txt4">{{ entity.getNumero }}</span>
+				</td>
+				
+			</tr>			
+		</table>
+	<br>	
+	
+		{% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+		
+		<table>
+			<tr>
+				<td>Presupuesto {{ form_row(edit_form.numero) }}</td>
+			</tr>
+			<tr>
+				<td>Presupuesto {{ form_row(edit_form.pedido) }}</td>
+			</tr>				
+		</table>
+				
+		<br>
+		<table class="presupuesto">
+			<tr class="presupuestoTits">
+				<td class="tit1"><span class="txt3">DESIGNACION</span> </td>
+				<td class="tit2"><span class="txt3">UNIDAD</span> </td>
+				<td class="tit3"><span class="txt3">CANTIDAD</span> </td>
+				<td class="tit4"><span class="txt3">PRECIO UNITARIO</span> </td>
+				<td class="tit5"><span class="txt3">PRECIO TOTAL</span> </td>
+			</tr>
+			{% set items = entity.getItems %}
+	
+			{% set i = 0 %}
+			{% for item in items %}
+			 
+			<tr class="presupuestoItems">
+				<td class="item1">
+				<input type="text" value="{{ item.designacion }}" name="designacion_{{ i }}" class="inputLargo">
+				</td>
+				<td class="item2">
+				<input type="text" value="{{ item.unidad }}" name="unidad_{{ i }}" class="inputCorto">
+				</td>
+				<td class="item3">
+				<input type="text" value="{{ item.cantidad }}" name="cantidad_{{ i }}" class="inputCorto">
+				</td>
+				<td class="item4">
+				<input type="text" value="{{ item.precioUnitario }}" name="precioUnitario_{{ i }}" class="inputCorto">
+				</td>
+				<td class="item5">
+				<input type="text" value="{{ item.precioTotal }}" name="precioTotal_{{ i }}" class="inputCorto">
+				</td>
+			</tr>
+			{% set i = i + 1 %}
+	 		{% endfor %}	
+		</table>
+		
+		<div class="fix"></div>
+		<br/>
+		<div class="fix"></div>
+		
+		<table class="presupuestoSubTotal">
+			<tr class="presupuestoTits">
+				<td class="titSubtotal"><span class="txt3">SUBTOTAL</span> </td>
+				<td class="precioSubtotal">
+					<span class="txt3">
+						{{ form_errors(edit_form.subTotal) }}
+						{{ form_widget(edit_form.subTotal) }}
+					</span> 
+				</td>			
+			</tr>
+		</table>
+	
+		<div class="fix"></div>
+		<br/>
+		<div class="fix"></div>
+	
+
+		<table class="presupuestoTotal">
+				<tr class="presupuestoTits">
+					<td class="titTotal"><span class="txt3">TOTAL</span> </td>
+					<td class="precioTotal">
+						<span class="txt3">
+							{{ form_errors(edit_form.total) }}
+							{{ form_widget(edit_form.total) }}
+						</span> 
+					</td>			
+				</tr>
+		</table>
+	
+		<div class="fix"></div>
+		<br/>
+		<div class="fix"></div>
+		
+		<table class="presupuestoEntrega">
+			<tr class="presupuestoTits">
+				<td class="titEntrega"><span class="txt3">ENTREGA EN EFECTIVO</span> </td>
+				<td class="precioEntrega">
+					{{ form_errors(edit_form.precioEntrega) }}
+					<span class="txt3 left">$</span>
+					{{ form_widget(edit_form.precioEntrega) }}
+				</td>
+				<td class="precioTextoEntrega">
+					<span class="txt3">
+					{{ form_errors(edit_form.precioTextoEntrega) }}
+					{{ form_widget(edit_form.precioTextoEntrega) }}
+					</span> 
+				</td>		
+			</tr>
+			
+			<tr class="presupuestoTits">
+				<td class="titEntrega"><span class="txt3">SALDO</span> </td>
+				<td class="precioEntrega">
+					{{ form_errors(edit_form.precioSaldo) }}
+					<span class="txt3 left">$</span>
+					{{ form_widget(edit_form.precioSaldo) }}
+				</td>
+				<td class=""></td>		
+			</tr>
+		</table>
+	
+		<div class="fix"></div>
+		<br/>
+		<div class="fix"></div>
+
+		<table class="presupuestoEntrega">
+			<tr class="">
+				<td class=""><span class="txt3">Acepto del presente Presupuesto prestando conformidad para su realización.</span> </td>
+					
+			</tr>
+		</table>
+		
+		<div class="fix"></div>
+		<br/>
+		<div class="fix"></div>
+		
+		<table class="presupuestoEntrega">
+			<tr class="">
+				<td class="">
+					<span class="txt3">
+					FORMA DE PAGO: {{ form_errors(edit_form.formaPago) }}{{ form_widget(edit_form.formaPago) }}
+					</span> 
+				</td>	
+			</tr>
+		</table>
+	
+{{ form_row(edit_form._token) }}
+
+
+		<div class="fix"></div>
+</div>
+		{% block form_record_actions %}
+		<ul class="form_record_actions">
+			
+			<li>
+				<a class="btn_back_to_list txt16 txt_green" href="{% block list_path %}{{ path('presupuesto') }}{% endblock list_path %}">
+				< Volver al listado
+				</a>
+			</li>
+			
+			<li>
+				<a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_imprimir', { 'id': entity.id }) }}">
+				Imprimir
+				</a>
+			</li>
+			{% block delete_btn %}
+			<li class="btn_delete">
+				<form action="{% block delete_path %}{{ path('presupuesto_delete', { 'id': entity.id }) }}{% endblock delete_path %}" method="post">
+				{{ form_widget(delete_form) }}
+				<button type="submit">Borrar</button>
+				</form>
+			</li>
+			{% endblock delete_btn %}
+			
+			<li>
+				
+				<button class="" type="submit">Aplicar</button>
+			
+			</li>
+			
+		</ul>
+		<div class="fix"></div>
+		{% endblock form_record_actions %}
+
+		</form>
+		
+		
+		
+		<div class="fix"></div>
+		{% endblock form_content %}
+
+
+
+
