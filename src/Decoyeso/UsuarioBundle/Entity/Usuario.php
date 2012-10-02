@@ -30,28 +30,28 @@ class Usuario extends BaseUser
      * @Assert\MaxLength(255)
      * @ORM\Column(name="nombre", type="string", length=255)
      */
-    protected $nombre;
+    private $nombre;
     
     /**
      * @var string $apellido
      *
      * @ORM\Column(name="apellido", type="string", length=255, nullable="true")
      */
-    protected $apellido;
+    private $apellido;
     
     /**
      * @var string $telefono
      *
      * @ORM\Column(name="telefono", type="string", length=255, nullable="true")
      */
-    protected $telefono;
+    private $telefono;
     
     /**
      * @var string $celular
      *
      * @ORM\Column(name="celular", type="string", length=255, nullable="true")
      */
-    protected $celular;
+    private $celular;
     
     
     /**
@@ -67,6 +67,13 @@ class Usuario extends BaseUser
      * @ORM\Column(name="fechaActualizado", type="date")
      */
     private $fechaActualizado;
+    
+    /**
+     * @var $logs
+     * (Lado Inverso)
+     * @ORM\OneToMany(targetEntity="Decoyeso\UsuarioBundle\Entity\Usuario", mappedBy="usuario", orphanRemoval=true)
+     */
+    private $logs;
     
     
     /**
@@ -86,17 +93,6 @@ class Usuario extends BaseUser
     	$this->setFechaActualizado (new \DateTime);
     }
     
-
-    
-    /**
-     * @var $logs
-     * (Lado Inverso)
-     * @ORM\OneToMany(targetEntity="Decoyeso\UsuarioBundle\Entity\Usuario", mappedBy="usuario", orphanRemoval=true)
-     */
-    public $logs;
-    
-
-
     /**
      * Get id
      *
@@ -130,7 +126,7 @@ class Usuario extends BaseUser
     public function __construct()
     {
     	parent::__construct();
-    	// your own logic
+    
     }
     
     

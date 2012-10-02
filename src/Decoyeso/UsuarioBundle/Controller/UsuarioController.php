@@ -83,16 +83,35 @@ class UsuarioController extends Controller
     	$deleteForm = $this->createDeleteForm($id);
     
     	$request = $this->getRequest();
-    	
-    	
 
-    
     	$editForm->bindRequest($request);
+    	
+    	$em = $this->getDoctrine()->getEntityManager();
+    	
+    	
+        $err = false;
+    	
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$query = $em->createQuery(" SELECT u FROM UsuarioBundle:Usuario u
+    			WHERE u.email = :u_email AND u.id != :u_id
+    			");
+    	$query->setParameters(array(
+    			'u_email' => $entity->getEmail(),
+    			'u_id' => $entity->getId(),
+    	));
+    	$auxUser = $query->getResult();
+    	
+    	
+    	if ($auxUser) {
+    		$errorMsj[]= "El Email ya existe.";
+    		$err = true;
+    	}
+    	
     
-    	if ($editForm->isValid()) {
+    	if ($editForm->isValid() && !$err) {
     		$userManager->updateUser($entity);
     		
-		$this->get('session')->setFlash('msj_info','El usuario se ha modificado correctamente');
+			$this->get('session')->setFlash('msj_info','El usuario se ha modificado correctamente');
     		//LOG
     		$log = $this->get('log');
     		$log->create($entity, "Usuario Actualizado");
@@ -103,6 +122,7 @@ class UsuarioController extends Controller
     
     	
     	return $this->render('UsuarioBundle:Usuario:admin_edit.html.twig', array(
+    			'errorMsj' => $errorMsj,
     			'entity'      => $entity,
     			'edit_form'   => $editForm->createView(),
     			'delete_form' => $deleteForm->createView(),
@@ -164,35 +184,6 @@ class UsuarioController extends Controller
     	));
     
     }
-    
-    
-   
-     
-
-    /**
-     * Finds and displays a Usuario entity.
-     *
-     
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('UsuarioBundle:Usuario')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Usuario entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('UsuarioBundle:Usuario:admin_edit.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-
-        ));
-    }
-    */
-    
 
     /**
      * Displays a form to create a new Usuario entity.
@@ -204,7 +195,6 @@ class UsuarioController extends Controller
         $userManager = $this->get('fos_user.user_manager');
         $entity = $userManager->createUser();
         
-        //$entity = new Usuario();
         $form   = $this->createForm(new RegistrationUsuarioNewType(), $entity);
 
         return $this->render('UsuarioBundle:Usuario:admin_new.html.twig', array(
@@ -272,7 +262,7 @@ class UsuarioController extends Controller
         	
             $userManager->updateUser($entity);
             
-	    $this->get('session')->setFlash('msj_info','El usuario se ha creado correctamente');
+	    	$this->get('session')->setFlash('msj_info','El usuario se ha creado correctamente');
 
             //LOG
             $log = $this->get('log');
@@ -295,66 +285,7 @@ class UsuarioController extends Controller
     }
 	
     
-    /**
-     * Displays a form to edit an existing Usuario entity.
-     *
-     
-    public function editAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('UsuarioBundle:Usuario')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Usuario entity.');
-        }
-
-        $editForm = $this->createForm(new UsuarioType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('UsuarioBundle:Usuario:admin_edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-	*/
-    
-    /**
-     * Edits an existing Usuario entity.
-     *
-    
-    public function updateAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('UsuarioBundle:Usuario')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Usuario entity.');
-        }
-
-        $editForm   = $this->createForm(new UsuarioType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        $request = $this->getRequest();
-
-        $editForm->bindRequest($request);
-
-        if ($editForm->isValid()) {
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('usuario_edit', array('id' => $id)));
-        }
-
-        return $this->render('UsuarioBundle:Usuario:admin_edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-	*/
+   
     
 
 }

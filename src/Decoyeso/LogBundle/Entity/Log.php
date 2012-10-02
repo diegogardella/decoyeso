@@ -54,7 +54,7 @@ class Log
     private $fechaCreado;
     
     /**
-     * @var datetime $fechaCreado
+     * @var datetime $fechaHoraCreado
      *
      * @ORM\Column(name="fechaHoraCreado", type="datetime")
      */
@@ -67,7 +67,11 @@ class Log
      * @ORM\ManyToOne(targetEntity="Decoyeso\UsuarioBundle\Entity\Usuario", inversedBy="logs" )
      * @ORM\JoinColumn(name="usuario_id", referencedColumnName="id", nullable="true")
      */
-    public $usuario;
+    private $usuario;
+    
+    private $doctrine;
+    
+    private $securityContext;
     
 
     /**
@@ -110,26 +114,18 @@ class Log
     	$this->setFechaHoraCreado (new \DateTime);
 
     }
-
-    
-    private $doctrine;
-    private $securityContext;
-    
+   
     public function __construct($doctrine,$securityContext)
     {
     	$this->doctrine = $doctrine;
     	$this->securityContext = $securityContext;
     }
     
-    protected $obj;
+
     
  	public function create($entity, $msj)
      {
-     	
-     	//$this->obj = $entity;
-     	//echo "si anduvo";
-     	
-     	//exit();
+
      	$user = $this->securityContext->getToken()->getUser();
 
      	$this->setUsuario($user);

@@ -28,6 +28,8 @@ class AppKernel extends Kernel
             new Coobix\BuscadorBundle\BuscadorBundle(),
         	new Spraed\PDFGeneratorBundle\SpraedPDFGeneratorBundle(),
             new Decoyeso\UbicacionBundle\UbicacionBundle(),
+        	new Decoyeso\ProductoBundle\ProductoBundle(),
+        		        		
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

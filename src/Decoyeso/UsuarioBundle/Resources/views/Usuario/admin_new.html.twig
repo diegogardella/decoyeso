@@ -10,13 +10,14 @@
 </div>
 {% endblock breadcrumb_in %} 
 
-{% block errorMsj %}
+{%block msj_info%}
+	{{ parent() }}
 	{% if errorMsj is defined %}
 		{% for er in errorMsj %}
 			{{ er }} <br>
 		{% endfor %}
 	{% endif%}
-{% endblock errorMsj %}
+{% endblock msj_info %}
 
 
 

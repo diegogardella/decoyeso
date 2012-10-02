@@ -1,0 +1,30 @@
+insumo:
+    pattern:  /
+    defaults: { _controller: "ProductoBundle:Insumo:index" }
+
+insumo_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "ProductoBundle:Insumo:show" }
+
+insumo_new:
+    pattern:  /new
+    defaults: { _controller: "ProductoBundle:Insumo:new" }
+
+insumo_create:
+    pattern:  /create
+    defaults: { _controller: "ProductoBundle:Insumo:create" }
+    requirements: { _method: post }
+
+insumo_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "ProductoBundle:Insumo:edit" }
+
+insumo_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "ProductoBundle:Insumo:update" }
+    requirements: { _method: post }
+
+insumo_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "ProductoBundle:Insumo:delete" }
+    requirements: { _method: post }

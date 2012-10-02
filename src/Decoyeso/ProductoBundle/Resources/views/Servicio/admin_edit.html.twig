@@ -1,0 +1,152 @@
+{% extends "CoobixAdminBundle:Default:edit.html.twig" %}
+
+{% block breadcrumb_in %}
+<div class="breadcrumbs">
+<a href="{{ path('servicio') }}" class="current" >Servicio</a>
+<div class="breadcrumb_divider"></div> 
+<a href="{{ path('servicio_edit', { 'id': entity.id }) }}" class="current" >Editar</a>
+</div>
+{% endblock breadcrumb_in %} 
+
+{% block module_tit %}Editar Servicio{% endblock module_tit %}
+
+
+{% block list_path %}
+{{ path('servicio') }}
+{% endblock list_path %}
+
+
+{% block form_content %}
+
+	<form action="{{ path('servicio_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+		
+		  
+		 {% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+		
+			
+			{{ form_widget(edit_form) }}
+			
+			
+			<div  class="form_row">
+			
+				<label class=" required" >Productos del servicio</label>
+				<div class="field_widget">
+				
+					<table  class="field_widget_productos" id="tableListProductos">
+						<tr>
+							<th>Nombre</th>
+							<th>Cantidad</th>
+							<th></th>
+						</tr>
+						<tr>
+							<td>
+								<select name="selectProductos" id="idSelectProducto" style="float:left;">
+									{% for producto in productos%}
+										<option value="{{producto.id}}">{{producto.nombre}}</option>
+									{%else%}
+										<option value="0">No existen productos para agregar</option>
+									{%endfor%}						
+								</select>
+							</td>
+							<td><input style="float:left;" type="text" id="idProductoCantidad" name="productoCantidad" value=""></td>
+							<td><button type="button" style="float:left;" id="idAgregarProducto" >Agregar Producto</button></td>
+						</tr>
+						{% set productosInicial='' %}
+						{% for producto in productosIncluidos %}						
+							<tr id="tr_{{producto.producto.id}}">
+								<td id="nom_{{producto.producto.id}}">{{producto.producto.nombre}}</td>
+								<td id="cant_{{producto.producto.id}}">{{producto.cantidad}}</td>
+								<td><button class="eliminarProductoDeLista" type="button" value="{{producto.producto.id}}">X</button></td>
+								
+								{% set productosInicial=productosInicial~";"~producto.producto.id~"@"~producto.cantidad %}
+								
+							</tr>
+						{% endfor %}
+					
+					</table>
+					
+					
+				</div>
+			
+			
+			</div>
+			
+			
+			<div id="div_producto_precio" class="form_row">
+			
+				<label class=" required" for="servicio_precio">Insumos del servicio</label>
+				<div class="field_widget">
+				
+					<table  class="field_widget_insumos" id="tableListInsumos">
+						<tr>
+							<th>Nombre</th>
+							<th>Cantidad</th>
+							<th></th>
+						</tr>
+						<tr>
+							<td>
+								<select name="selectInsumos" id="idSelectInsumo" style="float:left;">
+									{% for insumo in insumos%}
+										<option value="{{insumo.id}}">{{insumo.nombre}}</option>
+									{%else%}
+										<option value="0">No existen insumos para agregar</option>
+									{%endfor%}						
+								</select>
+							</td>
+							<td><input style="float:left;" type="text" id="idInsumoCantidad" name="insumoCantidad" value=""></td>
+							<td><button type="button" style="float:left;" id="idAgregarInsumo" >Agregar Insumo</button></td>
+						</tr>
+						{% set insumosInicial='' %}
+						{% for insumo in insumosIncluidos %}						
+							<tr id="tr_{{insumo.insumo.id}}">
+								<td id="nom_{{insumo.insumo.id}}">{{insumo.insumo.nombre}}</td>
+								<td id="cant_{{insumo.insumo.id}}">{{insumo.cantidad}}</td>
+								<td><button class="eliminarInsumoDeLista" type="button" value="{{insumo.insumo.id}}">X</button></td>
+								
+								{% set insumosInicial=insumosInicial~";"~insumo.insumo.id~"@"~insumo.cantidad %}
+								
+							</tr>
+						{% endfor %}
+					
+					</table>
+					
+					
+				</div>
+			
+			
+			</div>
+			
+			
+			<p>
+				<button class="btn_green_button right" id="btnGuardarCambios" type="submit">Guardar cambios</button>
+			</p>
+			
+			<input type="hidden" id="insumosInicial" value="{{insumosInicial}}">
+			<input type="hidden" id="productosInicial" value="{{productosInicial}}">
+			
+	</form>
+			
+	{% block form_record_actions %}
+	
+	{% endblock form_record_actions %}
+	<div class="fix"></div>
+	
+	
+{% endblock form_content %}
+
+	{% block delete_path %}
+			{{ path('servicio_delete', { 'id': entity.id }) }}
+	{% endblock delete_path %}
+	
+{% block javascript_extra %}
+
+	<script type="text/javascript" src="{{ asset('bundles/producto/js/servicio.js') }}" /></script>
+	
+	<script type="text/javascript">
+		$(window).ready(function(){
+			$('#servicio_insumos').val($('#insumosInicial').val());
+			$('#servicio_productos').val($('#productosInicial').val());
+		});	
+	</script>
+	
+{% endblock javascript_extra %}

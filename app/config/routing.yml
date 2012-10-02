@@ -1,3 +1,7 @@
+ProductoBundle:
+    resource: "@ProductoBundle/Resources/config/routing.yml"
+    prefix: /
+
 UbicacionBundle:
     resource: "@UbicacionBundle/Resources/config/routing.yml"
     prefix:   /
