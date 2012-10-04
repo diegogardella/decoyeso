@@ -1,6 +1,6 @@
 
 .field_widget_insumos,.field_widget_productos{
-	width: 80%;
+	width: auto;
 }
 
 .field_widget_insumos tr th,.field_widget_productos tr th{
@@ -22,4 +22,10 @@
 	width: 50px;
 	height: 15px;
 	padding:5px;
+}
+
+.field_widget_insumos tr td button{
+	width: auto;
+	padding:0px 5px;
+	height: 30px;
 }

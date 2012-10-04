@@ -55,9 +55,9 @@
 						</tr>
 						{% set insumosInicial='' %}
 						{% for insumo in insumosIncluidos %}						
-							<tr id="tr_{{insumo.insumo.id}}">
-								<td id="nom_{{insumo.insumo.id}}">{{insumo.insumo.nombre}}</td>
-								<td id="cant_{{insumo.insumo.id}}">{{insumo.cantidad}}</td>
+							<tr id="ins_tr_{{insumo.insumo.id}}">
+								<td id="ins_nom_{{insumo.insumo.id}}">{{insumo.insumo.nombre}}</td>
+								<td id="ins_cant_{{insumo.insumo.id}}">{{insumo.cantidad}}</td>
 								<td><button class="eliminarInsumoDeLista" type="button" value="{{insumo.insumo.id}}">X</button></td>
 								
 								{% set insumosInicial=insumosInicial~";"~insumo.insumo.id~"@"~insumo.cantidad %}

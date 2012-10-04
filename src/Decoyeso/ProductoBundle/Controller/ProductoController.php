@@ -102,7 +102,7 @@ class ProductoController extends Controller
     public function createAction()
     {
         $entity  = new Producto();
-        
+        $em = $this->getDoctrine()->getEntityManager();
         
         $request = $this->getRequest();
         $form    = $this->createForm(new ProductoType(), $entity);
@@ -112,7 +112,7 @@ class ProductoController extends Controller
         
         if ($form->isValid()) {
         	
-            $em = $this->getDoctrine()->getEntityManager();
+            
             $em->persist($entity);
             $em->flush();           
 
@@ -125,10 +125,13 @@ class ProductoController extends Controller
             return $this->redirect($this->generateUrl('producto_edit', array('id' => $entity->getId())));
             
         }
+        
+        $insumos=$em->getRepository('ProductoBundle:Insumo')->findAll();
 
         return $this->render('ProductoBundle:Producto:admin_new.html.twig', array(
             'entity' => $entity,
-           'form'   => $form->createView()
+            'form'   => $form->createView(),
+        	'insumos'=>$insumos,
         ));
     }
 
@@ -202,11 +205,22 @@ class ProductoController extends Controller
 
             return $this->redirect($this->generateUrl('producto_edit', array('id' => $id)));
         }
+        
+        $insumosIncluidos=$em->getRepository('ProductoBundle:ProductoInsumo')->findByProducto($id);
+        
+        $idInsumosIncluidos='0';
+        foreach ($insumosIncluidos as $insumoc){
+        	$idInsumosIncluidos.=','.$insumoc->getInsumo()->getId();
+        }
+        
+        $insumosDisponibles=$em->createQuery('SELECT i FROM ProductoBundle:Insumo i WHERE i.id not in ('.$idInsumosIncluidos.')')->getResult();
 
         return $this->render('ProductoBundle:Producto:admin_edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+        	'insumos'=>$insumosDisponibles,
+        	'insumosIncluidos'=>$insumosIncluidos,        		
         ));
     }
 
@@ -216,21 +230,47 @@ class ProductoController extends Controller
      */
     public function deleteAction($id)
     {
+    	
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
         $form->bindRequest($request);
-
+       
+        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
+           
+            $ProductoInsumos=$em->getRepository('ProductoBundle:ProductoInsumo')->findByProducto($id);
+            foreach ($ProductoInsumos as $pi){
+            	$em->remove($pi);
+            	$em->flush();
+            }
+            
+            
+           
+             
+            $ServicioProductos=$em->getRepository('ProductoBundle:ServicioProducto')->findByProducto($id);
+            foreach ($ServicioProductos as $sp){
+            	$em->remove($sp);
+            	$em->flush();
+            }
+            
+            
+          
+            
             $entity = $em->getRepository('ProductoBundle:Producto')->find($id);
 
+            
+            
+            
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Producto entity.');
             }
 
             $em->remove($entity);
+            
             $em->flush();
+        
         }
 
         return $this->redirect($this->generateUrl('producto'));
@@ -252,7 +292,7 @@ class ProductoController extends Controller
     			'delete_form' => $deleteForm->createView(),
     			'url' => $this->generateUrl('producto_delete', array('id' => $id)),
     			'id'=>$id,
-    			'msj'=>'¿Seguro desea eliminar el producto? '
+    			'msj'=>'¿Seguro desea eliminar el producto? ATENCIÓN !! El producto también será eliminado de los servicios con lo que este relacionado.'
     	));
     
     }

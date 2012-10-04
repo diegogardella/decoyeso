@@ -14,7 +14,7 @@ var insumoObject={
 			
 			if(this.validar()){
 				
-				$('#tableListInsumos').append('<tr id="tr_'+this.id+'"><td id="nom_'+this.id+'">'+this.nombre+'</td><td id="cant_'+this.id+'">'+this.cantidad+'</td><td><button class="eliminarInsumoDeLista" type="button" value="'+this.id+'">X</button></td></tr>');
+				$('#tableListInsumos').append('<tr id="ins_tr_'+this.id+'"><td id="ins_nom_'+this.id+'">'+this.nombre+'</td><td id="ins_cant_'+this.id+'">'+this.cantidad+'</td><td><button class="eliminarInsumoDeLista" type="button" value="'+this.id+'">X</button></td></tr>');
 				var text=$('#producto_insumos').val()+";"+this.id+"@"+this.cantidad;
 				$('#producto_insumos').val(text);
 				
@@ -50,14 +50,14 @@ var insumoObject={
 		},
 		eliminar:function(id){
 			this.id=id;
-			this.nombre=$('#nom_'+id).html();
-			this.cantidad=$('#cant_'+id).html();
+			this.nombre=$('#ins_nom_'+id).html();
+			this.cantidad=$('#ins_cant_'+id).html();
 			
 			if($('#idSelectInsumo option').length==1 && $('#idSelectInsumo option').eq(0).val()==0){
 				$('#idSelectInsumo option').eq(0).remove();
 			}
 			
-			$('#tr_'+id).remove();
+			$('#ins_tr_'+id).remove();
 			$('#idSelectInsumo').append(new Option(this.nombre, this.id));
 			
 			var ids=$('#producto_insumos').val().split(';');

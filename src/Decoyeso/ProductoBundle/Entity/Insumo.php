@@ -3,6 +3,7 @@
 namespace Decoyeso\ProductoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as assert;
 
 /**
  * Decoyeso\ProductoBundle\Entity\Insumo
@@ -25,13 +26,14 @@ class Insumo
      * @var string $nombre
      *
      * @ORM\Column(name="nombre", type="string", length=255)
+     * @assert\NotBlank(message="Por favor, ingrese nombre") 
      */
     private $nombre;
 
     /**
      * @var text $descripcion
      *
-     * @ORM\Column(name="descripcion", type="text")
+     * @ORM\Column(name="descripcion", type="text", nullable=true)
      */
     private $descripcion;
 
@@ -39,6 +41,7 @@ class Insumo
      * @var string $unidad
      *
      * @ORM\Column(name="unidad", type="string", length=100)
+     * @assert\NotBlank(message="Por favor, ingrese unidad") 
      */
     private $unidad;
 
@@ -46,6 +49,7 @@ class Insumo
      * @var float $precio
      *
      * @ORM\Column(name="precio", type="float")
+     * @assert\NotBlank(message="Por favor, ingrese precio") 
      */
     private $precio;
 

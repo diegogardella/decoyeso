@@ -1,6 +1,8 @@
 insumo:
-    pattern:  /
-    defaults: { _controller: "ProductoBundle:Insumo:index" }
+    pattern:  /{pararouting}
+    defaults: { _controller: "ProductoBundle:Insumo:index", pararouting:index }
+    requirements:
+        pararouting: buscar
 
 insumo_show:
     pattern:  /{id}/show

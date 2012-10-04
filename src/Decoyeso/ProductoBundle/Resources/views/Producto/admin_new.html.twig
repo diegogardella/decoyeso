@@ -45,6 +45,8 @@ Crear Producto
 								<select name="selectInsumos" id="idSelectInsumo" style="float:left;">
 									{% for insumo in insumos%}
 										<option value="{{insumo.id}}">{{insumo.nombre}}</option>
+									{% else %}
+										<option value="0">No existen insumos para agregar</option>
 									{%endfor%}						
 								</select>
 							</td>

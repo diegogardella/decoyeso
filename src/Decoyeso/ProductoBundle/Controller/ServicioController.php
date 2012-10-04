@@ -106,6 +106,8 @@ class ServicioController extends Controller
      */
     public function createAction()
     {
+    	$em = $this->getDoctrine()->getEntityManager();
+    	
         $entity  = new Servicio();
         
         
@@ -117,7 +119,7 @@ class ServicioController extends Controller
         
         if ($form->isValid()) {
         	
-            $em = $this->getDoctrine()->getEntityManager();
+           
             $em->persist($entity);
             $em->flush();           
 
@@ -130,10 +132,16 @@ class ServicioController extends Controller
             return $this->redirect($this->generateUrl('servicio_edit', array('id' => $entity->getId())));
             
         }
+        
+        
+        $insumos=$em->getRepository('ProductoBundle:Insumo')->findAll();
+        $productos=$em->getRepository('ProductoBundle:Producto')->findAll();        
 
         return $this->render('ProductoBundle:Servicio:admin_new.html.twig', array(
             'entity' => $entity,
-           'form'   => $form->createView()
+            'form'   => $form->createView(),
+            'insumos'=>$insumos,
+        	'productos'=>$productos,        		
         ));
     }
 
@@ -156,13 +164,6 @@ class ServicioController extends Controller
         }
         
         $insumosDisponibles=$em->createQuery('SELECT i FROM ProductoBundle:Insumo i WHERE i.id not in ('.$idInsumosIncluidos.')')->getResult();
-        
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Servicio entity.');
-        }
-        
-        
         
         $productosIncluidos=$em->getRepository('ProductoBundle:ServicioProducto')->findByServicio($id);
         
@@ -216,23 +217,49 @@ class ServicioController extends Controller
 
         $editForm->bindRequest($request);
         
-        $formProductos=$request->request->get('servicio');
+        $formServicio=$request->request->get('servicio');
 
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
             
-            $this->gestionarInsumos($formProductos['insumos'],$formProductos['productos'],$entity);
+            $this->gestionarInsumos($formServicio['insumos'],$formServicio['productos'],$entity);
             
             $this->get('session')->setFlash('msj_info','El servicio se ha modificado correctamente.');
 
             return $this->redirect($this->generateUrl('servicio_edit', array('id' => $id)));
         }
 
+        
+        
+        $insumosIncluidos=$em->getRepository('ProductoBundle:ServicioInsumo')->findByServicio($id);
+        
+        $idInsumosIncluidos='0';
+        foreach ($insumosIncluidos as $insumoc){
+        	$idInsumosIncluidos.=','.$insumoc->getInsumo()->getId();
+        }
+        
+        $insumosDisponibles=$em->createQuery('SELECT i FROM ProductoBundle:Insumo i WHERE i.id not in ('.$idInsumosIncluidos.')')->getResult();
+        
+        $productosIncluidos=$em->getRepository('ProductoBundle:ServicioProducto')->findByServicio($id);
+        
+        $idProductosIncluidos='0';
+        foreach ($productosIncluidos as $productoc){
+        	$idProductosIncluidos.=','.$productoc->getProducto()->getId();
+        }
+        
+        $productosDisponibles=$em->createQuery('SELECT p FROM ProductoBundle:Producto p WHERE p.id not in ('.$idProductosIncluidos.')')->getResult();
+                 
+
+        
         return $this->render('ProductoBundle:Servicio:admin_edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+        	'insumos'=>$insumosDisponibles,
+        	'insumosIncluidos'=>$insumosIncluidos,
+        	'productos'=>$productosDisponibles,
+        	'productosIncluidos'=>$productosIncluidos,        		
         ));
     }
 
@@ -242,13 +269,30 @@ class ServicioController extends Controller
      */
     public function deleteAction($id)
     {
+    	
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
+       
+        
         $form->bindRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
+            
+            $ServicioInsumos=$em->getRepository('ProductoBundle:ServicioInsumo')->findByServicio($id);
+            foreach ($ServicioInsumos as $si){
+            	$em->remove($si);
+            }
+            $em->flush();
+             
+            $ServicioProductos=$em->getRepository('ProductoBundle:ServicioProducto')->findByServicio($id);
+            foreach ($ServicioProductos as $sp){
+            	$em->remove($sp);
+            }
+            $em->flush();
+            
+            
             $entity = $em->getRepository('ProductoBundle:Servicio')->find($id);
 
             if (!$entity) {
@@ -276,9 +320,9 @@ class ServicioController extends Controller
     
     	return $this->render('CoobixAdminBundle:Default:list_delete_form.html.twig', array(
     			'delete_form' => $deleteForm->createView(),
-    			'url' => $this->generateUrl('producto_delete', array('id' => $id)),
+    			'url' => $this->generateUrl('servicio_delete', array('id' => $id)),
     			'id'=>$id,
-    			'msj'=>'¿Seguro desea eliminar el servicio? '
+    			'msj'=>'¿Seguro desea eliminar el servicio?'
     	));
     
     }

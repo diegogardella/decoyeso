@@ -14,7 +14,7 @@ class ServicioInsumo
 {
     /**
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Producto")
+     * @ORM\ManyToOne(targetEntity="Servicio")
      */
     private $servicio;
 

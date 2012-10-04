@@ -5,7 +5,7 @@ namespace Decoyeso\ProductoBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
-class ProductoType extends AbstractType
+class InsumoType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {

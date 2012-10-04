@@ -1,6 +1,8 @@
 servicio:
-    pattern:  /
-    defaults: { _controller: "ProductoBundle:Servicio:index" }
+    pattern:  /{pararouting}
+    defaults: { _controller: "ProductoBundle:Servicio:index", pararouting:index }
+    requirements:
+        pararouting: buscar
 
 servicio_show:
     pattern:  /{id}/show

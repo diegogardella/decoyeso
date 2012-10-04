@@ -1,6 +1,8 @@
 producto:
-    pattern:  /
-    defaults: { _controller: "ProductoBundle:Producto:index" }
+    pattern:  /{pararouting}
+    defaults: { _controller: "ProductoBundle:Producto:index", pararouting:index }
+    requirements:
+        pararouting: buscar
 
 producto_show:
     pattern:  /{id}/show

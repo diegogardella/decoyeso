@@ -14,7 +14,7 @@ var insumoObject={
 			
 			if(this.validar()){
 				
-				$('#tableListInsumos').append('<tr id="tr_'+this.id+'"><td id="nom_'+this.id+'">'+this.nombre+'</td><td id="cant_'+this.id+'">'+this.cantidad+'</td><td><button class="eliminarInsumoDeLista" type="button" value="'+this.id+'">X</button></td></tr>');
+				$('#tableListInsumos').append('<tr id="ins_tr_'+this.id+'"><td id="ins_nom_'+this.id+'">'+this.nombre+'</td><td id="ins_cant_'+this.id+'">'+this.cantidad+'</td><td><button class="eliminarInsumoDeLista" type="button" value="'+this.id+'">X</button></td></tr>');
 				var text=$('#servicio_insumos').val()+";"+this.id+"@"+this.cantidad;
 				$('#servicio_insumos').val(text);
 				
@@ -50,14 +50,14 @@ var insumoObject={
 		},
 		eliminar:function(id){
 			this.id=id;
-			this.nombre=$('#nom_'+id).html();
-			this.cantidad=$('#cant_'+id).html();
+			this.nombre=$('#ins_nom_'+id).html();
+			this.cantidad=$('#ins_cant_'+id).html();
 			
 			if($('#idSelectInsumo option').length==1 && $('#idSelectInsumo option').eq(0).val()==0){
 				$('#idSelectInsumo option').eq(0).remove();
 			}
 			
-			$('#tr_'+id).remove();
+			$('#ins_tr_'+id).remove();
 			$('#idSelectInsumo').append(new Option(this.nombre, this.id));
 			
 			var ids=$('#servicio_insumos').val().split(';');
@@ -86,8 +86,6 @@ $('.eliminarInsumoDeLista').live('click',function(){
 
 
 
-
-
 var productoObject={
 		
 		id:0,
@@ -102,7 +100,7 @@ var productoObject={
 			
 			if(this.validar()){
 				
-				$('#tableListProductos').append('<tr id="tr_'+this.id+'"><td id="nom_'+this.id+'">'+this.nombre+'</td><td id="cant_'+this.id+'">'+this.cantidad+'</td><td><button class="eliminarProductoDeLista" type="button" value="'+this.id+'">X</button></td></tr>');
+				$('#tableListProductos').append('<tr id="pro_tr_'+this.id+'"><td id="pro_nom_'+this.id+'">'+this.nombre+'</td><td id="pro_cant_'+this.id+'">'+this.cantidad+'</td><td><button class="eliminarProductoDeLista" type="button" value="'+this.id+'">X</button></td></tr>');
 				var text=$('#servicio_productos').val()+";"+this.id+"@"+this.cantidad;
 				$('#servicio_productos').val(text);
 				
@@ -138,14 +136,14 @@ var productoObject={
 		},
 		eliminar:function(id){
 			this.id=id;
-			this.nombre=$('#nom_'+id).html();
-			this.cantidad=$('#cant_'+id).html();
+			this.nombre=$('#pro_nom_'+id).html();
+			this.cantidad=$('#pro_cant_'+id).html();
 			
 			if($('#idSelectProducto option').length==1 && $('#idSelectProducto option').eq(0).val()==0){
 				$('#idSelectProducto option').eq(0).remove();
 			}
 			
-			$('#tr_'+id).remove();
+			$('#pro_tr_'+id).remove();
 			$('#idSelectProducto').append(new Option(this.nombre, this.id));
 			
 			var ids=$('#servicio_productos').val().split(';');
