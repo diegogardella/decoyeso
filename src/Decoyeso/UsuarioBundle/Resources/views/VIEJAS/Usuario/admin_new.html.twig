@@ -12,7 +12,11 @@
 
 {%block msj_info%}
 	{{ parent() }}
-	
+	{% if errorMsj is defined %}
+		{% for er in errorMsj %}
+			{{ er }} <br>
+		{% endfor %}
+	{% endif%}
 {% endblock msj_info %}
 
 

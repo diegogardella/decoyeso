@@ -26,6 +26,24 @@ usuario_update:
     defaults: { _controller: "UsuarioBundle:Usuario:update" }
     requirements: { _method: post }
 
+usuario_change_pass:
+    pattern:  /{id}/change_pass
+    defaults: { _controller: "UsuarioBundle:Usuario:changePass" }
+
+usuario_update_pass:
+    pattern:  /{id}/update_pass
+    defaults: { _controller: "UsuarioBundle:Usuario:updatePass" }
+    requirements: { _method: post }
+    
+usuario_cambiar_permisos:
+    pattern:  /{id}/cambiar_permisos
+    defaults: { _controller: "UsuarioBundle:Usuario:cambiarPermisos" }
+
+usuario_update_permisos:
+    pattern:  /{id}/update_permisos
+    defaults: { _controller: "UsuarioBundle:Usuario:updatePermisos" }
+    requirements: { _method: post }
+    
 usuario_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "UsuarioBundle:Usuario:delete" }

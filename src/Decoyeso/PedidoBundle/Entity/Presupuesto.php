@@ -37,8 +37,7 @@ class Presupuesto
      * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
-    
-    
+       
     /**
      * @var float $subTotal
      * @Assert\NotBlank()
@@ -106,7 +105,6 @@ class Presupuesto
      */
     private $observacion;
     
-
     /**
      * @var date $fechaCreado
      *
@@ -154,6 +152,16 @@ class Presupuesto
     {
     	$this->numero= "PRES".str_pad($this->getId(),5,0,STR_PAD_LEFT);
     }
+    
+    /**
+     * To String
+     *
+     * @return string
+     */
+    public function __toString() 
+    {
+    	return $this->getNombre()." ".$this->getNumero();
+    }
 
     /**
      * Get id
@@ -164,11 +172,6 @@ class Presupuesto
     {
         return $this->id;
     }
-
-    public function __toString() {
-    	return $this->getNombre()." ".$this->getNumero();
-    }
-    
 
     /**
      * Set numero

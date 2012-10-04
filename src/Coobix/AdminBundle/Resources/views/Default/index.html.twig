@@ -80,7 +80,9 @@
 				{% if role == 'ROLE_USER' %}
 		#}	
 		
-
+			{% if is_granted('ROLE_ADMIN') %}
+			{% endif %}
+		
 		
 			<div class="menuTab">
 				<div class="tabTit txt3" id="clienteTit">Clientes</div>
@@ -117,9 +119,15 @@
 			
 			<div class="menuTab">
 				<div class="tabTit txt3" id="miAccountTit">Usuarios</div>
-				<ul class="tabUl"> 
+				<ul class="tabUl">
+					
+				
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('usuario_edit', { 'id': app.user.id }) }}">Mi Cuenta</a></li>
+					
+					{% if is_granted('ROLE_SUPER_ADMIN')  %}
 					<li class="itemsTabUl"><a class="txt16" href="{{ path('usuario') }}">Listar Usuarios</a></li>
 					<li class="itemsTabUl"><a class="txt16" href="{{ path('usuario_new') }}">Crear Usuario</a></li>
+					{% endif %}
 				</ul>	
 			</div>
 			
@@ -129,6 +137,10 @@
 					<li class="itemsTabUl"><a class="txt16" href="{{ path('log') }}">Listar Logs</a></li>
 				</ul>	
 			</div>
+			
+			
+			
+			
 			
 			
 			

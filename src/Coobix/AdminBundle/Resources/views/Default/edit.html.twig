@@ -53,15 +53,27 @@
 	
 	{% block module_header%}
 		<div class="module_header">
+			{% block module_header_content%}
 			<div class="module_tit txt3">{% block module_tit %}TITULO TITLE{% endblock module_tit %}</div>
 			
+			
+			{% block module_header_delete%}
 			<form action="{% block delete_path %}{{ path('admin_entity_delete', { 'id': entity.id }) }}{% endblock delete_path %}" method="post">
 				{{ form_widget(delete_form) }}
 				<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
 			</form>
-
-			<a id="pedidoListarBtn" class="btn_blue right" href="{% block list_path %}{{ path('admin_entity_list') }}{% endblock list_path %}">Ir al listado</a>
+			{% endblock module_header_delete%}
 			
+			
+			{% block module_header_list%}
+			<a id="pedidoListarBtn" class="btn_blue right" href="{% block list_path %}{{ path('admin_entity_list') }}{% endblock list_path %}">Ir al listado</a>
+			{% endblock module_header_list%}
+			
+			{% block module_header_otros%}
+
+			{% endblock module_header_otros%}
+			
+			{% endblock module_header_content%}
 		</div>
 				
 		

@@ -46,8 +46,6 @@ class PresupuestoController extends Controller
     
     }
 
-
-
     /**
      * Displays a form to create a new Presupuesto entity.
      *

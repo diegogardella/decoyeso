@@ -22,7 +22,6 @@ Listado de Logs
 
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('u.apellido') %} class="sorted" {% endif %}>{{ entities.sortable('Usuario', 'u.apellido')|raw }}</th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('l.log') %} class="sorted" {% endif %}>{{ entities.sortable('Acción', 'l.log')|raw }}</th>
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('l.entidad') %} class="sorted" {% endif %}>{{ entities.sortable('Clase - Id', 'l.entidad')|raw }}</th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('l.fechaHoraCreado') %} class="sorted" {% endif %}>{{ entities.sortable('Creado el', 'l.fechaHoraCreado')|raw }}</th>
 
 {% endblock list_tits %}
@@ -30,7 +29,6 @@ Listado de Logs
 {% block list_item_texts %}
 <td >{{ entity.getUsuario }}</td>
 <td >{{ entity.getLog }}</td>
-<td >{{ entity.entidad }} - {{ entity.idEntidad }}</td>
 <td >{{ entity.getFechaHoraCreado | date ('d/m/Y H:i:s')}}</td>
 {% endblock list_item_texts %}
 

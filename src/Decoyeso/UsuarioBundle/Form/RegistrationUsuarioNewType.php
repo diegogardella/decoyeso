@@ -21,6 +21,17 @@ class RegistrationUsuarioNewType extends AbstractType
             ->add('email','email', array('label'=>'Email'))
             ->add('username','text', array('label'=>'Nombre de usuario'))
             ->add('plainPassword','password', array('label'=>'Contraseña'))
+            ->add('permisos','choice',
+            		array(
+            			'choices' =>array(
+            						"ROLE_SUPER_ADMIN"=> "SUPER ADMINISTRADOR",
+            						"ROLE_ADMINISTRACION"=> "USUARIO ADMINISTRACION",
+            						"ROLE_DEPOSITO"=> "USUARIO DEPOSITO",
+           						
+            						), 
+            				'required'=> true,
+            				
+            				'label'=>'Permisos'))
 		;
 		
 		//parent::buildForm($builder, $options);
