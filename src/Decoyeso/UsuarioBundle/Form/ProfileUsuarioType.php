@@ -22,7 +22,8 @@ class ProfileUsuarioType extends AbstractType
             ->add('telefono','text', array('label'=>'Teléfono', 'required'=>false))
             ->add('celular','text', array('label'=>'Celular', 'required'=>false))
             ->add('email','text', array('label'=>'Email', 'required'=>false))
-            ->add('plainPassword','password', array('label'=>'Nueva Contraseña', 'required'=>false))
+
+
 		;
 		
 		

@@ -10,7 +10,11 @@
 
 {%block msj_info%}
 	{{ parent() }}
-
+	{% if errorMsj is defined %}
+		{% for er in errorMsj %}
+			{{ er }} <br>
+		{% endfor %}
+	{% endif%}
 {% endblock msj_info %}
 
 {% block module_tit %}Editar Usuario{% endblock module_tit %}
@@ -23,28 +27,13 @@
 {{ path('usuario') }}
 {% endblock list_path %}
 
+
+{% if (app.user.id == entity.id) %}
+	{% block delete_btn %}
+		
+	{% endblock delete_btn %}
+{% else %}
 	{% block delete_path %}
 			{{ path('usuario_delete', { 'id': entity.id }) }}
 		{% endblock delete_path %}
-
-
-
-{% block module_header_delete%}
-{% if (app.user.id != entity.id) %}
-{{ parent() }}
 {% endif %}
-{% endblock module_header_delete%}
-
-{% block module_header_list%}
-{% if is_granted('ROLE_SUPER_ADMIN')  %}
-{{ parent() }}
-{% endif %}
-{% endblock module_header_list%}
-
-{% block module_header_otros%}
-	<a id="" class="btn_blue right" href="{{ path('usuario_change_pass', { 'id': entity.id }) }}">Cambiar Contraseña</a>
-	{% if is_granted('ROLE_SUPER_ADMIN')  %}
-	<a id="" class="btn_blue right" href="{{ path('usuario_cambiar_permisos', { 'id': entity.id }) }}">Cambiar Permisos</a>
-	{% endif %}
-{% endblock module_header_otros%}
-

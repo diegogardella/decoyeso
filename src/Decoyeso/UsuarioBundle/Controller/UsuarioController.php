@@ -9,6 +9,9 @@ use Decoyeso\UsuarioBundle\Form\UsuarioType;
 use Decoyeso\UsuarioBundle\Form\ProfileUsuarioType;
 use Decoyeso\UsuarioBundle\Form\RegistrationUsuarioType;
 use Decoyeso\UsuarioBundle\Form\RegistrationUsuarioNewType;
+use Decoyeso\UsuarioBundle\Form\ChangePassUsuarioType;
+use Decoyeso\UsuarioBundle\Form\CambiarPermisosUsuarioType;
+
 
 /**
  * Usuario controller.
@@ -22,6 +25,10 @@ class UsuarioController extends Controller
      */
 	public function indexAction($pararouting="index")
 	{
+		if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
+			throw $this->createNotFoundException('No tiene permisos.');
+		endif;
+		
 		$buscador=$this->get("buscador");
 		$buscador->setRequest($this->getRequest());
 		$buscador->setPararouting($pararouting);
@@ -36,7 +43,7 @@ class UsuarioController extends Controller
 				'entities' => $resultados["entities"],
 				'formBuscar'=>$resultados["form"]->createView(),
 		));
-	
+		
 	
 	}
     
@@ -44,7 +51,13 @@ class UsuarioController extends Controller
 
     public function editAction($id)
     {
-    
+    	
+    	if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
+    		if ($id != $this->get('security.context')->getToken()->getUser()->getId()):
+    		   	throw $this->createNotFoundException('No tiene permisos.');
+    		endif;
+    	endif;
+    	
     	$userManager = $this->get('fos_user.user_manager');
     	
     	$entity = $userManager->findUserBy(array("id"=>$id));
@@ -67,67 +80,7 @@ class UsuarioController extends Controller
     }
     
 
-    public function updateAction($id)
-    {
-    	
-   		$userManager = $this->get('fos_user.user_manager');
-    	
-    	$entity = $userManager->findUserBy(array("id"=>$id));
-    	
-    
-    	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find User entity.');
-    	}
-    
-    	$editForm   = $this->createForm(new ProfileUsuarioType(), $entity);
-    	$deleteForm = $this->createDeleteForm($id);
-    
-    	$request = $this->getRequest();
 
-    	$editForm->bindRequest($request);
-    	
-    	$em = $this->getDoctrine()->getEntityManager();
-    	
-    	
-        $err = false;
-    	
-    	$em = $this->getDoctrine()->getEntityManager();
-    	$query = $em->createQuery(" SELECT u FROM UsuarioBundle:Usuario u
-    			WHERE u.email = :u_email AND u.id != :u_id
-    			");
-    	$query->setParameters(array(
-    			'u_email' => $entity->getEmail(),
-    			'u_id' => $entity->getId(),
-    	));
-    	$auxUser = $query->getResult();
-    	
-    	
-    	if ($auxUser) {
-    		$errorMsj[]= "El Email ya existe.";
-    		$err = true;
-    	}
-    	
-    
-    	if ($editForm->isValid() && !$err) {
-    		$userManager->updateUser($entity);
-    		
-			$this->get('session')->setFlash('msj_info','El usuario se ha modificado correctamente');
-    		//LOG
-    		$log = $this->get('log');
-    		$log->create($entity, "Usuario Actualizado");
-    		
-    		return $this->redirect($this->generateUrl('usuario_edit', array('id' => $entity->getId())));
-    		
-    	}
-    
-    	
-    	return $this->render('UsuarioBundle:Usuario:admin_edit.html.twig', array(
-    			'errorMsj' => $errorMsj,
-    			'entity'      => $entity,
-    			'edit_form'   => $editForm->createView(),
-    			'delete_form' => $deleteForm->createView(),
-    	));
-    }
     
     /**
      * Deletes a Usuario entity.
@@ -135,6 +88,10 @@ class UsuarioController extends Controller
      */
     public function deleteAction($id)
     {
+    	
+    	if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
+    		throw $this->createNotFoundException('No tiene permisos.');
+    	endif;
     	$form = $this->createDeleteForm($id);
     	$request = $this->getRequest();
     
@@ -156,8 +113,7 @@ class UsuarioController extends Controller
     		$entity = $userManager->findUserBy(array("id"=>$id));
     		$entity->setEnabled(false);
     		$userManager->updateUser($entity);
-    		
-			
+
     	}
     
     	return $this->redirect($this->generateUrl('usuario'));
@@ -165,6 +121,7 @@ class UsuarioController extends Controller
     
     private function createDeleteForm($id)
     {
+
     	return $this->createFormBuilder(array('id' => $id))
     	->add('id', 'hidden')
     	->getForm()
@@ -174,6 +131,9 @@ class UsuarioController extends Controller
     
     public function listDeleteformAction($id)
     {
+    	if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
+    		throw $this->createNotFoundException('No tiene permisos.');
+    	endif;
     	$deleteForm = $this->createDeleteForm($id);
     
     	return $this->render('CoobixAdminBundle:Default:list_delete_form.html.twig', array(
@@ -191,7 +151,9 @@ class UsuarioController extends Controller
      */
     public function newAction()
     {
-        
+    	if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
+    		throw $this->createNotFoundException('No tiene permisos.');
+    	endif;
         $userManager = $this->get('fos_user.user_manager');
         $entity = $userManager->createUser();
         
@@ -202,88 +164,243 @@ class UsuarioController extends Controller
             'form'   => $form->createView()
         ));
     }
-	
+
     
     /**
      * Creates a new Usuario entity.
      *
      */
-    public function createAction()
-    {
-    	
-        $userManager = $this->get('fos_user.user_manager');
-        $entity = $userManager->createUser();
-        $id = $entity->getId();
-        $request = $this->getRequest();
-        $form    = $this->createForm(new RegistrationUsuarioNewType(), $entity);
-        $form->bindRequest($request);
-
-        
-        $err = false;
-        $errorMsj = array();
-        if ( $entity->getNombre() == "") {
-        	$errorMsj[]= "Debe ingresar un nombre.";
-        	$err = true;
-        }
-        if ( $entity->getEmail() == "") {
-        	$errorMsj[]= "Debe ingresar un Email.";
-        	$err = true;
-        }
-        if ( $entity->getUsername() == "") {
-        	$errorMsj[]= "Debe ingresar un Nombre de Usuario.";
-        	$err = true;
-        }
-        if ( $entity->getPlainPassword() == "") {
-        	$errorMsj[]= "Debe ingresar una Contraseña.";
-        	$err = true;
-        }
-        
-		if (!$err) {	        
-	        //Me fijo si ya existe el usuario
-	        $em = $this->getDoctrine()->getEntityManager();
-	                
-	        $auxUser = $em->getRepository('UsuarioBundle:Usuario')->findByEmail($entity->getEmail());
-	        if ($auxUser) {
-	        	$errorMsj[]= "El Email ya existe.";
-	        	$err = true;
-	        } 
-	        $auxUser = $em->getRepository('UsuarioBundle:Usuario')->findByUsername($entity->getUsername());
-			if ($auxUser) {
-	        	$errorMsj[]= "El Usuario ya existe.";
-	        	$err = true;
-	        }
-		}
+     public function createAction()
+     {
+     	if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
+     		throw $this->createNotFoundException('No tiene permisos.');
+     	endif;
+     	$userManager = $this->get('fos_user.user_manager');
+     	$entity = $userManager->createUser();
+     	$id = $entity->getId();
+     	$request = $this->getRequest();
+     	$form    = $this->createForm(new RegistrationUsuarioNewType(), $entity);
+     	$form->bindRequest($request);
           
-      
-               
-        if ($form->isValid() && !$err) {
-        	$entity->setEnabled(true);
-        	$entity->addRole("ROLE_SUPER_ADMIN");
-        	
-            $userManager->updateUser($entity);
-            
-	    	$this->get('session')->setFlash('msj_info','El usuario se ha creado correctamente');
 
-            //LOG
-            $log = $this->get('log');
-            $log->create($entity, "Usuario Creado");
-            
-            $editForm = $this->createForm(new ProfileUsuarioType(), $entity);
-            $deleteForm = $this->createDeleteForm($id);
-            return $this->redirect($this->generateUrl('usuario_edit', array(
-            		'id' => $entity->getId(),
-            		'edit_form'   => $editForm->createView(),
-            		'delete_form' => $deleteForm->createView())));
-            
-        }
 
-        return $this->render('UsuarioBundle:Usuario:admin_new.html.twig', array(
-        	'errorMsj' => $errorMsj,
-            'entity' => $entity,
-            'form'   => $form->createView()
-        ));
+	 	if ($form->isValid()) {
+    		$entity->setEnabled(true);
+     		$entity->addRole($entity->getPermisos());
+    
+     		$userManager->updateUser($entity);
+    
+     		$this->get('session')->setFlash('msj_info','El usuario se ha creado correctamente');
+    
+		    //LOG
+		    $log = $this->get('log');
+		    $log->create($entity, "Usuario Creado");
+		    
+		    $editForm = $this->createForm(new ProfileUsuarioType(), $entity);
+		    $deleteForm = $this->createDeleteForm($id);
+		    return $this->redirect($this->generateUrl('usuario_edit', array(
+		    'id' => $entity->getId(),
+		    'edit_form'   => $editForm->createView(),
+		    'delete_form' => $deleteForm->createView())));
+		    
+		     }
+    
+     	return $this->render('UsuarioBundle:Usuario:admin_new.html.twig', array(
+     	'entity' => $entity,
+     	'form'   => $form->createView()
+     	));
+     }
+     
+     public function updateAction($id)
+     {
+     
+     	$userManager = $this->get('fos_user.user_manager');
+     
+     	$entity = $userManager->findUserBy(array("id"=>$id));
+          
+     	if (!$entity) {
+     		throw $this->createNotFoundException('Unable to find User entity.');
+     	}
+     
+     	$editForm   = $this->createForm(new ProfileUsuarioType(), $entity);
+     	$deleteForm = $this->createDeleteForm($id);
+     
+     	$request = $this->getRequest();
+     
+     	$editForm->bindRequest($request);
+     
+     	$em = $this->getDoctrine()->getEntityManager();
+     
+     
+     
+     	if ($editForm->isValid()) {
+     		$userManager->updateUser($entity);
+     
+     		$this->get('session')->setFlash('msj_info','El usuario se ha modificado correctamente');
+     		//LOG
+     		$log = $this->get('log');
+     		$log->create($entity, "Usuario Actualizado");
+     
+     		return $this->redirect($this->generateUrl('usuario_edit', array('id' => $entity->getId())));
+     
+     	}
+     
+     
+     	return $this->render('UsuarioBundle:Usuario:admin_edit.html.twig', array(
+     			
+     			'entity'      => $entity,
+     			'edit_form'   => $editForm->createView(),
+     			'delete_form' => $deleteForm->createView(),
+     	));
+     }
+     
+     
+     /**
+      * Displays a form to change a Usuario pass.
+      *
+      */
+     public function changePassAction($id)
+     {
+    
+    	$userManager = $this->get('fos_user.user_manager');
+    	
+    	$entity = $userManager->findUserBy(array("id"=>$id));
+    
+    
+    	if (!$entity) {
+    		throw $this->createNotFoundException('Unable to find User entity.');
+    	}
+    
+    	$changePassForm = $this->createForm(new ChangePassUsuarioType(), $entity);
+    
+    	
+    	return $this->render('UsuarioBundle:Usuario:admin_changePass.html.twig', array(
+    			'entity'      => $entity,
+    			'edit_form'   => $changePassForm->createView(),
+    	));
     }
-	
+    
+
+    
+    public function updatePassAction($id)
+    {
+    
+    	$userManager = $this->get('fos_user.user_manager');
+    
+    	$entity = $userManager->findUserBy(array("id"=>$id));
+    
+    	if (!$entity) {
+    		throw $this->createNotFoundException('Unable to find User entity.');
+    	}
+    
+    	$editForm   = $this->createForm(new ChangePassUsuarioType(), $entity);
+    	
+    
+    	$request = $this->getRequest();
+    
+    	$editForm->bindRequest($request);
+    
+    	$em = $this->getDoctrine()->getEntityManager();
+    
+    
+    
+    	if ($editForm->isValid()) {
+    		$userManager->updateUser($entity);
+    
+    		$this->get('session')->setFlash('msj_info','La contraseña se ha modificado correctamente');
+    		//LOG
+    		$log = $this->get('log');
+    		$log->create($entity, "Contraseña Actualizada");
+    
+    		return $this->redirect($this->generateUrl('usuario_edit', array('id' => $entity->getId())));
+    
+    	}
+    
+    
+    	return $this->render('UsuarioBundle:Usuario:admin_changePass.html.twig', array(
+    
+    			'entity'      => $entity,
+    			'edit_form'   => $editForm->createView(),
+    	));
+    }
+    
+    
+    
+    
+    /**
+     * Displays a form to change a Usuario permisos.
+     *
+     */
+    public function cambiarPermisosAction($id)
+    {
+    	if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
+    	throw $this->createNotFoundException('No tiene permisos.');
+    	endif;
+    	$userManager = $this->get('fos_user.user_manager');
+    
+    	$entity = $userManager->findUserBy(array("id"=>$id));
+    
+    
+    	if (!$entity) {
+    		throw $this->createNotFoundException('Unable to find User entity.');
+    	}
+    
+    	$changePassForm = $this->createForm(new CambiarPermisosUsuarioType(), $entity);
+    
+    
+    
+    	return $this->render('UsuarioBundle:Usuario:admin_cambiarPermisos.html.twig', array(
+    			'entity'      => $entity,
+    			'edit_form'   => $changePassForm->createView(),
+    	));
+    }
+    
+    
+    public function updatePermisosAction($id)
+    {
+    	if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
+    	throw $this->createNotFoundException('No tiene permisos.');
+    	endif;
+    	$userManager = $this->get('fos_user.user_manager');
+    
+    	$entity = $userManager->findUserBy(array("id"=>$id));
+    
+    	if (!$entity) {
+    		throw $this->createNotFoundException('Unable to find User entity.');
+    	}
+    
+    	$editForm   = $this->createForm(new CambiarPermisosUsuarioType(), $entity);
+    
+    
+    	$request = $this->getRequest();
+    
+    	$editForm->bindRequest($request);
+    
+    	
+    
+    
+    
+    	if ($editForm->isValid()) {
+    		$role[] = $entity->getPermisos();
+    		$entity->setRoles($role);
+    		$userManager->updateUser($entity);
+    		
+    		$this->get('session')->setFlash('msj_info','Los permisos se modificaron correctamente');
+    		//LOG
+    		$log = $this->get('log');
+    		$log->create($entity, "Permisos Actualizados");
+    
+    		return $this->redirect($this->generateUrl('usuario_edit', array('id' => $entity->getId())));
+    
+    	}
+    
+    
+    	return $this->render('UsuarioBundle:Usuario:admin_cambiarPermisos.html.twig', array(
+    
+    			'entity'      => $entity,
+    			'edit_form'   => $editForm->createView(),
+    	));
+    }
     
    
     

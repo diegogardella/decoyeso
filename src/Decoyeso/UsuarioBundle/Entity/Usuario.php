@@ -2,9 +2,13 @@
 
 namespace Decoyeso\UsuarioBundle\Entity;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator;
+
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * Decoyeso\UsuarioBundle\Entity\Usuario
@@ -12,9 +16,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Decoyeso\UsuarioBundle\Entity\UsuarioRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity("email")
+ * @UniqueEntity("username")
+
  */
 class Usuario extends BaseUser
 {
+	
+	
     /**
      * @var integer $id
      *
@@ -26,33 +35,63 @@ class Usuario extends BaseUser
 
     /**
      * @var string $nombre
-     * @Assert\NotBlank()
-     * @Assert\MaxLength(255)
+     * @Assert\NotBlank(message="Por favor ingrese su nombre.")
+     * @Assert\MaxLength(limit="255", message="El nombre es demasiado largo.")
      * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
     
     /**
      * @var string $apellido
-     *
+     * @Assert\MaxLength(limit="255", message="El nombre es demasiado largo.")
      * @ORM\Column(name="apellido", type="string", length=255, nullable="true")
      */
     private $apellido;
     
     /**
      * @var string $telefono
-     *
+     * @Assert\MaxLength(limit="255", message="El nombre es demasiado largo.")
      * @ORM\Column(name="telefono", type="string", length=255, nullable="true")
      */
     private $telefono;
     
     /**
      * @var string $celular
-     *
+     * @Assert\MaxLength(limit="255", message="El nombre es demasiado largo.")
      * @ORM\Column(name="celular", type="string", length=255, nullable="true")
      */
     private $celular;
+
     
+    /**
+     * @var string $permisos
+     * @ORM\Column(name="permisos", type="string", length=255)
+     */
+    private $permisos;
+
+    
+    /**
+     * @var string $email
+     * @Assert\NotBlank(message="Por favor ingrese el Email.")
+     * @Assert\Email(message="Por favor ingrese un Email válido.")
+     * @Assert\MaxLength(limit="255", message="El email es demasiado largo.")
+     */
+    protected $email;    
+    
+    /**
+     * @var string $username
+     * @Assert\NotBlank(message="Por favor ingrese el nombre de usuario.")
+     * @Assert\MaxLength(limit="255", message="El nombre de usuario es demasiado largo.")
+     */
+    protected $username;
+    
+    /**
+     * @var string $plainPassword
+     * @Assert\MaxLength(limit="255", message="El nombre es demasiado largo.")
+     */
+    protected $plainPassword;
+    
+
     
     /**
      * @var date $fechaCreado
@@ -93,6 +132,14 @@ class Usuario extends BaseUser
     	$this->setFechaActualizado (new \DateTime);
     }
     
+
+    public function __construct()
+    {
+    	parent::__construct();
+    
+    }
+    
+
     /**
      * Get id
      *
@@ -121,14 +168,9 @@ class Usuario extends BaseUser
     public function getNombre()
     {
         return $this->nombre;
-    }
-    
-    public function __construct()
-    {
-    	parent::__construct();
-    
-    }
-    
+
+    } 
+
     
 
     /**
@@ -249,5 +291,25 @@ class Usuario extends BaseUser
     public function getFechaActualizado()
     {
         return $this->fechaActualizado;
+    }
+
+    /**
+     * Set permisos
+     *
+     * @param string $permisos
+     */
+    public function setPermisos($permisos)
+    {
+        $this->permisos = $permisos;
+    }
+
+    /**
+     * Get permisos
+     *
+     * @return string 
+     */
+    public function getPermisos()
+    {
+        return $this->permisos;
     }
 }

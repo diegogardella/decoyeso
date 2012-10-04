@@ -1,9 +1,15 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-    </head>
-    <body>
+{% extends "CoobixAdminBundle:Default:index.html.twig" %}
+
+{% block header %} {% endblock header %}
+{% block sidebar %} {% endblock sidebar %}
+
+{% block main %}
+
+
+<div class="loginWrap border_radius">
+
+
+		{#
         <div>
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
@@ -14,7 +20,7 @@
                 <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
             {% endif %}
         </div>
-
+		#}
         {% for key, message in app.session.getFlashes() %}
         <div class="{{ key }}">
             {{ message|trans({}, 'FOSUserBundle') }}
@@ -25,5 +31,7 @@
             {% block fos_user_content %}
             {% endblock fos_user_content %}
         </div>
-    </body>
-</html>
+        
+</div>
+
+{% endblock main %}

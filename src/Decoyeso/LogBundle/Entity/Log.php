@@ -28,15 +28,13 @@ class Log
      * @ORM\Column(name="entidad", type="string", length=255)
      */
     private $entidad;
-    
-    
+     
     /**
      * @var string $log
      *
      * @ORM\Column(name="log", type="string", length=255)
      */
     private $log;
-    
     
     /**
      * @var integer $idEntidad
@@ -73,37 +71,6 @@ class Log
     
     private $securityContext;
     
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set log
-     *
-     * @param string $log
-     */
-    public function setLog($log)
-    {
-        $this->log = $log;
-    }
-
-    /**
-     * Get log
-     *
-     * @return string 
-     */
-    public function getLog()
-    {
-        return $this->log;
-    }
-
     
     /**
      * @ORM\prePersist
@@ -122,6 +89,12 @@ class Log
     }
     
 
+    public function __toString()
+    {
+    	return $this->log;
+    }
+    
+
     
  	public function create($entity, $msj)
      {
@@ -131,14 +104,44 @@ class Log
      	$this->setUsuario($user);
      	$this->setEntidad(get_class($entity));
      	$this->setIdEntidad($entity->getId());
-     	$this->setLog($msj);
+     	$this->setLog($msj.": ".$entity);
      	
      	$em = $this->doctrine->getEntityManager();
      	$em->persist($this);
      	$em->flush();
     
      }
-    
+
+     
+     /**
+      * Get id
+      *
+      * @return integer
+      */
+     public function getId()
+     {
+     	return $this->id;
+     }
+     
+     /**
+      * Set log
+      *
+      * @param string $log
+      */
+     public function setLog($log)
+     {
+     	$this->log = $log;
+     }
+     
+     /**
+      * Get log
+      *
+      * @return string
+      */
+     public function getLog()
+     {
+     	return $this->log;
+     }
     
 
     /**
