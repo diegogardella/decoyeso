@@ -1,0 +1,125 @@
+{% extends "CoobixAdminBundle:Default:index.html.twig" %}
+
+
+{% block javascripts %}
+
+<script src="{{ asset('bundles/coobixadmin/js/tinymce/jscripts/tiny_mce/tiny_mce.js') }}" type="text/javascript"></script>
+
+<script type="text/javascript">
+	var userUploadDir = "nico";
+	tinyMCE.init({
+		// General options
+		//language : "es",
+				
+		//mode: "textareas",
+		mode : "specific_textareas",
+		editor_selector : "editor_textarea",
+
+
+		//elements : "coobix_postbundle_posttype_text",
+		content_css : "",
+		theme : "advanced",
+		content_css : "{{ asset('bundles/coobixpage/css/typo.css') }}",
+
+
+		plugins : "safari,spellchecker,pagebreak,style,layer,table,advhr,advimage,advlink,iespell,inlinepopups,insertdatetime,media,searchreplace,contextmenu,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,imagemanager",
+		// Theme options
+		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,charmap,|,justifyleft,justifycenter,justifyright,justifyfull,|,forecolor,backcolor,	|,styleselect,formatselect,fontselect,fontsizeselect",
+		theme_advanced_buttons2 : "bullist,numlist,|,outdent,indent,|,link,unlink,anchor,image,media,cleanup,code",
+		theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,iespell,advhr,|,fullscreen",
+		// theme_advanced_buttons4 : "insertfile,insertimage"
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "bottom",
+		theme_advanced_resizing : true
+		//imagemanager_path: "otro",
+		//imagemanager_rootpath: "otro",
+
+
+			
+		// convert_urls : false
+	});
+</script> 	
+
+{% endblock javascripts %}
+
+
+{% block main_content %}
+
+
+
+
+<div class="module width_full">
+	
+	{% block module_header%}
+		<div class="module_header">
+			{% block module_header_content%}
+			<div class="module_tit txt3">{% block module_tit %}TITULO TITLE{% endblock module_tit %}</div>
+			
+			
+			{% block module_header_delete%}
+			<form action="{% block delete_path %}{{ path('admin_entity_delete', { 'id': entity.id }) }}{% endblock delete_path %}" method="post">
+				{{ form_widget(delete_form) }}
+				<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
+			</form>
+			{% endblock module_header_delete%}
+			
+			
+			{% block module_header_list%}
+			<a id="pedidoListarBtn" class="btn_blue right" href="{% block list_path %}{{ path('admin_entity_list') }}{% endblock list_path %}">Ir al listado</a>
+			{% endblock module_header_list%}
+			
+			{% block module_header_otros%}
+
+			{% endblock module_header_otros%}
+			
+			{% endblock module_header_content%}
+		</div>
+		
+		
+		
+				
+		
+	{% endblock module_header%}
+	
+	<div class="module_content">
+	
+	{%block msj_info%}
+		
+		
+		{% if app.session.hasFlash('msj_info') %}
+			<div id="msjInfo" class="msjInfo" >
+				{{ app.session.getFlash('msj_info') }}
+			</div>
+		{% endif %}
+	
+	{%endblock msj_info%}
+		
+	{% block form_content %}
+		<form action="{% block update_path %}{{ path('admin_entity_update') }}{% endblock update_path %}" method="post" {{ form_enctype(edit_form) }}>
+		{% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+		{{ form_widget(edit_form) }}
+			<p>
+				<button id="btnGuardarCambios" class="btn_green_button right" type="submit">Guardar cambios</button>
+			</p>
+		</form>
+		
+		
+		
+		{% block form_record_actions %}
+		
+		{% endblock form_record_actions %}
+		<div class="fix"></div>
+		{% endblock form_content %}
+		
+		{% block otros %}{% endblock otros %}
+		
+	</div>
+</div>
+
+
+
+		
+
+
+{% endblock main_content %}

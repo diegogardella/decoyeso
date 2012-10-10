@@ -1,0 +1,7 @@
+LogBundle_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: LogBundle:Default:index }
+    
+LogBundle:
+    resource: "@LogBundle/Resources/config/routing/log.yml"
+    prefix:   /log

@@ -1,0 +1,64 @@
+/* Essentials */
+
+
+* {
+font-family:"Lucida Grande",tahoma,arial,helvetica,sans-serif;
+}
+
+
+.txt3 {
+font-family:"Lucida Grande",tahoma,arial,helvetica,sans-serif;
+color:#333;
+font-size:13.5px;
+font-weight:bold;
+line-height:20px;
+}
+
+
+
+.records_list thead tr th a,.records_list thead tr th  {
+font-family:"Lucida Grande",tahoma,arial,helvetica,sans-serif;
+color:#333;
+font-size: 13px;
+font-weight: bold;
+line-height: 20px;
+}
+
+.records_list tbody tr td a,.records_list tbody tr td, .txt16 {
+font-family:"Lucida Grande",tahoma,arial,helvetica,sans-serif;
+color:#666;
+font-size:13px;
+line-height:23px;
+}
+
+.records_list tbody tr td a:hover {
+color:#306D89;
+}
+
+.records_list tbody tr td.td_med {
+width:50%;
+}
+
+.records_list tbody tr td.td_short {
+width:20%;
+}
+
+.form_row, .form_row input, .form_row textarea, .form_row select {
+font-family:"Lucida Grande",tahoma,arial,helvetica,sans-serif;
+color:#666;
+font-size:13px;
+line-height:23px;
+}
+
+.form_row input {
+float:left;	
+}
+
+
+.txt_green {
+color:#80A057;
+}
+
+.txt_white {
+color:#FFF;
+}

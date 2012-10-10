@@ -1,0 +1,7 @@
+parameters:
+#    pedido.example.class: Pedido\PedidoBundle\Example
+
+services:
+#    pedido.example:
+#        class: %pedido.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

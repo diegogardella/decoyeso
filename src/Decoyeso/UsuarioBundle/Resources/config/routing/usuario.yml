@@ -1,0 +1,50 @@
+usuario:
+    pattern:  /{pararouting}
+    defaults: { _controller: "UsuarioBundle:Usuario:index", pararouting:index }
+    requirements:
+        pararouting: buscar
+
+usuario_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "UsuarioBundle:Usuario:show" }
+
+usuario_new:
+    pattern:  /new
+    defaults: { _controller: "UsuarioBundle:Usuario:new" }
+
+usuario_create:
+    pattern:  /create
+    defaults: { _controller: "UsuarioBundle:Usuario:create" }
+    requirements: { _method: post }
+
+usuario_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "UsuarioBundle:Usuario:edit" }
+
+usuario_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "UsuarioBundle:Usuario:update" }
+    requirements: { _method: post }
+
+usuario_change_pass:
+    pattern:  /{id}/change_pass
+    defaults: { _controller: "UsuarioBundle:Usuario:changePass" }
+
+usuario_update_pass:
+    pattern:  /{id}/update_pass
+    defaults: { _controller: "UsuarioBundle:Usuario:updatePass" }
+    requirements: { _method: post }
+    
+usuario_cambiar_permisos:
+    pattern:  /{id}/cambiar_permisos
+    defaults: { _controller: "UsuarioBundle:Usuario:cambiarPermisos" }
+
+usuario_update_permisos:
+    pattern:  /{id}/update_permisos
+    defaults: { _controller: "UsuarioBundle:Usuario:updatePermisos" }
+    requirements: { _method: post }
+    
+usuario_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "UsuarioBundle:Usuario:delete" }
+    requirements: { _method: post }

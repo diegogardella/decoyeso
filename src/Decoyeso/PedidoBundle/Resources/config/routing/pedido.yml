@@ -1,0 +1,32 @@
+pedido:
+    pattern:  /{pararouting}
+    defaults: { _controller: "PedidoBundle:Pedido:index", pararouting:index }
+    requirements:
+        pararouting: buscar
+
+pedido_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "PedidoBundle:Pedido:show" }
+
+pedido_new:
+    pattern:  /{cliente}/new
+    defaults: { _controller: "PedidoBundle:Pedido:new", cliente:0 }
+
+pedido_create:
+    pattern:  /create
+    defaults: { _controller: "PedidoBundle:Pedido:create" }
+    requirements: { _method: post }
+
+pedido_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "PedidoBundle:Pedido:edit" }
+
+pedido_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "PedidoBundle:Pedido:update" }
+    requirements: { _method: post }
+
+pedido_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "PedidoBundle:Pedido:delete" }
+    requirements: { _method: post }

@@ -1,0 +1,32 @@
+relevamiento:
+    pattern:  /{pararouting}
+    defaults: { _controller: "PedidoBundle:Relevamiento:index", pararouting:index }
+    requirements:
+        pararouting: buscar
+
+relevamiento_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "PedidoBundle:Relevamiento:show" }
+
+relevamiento_new:
+    pattern:  /{pedido}/new
+    defaults: { _controller: "PedidoBundle:Relevamiento:new", pedido:0 }
+
+relevamiento_create:
+    pattern:  /create
+    defaults: { _controller: "PedidoBundle:Relevamiento:create" }
+    requirements: { _method: post }
+
+relevamiento_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "PedidoBundle:Relevamiento:edit" }
+
+relevamiento_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "PedidoBundle:Relevamiento:update" }
+    requirements: { _method: post }
+
+relevamiento_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "PedidoBundle:Relevamiento:delete" }
+    requirements: { _method: post }

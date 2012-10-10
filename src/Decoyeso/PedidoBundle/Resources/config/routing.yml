@@ -1,0 +1,11 @@
+PedidoBundle:
+    resource: "@PedidoBundle/Resources/config/routing/pedido.yml"
+    prefix:   /pedido
+
+PresupuestoBundle:
+    resource: "@PedidoBundle/Resources/config/routing/presupuesto.yml"
+    prefix:   /presupuesto
+    
+RelevamientoBundle:
+    resource: "@PedidoBundle/Resources/config/routing/relevamiento.yml"
+    prefix:   /relevamiento

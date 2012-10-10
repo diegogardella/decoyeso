@@ -1,0 +1,7 @@
+parameters:
+#    coobix_admin.example.class: Coobix\AdminBundle\Example
+
+services:
+#    coobix_admin.example:
+#        class: %coobix_admin.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

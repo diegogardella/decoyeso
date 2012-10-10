@@ -1,0 +1,136 @@
+{% extends "CoobixAdminBundle:Default:index.html.twig" %}
+
+{% block main_content %}
+
+
+<div class="module width_full">
+
+	<div class="module_header">
+	
+		<div class="module_tit txt3">{% block module_tit %}TITLE LIST{% endblock module_tit %}</div>
+		{% block new_path_btn %}
+		<a class="btn_blue right" href="{% block new_path %}{{ path('admin_entity_new') }}{% endblock new_path %}">
+				Crear
+		</a>
+		{% endblock new_path_btn %}
+		
+		{% block buscar_btn %}
+			<a id="btnListBuscar" href="javascript:void(0)"  class="btn_blue right" >
+					Buscar
+			</a>
+		{%endblock%}
+		
+		<div class="fix"></div>
+		
+	   {%block buscador%}
+		
+		<div id="listBuscador" class="buscador" >
+		 	
+		 	{% form_theme formBuscar 'BuscadorBundle:Form:fields.html.twig' %}
+		 
+			{%block FormBuscar%}
+				<form method="post" action="{{path('',{pararouting:"buscar"})}}" novalidate="true">
+			{%endblock%}
+			
+				{%block camposFormBuscar%}
+					{{form_widget(formBuscar)}}
+				{%endblock%}
+			
+				<div class="clear"></div>
+				
+				 <div class="btnAplicarBusqueda">
+					<button class="btn_green_button right" type="submit" title="Filtrar">Aplicar busqueda</button>
+				 </div>
+				 
+			</form>
+	
+		</div>
+		
+	   {%endblock%}
+		
+	</div>
+	
+		
+
+	<div class="tab_container border_radius">
+		
+			{% block list_content %}
+
+			<table class="records_list">
+
+				<thead>
+					<tr>
+					{# <th>&nbsp;</th> #}
+					{% block list_tits %}
+					<th><a href="">Item 1</a></th>
+					<th><a href="">Item 2</a></th>
+					<th><a href="">Item 3</a></th>
+					<th><a href="">Item 4</a></th>
+					{% endblock list_tits %}
+					<th   style="width: 6%" >&nbsp;</th>
+				</thead>
+					</tr>
+				<tbody>
+				{% for entity in entities %}
+					{% if loop.index is odd %}
+						{% set classTr = "trColor1" %}
+					{% else %}
+						{% set classTr = "trColor2" %}
+					{% endif %}
+					<tr class="{{ classTr }}">
+						{# <td>&nbsp;</td> #}
+						{% block list_item_texts %}
+						<td><a href="{{ path('admin_entity_edit', { 'id': entity.id }) }}">{{ entity.name }}</a></td>
+						<td><a href="{{ path('admin_entity_edit', { 'id': entity.id }) }}">{{ entity.excerpt }}</a></td>
+						<td><a href="{{ path('admin_entity_edit', { 'id': entity.id }) }}">{{ entity.text }}</a></td>
+						<td><a href="{{ path('admin_entity_edit', { 'id': entity.id }) }}">{{ entity.enabled }}</a></td>
+						{% endblock list_item_texts %}
+				
+					{% block list_buttons %}
+					<td class="" >
+						<ul>
+							<li>
+								<a class="list_edit_btn" href="{% block edit_path %}{{ path('admin_entity_edit', { 'id': entity.id }) }}{% endblock edit_path %}" title="Editar"></a>
+							</li>
+							
+							<li>
+							{% block list_delete %}{% endblock list_delete %}
+							
+							{#
+							
+								<a class="list_delete_btn" href="{% block delete_path %}{{ path('admin_entity_delete', { 'id': entity.id }) }}{% endblock delete_path %}" title="Borrar"></a>
+							#}
+							</li>
+							
+						</ul>
+					</td>
+					{% endblock list_buttons %}
+					</tr>
+					
+					{% else %}
+					<tr class="trColor1">
+						<td colspan="0">
+							<span class="txt16">No existen registros.</span>
+						</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+			
+
+			{% endblock list_content %}
+		
+					
+	</div>
+					
+</div>
+
+{# display navigation #}
+<div class="navigation">
+    {{ entities.render()|raw }}
+</div>
+
+
+		{% block otros %}{% endblock otros %}
+
+{% endblock main_content %}
