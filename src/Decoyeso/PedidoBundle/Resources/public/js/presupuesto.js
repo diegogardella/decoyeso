@@ -121,7 +121,73 @@ $(document).ready(function(){
 	
 
 	
+<<<<<<< HEAD
 	
 });
 		
+=======
+	$( ".inputDesignaciones" ).autocomplete({
+			source: function( request, response ) {
+				$.ajax({
+					url: 'http://localhost/Decoyeso_arriba_test1/web/app_dev.php/presupuesto/items',
+					//dataType: "jsonp",
+					data: {term: request.term},
+					success: function( data ) {
+						response(jQuery.map(data, function(n){
+							
+							return {
+								label: n.designacion,
+								designacion: n.designacion,
+								unidad: n.unidad,
+								precio: n.precio,
+								id: n.id
+							}
+						}));
+				}
+			});
+			},
+			select: function( event, ui ) {
+				var i = $(this).attr("name").split("_");
+				var index = i[1];
+				
+				$("#unidad_"+index).val(ui.item.unidad);
+				$("#precioUnitario_"+index).val(ui.item.precio);
+				
+			},
+	});
+	
+
+	
+	
+	
+	
+	
+	
+});
+		
+
+
+/*
+arr = jQuery.map(data, function(n, i){
+    //console.log (n.designacion + i);
+	return {
+		label: n.designacion,
+		value: n.designacion
+	}
+  });
+*/
+
+/*
+response( $.map( data.itemnames, function( item ) {
+	console.log(item);
+	
+	return {
+		label: item.name + (item.adminName1 ? ", " + item.adminName1 : "") + ", " + item.countryName,
+		value: item.name
+	}
+	
+}));
+*/
+/**/
+>>>>>>> origin/desarrolloNico
 	

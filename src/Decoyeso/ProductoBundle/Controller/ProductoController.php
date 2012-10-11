@@ -15,6 +15,14 @@ use Decoyeso\ProductoBundle\Form\ProductoType;
  */
 class ProductoController extends Controller
 {
+<<<<<<< HEAD
+=======
+	
+	
+	
+
+	
+>>>>>>> origin/desarrolloNico
     /**
      * Lists all Producto entities.
      *

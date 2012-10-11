@@ -91,7 +91,11 @@ class Usuario extends BaseUser
      */
     protected $plainPassword;
     
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> origin/desarrolloNico
     
     /**
      * @var date $fechaCreado
@@ -133,6 +137,10 @@ class Usuario extends BaseUser
     }
     
 
+<<<<<<< HEAD
+=======
+    
+>>>>>>> origin/desarrolloNico
     public function __construct()
     {
     	parent::__construct();
@@ -171,8 +179,11 @@ class Usuario extends BaseUser
 
     } 
 
+<<<<<<< HEAD
     
 
+=======
+>>>>>>> origin/desarrolloNico
     /**
      * Set apellido
      *
@@ -312,4 +323,8 @@ class Usuario extends BaseUser
     {
         return $this->permisos;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/desarrolloNico

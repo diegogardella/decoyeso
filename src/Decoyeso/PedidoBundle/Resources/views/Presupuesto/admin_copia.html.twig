@@ -70,7 +70,11 @@ Crear Presupuesto
 			<tr class="NpresupuestoTr{{ i }}">
 				<td class="">
 				
+<<<<<<< HEAD
 				<input type="checkbox"  name="check_{{ i }}" value ="{{ i }}" 
+=======
+				<input type="checkbox"  name="check_{{ i }}" id="check_{{ i }}" value ="{{ i }}" 
+>>>>>>> origin/desarrolloNico
 				
 				{% if (item.check != null ) %}  
 				checked="checked"
@@ -79,6 +83,7 @@ Crear Presupuesto
 				class="checkCasillero">
 				</td>
 				<td class="NpresupuestoCol0">
+<<<<<<< HEAD
 				<input type="text" value="{{ item.designacion }}" name="designacion_{{ i }}" class="inputLargo">
 				</td>
 				<td class="NpresupuestoCol1">
@@ -98,6 +103,27 @@ Crear Presupuesto
 				</td>
 				<td class="NpresupuestoCol6">
 				<input type="text" value="{{ item.precioTotal }}" name="precioTotal_{{ i }}" class="inputCorto inputPrecioTotal">
+=======
+				<input type="text" value="{{ item.designacion }}" name="designacion_{{ i }}" id="designacion_{{ i }}" class="inputLargo inputDesignaciones">
+				</td>
+				<td class="NpresupuestoCol1">
+				<input type="text" value="{{ item.unidad }}" name="unidad_{{ i }}" id="unidad_{{ i }}" class="inputCorto">
+				</td>
+				<td class="NpresupuestoCol2">
+				<input type="text" value="{{ item.cantidad }}" name="cantidad_{{ i }}" id="cantidad_{{ i }}" class="inputCorto inputCantidad">
+				</td>
+				<td class="NpresupuestoCol3">
+				<input type="text" value="{{ item.precioUnitario }}" name="precioUnitario_{{ i }}" id="precioUnitario_{{ i }}" class="inputCorto precioUnitario">
+				</td>
+				<td class="NpresupuestoCol4">
+				<input type="text" value="{{ item.precioVtaSinIva }}" name="precioVtaSinIva_{{ i }}" id="precioVtaSinIva_{{ i }}" class="inputCorto ">
+				</td>
+				<td class="NpresupuestoCol5">
+				<input type="text" value="{{ item.precioVtaConIva }}"  name="precioVtaConIva_{{ i }}" id="precioVtaConIva_{{ i }}" class="inputCorto ">
+				</td>
+				<td class="NpresupuestoCol6">
+				<input type="text" value="{{ item.precioTotal }}" name="precioTotal_{{ i }}" id="precioTotal_{{ i }}" class="inputCorto inputPrecioTotal">
+>>>>>>> origin/desarrolloNico
 				</td>
 			</tr>
 			{% set i = i + 1 %}
@@ -230,5 +256,11 @@ Crear Presupuesto
 {% block list_path %}{{ path('presupuesto') }}{% endblock list_path %}
 
 {% block javascript_extra %}
+<<<<<<< HEAD
+=======
+<link type="text/css" href="{{ asset('bundles/pedido/js/jqueryui1824custom/css/ui-lightness/jqueryCustom.css') }}" rel="stylesheet" />
+	<script type="text/javascript" src="{{ asset('bundles/pedido/js/jqueryui1824custom/js/jqueryCustom.js') }}" ></script>
+	
+>>>>>>> origin/desarrolloNico
 	<script type="text/javascript" src="{{ asset('bundles/pedido/js/presupuesto.js') }}" /></script>
 {% endblock javascript_extra %}

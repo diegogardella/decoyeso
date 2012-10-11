@@ -15,6 +15,95 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PresupuestoController extends Controller
 {
+<<<<<<< HEAD
+=======
+	
+	
+	public function getItemsAction()
+	{
+		
+		$string = $this->getRequest()->get("term");
+		
+		
+		
+		$em = $this->getDoctrine()->getEntityManager();
+	
+		$query = $em->createQuery('SELECT p FROM ProductoBundle:Producto p
+				WHERE  p.nombre LIKE :p_nombre
+				ORDER BY p.nombre ASC
+				');
+		
+		$query->setParameters(array(
+				'p_nombre' => "%".$string."%",
+		));
+		
+		$productos = $query->getResult();
+		
+		$query = $em->createQuery('SELECT p FROM ProductoBundle:Insumo p
+				WHERE  p.nombre LIKE :p_nombre
+				ORDER BY p.nombre ASC
+				');
+		
+		$query->setParameters(array(
+				'p_nombre' => "%".$string."%",
+		));
+		
+		$insumos = $query->getResult();
+		
+		$query = $em->createQuery('SELECT p FROM ProductoBundle:Servicio p
+				WHERE  p.nombre LIKE :p_nombre
+				ORDER BY p.nombre ASC
+				');
+		
+		$query->setParameters(array(
+				'p_nombre' => "%".$string."%",
+		));
+		
+		$servicios = $query->getResult();
+		
+		
+
+		 
+		 foreach($productos as $p):
+		 		 $items[] = array(
+		 			"designacion" => $p->getNombre(),
+		 			"unidad" => $p->getUnidad(),
+		 			"precio" => $p->getPrecio(),
+		 		 	"id" => $p->getId(),
+		 		);
+		 endforeach;
+		 foreach($insumos as $p):
+		 $items[] = array(
+		 		"designacion" => $p->getNombre(),
+		 		"unidad" => $p->getUnidad(),
+		 		"precio" => $p->getPrecio(),
+		 		"id" => $p->getId(),
+		 );
+		 endforeach;
+		 foreach($servicios as $p):
+		 $items[] = array(
+		 		"designacion" => $p->getNombre(),
+		 		"unidad" => $p->getUnidad(),
+		 		"precio" => $p->getPrecio(),
+		 		"id" => $p->getId(),
+		 );
+		 endforeach;
+		 
+		
+		$return = json_encode(array(), JSON_FORCE_OBJECT);
+		if (isset($items)) $return = json_encode($items, JSON_FORCE_OBJECT);
+		//print_r($return);
+		
+		
+
+		//exit();
+			
+		return new Response($return,200,array('Content-Type'=>'application/json'));
+		
+	}
+	
+	
+>>>>>>> origin/desarrolloNico
     /**
      * Lists all Presupuesto entities.
      *

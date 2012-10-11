@@ -23,7 +23,10 @@ class ProfileUsuarioType extends AbstractType
             ->add('celular','text', array('label'=>'Celular', 'required'=>false))
             ->add('email','text', array('label'=>'Email', 'required'=>false))
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/desarrolloNico
 		;
 		
 		
@@ -33,4 +36,8 @@ class ProfileUsuarioType extends AbstractType
     {
         return 'usuario';
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/desarrolloNico

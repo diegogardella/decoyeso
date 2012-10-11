@@ -1,8 +1,29 @@
+<<<<<<< HEAD
 {% extends "UsuarioBundle::layout.html.twig" %}
 
 {% block fos_user_content %}
 {% if error %}
     <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
+=======
+{% extends "CoobixAdminBundle:Default:index.html.twig" %}
+
+{% block header %} {% endblock header %}
+{% block sidebar %} {% endblock sidebar %}
+
+{% block main %}
+
+
+<div class="loginWrap border_radius">
+
+{% block fos_user_content %}
+{% if error %}
+    <div>
+    {#
+    {{ error|trans({}, 'FOSUserBundle') }}
+    #}
+    Por favor verifique Usuario/Contraseña.
+    </div>
+>>>>>>> origin/desarrolloNico
 {% endif %}
 
 <form action="{{ path("fos_user_security_check") }}" method="post">
@@ -19,10 +40,17 @@
     </div>
     
     <div class="fix"></div>
+<<<<<<< HEAD
         
     <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
     <label for="remember_me">{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
 	   
+=======
+      {#  
+    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+    <label for="remember_me">{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
+	   #}
+>>>>>>> origin/desarrolloNico
     <div class="right inputLoginWrap">
          <input type="submit" id="_submit" name="_submit" value="Enviar" />
     </div>
@@ -32,6 +60,7 @@
 </form>
 {% endblock fos_user_content %}
 
+<<<<<<< HEAD
 {#
 {% extends "FOSUserBundle::layout.html.twig" %}
 
@@ -56,3 +85,9 @@
 </form>
 {% endblock fos_user_content %}
 #}
+=======
+        
+</div>
+
+{% endblock main %}
+>>>>>>> origin/desarrolloNico

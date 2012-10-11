@@ -40,6 +40,13 @@ presupuesto_arreglar:
     pattern:  /{id}/arreglar
     defaults: { _controller: "PedidoBundle:Presupuesto:arreglar" }
 
+<<<<<<< HEAD
+=======
+presupuesto_items:
+    pattern:  /items
+    defaults: { _controller: "PedidoBundle:Presupuesto:getItems" }
+
+>>>>>>> origin/desarrolloNico
 
 
 
