@@ -49,9 +49,20 @@ class Producto
      * @var float $precio
      *
      * @ORM\Column(name="precio", type="float")
-     * @assert\NotBlank(message="Por favor, ingrese precio") 
+     * @assert\NotBlank(message="Por favor, ingrese precio")
+	 * @assert\Type(type="float", message="EL valor de precio solo puede ser un número entero o decimal")
      */
     private $precio;
+    
+    
+    /**
+     * @var float $costo
+     *
+     * @ORM\Column(name="costo", type="float")
+     * @assert\NotBlank(message="Por favor, ingrese precio de costo")
+     * @assert\Type(type="float", message="EL valor de costo solo puede ser un número entero o decimal")
+     */
+    private $costo;
 
 
     /**
@@ -146,5 +157,25 @@ class Producto
     
     public function __toString(){
     	return $this->nombre();
+    }
+
+    /**
+     * Set costo
+     *
+     * @param float $costo
+     */
+    public function setCosto($costo)
+    {
+        $this->costo = $costo;
+    }
+
+    /**
+     * Get costo
+     *
+     * @return float 
+     */
+    public function getCosto()
+    {
+        return $this->costo;
     }
 }

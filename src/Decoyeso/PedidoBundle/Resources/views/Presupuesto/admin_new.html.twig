@@ -63,30 +63,7 @@ Crear Presupuesto
 			{% for i in 0..6%} 
 			<tr class="NpresupuestoTr{{ i }}">
 				<td class="">
-<<<<<<< HEAD
-				<input type="checkbox"  name="check_{{ i }}" value ="{{ i }}" class="checkCasillero">
-				</td>
-				<td class="NpresupuestoCol0">
-				<input type="text"  name="designacion_{{ i }}" class="inputLargo ">
-				</td>
-				<td class="NpresupuestoCol1">
-				<input type="text" name="unidad_{{ i }}" class="inputCorto">
-				</td>
-				<td class="NpresupuestoCol2">
-				<input type="text" name="cantidad_{{ i }}" class="inputCorto inputCantidad">
-				</td> 
-				<td class="NpresupuestoCol3">
-				<input type="text" name="precioUnitario_{{ i }}" class="inputCorto precioUnitario">
-				</td>
-				<td class="NpresupuestoCol4">
-				<input type="text" name="precioVtaSinIva_{{ i }}" class="inputCorto ">
-				</td>
-				<td class="NpresupuestoCol5">
-				<input type="text" name="precioVtaConIva_{{ i }}" class="inputCorto ">
-				</td>
-				<td class="NpresupuestoCol6">
-				<input type="text" name="precioTotal_{{ i }}" class="inputCorto inputPrecioTotal">
-=======
+
 				<input type="checkbox"  name="check_{{ i }}" id="check_{{ i }}" value ="{{ i }}" class="checkCasillero">
 				</td>
 				<td class="NpresupuestoCol0">
@@ -109,7 +86,6 @@ Crear Presupuesto
 				</td>
 				<td class="NpresupuestoCol6">
 				<input type="text" name="precioTotal_{{ i }}" id="precioTotal_{{ i }}" class="inputCorto inputPrecioTotal">
->>>>>>> origin/desarrolloNico
 				</td>
 			</tr>	
 			{% endfor %}		
@@ -240,13 +216,10 @@ Crear Presupuesto
 {% block list_path %}{{ path('presupuesto') }}{% endblock list_path %}
 
 {% block javascript_extra %}
-<<<<<<< HEAD
-	<script type="text/javascript" src="{{ asset('bundles/pedido/js/presupuesto.js') }}" /></script>
-=======
+
 	<link type="text/css" href="{{ asset('bundles/pedido/js/jqueryui1824custom/css/ui-lightness/jqueryCustom.css') }}" rel="stylesheet" />
 	<script type="text/javascript" src="{{ asset('bundles/pedido/js/jqueryui1824custom/js/jqueryCustom.js') }}" ></script>
 	
 	<script type="text/javascript" src="{{ asset('bundles/pedido/js/presupuesto.js') }}" ></script>
 	
->>>>>>> origin/desarrolloNico
 {% endblock javascript_extra %}

@@ -121,15 +121,11 @@ $(document).ready(function(){
 	
 
 	
-<<<<<<< HEAD
-	
-});
-		
-=======
+
 	$( ".inputDesignaciones" ).autocomplete({
 			source: function( request, response ) {
 				$.ajax({
-					url: 'http://localhost/Decoyeso_arriba_test1/web/app_dev.php/presupuesto/items',
+					url: 'http://localhost/decoyeso/web/app_dev.php/presupuesto/items',
 					//dataType: "jsonp",
 					data: {term: request.term},
 					success: function( data ) {
@@ -189,5 +185,5 @@ response( $.map( data.itemnames, function( item ) {
 }));
 */
 /**/
->>>>>>> origin/desarrolloNico
+
 	

@@ -51,7 +51,8 @@ class Servicio
      * @var float $precio
      *
      * @ORM\Column(name="precio", type="float")
-     * @assert\NotBlank(message="Por favor, ingrese precio") 
+     * @assert\NotBlank(message="Por favor, ingrese precio")
+	 * @assert\Type(type="float", message="EL valor de precio solo puede ser un número entero o decimal")
      */
     private $precio;
 

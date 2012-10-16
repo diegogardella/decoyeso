@@ -13,6 +13,7 @@ class ProductoType extends AbstractType
             ->add('nombre')
             ->add('descripcion')
             ->add('unidad')
+            ->add('costo')
             ->add('precio')
             ->add('insumos','hidden',array('property_path'=>false))
         ;

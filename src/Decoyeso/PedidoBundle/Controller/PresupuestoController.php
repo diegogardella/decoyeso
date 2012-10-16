@@ -15,8 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PresupuestoController extends Controller
 {
-<<<<<<< HEAD
-=======
 	
 	
 	public function getItemsAction()
@@ -103,7 +101,7 @@ class PresupuestoController extends Controller
 	}
 	
 	
->>>>>>> origin/desarrolloNico
+
     /**
      * Lists all Presupuesto entities.
      *
