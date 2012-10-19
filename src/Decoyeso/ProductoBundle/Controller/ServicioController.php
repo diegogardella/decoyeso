@@ -115,7 +115,7 @@ class ServicioController extends Controller
         $form    = $this->createForm(new ServicioType(), $entity);
         $form->bindRequest($request);
         
-        $formProductos=$request->request->get('servicio');
+        $formServicio=$request->request->get('servicio');
         
         if ($form->isValid()) {
         	
@@ -124,7 +124,7 @@ class ServicioController extends Controller
             $em->flush();           
 
             
-           $this->gestionarInsumos($formProductos['insumos'],$formProductos['productos'],$entity);
+           $this->gestionarServicio($formServicio['insumos'],$formServicio['productos'],$entity);
             
             
             $this->get('session')->setFlash('msj_info','El servicio se ha creado correctamente.');
@@ -223,7 +223,7 @@ class ServicioController extends Controller
             $em->persist($entity);
             $em->flush();
             
-            $this->gestionarInsumos($formServicio['insumos'],$formServicio['productos'],$entity);
+            $this->gestionarServicio($formServicio['insumos'],$formServicio['productos'],$entity);
             
             $this->get('session')->setFlash('msj_info','El servicio se ha modificado correctamente.');
 
@@ -327,7 +327,7 @@ class ServicioController extends Controller
     
     }
     
-    public function gestionarInsumos($parametroInsumos,$parametroProductos,$servicio){
+    public function gestionarServicio($parametroInsumos,$parametroProductos,$servicio){
     	
     	$em=$this->getDoctrine()->getEntityManager();
     	$insumos=explode(';',$parametroInsumos);

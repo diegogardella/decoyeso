@@ -2,11 +2,12 @@
 
 namespace Decoyeso\ProductoBundle\Controller;
 
-use Decoyeso\ProductoBundle\Entity\ProductoInsumo;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Decoyeso\ProductoBundle\Entity\ProductoInsumo;
 use Decoyeso\ProductoBundle\Entity\Producto;
+use Decoyeso\ProductoBundle\Entity\ProductoProducto;
+
 use Decoyeso\ProductoBundle\Form\ProductoType;
 
 /**
@@ -15,11 +16,6 @@ use Decoyeso\ProductoBundle\Form\ProductoType;
  */
 class ProductoController extends Controller
 {
-	
-	
-	
-
-	
     /**
      * Lists all Producto entities.
      *
@@ -92,11 +88,13 @@ class ProductoController extends Controller
         $form   = $this->createForm(new ProductoType(), $entity);
 
         $insumos=$em->getRepository('ProductoBundle:Insumo')->findAll();
+        $productos=$em->getRepository('ProductoBundle:Producto')->findAll();
         
         return $this->render('ProductoBundle:Producto:admin_new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         	'insumos'=>$insumos,
+        	'productos'=>$productos,        		
         ));
     }
 
@@ -116,15 +114,11 @@ class ProductoController extends Controller
         $formProductos=$request->request->get('producto');
         
         if ($form->isValid()) {
-        	
-            
+        	            
             $em->persist($entity);
             $em->flush();           
 
-            
-           $this->gestionarInsumos($formProductos['insumos'],$entity);
-            
-            
+            $this->gestionarProducto($formProductos['insumos'],$formProductos['productos'],$entity);
             $this->get('session')->setFlash('msj_info','El producto se ha creado correctamente.');
             
             return $this->redirect($this->generateUrl('producto_edit', array('id' => $entity->getId())));
@@ -132,11 +126,13 @@ class ProductoController extends Controller
         }
         
         $insumos=$em->getRepository('ProductoBundle:Insumo')->findAll();
-
+        $productos=$em->getRepository('ProductoBundle:Producto')->findAll();
+        
         return $this->render('ProductoBundle:Producto:admin_new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         	'insumos'=>$insumos,
+        	'productos'=>$productos,        		
         ));
     }
 
@@ -160,6 +156,17 @@ class ProductoController extends Controller
         
         $insumosDisponibles=$em->createQuery('SELECT i FROM ProductoBundle:Insumo i WHERE i.id not in ('.$idInsumosIncluidos.')')->getResult();
         
+        
+        $productosIncluidos=$em->getRepository('ProductoBundle:ProductoProducto')->findByProducto($id);
+        
+        $idProductosIncluidos='0';
+        foreach ($productosIncluidos as $productoc){
+        	$idProductosIncluidos.=','.$productoc->getProductos()->getId();
+        }
+
+         
+        $productosDisponibles=$em->createQuery('SELECT p FROM ProductoBundle:Producto p WHERE p.id not in ('.$idProductosIncluidos.','.$id.')')->getResult();
+        
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Producto entity.');
@@ -174,6 +181,8 @@ class ProductoController extends Controller
             'delete_form' => $deleteForm->createView(),
         	'insumos'=>$insumosDisponibles,
         	'insumosIncluidos'=>$insumosIncluidos,
+        	'productos'=>$productosDisponibles,
+        	'productosIncluidos'=>$productosIncluidos,        		
         ));
     }
 
@@ -204,7 +213,7 @@ class ProductoController extends Controller
             $em->persist($entity);
             $em->flush();
             
-            $this->gestionarInsumos($formProductos['insumos'],$entity);
+            $this->gestionarProducto($formProductos['insumos'],$formProductos['productos'],$entity);
             
             $this->get('session')->setFlash('msj_info','El producto se ha modificado correctamente.');
 
@@ -220,12 +229,27 @@ class ProductoController extends Controller
         
         $insumosDisponibles=$em->createQuery('SELECT i FROM ProductoBundle:Insumo i WHERE i.id not in ('.$idInsumosIncluidos.')')->getResult();
 
+        
+        $productosIncluidos=$em->getRepository('ProductoBundle:ProductoProducto')->findByProducto($id);
+        
+        $idProductosIncluidos='0';
+        foreach ($productosIncluidos as $productoc){
+        	$idProductosIncluidos.=','.$productoc->getProductos()->getId();
+        }
+        
+         
+        $productosDisponibles=$em->createQuery('SELECT p FROM ProductoBundle:Producto p WHERE p.id not in ('.$idProductosIncluidos.','.$id.')')->getResult();
+        
+        
+        
         return $this->render('ProductoBundle:Producto:admin_edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         	'insumos'=>$insumosDisponibles,
-        	'insumosIncluidos'=>$insumosIncluidos,        		
+        	'insumosIncluidos'=>$insumosIncluidos,
+        	'productos'=>$productosDisponibles,
+        	'productosIncluidos'=>$productosIncluidos,        		    		
         ));
     }
 
@@ -251,7 +275,11 @@ class ProductoController extends Controller
             	$em->flush();
             }
             
-            
+            $ProductoProductos=$em->getRepository('ProductoBundle:ProductoProducto')->findByProducto($id);
+            foreach ($ProductoProductos as $pp){
+            	$em->remove($pp);
+            	$em->flush();
+            }
            
              
             $ServicioProductos=$em->getRepository('ProductoBundle:ServicioProducto')->findByProducto($id);
@@ -302,11 +330,14 @@ class ProductoController extends Controller
     
     }
     
-    public function gestionarInsumos($parametroInsumos,$producto){
+    public function gestionarProducto($parametroInsumos,$parametroProductos,$producto){
     	
+
     	$em=$this->getDoctrine()->getEntityManager();
     	$insumos=explode(';',$parametroInsumos);
+    	$productos=explode(';',$parametroProductos);
 
+    	
     	$objetosProductoInsumos=$em->getRepository('ProductoBundle:ProductoInsumo')->findByProducto($producto->getId());
 
     	foreach($objetosProductoInsumos as $objeto){
@@ -314,6 +345,14 @@ class ProductoController extends Controller
     	}
     	$em->flush();
 
+    	
+    	$objetosProductoProductos=$em->getRepository('ProductoBundle:ProductoProducto')->findByProducto($producto->getId());
+    	 
+    	foreach($objetosProductoProductos as $objeto){
+    		$em->remove($objeto);
+    	}
+    	$em->flush();
+    	
     	
     	for($i=1;$i<count($insumos);$i++){
     	
@@ -330,6 +369,21 @@ class ProductoController extends Controller
 
     	}
     	
+    	for($j=1;$j<count($productos);$j++){
+    		 
+    		$ProductoProducto[$j]=new ProductoProducto();
+    		$ProductoProducto[$j]->setProducto($producto);
+    		 
+    		$productoO=explode('@',$productos[$j]);
+    		
+    		$objetoProducto=$em->getRepository('ProductoBundle:Producto')->find($productoO[0]);
+    		$ProductoProducto[$j]->setProductos($objetoProducto);
+    		$ProductoProducto[$j]->setCantidad($productoO[1]);
+    		 
+    		$em->persist($ProductoProducto[$j]);
+    		 
+    	}
+    	 
     	$em->flush();
     	    	
     }
