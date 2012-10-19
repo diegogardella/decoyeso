@@ -13,7 +13,7 @@
 }
 
 .field_widget_insumos tr td select,.field_widget_productos tr td select{
-	width: 350px;
+	width: 100%;
 	padding:5px;
 	height: 30px
 }

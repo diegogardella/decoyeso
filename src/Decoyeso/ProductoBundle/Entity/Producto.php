@@ -21,7 +21,8 @@ class Producto
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+    
+ 	
     /**
      * @var string $nombre
      *
@@ -50,7 +51,7 @@ class Producto
      *
      * @ORM\Column(name="precio", type="float")
      * @assert\NotBlank(message="Por favor, ingrese precio")
-	 * @assert\Type(type="float", message="EL valor de precio solo puede ser un número entero o decimal")
+	 * @assert\Type(type="numeric", message="EL valor de precio solo puede ser un número entero o decimal")
      */
     private $precio;
     
@@ -60,10 +61,16 @@ class Producto
      *
      * @ORM\Column(name="costo", type="float")
      * @assert\NotBlank(message="Por favor, ingrese precio de costo")
-     * @assert\Type(type="float", message="EL valor de costo solo puede ser un número entero o decimal")
+     * @assert\Type(type="numeric", message="EL valor de costo solo puede ser un número entero o decimal")
      */
     private $costo;
 
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="tipo", type="integer")
+     */
+    private $tipo;
 
     /**
      * Get id
@@ -154,10 +161,6 @@ class Producto
     {
         return $this->precio;
     }
-    
-    public function __toString(){
-    	return $this->nombre();
-    }
 
     /**
      * Set costo
@@ -178,4 +181,27 @@ class Producto
     {
         return $this->costo;
     }
+    
+    
+    /**
+     * Get tipo
+     *
+     * @return integer
+     */
+    public function getTipo()
+    {
+    	return $this->tipo;
+    }
+    
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     */
+    public function setTipo($tipo)
+    {
+    	$this->tipo = $tipo;
+    }
+    
+    
 }

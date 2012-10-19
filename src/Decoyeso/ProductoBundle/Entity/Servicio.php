@@ -56,6 +56,14 @@ class Servicio
      */
     private $precio;
 
+    /**
+     * @var float $costo
+     *
+     * @ORM\Column(name="costo", type="float")
+     * @assert\NotBlank(message="Por favor, ingrese precio de costo")
+     * @assert\Type(type="numeric", message="EL valor de costo solo puede ser un número entero o decimal")
+     */
+    private $costo;
 
     /**
      * Get id
@@ -149,5 +157,25 @@ class Servicio
     
     public function __toString(){
     	return $this->nombre;
+    }
+
+    /**
+     * Set costo
+     *
+     * @param float $costo
+     */
+    public function setCosto($costo)
+    {
+        $this->costo = $costo;
+    }
+
+    /**
+     * Get costo
+     *
+     * @return float 
+     */
+    public function getCosto()
+    {
+        return $this->costo;
     }
 }
