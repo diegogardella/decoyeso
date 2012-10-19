@@ -1,0 +1,30 @@
+proceso:
+    pattern:  /
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:index" }
+
+proceso_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:show" }
+
+proceso_new:
+    pattern:  /new
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:new" }
+
+proceso_create:
+    pattern:  /create
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:create" }
+    requirements: { _method: post }
+
+proceso_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:edit" }
+
+proceso_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:update" }
+    requirements: { _method: post }
+
+proceso_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:delete" }
+    requirements: { _method: post }

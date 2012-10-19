@@ -1,0 +1,7 @@
+parameters:
+#    decoyeso_produccion.example.class: Decoyeso\ProduccionBundle\Example
+
+services:
+#    decoyeso_produccion.example:
+#        class: %decoyeso_produccion.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

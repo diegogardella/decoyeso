@@ -1,0 +1,3 @@
+DecoyesoProduccionBundle_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: DecoyesoProduccionBundle:Default:index }
