@@ -29,7 +29,9 @@ class AppKernel extends Kernel
         	new Spraed\PDFGeneratorBundle\SpraedPDFGeneratorBundle(),
             new Decoyeso\UbicacionBundle\UbicacionBundle(),
         	new Decoyeso\ProductoBundle\ProductoBundle(),
-        		        		
+
+            new Decoyeso\ObraBundle\DecoyesoObraBundle(),
+            new Decoyeso\ProduccionBundle\DecoyesoProduccionBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
