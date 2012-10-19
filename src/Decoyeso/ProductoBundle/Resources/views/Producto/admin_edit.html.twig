@@ -23,87 +23,10 @@
 		  
 		 {% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 		
-			{{ form_widget(edit_form.insumos,{'attr':{'value':''} }) }}
-			{{ form_widget(edit_form.productos,{'attr':{'value':''} }) }}
+		
+			{{ form_widget(edit_form.insumos) }}
 			
-			{{ form_row(edit_form.tipo) }}
-			{{ form_row(edit_form.nombre) }}
-			{{ form_row(edit_form.descripcion) }}
-			{{ form_row(edit_form.unidad) }}
-			{{ form_row(edit_form.costo) }}
-			
-			<div  class="form_row">
-			
-				<label class=" required" >Costo sugerido</label>
-				<div class="field_widget" id="idCostoSugerido">
-					
-					{% set costoSugerido=0 %}
-					{% for producto in productosIncluidos %}
-						{% set costoSugerido=costoSugerido+(producto.productos.costo*producto.cantidad) %}
-					{% endfor %}
-					
-					{% for insumo in insumosIncluidos %}
-						{% set costoSugerido=costoSugerido+(insumo.insumo.costo*insumo.cantidad) %}
-					{% endfor %}
-				
-					{{ costoSugerido }}
-				
-				</div>
-			</div>
-			
-			{{ form_row(edit_form.precio) }}
-			
-			{{ form_rest(edit_form) }}
-			
-			
-			<div  class="form_row">
-			
-				<label class=" required" >Productos del Producto</label>
-				<div class="field_widget">
-				
-					<table  class="field_widget_productos" id="tableListProductos">
-						<tr>
-							<th>Nombre</th>
-							<th>Cantidad</th>
-							<th>Costo</th>
-							<th></th>
-						</tr>
-						<tr>
-							<td>
-								<select name="selectProductos" id="idSelectProducto" style="float:left;">
-									{% for producto in productos %}
-										<option value="{{producto.id}}@{{ producto.costo }}@{{ producto.unidad }}">{{producto.nombre}}</option>
-									{%else%}
-										<option value="0@@@">No existen productos para agregar</option>
-									{%endfor%}						
-								</select>
-							</td>
-							<td><input style="float:left;" maxlength="12" type="text" id="idProductoCantidad" name="productoCantidad" value=""></td>
-							<td id="idCostoProductoAgergar"></td>
-							<td><button type="button" style="float:left;" id="idAgregarProducto" >Agregar</button></td>
-						</tr>
-						{% set productosInicial='' %}
-						{% for producto in productosIncluidos %}						
-							<tr id="pro_tr_{{producto.productos.id}}">
-								<td id="pro_nom_{{producto.productos.id}}">{{producto.productos.nombre}}</td>
-								<td id="pro_cant_{{producto.productos.id}}">{{producto.cantidad}} {{ producto.productos.unidad}}</td>
-								<td id="pro_cost_{{producto.productos.id}}">{{ producto.productos.costo}}</td>
-								<td ><button class="eliminarProductoDeLista" type="button" value="{{producto.productos.id}}">X</button></td>
-								
-								{% set productosInicial=productosInicial~";"~producto.productos.id~"@"~producto.cantidad~"@"~producto.productos.costo~"@"~producto.productos.unidad~"@"~producto.productos.nombre %}
-								
-							</tr>
-						{% endfor %}
-					
-					</table>
-					
-					
-				</div>
-			
-			
-			</div>
-			
-			
+			{{ form_widget(edit_form) }}
 			
 			
 			<div id="div_producto_precio" class="form_row">
@@ -115,32 +38,29 @@
 						<tr>
 							<th>Nombre</th>
 							<th>Cantidad</th>
-							<th>Costo</th>												
 							<th></th>
 						</tr>
 						<tr>
 							<td>
 								<select name="selectInsumos" id="idSelectInsumo" style="float:left;">
 									{% for insumo in insumos%}
-										<option value="{{insumo.id}}@{{ insumo.costo }}@{{ insumo.unidad }}">{{insumo.nombre}}</option>
-									{% else %}
-										<option value="0@@@">No existen insumos para agregar</option>
+										<option value="{{insumo.id}}">{{insumo.nombre}}</option>
+									{%else%}
+										<option value="0">No existen insumos para agregar</option>
 									{%endfor%}						
 								</select>
 							</td>
-							<td><input style="float:left;" maxlength="12" type="text" id="idInsumoCantidad" name="insumoCantidad" value=""></td>
-							<td id="idCostoInsumoAgergar"></td>		
-							<td><button type="button" style="float:left;" id="idAgregarInsumo" >Agregar</button></td>
+							<td><input style="float:left;" type="text" id="idInsumoCantidad" name="insumoCantidad" value=""></td>
+							<td><button type="button" style="float:left;" id="idAgregarInsumo" >Agregar Insumo</button></td>
 						</tr>
 						{% set insumosInicial='' %}
 						{% for insumo in insumosIncluidos %}						
 							<tr id="ins_tr_{{insumo.insumo.id}}">
 								<td id="ins_nom_{{insumo.insumo.id}}">{{insumo.insumo.nombre}}</td>
-								<td id="pro_cant_{{insumo.insumo.id}}">{{insumo.cantidad}} {{ insumo.insumo.unidad}}</td>
-								<td id="pro_cost_{{insumo.insumo.id}}">{{ insumo.insumo.costo}}</td>
-								<td ><button class="eliminarInsumoDeLista" type="button" value="{{insumo.insumo.id}}">X</button></td>
+								<td id="ins_cant_{{insumo.insumo.id}}">{{insumo.cantidad}}</td>
+								<td><button class="eliminarInsumoDeLista" type="button" value="{{insumo.insumo.id}}">X</button></td>
 								
-								{% set insumosInicial=insumosInicial~";"~insumo.insumo.id~"@"~insumo.cantidad~"@"~insumo.insumo.costo~"@"~insumo.insumo.unidad~"@"~insumo.insumo.nombre %}
+								{% set insumosInicial=insumosInicial~";"~insumo.insumo.id~"@"~insumo.cantidad %}
 								
 							</tr>
 						{% endfor %}
@@ -153,20 +73,16 @@
 			
 			</div>
 			
-			{{ form_rest(edit_form) }}
-
+			
 			<p>
 				<button class="btn_green_button right" id="btnGuardarCambios" type="submit">Guardar cambios</button>
 			</p>
 			
-
+			<input type="hidden" id="insumosInicial" value="{{insumosInicial}}">
 			
 	</form>
-	
-	<input type="hidden" id="insumosInicial" value="{{insumosInicial}}">
-	<input type="hidden" id="productosInicial" value="{{productosInicial}}">
-		
-{% block form_record_actions %}
+			
+	{% block form_record_actions %}
 	
 	{% endblock form_record_actions %}
 	<div class="fix"></div>
@@ -190,7 +106,6 @@
 	<script type="text/javascript">
 		$(window).ready(function(){
 			$('#producto_insumos').val($('#insumosInicial').val());
-			$('#producto_productos').val($('#productosInicial').val());
 		});	
 	</script>
 	

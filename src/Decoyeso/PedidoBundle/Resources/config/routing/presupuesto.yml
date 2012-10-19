@@ -30,6 +30,11 @@ presupuesto_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "PedidoBundle:Presupuesto:delete" }
     requirements: { _method: post }
+
+presupuesto_aprobar:
+    pattern:  /{id}/aprobar
+    defaults: { _controller: "PedidoBundle:Presupuesto:aprobar" }
+    requirements: { _method: post }
     
 presupuesto_imprimir:
     pattern:  /{id}/imprimir
@@ -39,7 +44,6 @@ presupuesto_imprimir:
 presupuesto_arreglar:
     pattern:  /{id}/arreglar
     defaults: { _controller: "PedidoBundle:Presupuesto:arreglar" }
-
 
 presupuesto_items:
     pattern:  /items

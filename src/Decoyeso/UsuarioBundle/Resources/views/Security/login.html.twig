@@ -1,4 +1,3 @@
-
 {% extends "CoobixAdminBundle:Default:index.html.twig" %}
 
 {% block header %} {% endblock header %}
@@ -17,7 +16,6 @@
     #}
     Por favor verifique Usuario/Contraseña.
     </div>
-
 {% endif %}
 
 <form action="{{ path("fos_user_security_check") }}" method="post">
@@ -34,12 +32,10 @@
     </div>
     
     <div class="fix"></div>
-
       {#  
     <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
     <label for="remember_me">{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
 	   #}
-
     <div class="right inputLoginWrap">
          <input type="submit" id="_submit" name="_submit" value="Enviar" />
     </div>
@@ -49,9 +45,7 @@
 </form>
 {% endblock fos_user_content %}
 
-
         
 </div>
 
 {% endblock main %}
-

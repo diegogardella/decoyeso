@@ -13,7 +13,6 @@ class ServicioType extends AbstractType
             ->add('nombre')
             ->add('descripcion')
             ->add('unidad')
-            ->add('costo')            
             ->add('precio')
             ->add('productos','hidden',array('property_path'=>false))
             ->add('insumos','hidden',array('property_path'=>false))

@@ -12,7 +12,7 @@
 	{% if entity.pedido %}
 		<ul>
 			<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
-			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.obra}}</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombreObra}}</a></li>
 			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_edit',{'id':entity.id}) }}">Presupuesto:{{ entity.numero }}</a></li>
 			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_copia',{'id':entity.id}) }}">Crear Presupuesto</a></li>
 		</ul>
@@ -67,43 +67,13 @@ Crear Presupuesto
 	
 			{% set i = 0 %}
 			{% for item in items %}
-			<tr class="NpresupuestoTr{{ i }}">
+			<tr class="NpresupuestoTr" id="NpresupuestoTr{{ i }}">
 				<td class="">
-				
-<<<<<<< HEAD
-				<input type="checkbox"  name="check_{{ i }}" value ="{{ i }}" 
-=======
 				<input type="checkbox"  name="check_{{ i }}" id="check_{{ i }}" value ="{{ i }}" 
->>>>>>> origin/desarrolloNico
-				
-				{% if (item.check != null ) %}  
-				checked="checked"
-				{% endif %}
-				
+				{% if (item.check != null ) %}	checked="checked" {% endif %}
 				class="checkCasillero">
 				</td>
 				<td class="NpresupuestoCol0">
-<<<<<<< HEAD
-				<input type="text" value="{{ item.designacion }}" name="designacion_{{ i }}" class="inputLargo">
-				</td>
-				<td class="NpresupuestoCol1">
-				<input type="text" value="{{ item.unidad }}" name="unidad_{{ i }}" class="inputCorto">
-				</td>
-				<td class="NpresupuestoCol2">
-				<input type="text" value="{{ item.cantidad }}" name="cantidad_{{ i }}" class="inputCorto inputCantidad">
-				</td>
-				<td class="NpresupuestoCol3">
-				<input type="text" value="{{ item.precioUnitario }}" name="precioUnitario_{{ i }}" class="inputCorto precioUnitario">
-				</td>
-				<td class="NpresupuestoCol4">
-				<input type="text" value="{{ item.precioVtaSinIva }}" name="precioVtaSinIva_{{ i }}" class="inputCorto ">
-				</td>
-				<td class="NpresupuestoCol5">
-				<input type="text" value="{{ item.precioVtaConIva }}" name="precioVtaConIva_{{ i }}" class="inputCorto ">
-				</td>
-				<td class="NpresupuestoCol6">
-				<input type="text" value="{{ item.precioTotal }}" name="precioTotal_{{ i }}" class="inputCorto inputPrecioTotal">
-=======
 				<input type="text" value="{{ item.designacion }}" name="designacion_{{ i }}" id="designacion_{{ i }}" class="inputLargo inputDesignaciones">
 				</td>
 				<td class="NpresupuestoCol1">
@@ -123,8 +93,14 @@ Crear Presupuesto
 				</td>
 				<td class="NpresupuestoCol6">
 				<input type="text" value="{{ item.precioTotal }}" name="precioTotal_{{ i }}" id="precioTotal_{{ i }}" class="inputCorto inputPrecioTotal">
->>>>>>> origin/desarrolloNico
 				</td>
+				
+				<td class="">
+					<a href="javascript:void(0);" class="linkEliminarFila" id="linkEliminarFila_{{ i }}" >
+					</a>
+				</td>
+				
+				
 			</tr>
 			{% set i = i + 1 %}
 	 		{% endfor %}	
@@ -256,11 +232,12 @@ Crear Presupuesto
 {% block list_path %}{{ path('presupuesto') }}{% endblock list_path %}
 
 {% block javascript_extra %}
-<<<<<<< HEAD
-=======
+	<script type="text/javascript">
+	var urlAjaxItemsPresupuesto = "{{ path('presupuesto_items') }}";
+   </script>
+
 <link type="text/css" href="{{ asset('bundles/pedido/js/jqueryui1824custom/css/ui-lightness/jqueryCustom.css') }}" rel="stylesheet" />
 	<script type="text/javascript" src="{{ asset('bundles/pedido/js/jqueryui1824custom/js/jqueryCustom.js') }}" ></script>
 	
->>>>>>> origin/desarrolloNico
 	<script type="text/javascript" src="{{ asset('bundles/pedido/js/presupuesto.js') }}" /></script>
 {% endblock javascript_extra %}

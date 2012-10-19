@@ -28,8 +28,7 @@ class AdminController extends Controller
      */
     public function indexAction()
     {
-    	return $this->redirect($this->generateUrl('pedido'));
-        //return $this->render('CoobixAdminBundle:Default:index.html.twig');
+    	return $this->redirect($this->generateUrl('cliente'));
     }
     
     

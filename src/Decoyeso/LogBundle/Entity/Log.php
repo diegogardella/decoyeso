@@ -95,6 +95,7 @@ class Log
     }
     
 
+
     
  	public function create($entity, $msj)
      {
@@ -243,6 +244,4 @@ class Log
     {
         return $this->fechaHoraCreado;
     }
-
 }
-

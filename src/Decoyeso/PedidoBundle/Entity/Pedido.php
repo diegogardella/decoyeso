@@ -47,7 +47,7 @@ class Pedido
     
     /**
      * 
-     * @var $estado (1-En espera,2-Procesado)
+     * @var $estado
      * @ORM\Column(name="estado", type="integer", nullable="true")
      * 
      */
@@ -61,12 +61,12 @@ class Pedido
     
 
     /**
-     * @var string $obra
+     * @var string $nombreObra
      *
-     * @ORM\Column(name="obra", type="string", length="255")
+     * @ORM\Column(name="nombreObra", type="string", length="255")
 	 * @assert\NotBlank(message="Por favor, ingrese el nombre de la obra")
      */
-    private $obra;
+    private $nombreObra;
 
     /**
      * @var text $descripcion
@@ -82,42 +82,49 @@ class Pedido
      *
      * @ORM\Column(name="fechaSolicitado", type="date")
      */
-    protected $fechaSolicitado;
+    private $fechaSolicitado;
     
     /**
      * @var date $fechaEntrega
      *
      * @ORM\Column(name="fechaEntrega", type="date")
      */
-    protected $fechaEntrega;
+    private $fechaEntrega;
 
     /**
      * @var date $fechaCreado
      *
      * @ORM\Column(name="fechaCreado", type="date")
      */
-    protected $fechaCreado;
+    private $fechaCreado;
     
     /**
      * @var date $fechaActualizado
      *
      * @ORM\Column(name="fechaActualizado", type="date")
      */
-    protected $fechaActualizado;
+    private $fechaActualizado;
     
     /**
      * @var Relevamiento $relevamientos
      *
      * @ORM\OneToMany(targetEntity="Relevamiento", mappedBy="pedido", cascade={"remove"}))
      */
-    protected $relevamientos;
+    private $relevamientos;
     
     /**
      * @var Presupuesto $presupuestos
      *
      * @ORM\OneToMany(targetEntity="Presupuesto", mappedBy="pedido", cascade={"remove"}))
      */
-    protected $presupuestos;
+    private $presupuestos;
+    
+    /**
+     * @var Obra $obra
+     *
+     * @ORM\OneToMany(targetEntity="\Decoyeso\ObraBundle\Entity\Obra", mappedBy="pedidos", cascade={"remove"}))
+     */
+    private $obra;
     
     /**
      * @var provincia
@@ -125,7 +132,7 @@ class Pedido
      * @ORM\ManyToOne(targetEntity="\Decoyeso\UbicacionBundle\Entity\Provincia") 
      */
     
-    protected $provincia;
+    private $provincia;
     
     /**
      * @var departamento
@@ -133,7 +140,7 @@ class Pedido
      * @ORM\ManyToOne(targetEntity="\Decoyeso\UbicacionBundle\Entity\Departamento")
      *
      */
-    protected $departamento;    
+    private $departamento;    
     
 
     /**
@@ -142,7 +149,7 @@ class Pedido
      * @ORM\ManyToOne(targetEntity="\Decoyeso\UbicacionBundle\Entity\Localidad")
      *
      */
-    protected $localidad;    
+    private $localidad;    
     
     
     /**
@@ -166,68 +173,6 @@ class Pedido
      */
     private $numeroCalle;
     
-    
-    
-    /**
-     * Set numeroCalle
-     *
-     * @param string $numeroCalle
-     */
-    public function setNumeroCalle($numeroCalle)
-    {
-    	$this->numeroCalle = $numeroCalle;
-    }
-    
-    /**
-     * Get numeroCalle
-     *
-     * @return string
-     */
-    public function getNumeroCalle()
-    {
-    	return $this->numeroCalle;
-    }
-    
-    
-    /**
-     * Set barrio
-     *
-     * @param string $barrio
-     */
-    public function setBarrio($barrio)
-    {
-    	$this->barrio = $barrio;
-    }
-    
-    /**
-     * Get barrio
-     *
-     * @return string
-     */
-    public function getBarrio()
-    {
-    	return $this->barrio;
-    }
-    
-    /**
-     * Set calle
-     *
-     * @param string $calle
-     */
-    public function setCalle($calle)
-    {
-    	$this->calle = $calle;
-    }
-    
-    /**
-     * Get calle
-     *
-     * @return string
-     */
-    public function getCalle()
-    {
-    	return $this->calle;
-    }
     
     
     
@@ -259,9 +204,105 @@ class Pedido
 
     public function __toString()
     {
-    	return $this->numero."-".$this->obra;
+    	return $this->numero."-".$this->nombreObra;
     }
 
+ 
+    public function getRequiereRelevamiento(){
+    	return $this->requiereRelevamiento;
+    }
+    
+    public function setRequiereRelevamiento($requiereRelevamiento){
+    	$this->requiereRelevamiento=$requiereRelevamiento;
+    }
+    
+    public function getRequiereRelevamientoNombre(){
+    	
+    	switch ($this->getRequiereRelevamiento()){
+    		
+    		case 1:
+    			return "No";
+    		break;
+    		
+    		case 2:
+    			return "Si";
+    		break;
+    	}
+    	
+    }
+
+    
+    //Devuelve el nombre del estado
+    
+    public function getEstadoNombre(){
+    	
+    	switch ($this->getEstado()){
+    		case 1:
+    			return "Creado";
+    		break;
+    		
+    		case 2:
+    			return "Relevamiento creado";
+    		break;
+
+    		case 3:
+    			return "Presupuesto creado";
+    			
+    		case 4:
+    			return "Presupuesto aprobado";
+    		break;
+    		
+    	}
+    }
+    
+    public function verificarEstado(){
+    	
+    	$bEstados=1; 
+    	
+    	if(count($this->getRelevamientos())>0){
+    		$bEstados=2;
+    		$this->requiereRelevamiento=1;
+    	}
+    	    	
+    	if(count($this->getPresupuestos())>0){
+    		$bEstados=3;
+    	}
+    	
+    	$this->estado=$bEstados;
+    }
+    
+   
+    
+    
+    public function getPrioridadNombre(){
+    
+    	switch ($this->getPrioridad()){
+    		case 1:
+    			return "Baja";
+    			break;
+    
+    		case 2:
+    			return "Media";
+    		break;
+    		
+    		case 3:
+    			return "Alta";
+    		break;
+    		
+    		case 4:
+    			return "Muy alta";
+    		break;
+    	}
+    }
+
+  
+    public function __construct()
+    {
+        $this->relevamientos = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->presupuestos = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->obra = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -270,6 +311,86 @@ class Pedido
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param string $numero
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return string 
+     */
+    public function getNumero()
+    {
+        return $this->numero;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param integer $estado
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return integer 
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
+     * Set prioridad
+     *
+     * @param integer $prioridad
+     */
+    public function setPrioridad($prioridad)
+    {
+        $this->prioridad = $prioridad;
+    }
+
+    /**
+     * Get prioridad
+     *
+     * @return integer 
+     */
+    public function getPrioridad()
+    {
+        return $this->prioridad;
+    }
+
+    /**
+     * Set nombreObra
+     *
+     * @param string $nombreObra
+     */
+    public function setNombreObra($nombreObra)
+    {
+        $this->nombreObra = $nombreObra;
+    }
+
+    /**
+     * Get nombreObra
+     *
+     * @return string 
+     */
+    public function getNombreObra()
+    {
+        return $this->nombreObra;
     }
 
     /**
@@ -313,6 +434,26 @@ class Pedido
     }
 
     /**
+     * Set fechaEntrega
+     *
+     * @param date $fechaEntrega
+     */
+    public function setFechaEntrega($fechaEntrega)
+    {
+        $this->fechaEntrega = $fechaEntrega;
+    }
+
+    /**
+     * Get fechaEntrega
+     *
+     * @return date 
+     */
+    public function getFechaEntrega()
+    {
+        return $this->fechaEntrega;
+    }
+
+    /**
      * Set fechaCreado
      *
      * @param date $fechaCreado
@@ -353,6 +494,66 @@ class Pedido
     }
 
     /**
+     * Set barrio
+     *
+     * @param string $barrio
+     */
+    public function setBarrio($barrio)
+    {
+        $this->barrio = $barrio;
+    }
+
+    /**
+     * Get barrio
+     *
+     * @return string 
+     */
+    public function getBarrio()
+    {
+        return $this->barrio;
+    }
+
+    /**
+     * Set calle
+     *
+     * @param string $calle
+     */
+    public function setCalle($calle)
+    {
+        $this->calle = $calle;
+    }
+
+    /**
+     * Get calle
+     *
+     * @return string 
+     */
+    public function getCalle()
+    {
+        return $this->calle;
+    }
+
+    /**
+     * Set numeroCalle
+     *
+     * @param string $numeroCalle
+     */
+    public function setNumeroCalle($numeroCalle)
+    {
+        $this->numeroCalle = $numeroCalle;
+    }
+
+    /**
+     * Get numeroCalle
+     *
+     * @return string 
+     */
+    public function getNumeroCalle()
+    {
+        return $this->numeroCalle;
+    }
+
+    /**
      * Set cliente
      *
      * @param Decoyeso\ClientesBundle\Entity\Cliente $cliente
@@ -372,50 +573,6 @@ class Pedido
         return $this->cliente;
     }
 
-    /**
-     * Set obra
-     *
-     * @param string $obra
-     */
-    public function setObra($obra)
-    {
-        $this->obra = $obra;
-    }
-
-    /**
-     * Get obra
-     *
-     * @return string 
-     */
-    public function getObra()
-    {
-        return $this->obra;
-    }
-
-    /**
-     * Set numero
-     *
-     * @param integer $numero
-     */
-    public function setNumero($numero)
-    {
-        $this->numero = $numero;
-    }
-
-    /**
-     * Get numero
-     *
-     * @return integer 
-     */
-    public function getNumero()
-    {
-        return $this->numero;
-    }
-    public function __construct()
-    {
-        $this->relevamientos = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
     /**
      * Add relevamientos
      *
@@ -455,148 +612,25 @@ class Pedido
     {
         return $this->presupuestos;
     }
-    
-    public function getRequiereRelevamiento(){
-    	return $this->requiereRelevamiento;
-    }
-    
-    public function setRequiereRelevamiento($requiereRelevamiento){
-    	$this->requiereRelevamiento=$requiereRelevamiento;
-    }
-    
-    public function getRequiereRelevamientoNombre(){
-    	
-    	switch ($this->getRequiereRelevamiento()){
-    		
-    		case 1:
-    			return "No";
-    		break;
-    		
-    		case 2:
-    			return "Si";
-    		break;
-    	}
-    	
+
+    /**
+     * Add obra
+     *
+     * @param Decoyeso\ObraBundle\Entity\Obra $obra
+     */
+    public function addObra(\Decoyeso\ObraBundle\Entity\Obra $obra)
+    {
+        $this->obra[] = $obra;
     }
 
     /**
-     * Set estado
+     * Get obra
      *
-     * @param integer $estado
+     * @return Doctrine\Common\Collections\Collection 
      */
-    public function setEstado($estado)
+    public function getObra()
     {
-        $this->estado = $estado;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return integer 
-     */
-    public function getEstado()
-    {
-    	return $this->estado;
-    }
-    
-    //Devuelve el nombre del estado
-    
-    public function getEstadoNombre(){
-    	
-    	switch ($this->getEstado()){
-    		case 1:
-    			return "En espera";
-    		break;
-    		
-    		case 2:
-    			return "Relevamiento creado";
-    		break;
-
-    		case 3:
-    			return "Presupuesto creado";
-    		break;
-    		
-    	}
-    }
-    
-    public function verificarEstado(){
-    	
-    	$bEstados=1; 
-    	
-    	if(count($this->getRelevamientos())>0){
-    		$bEstados=2;
-    		$this->requiereRelevamiento=1;
-    	}
-    	    	
-    	if(count($this->getPresupuestos())>0){
-    		$bEstados=3;
-    	}
-    	
-    	$this->estado=$bEstados;
-    }
-    
-    
-
-    /**
-     * Set prioridad
-     *
-     * @param integer $prioridad
-     */
-    public function setPrioridad($prioridad)
-    {
-        $this->prioridad = $prioridad;
-    }
-
-    /**
-     * Get prioridad
-     *
-     * @return integer 
-     */
-    public function getPrioridad()
-    {
-        return $this->prioridad;
-    }
-    
-    
-    public function getPrioridadNombre(){
-    
-    	switch ($this->getPrioridad()){
-    		case 1:
-    			return "Baja";
-    			break;
-    
-    		case 2:
-    			return "Media";
-    		break;
-    		
-    		case 3:
-    			return "Alta";
-    		break;
-    		
-    		case 4:
-    			return "Muy alta";
-    		break;
-    	}
-    }
-
-    /**
-     * Set fechaEntrega
-     *
-     * @param date $fechaEntrega
-     */
-    public function setFechaEntrega($fechaEntrega)
-    {
-        $this->fechaEntrega = $fechaEntrega;
-    }
-
-    /**
-     * Get fechaEntrega
-     *
-     * @return date 
-     */
-    public function getFechaEntrega()
-    {
-        return $this->fechaEntrega;
+        return $this->obra;
     }
 
     /**

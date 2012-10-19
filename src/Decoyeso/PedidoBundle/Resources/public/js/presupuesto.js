@@ -15,11 +15,11 @@ $(document).ready(function(){
 	//Pintar casilleros
 	$(".checkCasillero").live('click onLoad',function() {
 		if($(this).is(':checked')) {  
-			$(".NpresupuestoTr"+$(this).val()).addClass("NfondoGris");
+			$("#NpresupuestoTr"+$(this).val()).addClass("NfondoGris");
         }
 		else {
 			
-			$(".NpresupuestoTr"+$(this).val()).removeClass("NfondoGris");
+			$("#NpresupuestoTr"+$(this).val()).removeClass("NfondoGris");
 		}
 	});
 	$(".checkCasillero").trigger('onLoad');
@@ -27,9 +27,10 @@ $(document).ready(function(){
 	function contarFilas () {
 		var cantidad = 0;
 		$(".checkCasillero").each(function() {
-			cantidad += 1;
+			if (parseFloat($(this).val()) > parseFloat(cantidad))
+			cantidad = parseFloat($(this).val());
 		});
-		return parseFloat(cantidad);
+		return (parseFloat(cantidad) +1) ;
 	}
 	
 	// Agrega un fila
@@ -37,10 +38,20 @@ $(document).ready(function(){
 		
 		var numFila = contarFilas();
 		
-		$('#tablaItemsPresupuesto').append('<tr class="NpresupuestoTr'+numFila+'"><td class=""><input type="checkbox"  name="check_'+numFila+'" value ="'+numFila+'" class="checkCasillero"></td><td class="NpresupuestoCol0"><input type="text"  name="designacion_'+numFila+'" class="inputLargo "></td><td class="NpresupuestoCol1"><input type="text" name="unidad_'+numFila+'" class="inputCorto"></td><td class="NpresupuestoCol2"><input type="text" name="cantidad_'+numFila+'" class="inputCorto inputCantidad"></td><td class="NpresupuestoCol3"><input type="text" name="precioUnitario_'+numFila+'" class="inputCorto precioUnitario"></td><td class="NpresupuestoCol4"><input type="text" name="precioVtaSinIva_'+numFila+'" class="inputCorto "></td><td class="NpresupuestoCol5"><input type="text" name="precioVtaConIva_'+numFila+'" class="inputCorto "></td><td class="NpresupuestoCol6"><input type="text" name="precioTotal_'+numFila+'" class="inputCorto inputPrecioTotal"></td></tr>');
+		$('#tablaItemsPresupuesto').append('<tr class="NpresupuestoTr" id="NpresupuestoTr'+numFila+'"><td class=""><input type="checkbox"  name="check_'+numFila+'" value ="'+numFila+'" class="checkCasillero"></td><td class="NpresupuestoCol0"><input type="text"  name="designacion_'+numFila+'" class="inputLargo "></td><td class="NpresupuestoCol1"><input type="text" name="unidad_'+numFila+'" class="inputCorto"></td><td class="NpresupuestoCol2"><input type="text" name="cantidad_'+numFila+'" class="inputCorto inputCantidad"></td><td class="NpresupuestoCol3"><input type="text" name="precioUnitario_'+numFila+'" class="inputCorto precioUnitario"></td><td class="NpresupuestoCol4"><input type="text" name="precioVtaSinIva_'+numFila+'" class="inputCorto "></td><td class="NpresupuestoCol5"><input type="text" name="precioVtaConIva_'+numFila+'" class="inputCorto "></td><td class="NpresupuestoCol6"><input type="text" name="precioTotal_'+numFila+'" class="inputCorto inputPrecioTotal"></td><td class=""><a href="javascript:void(0);" class="linkEliminarFila" id="linkEliminarFila_'+numFila+'" ></a></td></tr>');
 		
 		//oculto las columnas no seleccionadas
 		$("#decoyeso_pedidobundle_presupuestotype_mostrarColumnas input").trigger('onLoad');
+		
+	});
+	
+	$(".linkEliminarFila").live('click',function(){
+		
+		var i = $(this).attr("id").split("_");
+		var index = i[1];
+		
+		if($(".NpresupuestoTr").length < 2) return;
+		$("#NpresupuestoTr"+index).remove();
 		
 	});
 		
@@ -119,13 +130,15 @@ $(document).ready(function(){
 			
 	});
 	
+	
 
 	
 
+	
 	$( ".inputDesignaciones" ).autocomplete({
 			source: function( request, response ) {
 				$.ajax({
-					url: 'http://localhost/decoyeso/web/app_dev.php/presupuesto/items',
+					url: urlAjaxItemsPresupuesto,
 					//dataType: "jsonp",
 					data: {term: request.term},
 					success: function( data ) {
@@ -185,5 +198,4 @@ response( $.map( data.itemnames, function( item ) {
 }));
 */
 /**/
-
 	

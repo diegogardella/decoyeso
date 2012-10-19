@@ -8,6 +8,8 @@ use Decoyeso\PedidoBundle\Entity\Presupuesto;
 use Decoyeso\PedidoBundle\Form\PresupuestoType;
 use Symfony\Component\HttpFoundation\Response;
 
+use Decoyeso\ObraBundle\Entity\Obra as Obra;	
+
 
 /**
  * Presupuesto controller.
@@ -101,7 +103,6 @@ class PresupuestoController extends Controller
 	}
 	
 	
-
     /**
      * Lists all Presupuesto entities.
      *
@@ -201,6 +202,10 @@ class PresupuestoController extends Controller
         $numFilas = $request->get("numFilas");
        
         for($i=0; $i<$numFilas; $i++):
+
+        	if (!$request->request->has("designacion_$i")) 
+        	continue;
+    
        		$items[$i]['check'] = $request->get("check_$i");
         	$items[$i]['designacion'] = $request->get("designacion_$i");
     	    $items[$i]['unidad'] = $request->get("unidad_$i");
@@ -210,6 +215,9 @@ class PresupuestoController extends Controller
     	    $items[$i]['precioVtaConIva'] = $request->get("precioVtaConIva_$i");
    		    $items[$i]['precioTotal'] = $request->get("precioTotal_$i");
         endfor;
+        
+
+        
 
         $entity->setItems(json_encode($items));
 
@@ -295,13 +303,103 @@ class PresupuestoController extends Controller
 		        
         $editForm = $this->createForm(new PresupuestoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
+        $aprobarConObraForm = $this->createAprobarForm($id,0);
+        $aprobarVtaDirectaForm = $this->createAprobarForm($id,1);
         
        
         return $this->render('PedidoBundle:Presupuesto:admin_show.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+        	'aprobar_con_obra_form' => $aprobarConObraForm->createView(),
+        	'aprobar_vta_directa_form' => $aprobarVtaDirectaForm->createView(),
         ));
+    }
+    
+    
+    /**
+     * Aprueba Presupuesto.
+     *
+     */
+    public function aprobarAction($id)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+    
+    	$entity = $em->getRepository('PedidoBundle:Presupuesto')->find($id);
+    
+    	if (!$entity) {
+    		throw $this->createNotFoundException('Unable to find Presupuesto entity.');
+    	}
+
+        $request = $this->getRequest();
+        $form = $request->request->get("form");
+        
+        $aprobarForm = $this->createAprobarForm($id,$form["tipo"]);
+       		
+        
+        $aprobarForm->bindRequest($request);
+
+        if ($aprobarForm->isValid()) {
+        	
+        	$presupuestos = $em->getRepository('PedidoBundle:Presupuesto')->findByPedido($entity->getPedido()->getId());
+
+        	foreach($presupuestos as $p):
+        		$p->setEstado(2);
+        		$em->persist($p);
+        	endforeach;
+
+        	$entity->setEstado(1);
+        	$em->persist($entity);
+        	
+        	
+        	
+        	//Si tipo == 0 entonces hay q crear una obra
+        	if ($form["tipo"] == 0) {
+	        	//Me fijo si hay una obra con ese pedido
+	        	$obra = $em->getRepository('DecoyesoObraBundle:Obra')->findByPedidos($entity->getPedido()->getId());
+	        	
+	            if (!$obra) {
+		        	$obra = New Obra();
+		        	$obra->setNombre($entity->getPedido()->getNombreObra());
+		        	$obra->setPedidos($entity->getPedido());
+		        	$obra->setEstado(0);
+		        	$em->persist($obra);
+	            }
+        	}
+            
+            //Cambio el estado en el pedido
+            $entity->getPedido()->setEstado(4);
+        	
+        	$em->flush();
+
+            $this->get('session')->setFlash('msj_info','El presupuesto fue aprobado');
+            
+            //LOG
+            $log = $this->get('log');
+            $log->create($entity, "Presupuesto aprobado");
+
+            return $this->redirect($this->generateUrl('presupuesto_edit', array('id' => $id)));
+        }
+
+        return $this->render('PedidoBundle:Presupuesto:edit.html.twig', array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        	'aprobar_con_obra_form' => $aprobarConObraForm->createView(),
+        	'aprobar_vta_directa_form' => $aprobarVtaDirectaForm->createView(),
+        ));
+    }
+    
+    
+    private function createAprobarForm($id, $tipo)
+    {
+    	//$tipo = 0 --> Con Obra
+    	//$tipo = 1 --> Vta Directa 
+    	return $this->createFormBuilder(array('id' => $id, 'tipo' => $tipo))
+    	->add('id', 'hidden')
+    	->add('tipo', 'hidden')
+    	->getForm()
+    	;
     }
 
 
@@ -415,6 +513,8 @@ class PresupuestoController extends Controller
 	    	
         endforeach;
     }
+    
+
     
     
     

@@ -17,7 +17,7 @@ Listado de Pedidos
 
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('p.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Número', 'p.numero')|raw }}</a></th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('c.apellido') %} class="sorted" {% endif %}>{{ entities.sortable('Cliente', 'c.apellido')|raw }}</th>
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.obra') %} class="sorted" {% endif %}>{{ entities.sortable('Obra', 'p.obra')|raw }}</th>
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombreObra') %} class="sorted" {% endif %}>{{ entities.sortable('Obra', 'p.nombreObra')|raw }}</th>
 <th align="center" style="width: {{ widthCols }}%"{% if entities.isSorted('p.prioridad') %} class="sorted" {% endif %}>{{ entities.sortable('Prioridad', 'p.prioridad')|raw }}</th>
 <th align="center" style="width: {{ widthCols }}%"{% if entities.isSorted('p.estado') %} class="sorted" {% endif %}>{{ entities.sortable('Estado', 'p.estado')|raw }}</th>
 
@@ -32,7 +32,7 @@ Listado de Pedidos
 </td>
 
 <td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.getCliente }}</a></td>
-<td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.obra }}</a></td>
+<td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.nombreObra }}</a></td>
 <td align="center"><a href="{{ path('pedido_edit', { 'id': entity.id }) }}" >{{entity.prioridadNombre}}</a></td>
 <td align="center"><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.estadoNombre }}</a></td>
 {% endblock list_item_texts %}
@@ -49,7 +49,7 @@ Listado de Pedidos
 		
 		{{form_row(formBuscar._token)}}
 		{{form_row(formBuscar.p_numero)}}
-		{{form_row(formBuscar.p_obra)}}
+		{{form_row(formBuscar.p_nombreObra)}}
 		{{form_row(formBuscar.p_descripcion)}}
 		{{form_row(formBuscar.p_requiereRelevamiento)}}		
 		{{form_row(formBuscar.p_prioridad)}}

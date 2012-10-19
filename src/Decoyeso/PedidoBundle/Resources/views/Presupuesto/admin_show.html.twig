@@ -7,7 +7,7 @@
 {%block main_path%}
 <ul>
 	<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
-	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.obra}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombreObra}}</a></li>
 	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_edit',{'id':entity.id}) }}">Presupuesto: {{entity.numero}}</a></li>
 </ul>
 {%endblock main_path%}
@@ -16,7 +16,7 @@
 		<div class="module_header">
 			<div id="tituloContenido" class="module_tit txt3">Datos del Presupuesto</div>
 			
-			
+
 			
 			<form action="{{ path('presupuesto_delete', { 'id': entity.id }) }}" method="post">
 				{{ form_widget(delete_form) }}
@@ -36,6 +36,19 @@
 					<span class="print_icon"></span>
 					Imprimir
 				</a>
+			{% if (entity.estado == 0) %}	
+			<form action="{{ path('presupuesto_aprobar', { 'id': entity.id }) }}" method="post">
+				{{ form_widget(aprobar_vta_directa_form) }}
+				<button id="pedidoEliminarBtn" class="btn_green_button right" type="submit">Aprobar Vta Directa</button>
+			</form>
+			{% endif %}
+			
+			{% if (entity.estado == 0) %}	
+			<form action="{{ path('presupuesto_aprobar', { 'id': entity.id }) }}" method="post">
+				{{ form_widget(aprobar_con_obra_form) }}
+				<button id="pedidoEliminarBtn" class="btn_green_button right" type="submit">Aprobar y Crear Obra</button>
+			</form>
+			{% endif %}
 						
 		</div>
 {% endblock module_header%}
@@ -57,7 +70,7 @@
 			<tr>
 				<td> 
 					<span class="txt3">OBRA:</span>
-					<span class="txt4">{{ entity.getPedido.getObra }}</span>
+					<span class="txt4">{{ entity.getPedido.getNombreObra }}</span>
 				</td>
 				<td>
 					<span class="txt3">TELEFONO:</span>

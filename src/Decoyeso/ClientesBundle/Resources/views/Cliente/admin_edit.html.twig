@@ -96,7 +96,7 @@
 						{% for pedido in entity.pedido %}
 							<tr>
 								<td><a href="{{ path('pedido_edit', { 'id': pedido.id }) }}" title="Editar">{{pedido.numero}}</a></td>
-								<td><a href="{{ path('pedido_edit', { 'id': pedido.id }) }}" title="Editar">{{pedido.obra}}</a></td>
+								<td><a href="{{ path('pedido_edit', { 'id': pedido.id }) }}" title="Editar">{{pedido.nombreObra}}</a></td>
 								<td align="center"><a href="{{ path('pedido_edit', { 'id': pedido.id }) }}" title="Editar">{{pedido.prioridadNombre}}</a></td>
 								<td align="center"><a href="{{ path('pedido_edit', { 'id': pedido.id }) }}" title="Editar">{{pedido.estadoNombre}}</a></td>
 								<td width="20">

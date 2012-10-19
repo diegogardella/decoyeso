@@ -83,5 +83,18 @@ height:100px;
 	display: block;
 	}
 
+.linkEliminarFila {
+	background: url(../images/icons/delete.png)  no-repeat;
+	height: 16px;
+	width: 16px;
+	display: block;
+}
 
+#NobraTit {
+background: url(../images/icons/building.png) no-repeat;
+}
+
+#NProdTit {
+background: url(../images/icons/cog.png) no-repeat;
+}
 

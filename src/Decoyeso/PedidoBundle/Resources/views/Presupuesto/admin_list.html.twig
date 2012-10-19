@@ -24,7 +24,7 @@ Listado de Presupuestos
 {% block list_item_texts %}
 <td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.numero }}</a></td>
 <td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.pedido.cliente.nombre }}</a></td>
-<td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.pedido.numero }}-{{ entity.pedido.obra }}</a></td>
+<td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.pedido.numero }}-{{ entity.pedido.nombreObra }}</a></td>
 {% endblock list_item_texts %}
 
 
@@ -43,7 +43,7 @@ Listado de Presupuestos
 	
 	
 		{{form_row(formBuscar.p_numero)}}
-		{{form_row(formBuscar.p_obra)}}
+		{{form_row(formBuscar.p_nombreObra)}}
 
 	</div>
 {%endblock%}

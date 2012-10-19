@@ -105,6 +105,15 @@ class Presupuesto
      */
     private $observacion;
     
+    
+    /**
+     *
+     * @var $estado (0-En espera, 1-Aprobado, 2-No Aprobado)
+     * @ORM\Column(name="estado", type="integer", nullable="true")
+     *
+     */
+    private $estado;
+    
     /**
      * @var date $fechaCreado
      *
@@ -135,6 +144,7 @@ class Presupuesto
     {
     	$this->setFechaCreado (new \DateTime);
     	$this->setFechaActualizado (new \DateTime);
+    	$this->setEstado(0);
     }
     
     /**
@@ -472,5 +482,25 @@ class Presupuesto
     public function getPedido()
     {
         return $this->pedido;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param integer $estado
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return integer 
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }

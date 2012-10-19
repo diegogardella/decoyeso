@@ -93,6 +93,11 @@ class Relevamiento
     {
     	$this->numero="REL".str_pad($this->getId(),5,0,STR_PAD_LEFT);
     }
+    
+    public function __toString() 
+    {
+    	return $this->getNumero()."-".$this->getNombre();
+    }
 
 
     /**

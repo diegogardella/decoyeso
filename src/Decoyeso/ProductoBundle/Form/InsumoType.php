@@ -13,7 +13,6 @@ class InsumoType extends AbstractType
             ->add('nombre')
             ->add('descripcion')
             ->add('unidad')
-            ->add('costo')
             ->add('precio')
         ;
     }

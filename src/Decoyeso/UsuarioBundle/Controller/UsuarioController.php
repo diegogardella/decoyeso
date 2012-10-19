@@ -183,7 +183,6 @@ class UsuarioController extends Controller
      	$form->bindRequest($request);
           
 
-
 	 	if ($form->isValid()) {
     		$entity->setEnabled(true);
      		$entity->addRole($entity->getPermisos());
@@ -272,6 +271,7 @@ class UsuarioController extends Controller
     	}
     
     	$changePassForm = $this->createForm(new ChangePassUsuarioType(), $entity);
+ 
 
     	
     	return $this->render('UsuarioBundle:Usuario:admin_changePass.html.twig', array(
@@ -401,7 +401,10 @@ class UsuarioController extends Controller
     			'edit_form'   => $editForm->createView(),
     	));
     }
-
+     
+     
+   
+  
     
 
 }

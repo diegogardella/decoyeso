@@ -11,7 +11,7 @@
 {%block main_path%}
 <ul>
 	<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.cliente.id}) }}">Cliente: {{entity.cliente}}</a></li>
-	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.id}) }}">Pedido: {{entity.numero}}, {{entity.obra}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.id}) }}">Pedido: {{entity.numero}}, {{entity.nombreObra}}</a></li>
 </ul>
 {%endblock main_path%}
 
