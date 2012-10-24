@@ -32,6 +32,7 @@ class AppKernel extends Kernel
 
             new Decoyeso\ObraBundle\DecoyesoObraBundle(),
             new Decoyeso\ProduccionBundle\DecoyesoProduccionBundle(),
+            new Decoyeso\StockBundle\StockBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -1,3 +1,7 @@
+StockBundle:
+    resource: "@StockBundle/Resources/config/routing.yml"
+    prefix:   /
+
 DecoyesoProduccionBundle:
     resource: "@DecoyesoProduccionBundle/Resources/config/routing.yml"
     prefix:   /

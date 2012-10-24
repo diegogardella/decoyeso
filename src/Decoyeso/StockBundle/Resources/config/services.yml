@@ -1,0 +1,7 @@
+parameters:
+#    stock.example.class: Decoyeso\StockBundle\Example
+
+services:
+#    stock.example:
+#        class: %stock.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

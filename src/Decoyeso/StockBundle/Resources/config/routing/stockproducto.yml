@@ -1,0 +1,30 @@
+stockproducto:
+    pattern:  /
+    defaults: { _controller: "StockBundle:StockProducto:index" }
+
+stockproducto_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "StockBundle:StockProducto:show" }
+
+stockproducto_new:
+    pattern:  /new
+    defaults: { _controller: "StockBundle:StockProducto:new" }
+
+stockproducto_create:
+    pattern:  /create
+    defaults: { _controller: "StockBundle:StockProducto:create" }
+    requirements: { _method: post }
+
+stockproducto_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "StockBundle:StockProducto:edit" }
+
+stockproducto_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "StockBundle:StockProducto:update" }
+    requirements: { _method: post }
+
+stockproducto_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "StockBundle:StockProducto:delete" }
+    requirements: { _method: post }

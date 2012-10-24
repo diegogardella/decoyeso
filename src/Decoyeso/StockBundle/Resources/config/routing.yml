@@ -1,0 +1,3 @@
+InsumoBundle:
+    resource: "@StockBundle/Resources/config/routing/stockproducto.yml"
+    prefix: /stockproducto
