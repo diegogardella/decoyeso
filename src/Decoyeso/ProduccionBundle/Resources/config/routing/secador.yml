@@ -1,0 +1,34 @@
+secador:
+    pattern:  /
+    defaults: { _controller: "DecoyesoProduccionBundle:Secador:index" }
+
+secador_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "DecoyesoProduccionBundle:Secador:show" }
+
+secador_new:
+    pattern:  /new
+    defaults: { _controller: "DecoyesoProduccionBundle:Secador:new" }
+
+secador_create:
+    pattern:  /create
+    defaults: { _controller: "DecoyesoProduccionBundle:Secador:create" }
+    requirements: { _method: post }
+
+secador_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "DecoyesoProduccionBundle:Secador:edit" }
+
+secador_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "DecoyesoProduccionBundle:Secador:update" }
+    requirements: { _method: post }
+
+secador_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "DecoyesoProduccionBundle:Secador:delete" }
+    requirements: { _method: post }
+
+secador_estado:
+    pattern:  /estado
+    defaults: { _controller: "DecoyesoProduccionBundle:Secador:estado" }

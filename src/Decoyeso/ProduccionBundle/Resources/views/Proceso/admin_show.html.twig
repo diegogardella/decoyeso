@@ -1,0 +1,251 @@
+{% extends "CoobixAdminBundle:Default:edit.html.twig" %}
+
+{% block breadcrumb_in %}
+
+{% endblock breadcrumb_in %} 
+
+{%block main_path%}
+<ul>
+{#
+	<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.cliente.id}) }}">Cliente: {{entity.cliente}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.id}) }}">Pedido: {{entity.numero}}, {{entity.obra}}</a></li>
+#}
+</ul>
+{%endblock main_path%}
+
+{% block module_header%}
+		<div class="module_header">
+			<div id="tituloContenido" class="module_tit txt3">Resumen del Proceso</div>
+			
+			
+			{% if entity.estado < 1  %}
+			<form action="{{ path('proceso_delete', { 'id': entity.id }) }}" method="post">
+				{{ form_widget(delete_form) }}
+				<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
+			</form>
+			{% endif %}
+			<a id="pedidoListarBtn" class="btn_blue right" href="{{path('proceso')}}">Ir al listado</a>
+		
+		</div>
+{% endblock module_header%}
+
+{% block form_content %}
+		{% block errorMsj %}{% endblock errorMsj %}
+		
+		<form action="" method="post" id="procesoForm" {{ form_enctype(edit_form) }}>
+		<div class="formProcesoCont">
+		<br>
+		<br>	
+	
+		{% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+		{{ form_errors(edit_form) }}
+		
+
+	
+		
+		<div class="fix"><br><br><br></div>
+				
+		<table id="tablaItems" class="NTablaItemsProceso">
+			<tr>
+				<td class="txt3" style="width: 20%">PROCESO:</td>
+				<td style="width: 79%">{{ entity.getNumero() }}</td>
+			</tr>
+
+			<tr>
+				<td class=" txt3">FECHA CREADO:</td>
+				<td>{{ entity.getFechaCreado()  | date("d/m/Y")}}</td>
+			</tr>
+			{% if (entity.getFechaInicio()) %}
+			<tr>
+				<td class=" txt3">FECHA INICIO:</td>
+				<td>
+					{{ entity.getFechaCreado()  | date("d/m/Y")}}
+				</td>
+			</tr>
+			{% endif %}
+			{% if (entity.getFechaFin()) %}
+			<tr>
+				<td class=" txt3">FECHA FIN:</td>
+				<td>
+					{{ entity.getFechaFin()  | date("d/m/Y")}}
+				</td>
+			</tr>
+			{% endif %}
+			
+			<tr>
+				<td class=" txt3">ESTADO:</td>
+				<td>{{ entity.getNombreEstado() }}</td>
+			</tr>			
+		
+		</table>
+		
+		<div class="fix"><br></div>
+		
+		<table id="tablaItems" class="NTablaItemsProceso">
+			<tr>
+				<td  colspan="3" align="center" class=" txt3 ">ESPACIO EN SECADORES</td>
+			</tr>
+						
+			<tr>
+				<td class=" txt3 ">PRODUCTO</td>
+				<td align="center" class=" txt3 ">CANTIDAD</td>
+				<td align="center" class=" txt3 " >SECADORES</td>
+			</tr>
+			
+			<tr>
+				<td class="">Placas</td>
+				<td align="center" class="">120</td>
+				<td align="center" class="  " >Hay Lugar</td>
+			</tr>
+			<tr>
+				<td class="">Molduras</td>
+				<td align="center" class="  ">120</td>
+				<td align="center" class="  " >No Hay Lugar</td>
+			</tr>
+			
+
+		</table>
+		<div class="fix"><br></div>
+		
+		
+		
+		<table id="tablaItems" class="NTablaItemsProceso">
+			<tr>
+				<td  colspan="3" align="center" class=" txt3 ">RESUMEN DE PRODUCTOS A FABRICAR</td>
+			</tr>
+						
+			<tr>
+				<td class=" txt3 ">PRODUCTO</td>
+				<td align="center" class=" txt3 ">A FABRICAR</td>
+				<td align="center" class=" txt3 " >FABRICADOS</td>
+			</tr>
+			
+			{% set totalCantidad = 0 %}
+			{% set totalCantidadProducida = 0 %}
+			
+			{% for pp in procesoProducto %} 
+			
+			{% set totalCantidad = totalCantidad + pp.cantidad %}
+			{% set totalCantidadProducida = totalCantidadProducida + pp.cantidadProducida %}
+			<tr class="NItemsTr" >
+				<td align="left" class="">{{ pp.producto }}</td>
+				<td align="center" class="">{{ pp.cantidad }}</td>
+				<td align="center" class="">{{ pp.cantidadProducida }}</td>
+			</tr>
+			{% endfor %}
+			<tr><td colspan="3" ><div class="Nlinea"></div></td></tr>
+			<tr>
+				<td class=" txt3 ">TOTAL</td>
+				<td align="center" class="">{{ totalCantidad }}</td>
+				<td align="center" class="" >{{ totalCantidadProducida }}</td>
+			</tr>
+		</table>
+		<div class="fix"><br></div>
+		
+		<table id="tablaItems" class="NTablaItemsProceso">
+			<tr>
+				<td colspan="5" align="center" class=" txt3 ">INSUMOS</td>
+			</tr>
+			{% if entity.estado > 1  %}
+			<tr>
+				<td  align="center" class=" txt3 ">CONSUMIDOS</td>
+				<td colspan="4" align="left" class=" txt3 "></td>
+			</tr>
+			<tr><td colspan="5" ></td></tr>
+			
+			<tr>
+				<td align="left" class=" txt3 ">TOTAL PROD.</td>
+				<td align="center" class=" txt3 ">YESO</td>
+				<td align="center" class=" txt3 ">AGUA</td>
+				<td align="center" class=" txt3 ">FIBRA</td>
+				<td align="center" class=" txt3 ">POROSIL</td>
+			</tr>
+			
+			<tr class="NItemsTr" >
+				<td align="left" class="">{{ totalCantidadProducida }} productos</td>
+				<td align="center" class="">132</td>
+				<td align="center" class="">132</td>
+				<td align="center" class="">132</td>
+				<td align="center" class="">132</td>
+			</tr>
+
+			<tr><td colspan="5" ><br/></td></tr>
+			<tr><td colspan="5" ><div class="Nlinea"></div></td></tr>
+			<tr><td colspan="5" ><br/></td></tr>
+			{% endif %}			
+			<tr>
+				<td  align="center" class=" txt3 ">A CONSUMIR (ESTIMADO)</td>
+				<td colspan="4" align="left" class=" txt3 "></td>
+			</tr>
+			<tr><td colspan="5" ></td></tr>
+			
+			<tr>
+				<td align="left" class=" txt3 ">PRODUCTO</td>
+				<td align="center" class=" txt3 ">YESO</td>
+				<td align="center" class=" txt3 ">AGUA</td>
+				<td align="center" class=" txt3 ">FIBRA</td>
+				<td align="center" class=" txt3 ">POROSIL</td>
+			</tr>
+			
+			{% for pp in procesoProducto %} 
+			<tr class="NItemsTr" >
+				<td align="left" class="">{{ pp.producto }}</td>
+				<td align="center" class="">{{ pp.cantidad }}</td>
+				<td align="center" class="">{{ pp.cantidad }}</td>
+				<td align="center" class="">{{ pp.cantidad }}</td>
+				<td align="center" class="">{{ pp.cantidad }}</td>
+			</tr>
+			{% endfor %}
+			<tr><td colspan="5" ><div class="Nlinea"></div></td></tr>
+			<tr class="NItemsTr" >
+				<td align="left" class="txt3">TOTAL</td>
+				<td align="center" class="">132</td>
+				<td align="center" class="">132</td>
+				<td align="center" class="">132</td>
+				<td align="center" class="">132</td>
+			</tr>
+			<tr><td colspan="5" ><div class="Nlinea"></div></td></tr>
+			<tr class="NItemsTr" >
+				<td align="left" class="txt3">ESTADO</td>
+				<td align="center" class="">Con stock</td>
+				<td align="center" class="">Con stock</td>
+				<td align="center" class="">Con stock</td>
+				<td align="center" class="">Sin stock</td>
+			</tr>
+		</table>
+	
+		
+		<div class="fix"><br/></div>
+	
+	
+	
+	
+	
+
+	</div>	
+		
+		<div class="fix"></div>
+		<p>
+			{% if entity.estado == 0  %}
+			<a href="{{ path('proceso_iniciar', { 'id': entity.id }) }}" class="btn_green_button right" type="submit">INICIAR</a>
+			<a href="{{ path('proceso_edit', { 'id': entity.id }) }}" class="btn_blue right" type="submit">Modificar</a>
+			{% endif %}
+			{% if entity.estado == 1  %}
+			<a href="{{ path('proceso_finalizar', { 'id': entity.id }) }}" class="btn_blue right" type="submit">Finalizar</a>
+			{% endif %}
+			{% if entity.estado == 2  %}
+			<a href="{{ path('proceso_asignar', { 'id': entity.id }) }}" class="btn_blue right" type="submit">Asignar Productos al stock</a>
+
+			{% endif %}
+		</p>
+		
+		<div class="fix"></div>
+		
+		</form>
+		{% endblock form_content %}
+
+{% block list_path %}{{ path('proceso') }}{% endblock list_path %}
+
+{% block javascript_extra %}
+
+{% endblock javascript_extra %}

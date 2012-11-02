@@ -203,5 +203,10 @@ class Producto
     	$this->tipo = $tipo;
     }
     
+    public function __toString() 
+    {
+     return $this->nombre;	
+    }
+    
     
 }

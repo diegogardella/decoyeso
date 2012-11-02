@@ -1,0 +1,86 @@
+{% extends "CoobixAdminBundle:Default:list.html.twig" %}
+
+{% block breadcrumb_in %}
+<div class="breadcrumbs">
+<a href="{{ path('proceso') }}" class="current" >Proceso</a>
+</div>
+{% endblock breadcrumb_in %} 
+
+
+{% block module_tit %}
+Listado de Procesos
+{% endblock module_tit %}
+
+{% block list_tits %}
+
+{% set widthCols =  94/3 %}
+
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.fechaCreado') %} class="sorted" {% endif %}>{{ entities.sortable('Creado el', 'p.fechaCreado')|raw }}</a></th>
+
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Número', 'p.numero')|raw }}</a></th>
+
+
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.estado') %} class="sorted" {% endif %}>{{ entities.sortable('Estado', 'p.estado')|raw }}</a></th>
+
+
+
+
+{% endblock list_tits %}
+
+{% block list_item_texts %}
+<td>
+	<a href="{{ path('proceso_show', { 'id': entity.id }) }}">
+		{{ entity.fechaCreado | date("d/m/Y")}}
+	</a>
+</td>
+<td>
+	<a href="{{ path('proceso_show', { 'id': entity.id }) }}">
+		{{ entity.numero }}
+	</a>
+</td>
+<td >
+	<a href="{{ path('proceso_show', { 'id': entity.id }) }}">
+		
+		{{ entity.getNombreEstado() }}
+		
+	</a>
+</td>
+
+{% endblock list_item_texts %}
+
+
+
+
+{%block FormBuscar%}
+	<form method="post" action="{{path('proceso',{pararouting:"buscar"})}}" novalidate="true">
+{%endblock%}
+
+{%block camposFormBuscar%}
+	<div id="formBuscar">
+		
+		{{form_row(formBuscar._token)}}
+		{{form_row(formBuscar.p_numero)}}
+		
+	</div>
+{%endblock%}
+
+{% block new_path %} 
+{{ path('proceso_new') }}
+{% endblock new_path %}
+
+{% block edit_path %} 
+{{ path('proceso_show', { 'id': entity.id }) }} 
+{% endblock edit_path %}
+
+{% block delete_path %}
+{{ path('proceso_delete', { 'id': entity.id }) }}
+{% endblock delete_path %}
+
+{% block list_delete %}
+{% render "DecoyesoProduccionBundle:Proceso:listDeleteform" with {'id': entity.id}  %}
+{% endblock list_delete %}
+
+
+
+
+

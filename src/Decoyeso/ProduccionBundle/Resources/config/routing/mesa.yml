@@ -1,0 +1,30 @@
+mesa:
+    pattern:  /
+    defaults: { _controller: "DecoyesoProduccionBundle:Mesa:index" }
+
+mesa_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "DecoyesoProduccionBundle:Mesa:show" }
+
+mesa_new:
+    pattern:  /new
+    defaults: { _controller: "DecoyesoProduccionBundle:Mesa:new" }
+
+mesa_create:
+    pattern:  /create
+    defaults: { _controller: "DecoyesoProduccionBundle:Mesa:create" }
+    requirements: { _method: post }
+
+mesa_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "DecoyesoProduccionBundle:Mesa:edit" }
+
+mesa_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "DecoyesoProduccionBundle:Mesa:update" }
+    requirements: { _method: post }
+
+mesa_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "DecoyesoProduccionBundle:Mesa:delete" }
+    requirements: { _method: post }

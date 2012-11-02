@@ -46,7 +46,6 @@ class Pedido
     private $requiereRelevamiento;
     
     /**
-     * 
      * @var $estado
      * @ORM\Column(name="estado", type="integer", nullable="true")
      * 

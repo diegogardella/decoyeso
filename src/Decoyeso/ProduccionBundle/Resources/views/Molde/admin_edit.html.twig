@@ -1,0 +1,75 @@
+{% extends "CoobixAdminBundle:Default:edit.html.twig" %}
+
+{% block breadcrumb_in %}
+<div class="breadcrumbs">
+<a href="{{ path('molde_list') }}" class="current" >Molde</a>
+<div class="breadcrumb_divider"></div> 
+<a href="{{ path('molde_edit', { 'id': entity.id }) }}" class="current" >Editar</a>
+</div>
+{% endblock breadcrumb_in %} 
+
+{%block main_path%}
+<ul>
+{#
+	<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.cliente.id}) }}">Cliente: {{entity.cliente}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.id}) }}">Pedido: {{entity.numero}}, {{entity.obra}}</a></li>
+#}
+</ul>
+{%endblock main_path%}
+
+{% block module_header%}
+		<div class="module_header">
+			<div id="tituloContenido" class="module_tit txt3">Datos del Molde</div>
+			
+			
+			
+			<form action="{{ path('molde_delete', { 'id': entity.id }) }}" method="post">
+				{{ form_widget(delete_form) }}
+				<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
+			</form>
+
+			<a id="pedidoListarBtn" class="btn_blue right" href="{{path('molde')}}">Ir al listado</a>
+			{#
+			<a id="obraPresupuestosCrearBtn" style="display:none" class="btn_blue right" href="{{path('presupuesto_new',{'pedido':entity.id})}}">Crear Presupuesto</a>
+			
+			
+			{%if entity.requiereRelevamiento==1%}	
+				<a id="pedidoRelevamientosCrearBtn" style="display:none" class="btn_blue right" href="{{path('relevamiento_new',{'pedido':entity.id})}}">Crear Relevamiento</a>
+			{%endif%}
+			
+
+			<a id="pedidoPresupuestosBtn" class="btn_blue right" href="javascript:void(0)">Presupuestos del Pedido</a>
+			{%if entity.requiereRelevamiento==1%}	
+				<a id="pedidoRelevamientosBtn"  class="btn_blue right" href="javascript:void(0)">Relevamientos del Pedido</a>
+			{%endif%}
+			<a id="pedidoDatosBtn" style="display:none" class="btn_blue right" href="javascript:void(0)">Datos del Pedido</a>
+			#}
+		</div>
+{% endblock module_header%}
+
+{% block form_content %}
+		<form action="{% block update_path %}{{ path('molde_update', { 'id': entity.id }) }}{% endblock update_path %}" method="post" {{ form_enctype(edit_form) }}>
+		{% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+		
+		
+		{{ form_widget(edit_form) }}
+			<p>
+				<button class="btn_green_button right" type="submit">Guardar cambios</button>
+			</p>
+		</form>
+		
+		
+		
+		{% block form_record_actions %}
+		
+			{% block delete_btn %}
+			
+			{% endblock delete_btn %}
+		
+		{% endblock form_record_actions %}
+		<div class="fix"></div>
+{% endblock form_content %}
+
+{% block javascript_extra %}
+	
+{% endblock javascript_extra %}

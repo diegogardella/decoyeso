@@ -1,0 +1,160 @@
+{% extends "CoobixAdminBundle:Default:edit.html.twig" %}
+
+{% block breadcrumb_in %}
+
+{% endblock breadcrumb_in %} 
+
+{%block main_path%}
+<ul>
+{#
+	<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.cliente.id}) }}">Cliente: {{entity.cliente}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.id}) }}">Pedido: {{entity.numero}}, {{entity.obra}}</a></li>
+#}
+</ul>
+{%endblock main_path%}
+
+{% block module_header%}
+		<div class="module_header">
+			<div id="tituloContenido" class="module_tit txt3">Datos del Proceso</div>
+			
+			
+			{% if entity.estado < 2  %}
+			<form action="{{ path('proceso_delete', { 'id': entity.id }) }}" method="post">
+				{{ form_widget(delete_form) }}
+				<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
+			</form>
+			{% endif %}
+			<a id="pedidoListarBtn" class="btn_blue right" href="{{path('proceso')}}">Ir al listado</a>
+		
+		</div>
+{% endblock module_header%}
+
+{% block form_content %}
+		{% block errorMsj %}{% endblock errorMsj %}
+		
+		<form action="{% block create_path %}{{ path('proceso_update', { 'id': entity.id }) }}{% endblock create_path %}" method="post" id="procesoForm" {{ form_enctype(edit_form) }}>
+		<div class="formProcesoCont">
+		<br>
+		<br>	
+	
+		{% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+		{{ form_errors(edit_form) }}
+		
+
+		
+		<div class="fix"><br><br><br></div>
+				
+		<table id="tablaItems">
+			<tr>
+				
+				<td class="titItems txt3 NItemsCol0">PRODUCTO</td>
+				<td class="titItems txt3 NItemsCol1">CANTIDAD</td>
+				<td class="">
+					&nbsp;
+				</td>
+			</tr>
+			{% set i = 0 %}
+			{% for pp in procesoProducto %} 
+			<tr class="NItemsTr" id="NItemsTr{{ i }}">
+
+				<td class="NItemsCol0">
+					<select name="designacion_{{ i }}" class="inputLargo inputDesignaciones" id="designacion_{{ i }}">
+						<option value="0"></option>
+					{% for producto in productos %}
+						<option value="{{ producto.id }}" 
+						{% if (producto.id == pp.producto.id) %} selected="selected" {% endif %}>{{ producto.nombre }}</option>
+					{% else %}
+						<option value="0">No existen productos</option>
+					{%endfor%}						
+					</select>
+				</td>
+				<td class="NItemsCol1">&nbsp;<input type="text" name="cantidad_{{ i }}" id="cantidad_{{ i }}" class="inputCorto inputCantidad" value="{{ pp.cantidad }}">
+				&nbsp;
+				</td> 
+				<td class="">
+					
+					<a href="javascript:void(0);" class="linkEliminarFila" id="linkEliminarFila_{{ i }}" >
+					</a>
+				</td>
+			</tr>
+			{% set i = i +1 %}
+			{% endfor %}		
+		</table>
+		
+		<div class="NbtnAgregarFila">
+			
+			<span class="NimagenAgregar left"></span>
+			
+			<span class="left txt3">&nbsp;Agregar Fila</span>
+		</div>
+	
+		<input type="hidden" name="numFilas" id="numFilas" value="0">
+		
+		<div class="fix"></div>
+	<br/>
+	<div class="fix"></div>
+	
+		
+	{{ form_row(edit_form._token) }}
+	</div>	
+		
+		<div class="fix"></div>
+		<p>
+			<button class="btn_green_button right" type="submit">Guardar cambios</button>
+		</p>
+		
+		<div class="fix"></div>
+		
+		</form>
+		{% endblock form_content %}
+
+{% block list_path %}{{ path('proceso') }}{% endblock list_path %}
+
+{% block javascript_extra %}
+
+		<script type="text/javascript">
+	$(document).ready(function(){
+		// Agrega un fila
+		$(".NbtnAgregarFila").live('click', function(){
+
+			function contarFilas () {
+				var cantidad = 0;
+				$(".inputDesignaciones").each(function() {
+					var i = $(this).attr("id").split("_");
+					var index = i[1];
+					if (parseFloat(index) > parseFloat(cantidad))
+					cantidad = parseFloat(index);
+				});
+				//alert(cantidad);
+				return (parseFloat(cantidad) +1) ;
+				
+			}
+			
+			var numFila = contarFilas();
+	
+	
+			var fila = 	'<tr class="NItemsTr" id="NItemsTr'+numFila+'"><td class="NItemsCol0"><select name="designacion_'+numFila+'" class="inputLargo inputDesignaciones" id="designacion_'+numFila+'"><option value="0"></option>';
+			{% for producto in productos %}
+			fila +=	'<option value="{{ producto.id }}">{{ producto.nombre }}</option>';
+			{% else %}
+			fila +=	'<option value="0">No existen productos</option>'
+			{%endfor%}						
+			fila +=	'</select></td><td class="NItemsCol1">&nbsp;<input type="text" name="cantidad_'+numFila+'" id="cantidad_'+numFila+'" class="inputCorto inputCantidad">&nbsp;</td><td class=""><a href="javascript:void(0);" class="linkEliminarFila" id="linkEliminarFila_'+numFila+'"></a></td></tr>';
+					
+			$('#tablaItems').append(fila);
+			
+				
+			
+		});
+
+	});	
+
+	var urlAjaxItems = "{{ path('proceso_items') }}";
+    </script>
+
+	<link type="text/css" href="{{ asset('bundles/decoyesoproduccion/js/jqueryui1824custom/css/ui-lightness/jqueryCustom.css') }}" rel="stylesheet" />
+	<script type="text/javascript" src="{{ asset('bundles/decoyesoproduccion/js/jqueryui1824custom/js/jqueryCustom.js') }}" ></script>
+	
+	<script type="text/javascript" src="{{ asset('bundles/decoyesoproduccion/js/proceso.js') }}" ></script>
+	
+{% endblock javascript_extra %}

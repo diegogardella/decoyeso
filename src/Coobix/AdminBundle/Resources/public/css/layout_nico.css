@@ -98,3 +98,99 @@ background: url(../images/icons/building.png) no-repeat;
 background: url(../images/icons/cog.png) no-repeat;
 }
 
+.NTablaItemsProceso {
+	border: 1px solid;
+	width: 700px;
+}
+
+.NtablaProceso1
+
+.NTablaItemsProceso tr {
+	
+}
+
+.NTablaItemsProceso td {
+	padding:5px;
+}
+
+.Nlinea {
+	width: 100%;
+	height: 1px;
+	background-color: #ccc;
+	
+}
+
+.NTablaItemsProceso td {
+    color: #666666;
+    font-family: "Lucida Grande",tahoma,arial,helvetica,sans-serif;
+    font-size: 14px;
+    line-height: 23px;
+}
+
+.NSecador, .NLugar, .NLugarSep {
+	float: left;
+}
+
+.NLugar, .NLugarSep  {
+	border: 1px solid;
+	width: 7px;
+	height: 40px;	
+}
+
+.NLugarSep {
+	height: 45px;
+	border:none;
+	width: 13px;	
+	}
+	
+.NAzul {
+	background-color: #306D89;
+}
+
+
+.Ntxt3 {
+font-family:"Lucida Grande",tahoma,arial,helvetica,sans-serif;
+color:#333;
+font-size:13.5px;
+line-height:20px;
+}
+
+.NTabContainer {
+	float: left;
+	width: 90%;
+	padding: 10px;
+	z-index: 0;
+	position:relative;
+}
+
+.NTabContainerBtn {
+	float: left;
+	position:relative;
+	padding: 15px;
+	border-bottom: none;
+	margin: 0 10px 0px 0px;
+	z-index: 0;
+	background-color: white;
+	
+}
+
+.NSecadorCont {
+	float: left;
+}
+
+.itemSecadorPlaca {
+	width: 890px;
+	margin: 5px 0px 15px 0px;
+}
+
+.itemSecadorMoldura {
+	width: 210px;
+	margin: 5px 10px 25px;
+}
+
+
+
+
+
+
+
