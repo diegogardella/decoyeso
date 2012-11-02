@@ -3,14 +3,15 @@
 namespace Decoyeso\StockBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as assert;
 
 /**
- * Decoyeso\StockBundle\Entity\StockProducto
+ * Decoyeso\StockBundle\Entity\MovimientoStock
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Decoyeso\StockBundle\Entity\StockProductoRepository")
+ * @ORM\Entity(repositoryClass="Decoyeso\StockBundle\Entity\MovimientoStockRepository")
  */
-class StockProducto
+class MovimientoStock
 {
     /**
      * @var integer $id
@@ -24,28 +25,22 @@ class StockProducto
     /**
      * @var integer $producto
      *
-     * @ORM\ManyToOne(targetEntity="Decoyeso\ProductoBundle\Entity\Producto Producto")
+     * @ORM\ManyToOne(targetEntity="Decoyeso\ProductoBundle\Entity\Elemento")
      */
-    private $producto;
+    private $elemento;
 
     /**
      * @var integer $accion
      *
-     * @ORM\Column(name="accion", type="integer")
+     * @ORM\Column(name="accion", type="integer",nullable=true)
      */
     private $accion;
 
-    /**
-     * @var integer $motivo
-     *
-     * @ORM\Column(name="motivo", type="integer")
-     */
-    private $motivo;
 
     /**
      * @var text $observacion
      *
-     * @ORM\Column(name="observacion", type="text")
+     * @ORM\Column(name="observacion", type="text", nullable=true)
      */
     private $observacion;
 
@@ -53,6 +48,7 @@ class StockProducto
      * @var float $cantidad
      *
      * @ORM\Column(name="cantidad", type="float")
+     * @assert\NotBlank(message="Por favor, ingrese cantidad") 
      */
     private $cantidad;
 
@@ -70,13 +66,16 @@ class StockProducto
      */
     private $usuario;
 
-    /**
-     * @var float $cantidadTotal
-     *
-     * @ORM\Column(name="cantidadTotal", type="float")
-     */
-    private $cantidadTotal;
 
+    
+    /**
+     * @ORM\prePersist
+     */
+    public function prePersist()
+    {
+    	$this->setFechaHora (new \DateTime);
+    }
+    
 
     /**
      * Get id
@@ -89,23 +88,23 @@ class StockProducto
     }
 
     /**
-     * Set producto
+     * Set elemento
      *
-     * @param integer $producto
+     * @param integer $elemento
      */
-    public function setProducto(\Decoyeso\ProductoBundle\Entity\Producto $producto)
+    public function setElemento(\Decoyeso\ProductoBundle\Entity\Elemento $elemento)
     {
-        $this->producto = $producto;
+        $this->elemento = $elemento;
     }
 
     /**
-     * Get producto
+     * Get elemento
      *
      * @return integer 
      */
-    public function getProducto()
+    public function getElemento()
     {
-        return $this->producto;
+        return $this->elemento;
     }
 
     /**
@@ -128,25 +127,7 @@ class StockProducto
         return $this->accion;
     }
 
-    /**
-     * Set motivo
-     *
-     * @param integer $motivo
-     */
-    public function setMotivo($motivo)
-    {
-        $this->motivo = $motivo;
-    }
 
-    /**
-     * Get motivo
-     *
-     * @return integer 
-     */
-    public function getMotivo()
-    {
-        return $this->motivo;
-    }
 
     /**
      * Set observacion
@@ -228,23 +209,5 @@ class StockProducto
         return $this->usuario;
     }
 
-    /**
-     * Set cantidadTotal
-     *
-     * @param float $cantidadTotal
-     */
-    public function setCantidadTotal($cantidadTotal)
-    {
-        $this->cantidadTotal = $cantidadTotal;
-    }
 
-    /**
-     * Get cantidadTotal
-     *
-     * @return float 
-     */
-    public function getCantidadTotal()
-    {
-        return $this->cantidadTotal;
-    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Decoyeso\StockBundle\Form;
+namespace Decoyeso\ProductoBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
@@ -10,19 +10,16 @@ class StockProductoType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('accion')
-            ->add('motivo')
+            ->add('accion','hidden')
+            ->add('producto')            
+            ->add('motivo','choice',array('choices'=>array('1'=>'Nuevo producto','2'=>'Regresó de Obra')))
             ->add('observacion')
             ->add('cantidad')
-            ->add('fechaHora')
-            ->add('cantidadTotal')
-            ->add('producto')
-            ->add('usuario')
         ;
     }
 
     public function getName()
     {
-        return 'decoyeso_stockbundle_stockproductotype';
+        return 'stockproducto';
     }
 }

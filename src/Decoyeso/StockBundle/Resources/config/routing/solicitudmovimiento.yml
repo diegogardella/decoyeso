@@ -1,0 +1,30 @@
+solicitudmovimiento:
+    pattern:  /
+    defaults: { _controller: "StockBundle:SolicitudMovimiento:index" }
+
+solicitudmovimiento_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "StockBundle:SolicitudMovimiento:show" }
+
+solicitudmovimiento_new:
+    pattern:  /{paramPedido}/new
+    defaults: { _controller: "StockBundle:SolicitudMovimiento:new" }
+
+solicitudmovimiento_create:
+    pattern:  /create
+    defaults: { _controller: "StockBundle:SolicitudMovimiento:create" }
+    requirements: { _method: post }
+
+solicitudmovimiento_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "StockBundle:SolicitudMovimiento:edit" }
+
+solicitudmovimiento_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "StockBundle:SolicitudMovimiento:update" }
+    requirements: { _method: post }
+
+solicitudmovimiento_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "StockBundle:SolicitudMovimiento:delete" }
+    requirements: { _method: post }

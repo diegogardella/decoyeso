@@ -1,0 +1,42 @@
+{% extends "CoobixAdminBundle:Default:new.html.twig" %}
+
+
+{% block breadcrumb_in %}
+
+	<div class="breadcrumbs">
+		<a href="{{ path('movimientostock') }}" class="current" >Agregar Productos/Insumos</a>
+	</div>
+	<div class="breadcrumb_divider"> 
+		<a href="{{ path('movimientostock_new') }}" class="current" >Agregar</a>
+	</div>
+	
+{% endblock breadcrumb_in %} 
+
+{% block module_tit %}
+	{% if entity.accion==1 %}
+		Productos/Insumos agregados a stock
+	{% else %}
+		Eliminar Productos/Insumos eliminados de stock
+	{% endif %}
+{% endblock module_tit %}
+
+
+{% block list_path %}
+	{{ path('movimientostock') }}
+{% endblock list_path %}
+
+
+{% block form_content %}
+	{% block errorMsj %}{% endblock errorMsj %}
+	<form novalidate action="{% block create_path %}{{ path('movimientostock_create') }}{% endblock create_path %}" method="post" {{ form_enctype(form) }}>
+		{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+		{{ form_widget(form.accion,{'attr':{'value': accion } }) }}
+		{{ form_rest(form) }}
+		<p>
+			<button class="btn_green_button right" id="btnGuardarCambios" type="submit">Guardar cambios</button>
+		</p>
+	</form>
+		
+		
+	<div class="fix"></div>
+{% endblock form_content %}

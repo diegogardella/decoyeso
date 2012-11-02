@@ -356,12 +356,12 @@ class PresupuestoController extends Controller
         	//Si tipo == 0 entonces hay q crear una obra
         	if ($form["tipo"] == 0) {
 	        	//Me fijo si hay una obra con ese pedido
-	        	$obra = $em->getRepository('DecoyesoObraBundle:Obra')->findByPedidos($entity->getPedido()->getId());
+	        	$obra = $em->getRepository('DecoyesoObraBundle:Obra')->findByPedido($entity->getPedido()->getId());
 	        	
 	            if (!$obra) {
 		        	$obra = New Obra();
 		        	$obra->setNombre($entity->getPedido()->getNombreObra());
-		        	$obra->setPedidos($entity->getPedido());
+		        	$obra->setPedido($entity->getPedido());
 		        	$obra->setEstado(0);
 		        	$em->persist($obra);
 	            }

@@ -1,3 +1,7 @@
-InsumoBundle:
-    resource: "@StockBundle/Resources/config/routing/stockproducto.yml"
-    prefix: /stockproducto
+MovimientoStockBundle:
+    resource: "@StockBundle/Resources/config/routing/movimientostock.yml"
+    prefix: /movimientostock
+
+SolicitudMovimientoBundle:
+    resource: "@StockBundle/Resources/config/routing/solicitudmovimiento.yml"
+    prefix: /solicitudmovimiento

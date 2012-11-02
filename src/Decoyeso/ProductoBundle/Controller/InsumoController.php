@@ -126,18 +126,35 @@ public function indexAction($pararouting="index")
         $em = $this->getDoctrine()->getEntityManager();
 
         $entity = $em->getRepository('ProductoBundle:Insumo')->find($id);
+        
+        $insumosStock=$em->getRepository('StockBundle:MovimientoStock')->findByElemento($id);
+        $cantidadInsumoStock=0;
+        foreach($insumosStock as $insumoStock){
+        	if($insumoStock->getAccion()==1){
+        		$cantidadInsumoStock=$cantidadInsumoStock+$insumoStock->getCantidad();
+        	}else{
+        		$cantidadInsumoStock=$cantidadInsumoStock-$insumoStock->getCantidad();
+        	}
+        	 
+        }
+        
+        
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Insumo entity.');
         }
 
+        
         $editForm = $this->createForm(new InsumoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
+        
+        
         return $this->render('ProductoBundle:Insumo:admin_edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+        	'cantidadInsumoStock'=>$cantidadInsumoStock        		
         ));
     }
 

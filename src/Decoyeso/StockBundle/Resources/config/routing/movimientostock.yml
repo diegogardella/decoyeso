@@ -1,0 +1,30 @@
+movimientostock:
+    pattern:  /
+    defaults: { _controller: "StockBundle:MovimientoStock:index" }
+
+movimientostock_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "StockBundle:MovimientoStock:show" }
+
+movimientostock_new:
+    pattern:  /{accion}/{tipo}/new
+    defaults: { _controller: "StockBundle:MovimientoStock:new" }
+
+movimientostock_create:
+    pattern:  /{tipo}/create
+    defaults: { _controller: "StockBundle:MovimientoStock:create" }
+    requirements: { _method: post }
+
+movimientostock_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "StockBundle:MovimientoStock:edit" }
+
+movimientostock_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "StockBundle:MovimientoStock:update" }
+    requirements: { _method: post }
+
+movimientostock_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "StockBundle:MovimientoStock:delete" }
+    requirements: { _method: post }

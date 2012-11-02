@@ -100,9 +100,6 @@
 				</ul>	
 			</div>
 			
-
-			
-			
 			<div class="menuTab">
 				<div class="tabTit txt3" id="pedidoTit">Pedidos</div>
 				<ul class="tabUl">
@@ -134,7 +131,7 @@
 				<div class="tabTit txt3" id="pedidoTit">Productos y Servicios</div>
 				<ul class="tabUl">
 					<li class="itemsTabUl"><a class="txt16" href="{{ path('producto') }}">Listar Productos</a></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('producto_new') }}">Crear Producto</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('producto_new') }}">Crear Producto</a></li>					
 					
 					<li class="sepItemsTabUl"></li>
 					
@@ -149,9 +146,22 @@
 				</ul>	
 			</div>
 			
-			
-			
-			
+			<div class="menuTab">
+				<div class="tabTit txt3" id="pedidoTit">Stock</div>
+				<ul class="tabUl">
+				
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('solicitudmovimiento') }}">Listar Solicitudes</a></li>
+					<li class="sepItemsTabUl"></li>
+				
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('movimientostock_new',{'accion':1,'tipo':1}) }}">Agregar Productos a Stock</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('movimientostock_new',{'accion':2,'tipo':1}) }}">Eliminar Productos de Stock</a></li>
+					<li class="sepItemsTabUl"></li>
+					
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('movimientostock_new',{'accion':1,'tipo':2}) }}">Agregar Insumos a Stock</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('movimientostock_new',{'accion':2,'tipo':2}) }}">Eliminar Insumos de Stock</a></li>
+
+				</ul>	
+			</div>
 			
 			<div class="menuTab">
 				<div class="tabTit txt3" id="miAccountTit">Usuarios</div>
@@ -210,7 +220,7 @@
 		
 	</div>
 	{% endblock sidebar %}
-
+	
 	
 	{% block main %}
 	<div id="main" class="column">

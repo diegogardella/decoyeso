@@ -1,0 +1,84 @@
+{% extends "CoobixAdminBundle:Default:new.html.twig" %}
+
+
+{% block breadcrumb_in %}
+
+	<div class="breadcrumbs">
+		<a href="{{ path('solicitudmovimiento') }}" class="current" >Agregar Producto</a>
+	</div>
+	<div class="breadcrumb_divider"> 
+		<a href="{{ path('solicitudmovimiento_new') }}" class="current" >Agregar</a>
+	</div>
+	
+{% endblock breadcrumb_in %} 
+
+{% block module_tit %}
+Crear solicitud
+{% endblock module_tit %}
+
+
+{% block list_path %}
+	{{ path('solicitudmovimiento') }}
+{% endblock list_path %}
+
+{% block form_content %}
+	{% block errorMsj %}{% endblock errorMsj %}
+	<form novalidate action="{% block create_path %}{{ path('solicitudmovimiento_create') }}{% endblock create_path %}" method="post" {{ form_enctype(form) }}>
+		{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+		
+		{{ form_row(form.elementos,{'attr':{'value':''} }) }}
+		
+		{{ form_row(form.pedido) }}
+		{{ form_row(form.fechaHoraRequerido) }}
+		{{ form_row(form.observacion) }}
+		{{ form_rest(form) }}
+		
+		<div  class="form_row">
+			
+				<label class=" required" >Productos/Insumos</label>
+				<div class="field_widget">
+				
+					<table  class="field_widget_elementos" id="tableListElementos">
+						<tr>
+							<th>Nombre</th>
+							<th>Cantidad</th>
+							<th></th>
+						</tr>
+						<tr>
+							<td>
+								<select name="selectElementos" id="idSelectElemento" style="float:left;">
+									{% for elemento in elementos %}
+										<option value="{{elemento.id}}@{{ elemento.unidad }}">{{elemento.nombre}}</option>
+									{%else%}
+										<option value="0@0">No existen productos o insumos para agregar</option>
+									{%endfor%}						
+								</select>
+							</td>
+							<td><input style="float:left;" type="text" maxlength="12" id="idElementoCantidad" name="elementoCantidad" value=""></td>
+							<td><button type="button" style="float:left;" id="idAgregarElemento" >Agregar</button></td>
+						</tr>
+						
+					</table>
+					
+				</div>
+				
+			</div>
+			
+		<p>
+			<button class="btn_green_button right" id="btnGuardarCambios" type="submit">Guardar cambios</button>
+		</p>
+	</form>
+		
+		
+	<div class="fix"></div>
+{% endblock form_content %}
+
+{% block javascript_extra %}
+	<script type="text/javascript" src="{{ asset('bundles/stock/js/solicitudmovimiento.js') }}" /></script>
+	<script type="text/javascript">
+		$(window).ready(function(){
+			$('#solicitudmovimiento_elementos').val('');		
+		});	
+	</script>
+	
+{% endblock javascript_extra %}

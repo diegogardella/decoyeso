@@ -1,30 +1,30 @@
 
-.field_widget_insumos,.field_widget_productos{
+.field_widget_insumos,.field_widget_productos,.field_widget_elementos{
 	width: auto;
 }
 
-.field_widget_insumos tr th,.field_widget_productos tr th{
+.field_widget_insumos tr th,.field_widget_productos tr th,.field_widget_elementos tr th{
 	background-color: #ccc; 
 }
 
-.field_widget_insumos tr th:first-child,.field_widget_productos tr th:first-child{
+.field_widget_insumos tr th:first-child,.field_widget_productos tr th:first-child,.field_widget_elementos tr th:first-child{
 	text-align: left;
 	
 }
 
-.field_widget_insumos tr td select,.field_widget_productos tr td select{
+.field_widget_insumos tr td select,.field_widget_productos tr td select,.field_widget_elementos tr td select{
 	width: 350px;
 	padding:5px;
 	height: 30px
 }
 
-.field_widget_insumos tr td input[type="text"],.field_widget_productos tr td input[type="text"]{
+.field_widget_insumos tr td input[type="text"],.field_widget_productos tr td input[type="text"],.field_widget_elementos tr td input[type="text"]{
 	width: 50px;
 	height: 15px;
 	padding:5px;
 }
 
-.field_widget_insumos tr td button{
+.field_widget_insumos tr td button,.field_widget_elementos tr td button{
 	width: auto;
 	padding:0px 5px;
 	height: 30px;

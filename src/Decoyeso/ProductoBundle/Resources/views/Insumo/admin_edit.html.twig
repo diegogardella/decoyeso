@@ -23,7 +23,11 @@
 		  
 		 {% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 		
-			
+			{{ form_row(edit_form.nombre) }}
+			<div class="form_row">
+					<label for="cliente_numero" class=" required">Cantidad en Stock</label>
+					<div>{{cantidadInsumoStock}}</div>
+			</div>
 			{{ form_widget(edit_form) }}
 						
 			

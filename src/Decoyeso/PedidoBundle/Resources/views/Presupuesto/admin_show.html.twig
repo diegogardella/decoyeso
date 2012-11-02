@@ -36,14 +36,14 @@
 					<span class="print_icon"></span>
 					Imprimir
 				</a>
-			{% if (entity.estado == 0) %}	
+			{% if (entity.estado == 0 and entity.pedido.tipo==1) %}	
 			<form action="{{ path('presupuesto_aprobar', { 'id': entity.id }) }}" method="post">
 				{{ form_widget(aprobar_vta_directa_form) }}
 				<button id="pedidoEliminarBtn" class="btn_green_button right" type="submit">Aprobar Vta Directa</button>
 			</form>
 			{% endif %}
 			
-			{% if (entity.estado == 0) %}	
+			{% if (entity.estado == 0 and entity.pedido.tipo==2) %}	
 			<form action="{{ path('presupuesto_aprobar', { 'id': entity.id }) }}" method="post">
 				{{ form_widget(aprobar_con_obra_form) }}
 				<button id="pedidoEliminarBtn" class="btn_green_button right" type="submit">Aprobar y Crear Obra</button>

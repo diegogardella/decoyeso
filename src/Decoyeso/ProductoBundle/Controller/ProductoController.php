@@ -146,6 +146,16 @@ class ProductoController extends Controller
 
         $entity = $em->getRepository('ProductoBundle:Producto')->find($id);
         
+        $productosStock=$em->getRepository('StockBundle:MovimientoStock')->findByElemento($id);
+        $cantidadProductoStock=0;
+        foreach($productosStock as $productoStock){
+        	if($productoStock->getAccion()==1){
+        		$cantidadProductoStock=$cantidadProductoStock+$productoStock->getCantidad();
+        	}else{
+        		$cantidadProductoStock=$cantidadProductoStock-$productoStock->getCantidad();
+        	}
+        	
+        }
         
         $insumosIncluidos=$em->getRepository('ProductoBundle:ProductoInsumo')->findByProducto($id);
         
@@ -182,7 +192,8 @@ class ProductoController extends Controller
         	'insumos'=>$insumosDisponibles,
         	'insumosIncluidos'=>$insumosIncluidos,
         	'productos'=>$productosDisponibles,
-        	'productosIncluidos'=>$productosIncluidos,        		
+        	'productosIncluidos'=>$productosIncluidos,
+        	'cantidadProductoStock'=>$cantidadProductoStock
         ));
     }
 

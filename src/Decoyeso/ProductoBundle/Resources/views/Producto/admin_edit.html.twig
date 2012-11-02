@@ -28,6 +28,10 @@
 			
 			{{ form_row(edit_form.tipo) }}
 			{{ form_row(edit_form.nombre) }}
+			<div class="form_row">
+					<label for="cliente_numero" class=" required">Cantidad en Stock</label>
+					<div>{{cantidadProductoStock}}</div>
+			</div>
 			{{ form_row(edit_form.descripcion) }}
 			{{ form_row(edit_form.unidad) }}
 			{{ form_row(edit_form.costo) }}

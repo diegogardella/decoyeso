@@ -31,6 +31,13 @@ class Pedido
      * @ORM\Column(name="numero", type="string",length="12",nullable="true")
      */
     private $numero;
+    
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="tipo", type="integer")
+     */
+    private $tipo;
 
     /**
      * @var $cliente
@@ -122,7 +129,7 @@ class Pedido
     /**
      * @var Obra $obra
      *
-     * @ORM\OneToMany(targetEntity="\Decoyeso\ObraBundle\Entity\Obra", mappedBy="pedidos", cascade={"remove"}))
+     * @ORM\OneToOne(targetEntity="\Decoyeso\ObraBundle\Entity\Obra", mappedBy="pedido", cascade={"remove"}))
      */
     private $obra;
     
@@ -173,7 +180,12 @@ class Pedido
      */
     private $numeroCalle;
     
-    
+    /**
+     * @var integer $solicitudMovimientoElemento
+     *
+     * @ORM\OneToMany(targetEntity="Decoyeso\StockBundle\Entity\SolicitudMovimiento",mappedBy="pedido")
+     */
+    private $solicitudMovimiento;
     
     
     /**
@@ -691,5 +703,45 @@ class Pedido
     public function getLocalidad()
     {
         return $this->localidad;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param integer $tipo
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return integer 
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Add solicitudMovimiento
+     *
+     * @param Decoyeso\StockBundle\Entity\SolicitudMovimiento $solicitudMovimiento
+     */
+    public function addPedido(\Decoyeso\StockBundle\Entity\SolicitudMovimiento $solicitudMovimiento)
+    {
+        $this->solicitudMovimiento[] = $solicitudMovimiento;
+    }
+
+    /**
+     * Get solicitudMovimiento
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getSolicitudMovimiento()
+    {
+        return $this->solicitudMovimiento;
     }
 }

@@ -30,12 +30,6 @@ class Obra
      */
     private $numero;
 
-    /**
-     * @var string $nombre
-     *
-     * @ORM\Column(name="nombre", type="string", length=255)
-     */
-    private $nombre;
     
     /**
      *
@@ -47,11 +41,11 @@ class Obra
     private $estado;
     
     /**
-     * @var Pedido $pedidos
+     * @var Pedido $pedido
      * @Assert\NotNull
-     * @ORM\ManyToOne(targetEntity="Decoyeso\PedidoBundle\Entity\Pedido", inversedBy="obra" )
+     * @ORM\OneToOne(targetEntity="Decoyeso\PedidoBundle\Entity\Pedido", inversedBy="obra" )
      */
-    private $pedidos;
+    private $pedido;
     
     /**
      * @var date $fechaCreado
@@ -99,7 +93,7 @@ class Obra
      */
     public function __toString()
     {
-    	return $this->getNombre()." ".$this->getNumero();
+    	return $this->getPedido()->getNombreObra()." ".$this->getNumero();
     }
     
     /**
@@ -130,26 +124,6 @@ class Obra
     public function getNumero()
     {
         return $this->numero;
-    }
-
-    /**
-     * Set nombre
-     *
-     * @param string $nombre
-     */
-    public function setNombre($nombre)
-    {
-        $this->nombre = $nombre;
-    }
-
-    /**
-     * Get nombre
-     *
-     * @return string 
-     */
-    public function getNombre()
-    {
-        return $this->nombre;
     }
 
     /**
@@ -229,22 +203,22 @@ class Obra
     }
 
     /**
-     * Set pedidos
+     * Set pedido
      *
-     * @param Decoyeso\PedidoBundle\Entity\Pedido $pedidos
+     * @param Decoyeso\PedidoBundle\Entity\Pedido $pedido
      */
-    public function setPedidos(\Decoyeso\PedidoBundle\Entity\Pedido $pedidos)
+    public function setPedido(\Decoyeso\PedidoBundle\Entity\Pedido $pedido)
     {
-        $this->pedidos = $pedidos;
+        $this->pedido = $pedido;
     }
 
     /**
-     * Get pedidos
+     * Get pedido
      *
      * @return Decoyeso\PedidoBundle\Entity\Pedido 
      */
-    public function getPedidos()
+    public function getPedido()
     {
-        return $this->pedidos;
+        return $this->pedido;
     }
 }
