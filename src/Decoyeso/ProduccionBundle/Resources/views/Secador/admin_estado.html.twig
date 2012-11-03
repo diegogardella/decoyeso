@@ -1,0 +1,146 @@
+{% extends "CoobixAdminBundle:Default:index.html.twig" %}
+
+
+{% block main_content %}
+<div class="module width_full">
+
+	<div class="module_header">
+	
+		<div class="module_tit txt3">Estado</div>
+
+		
+
+		
+		<div class="fix"></div>
+		
+	   
+		
+	</div>
+	
+		
+		<a class="NTabContainerBtn txt3 border_radius" id="btnEstadoSecadorPlacas" href="javascript:void(0);">
+			Secadores de Placas
+		</a>
+		<a class="NTabContainerBtn txt3 border_radius"  id="btnEstadoSecadorMolduras" href="javascript:void(0);">
+			Secadores de Molduras
+		</a>
+		
+		
+	<div class="NTabContainer border_radius" id="solapaEstadoPlacas">
+
+		
+		
+		<div class="fix"><br></div>
+		
+		{% for sP in secadoresPlacas %}
+		
+		<div class="NSecadorCont itemSecadorPlaca">
+
+			<span class="txt3">Secador:</span> <span class="Ntxt3">{{ sP.nombre }}</span><br>
+			<span class="txt3">Capacidad:</span> <span class="Ntxt3">{{ sP.capacidad }} Un.</span><br>
+			<span class="txt3">Disponibles:</span> <span class="Ntxt3">10</span>
+			 
+			<div class="fix"><br></div>
+		
+			<div class="NSecador">
+				{% for lugar in sP.lugaresSecador %}
+					
+					{% if lugar.getDisponible() == 0 %}
+						<div class="NLugar" id="{{ loop.index }}">
+					{% endif %}
+					{% if lugar.getDisponible() == 1 %}
+						<div class="NLugar NAzul " id="{{ loop.index }}">
+					{% endif %}
+					
+						</div>
+						
+					{% if (loop.index % 45 == 0) %}
+					<div class="NLugarSep"></div>
+					{% endif %}
+					{% if (loop.index == 90) %}
+					<div class="fix"></div>
+					{% endif %}
+						
+				{% endfor %}
+			</div>
+		
+		</div>
+		
+		<div class="fix"><br></div>
+		
+		
+		
+		
+		{% else %}
+		
+		<div class="">
+			No se han creado secadores de placas
+		</div>
+		
+		{% endfor %}
+		
+		
+		
+					
+	</div>
+	
+	
+	<div class="NTabContainer border_radius NdisplayNone" id="solapaEstadoMolduras">
+	
+	<div class="fix"><br></div>
+		
+		{% for sP in secadoresMolduras %}
+		
+		<div class="NSecadorCont itemSecadorMoldura">
+
+			<span class="txt3">Secador:</span> <span class="Ntxt3">{{ sP.nombre }}</span><br>
+			<span class="txt3">Capacidad:</span> <span class="Ntxt3">{{ sP.capacidad }} Un.</span><br>
+			<span class="txt3">Disponibles:</span> <span class="Ntxt3">10</span>
+			 
+			<div class="fix"><br></div>
+
+			<div class="NSecador">
+				{% for lugar in sP.lugaresSecador %}
+					
+					{% if lugar.getDisponible() == 0 %}
+						<div class="NLugar" id="{{ loop.index }}">
+					{% endif %}
+					{% if lugar.getDisponible() == 1 %}
+						<div class="NLugar NAzul " id="{{ loop.index }}">
+					{% endif %}
+					
+						</div>
+						
+					{% if (loop.index % 10 == 0) %}
+					<div class="fix"></div>
+					{% endif %}
+						
+				{% endfor %}
+			</div>
+			
+			
+		
+		</div>
+			
+		
+		{% else %}
+		
+		<div class="">
+			No se han creado secadores de placas
+		</div>
+		
+		{% endfor %}
+		
+
+	</div>			
+</div>
+{% endblock main_content %}
+
+{% block javascript_extra %}
+
+
+
+	<script type="text/javascript" src="{{ asset('bundles/decoyesoproduccion/js/secador.js') }}" ></script>
+	
+{% endblock javascript_extra %}
+

@@ -1,3 +1,15 @@
-DecoyesoProduccionBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: DecoyesoProduccionBundle:Default:index }
+ProcesoBundle:
+    resource: "@DecoyesoProduccionBundle/Resources/config/routing/proceso.yml"
+    prefix:   /proceso
+
+MoldeBundle:
+    resource: "@DecoyesoProduccionBundle/Resources/config/routing/molde.yml"
+    prefix:   /molde
+
+MesaBundle:
+    resource: "@DecoyesoProduccionBundle/Resources/config/routing/mesa.yml"
+    prefix:   /mesa
+
+SecadorBundle:
+    resource: "@DecoyesoProduccionBundle/Resources/config/routing/secador.yml"
+    prefix:   /secador

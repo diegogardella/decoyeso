@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Decoyeso\ProduccionBundle\Entity\ProcesoRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Proceso
 {
@@ -27,13 +28,6 @@ class Proceso
      * @ORM\Column(name="numero", type="string",length="12",nullable="true")
      */
     private $numero;
-
-    /**
-     * @var string $nombre
-     *
-     * @ORM\Column(name="nombre", type="string", length=255)
-     */
-    private $nombre;
     
     /**
      *
@@ -49,14 +43,36 @@ class Proceso
      *
      * @ORM\Column(name="fechaCreado", type="date")
      */
-    protected $fechaCreado;
+    private $fechaCreado;
+    
+    /**
+     * @var date $fechaInicio
+     *
+     * @ORM\Column(name="fechaInicio", type="date", nullable="true")
+     */
+    private $fechaInicio;
+    
+    /**
+     * @var date $fechaFin
+     *
+     * @ORM\Column(name="fechaFin", type="date", nullable="true")
+     */
+    private $fechaFin;
+    
+    /**
+     * @var lugaresSecador
+     *
+     * @ORM\OneToMany(targetEntity="LugarSecador", mappedBy="proceso")
+     *
+     */
+    private $lugaresSecador;
     
     /**
      * @var date $fechaActualizado
      *
      * @ORM\Column(name="fechaActualizado", type="date")
      */
-    protected $fechaActualizado;
+    private $fechaActualizado;
        
     /**
      * @ORM\prePersist
@@ -65,6 +81,7 @@ class Proceso
     {
     	$this->setFechaCreado (new \DateTime);
     	$this->setFechaActualizado (new \DateTime);
+    	$this->setEstado(0);
     }
     
     /**
@@ -90,8 +107,20 @@ class Proceso
      */
     public function __toString()
     {
-    	return $this->getNombre()." ".$this->getNumero();
+    	return $this->getNumero();
     }
+    
+    public function getNombreEstado () {
+    	//si cambiar acá, tmb se cambia en el form
+    	$nombreEstado[0] = "No Iniciado";
+    	$nombreEstado[1] = "Iniciado";
+    	$nombreEstado[2] = "Finalizado";
+    	$nombreEstado[3] = "Finalizado y productos asignados";
+    	
+    	return $nombreEstado[$this->estado];
+    }
+
+
 
     /**
      * Get id
@@ -124,26 +153,6 @@ class Proceso
     }
 
     /**
-     * Set nombre
-     *
-     * @param string $nombre
-     */
-    public function setNombre($nombre)
-    {
-        $this->nombre = $nombre;
-    }
-
-    /**
-     * Get nombre
-     *
-     * @return string 
-     */
-    public function getNombre()
-    {
-        return $this->nombre;
-    }
-
-    /**
      * Set estado
      *
      * @param integer $estado
@@ -161,6 +170,26 @@ class Proceso
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set fechaInicio
+     *
+     * @param date $fechaInicio
+     */
+    public function setFechaInicio($fechaInicio)
+    {
+        $this->fechaInicio = $fechaInicio;
+    }
+
+    /**
+     * Get fechaInicio
+     *
+     * @return date 
+     */
+    public function getFechaInicio()
+    {
+        return $this->fechaInicio;
     }
 
     /**
@@ -201,5 +230,49 @@ class Proceso
     public function getFechaActualizado()
     {
         return $this->fechaActualizado;
+    }
+
+    /**
+     * Set fechaFin
+     *
+     * @param date $fechaFin
+     */
+    public function setFechaFin($fechaFin)
+    {
+        $this->fechaFin = $fechaFin;
+    }
+
+    /**
+     * Get fechaFin
+     *
+     * @return date 
+     */
+    public function getFechaFin()
+    {
+        return $this->fechaFin;
+    }
+    public function __construct()
+    {
+        $this->lugaresSecador = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add lugaresSecador
+     *
+     * @param Decoyeso\ProduccionBundle\Entity\LugarSecador $lugaresSecador
+     */
+    public function addLugarSecador(\Decoyeso\ProduccionBundle\Entity\LugarSecador $lugaresSecador)
+    {
+        $this->lugaresSecador[] = $lugaresSecador;
+    }
+
+    /**
+     * Get lugaresSecador
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getLugaresSecador()
+    {
+        return $this->lugaresSecador;
     }
 }

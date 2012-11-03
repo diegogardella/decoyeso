@@ -1,0 +1,30 @@
+molde:
+    pattern:  /
+    defaults: { _controller: "DecoyesoProduccionBundle:Molde:index" }
+
+molde_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "DecoyesoProduccionBundle:Molde:show" }
+
+molde_new:
+    pattern:  /new
+    defaults: { _controller: "DecoyesoProduccionBundle:Molde:new" }
+
+molde_create:
+    pattern:  /create
+    defaults: { _controller: "DecoyesoProduccionBundle:Molde:create" }
+    requirements: { _method: post }
+
+molde_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "DecoyesoProduccionBundle:Molde:edit" }
+
+molde_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "DecoyesoProduccionBundle:Molde:update" }
+    requirements: { _method: post }
+
+molde_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "DecoyesoProduccionBundle:Molde:delete" }
+    requirements: { _method: post }

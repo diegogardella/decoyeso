@@ -28,3 +28,27 @@ proceso_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "DecoyesoProduccionBundle:Proceso:delete" }
     requirements: { _method: post }
+    
+proceso_items:
+    pattern:  /items
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:getItems" }
+
+proceso_iniciar:
+    pattern:  /{id}/iniciar
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:iniciar" }
+
+proceso_finalizar:
+    pattern:  /{id}/finalizar
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:finalizar" }
+
+proceso_finalizar_update:
+    pattern:  /{id}/finalizar_update
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:finalizarUpdate" }
+
+proceso_asignar:
+    pattern:  /{id}/asignar
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:asignarProductosSecadores" }
+
+
+
+

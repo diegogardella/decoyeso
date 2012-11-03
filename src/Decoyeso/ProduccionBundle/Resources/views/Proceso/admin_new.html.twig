@@ -1,0 +1,157 @@
+{% extends "CoobixAdminBundle:Default:new.html.twig" %}
+
+
+
+{% block breadcrumb_in %}
+<div class="breadcrumbs">
+<a href="{{ path('proceso') }}" class="current" >Procesos</a>
+<div class="breadcrumb_divider"></div> 
+<a href="{{ path('proceso_new') }}" class="current" >Crear</a>
+</div>
+{% endblock breadcrumb_in %} 
+
+{%block main_path%}
+	{#
+	{%if entity.cliente %}
+		<ul>
+		
+			<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id': entity.cliente.id}) }}">Cliente: {{entity.cliente.nombre}}</a></li>
+			<li>> <a class="btn_back_to_list txt16 txt_green" href="{{ path('obra_new',{'cliente': entity.cliente.id}) }}">Crear Obra</a></li>
+			
+		</ul>
+	{%endif%}
+	#}
+{%endblock main_path%}
+
+
+{% block module_tit %}
+Crear Proceso
+{% endblock module_tit %}
+
+
+{% block form_content %}
+		{% block errorMsj %}{% endblock errorMsj %}
+		
+		<form action="{% block create_path %}{{ path('proceso_create') }}{% endblock create_path %}" method="post" id="procesoForm" {{ form_enctype(form) }}>
+		<div class="formProcesoCont">
+		<br>
+		<br>	
+	
+		{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+		{{ form_errors(form) }}
+		
+
+		
+		<div class="fix"><br><br><br></div>
+				
+		<table id="tablaItems">
+			<tr>
+				
+				<td class="titItems txt3 NItemsCol0">PRODUCTO</td>
+				<td class="titItems txt3 NItemsCol1">CANTIDAD</td>
+				<td class="">
+					&nbsp;
+				</td>
+			</tr>
+			
+			{% for i in 0..6%} 
+			<tr class="NItemsTr" id="NItemsTr{{ i }}">
+
+				<td class="NItemsCol0">
+					<select name="designacion_{{ i }}" class="inputLargo inputDesignaciones" id="designacion_{{ i }}">
+						<option value="0"></option>
+					{% for producto in productos %}
+						<option value="{{ producto.id }}">{{ producto.nombre }}</option>
+					{% else %}
+						<option value="0">No existen productos</option>
+					{%endfor%}						
+					</select>
+				</td>
+				<td class="NItemsCol1">&nbsp;<input type="text" name="cantidad_{{ i }}" id="cantidad_{{ i }}" class="inputCorto inputCantidad">&nbsp;</td> 
+				<td class="">
+					<a href="javascript:void(0);" class="linkEliminarFila" id="linkEliminarFila_{{ i }}"></a>
+				</td>
+			</tr>	
+			{% endfor %}		
+		</table>
+		
+		<div class="NbtnAgregarFila">
+			
+			<span class="NimagenAgregar left"></span>
+			
+			<span class="left txt3">&nbsp;Agregar Fila</span>
+		</div>
+		
+		<input type="hidden" name="numFilas" id="numFilas" value="0">
+		
+		<div class="fix"></div>
+	<br/>
+	<div class="fix"></div>
+	
+		
+	{{ form_row(form._token) }}
+	</div>	
+		
+		<div class="fix"></div>
+		<p>
+			<button class="btn_green_button right" type="submit">CREAR</button>
+		</p>
+		
+		<div class="fix"></div>
+		
+		</form>
+		{% endblock form_content %}
+
+{% block list_path %}{{ path('presupuesto') }}{% endblock list_path %}
+
+{% block javascript_extra %}
+
+
+
+	<link type="text/css" href="{{ asset('bundles/decoyesoproduccion/js/jqueryui1824custom/css/ui-lightness/jqueryCustom.css') }}" rel="stylesheet" />
+	<script type="text/javascript" src="{{ asset('bundles/decoyesoproduccion/js/jqueryui1824custom/js/jqueryCustom.js') }}" ></script>
+	
+	<script type="text/javascript" src="{{ asset('bundles/decoyesoproduccion/js/proceso.js') }}" ></script>
+	
+	
+		<script type="text/javascript">
+	$(document).ready(function(){
+		// Agrega un fila
+		$(".NbtnAgregarFila").live('click', function(){
+
+			function contarFilas () {
+				var cantidad = 0;
+				$(".inputDesignaciones").each(function() {
+					var i = $(this).attr("id").split("_");
+					var index = i[1];
+					if (parseFloat(index) > parseFloat(cantidad))
+					cantidad = parseFloat(index);
+				});
+				//alert(cantidad);
+				return (parseFloat(cantidad) +1) ;
+				
+			}
+			
+			var numFila = contarFilas();
+	
+	
+			var fila = 	'<tr class="NItemsTr" id="NItemsTr'+numFila+'"><td class="NItemsCol0"><select name="designacion_'+numFila+'" class="inputLargo inputDesignaciones" id="designacion_'+numFila+'"><option value="0"></option>';
+			{% for producto in productos %}
+			fila +=	'<option value="{{ producto.id }}">{{ producto.nombre }}</option>';
+			{% else %}
+			fila +=	'<option value="0">No existen productos</option>'
+			{%endfor%}						
+			fila +=	'</select></td><td class="NItemsCol1">&nbsp;<input type="text" name="cantidad_'+numFila+'" id="cantidad_'+numFila+'" class="inputCorto inputCantidad">&nbsp;</td><td class=""><a href="javascript:void(0);" class="linkEliminarFila" id="linkEliminarFila_'+numFila+'"></a></td></tr>';
+					
+			$('#tablaItems').append(fila);
+			
+				
+			
+		});
+
+	});	
+
+	var urlAjaxItems = "{{ path('proceso_items') }}";
+    </script>
+	
+{% endblock javascript_extra %}

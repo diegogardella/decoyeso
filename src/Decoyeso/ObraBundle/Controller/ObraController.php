@@ -210,6 +210,10 @@ class ObraController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Obra entity.');
             }
+            
+            //LOG
+            $log = $this->get('log');
+            $log->create($entity, "Obra Eliminada");
 
             $em->remove($entity);
             $em->flush();

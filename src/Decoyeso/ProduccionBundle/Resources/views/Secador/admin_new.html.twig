@@ -1,0 +1,44 @@
+{% extends "CoobixAdminBundle:Default:new.html.twig" %}
+
+
+
+{% block breadcrumb_in %}
+<div class="breadcrumbs">
+<a href="{{ path('secador') }}" class="current" >Secador</a>
+<div class="breadcrumb_divider"></div> 
+<a href="{{ path('secador_new') }}" class="current" >Crear</a>
+</div>
+{% endblock breadcrumb_in %} 
+
+{%block main_path%}
+	{#
+	{%if entity.cliente %}
+		<ul>
+		
+			<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id': entity.cliente.id}) }}">Cliente: {{entity.cliente.nombre}}</a></li>
+			<li>> <a class="btn_back_to_list txt16 txt_green" href="{{ path('obra_new',{'cliente': entity.cliente.id}) }}">Crear Obra</a></li>
+			
+		</ul>
+	{%endif%}
+	#}
+{%endblock main_path%}
+
+
+{% block module_tit %}
+Crear Secador
+{% endblock module_tit %}
+
+{% block create_path %}
+{{ path('secador_create') }}
+{% endblock create_path %}
+
+{% block list_path %}
+{{ path('secador') }}
+{% endblock list_path %}
+
+{% block javascript_extra %}
+
+
+
+
+{% endblock javascript_extra %}
