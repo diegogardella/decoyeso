@@ -75,11 +75,58 @@ class SolicitudMovimientoController extends Controller
 
         ));
     }
+    
+    
+    /**
+     * Finds and displays a SolicitudMovimiento entity.
+     *
+     */
+    public function showPorPedidoAction($paramPedido)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+    
+    	$entity = $em->getRepository('StockBundle:SolicitudMovimiento')->findOneByPedido($paramPedido);
+    
+    	return $this->redirect($this->generateUrl('solicitudmovimiento_show', array('id' => $entity->getId())));
 
+    }
+    
+    
     /**
      * Displays a form to create a new SolicitudMovimiento entity.
      *
      */
+    
+    
+    public function newVentaDirectaAction($paramPedido)
+    {
+    	$em=$this->getDoctrine()->getEntityManager();
+    	$entity = new SolicitudMovimiento();
+    
+    	$pedido=$em->getRepository('PedidoBundle:Pedido')->find($paramPedido);   
+    	
+    	$presupuesto=$em->getRepository('PedidoBundle:Presupuesto')->findBy(array('pedido'=>$paramPedido,'estado'=>1));
+    	    	
+    	$valorItems="";
+    	$presupuestoItems=json_decode($presupuesto[0]->getItems(),true);
+    	
+    	foreach($presupuestoItems as $key=>$value ){
+    	  if($value["id"]!=''){
+    	  	$valorItems.=";".$value["id"]."@".$value["cantidad"]."@".$value["unidad"]."@".$value["designacion"];
+    	  }
+    	}    		    	
+    	
+    	$form   = $this->createForm(new SolicitudMovimientoType(), $entity);
+    
+    	return $this->render('StockBundle:SolicitudMovimiento:admin_new_venta_directa.html.twig', array(
+    			'entity' => $entity,
+    			'form'   => $form->createView(),
+    			'presupuestoItems'=>$presupuestoItems,
+    			'valorItems'=>$valorItems
+    	));
+    }
+    
+    
     public function newAction($paramPedido)
     {
     	$em=$this->getDoctrine()->getEntityManager();
@@ -111,27 +158,22 @@ class SolicitudMovimientoController extends Controller
         $form->bindRequest($request);
 
         $formSolicitudMovimiento=$request->request->get('solicitudmovimiento');
-        
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            
-            $entity->setFechaHoraCreado(new \DateTime());
-            $entity->setEstado(1);
-            
-            $em->persist($entity);
-            $em->flush();
+                
+         $em = $this->getDoctrine()->getEntityManager();
+           
+         $entity->setFechaHoraCreado(new \DateTime());
+         $entity->setEstado(1);
+           
+         $entity->getPedido()->setEstado(5);
+         
+         $em->persist($entity);
+         $em->flush();
 
-            $this->gestionarSolicitudMovimiento($formSolicitudMovimiento['elementos'],$entity);
-            $this->get('session')->setFlash('msj_info','La solicitud se ha creado correctamente.');
+         $this->gestionarSolicitudMovimiento($formSolicitudMovimiento['elementos'],$entity);
+	     $this->get('session')->setFlash('msj_info','La solicitud se ha creado correctamente.');
             
-            return $this->redirect($this->generateUrl('solicitudmovimiento_show', array('id' => $entity->getId())));
+         return $this->redirect($this->generateUrl('solicitudmovimiento_show', array('id' => $entity->getId())));
             
-        }
-
-        return $this->render('StockBundle:SolicitudMovimiento:admin_new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView()
-        ));
     }
 
     /**
@@ -141,7 +183,6 @@ class SolicitudMovimientoController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
         $entity = $em->getRepository('StockBundle:SolicitudMovimiento')->find($id);
 
         if (!$entity) {
@@ -169,11 +210,11 @@ class SolicitudMovimientoController extends Controller
     	$form=$request->request->get('form');
     	
         $entity = $em->getRepository('StockBundle:SolicitudMovimiento')->find($id);
+        $entity->getPedido()->setEstado(6);
         $entity->setEstado(2);
         $em->persist($entity);
         
     	foreach($form['solicitudMovimientoElementoCantidadReservada'] as $key =>$value){    		
-    		echo "<br>".$key.":".$value."<br>";
     		$elementoSolicitudMovimiento=$em->getRepository('StockBundle:SolicitudMovimientoElemento')->find($key);
     		$elementoSolicitudMovimiento->setCantidadReservada($value);
     		$em->persist($elementoSolicitudMovimiento);    		

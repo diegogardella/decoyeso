@@ -23,7 +23,7 @@ Listado de Pedidos de Productos/Insumos a Stock
 
 {% block list_item_texts %}
 	<td ><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}">{{ entity.pedido.numero }}</a></td>
-	<td ><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}">{{ entity.pedido.nombreObra }}</a></td>
+	<td ><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}">{{ entity.pedido.nombre }}</a></td>
 	<td align="center"><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}" >{{entity.fechaHoraRequerido | date('d/m/Y')}}</a></td>
 	<td align="center"><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}">{{ entity.estadoNombre }}</a></td>
 {% endblock list_item_texts %}

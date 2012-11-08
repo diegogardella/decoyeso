@@ -47,13 +47,35 @@
 
 
 <div class="module width_full">
-
-	<div class="module_header">
-	
-		<div class="module_tit txt3">{% block module_tit %}TITLE LIST{% endblock module_tit %}</div>
-		<a id="clienteListarBtn" class="btn_blue right" href="{% block list_path %}{{ path('admin_entity_list') }}{% endblock list_path %}">Ir al listado</a>
+	{% block module_header%}
+		<div class="module_header">
 		
-	</div>
+			<div class="module_tit txt3">{% block module_tit %}TITLE LIST{% endblock module_tit %}</div>
+		
+				{% block menuAcciones%}
+					<div id="idmenuAcciones" class="menuAcciones menusDropDownSeccion">
+						<a class="btn_blue right" href="javascript:void(0)">Acciones</a>
+						<ul style="display:none" >
+							{% block menuAccionesItems%}
+							{% endblock menuAccionesItems%}
+						</ul>
+					</div>
+				{% endblock menuAcciones%}
+				
+				{% block menuOpciones%}
+					<div id="idmenuMasOpciones" class="menuMasOpciones menusDropDownSeccion">
+						<a id="idBtnMasOpciones" class="btn_blue right" href="javascript:void(0)">Opciones</a>
+						<ul id="idUlMasOpciones" style="display:none" >
+							{% block menuOpcionesItems %}
+							{% endblock menuOpcionesItems %}
+						</ul>
+					</div>
+				{% endblock menuOpciones%}
+			
+		</div>
+	{% endblock module_header%}
+	
+	<hr>
 	
 	<div class="module_content">
 		{%block msj_info%}

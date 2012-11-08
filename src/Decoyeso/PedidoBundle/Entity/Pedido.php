@@ -67,12 +67,11 @@ class Pedido
     
 
     /**
-     * @var string $nombreObra
+     * @var string $nombre
      *
-     * @ORM\Column(name="nombreObra", type="string", length="255")
-	 * @assert\NotBlank(message="Por favor, ingrese el nombre de la obra")
+     * @ORM\Column(name="nombre", type="string", length="255")
      */
-    private $nombreObra;
+    private $nombre;
 
     /**
      * @var text $descripcion
@@ -125,12 +124,7 @@ class Pedido
      */
     private $presupuestos;
     
-    /**
-     * @var Obra $obra
-     *
-     * @ORM\OneToOne(targetEntity="\Decoyeso\ObraBundle\Entity\Obra", mappedBy="pedido", cascade={"remove"}))
-     */
-    private $obra;
+
     
     /**
      * @var provincia
@@ -215,7 +209,7 @@ class Pedido
 
     public function __toString()
     {
-    	return $this->numero."-".$this->nombreObra;
+    	return $this->numero."-".$this->nombre;
     }
 
  
@@ -249,7 +243,7 @@ class Pedido
     	
     	switch ($this->getEstado()){
     		case 1:
-    			return "Creado";
+    			return "Pedido Creado";
     		break;
     		
     		case 2:
@@ -260,7 +254,24 @@ class Pedido
     			return "Presupuesto creado";
     			
     		case 4:
-    			return "Presupuesto aprobado";
+    			return "Presupuesto Aprobado";
+    		break;
+    		
+    		case ($this->getEstado()==5 or $this->getEstado()==6):
+    			if($this->getTipo()==2){
+    				return "Obra en Ejecución";
+    			}else{
+    				if($this->getEstado()==5){
+    					return "Solicitud a Stock Enviada ";
+    				}else{
+    					return "Solicitud a Stock Procesada".$this->getEstado();
+    				}
+    			}
+    			
+    		break;
+    		
+    		case 7:
+    			return "Pedido Finalizado";
     		break;
     		
     	}
@@ -277,6 +288,13 @@ class Pedido
     	    	
     	if(count($this->getPresupuestos())>0){
     		$bEstados=3;
+    	}
+    	
+    	
+    	foreach ($this->getPresupuestos() as $presupuesto){
+    		if($presupuesto->getEstado()==1){
+    			$bEstados=4;
+    		}	
     	}
     	
     	$this->estado=$bEstados;
@@ -385,23 +403,23 @@ class Pedido
     }
 
     /**
-     * Set nombreObra
+     * Set nombre
      *
-     * @param string $nombreObra
+     * @param strinombre
      */
-    public function setNombreObra($nombreObra)
+    public function setNombre($nombre)
     {
-        $this->nombreObra = $nombreObra;
+        $this->nombre = $nombre;
     }
 
     /**
-     * Get nombreObra
+     * Get nombre
      *
      * @return string 
      */
-    public function getNombreObra()
+    public function getNombre()
     {
-        return $this->nombreObra;
+        return $this->nombre;
     }
 
     /**

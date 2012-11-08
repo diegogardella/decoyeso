@@ -15,10 +15,8 @@ Listado de Obras
 
 {% set widthCols =  94/2 %}
 
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'p.nombre')|raw }}</a></th>
-
-
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.estado') %} class="sorted" {% endif %}>{{ entities.sortable('Estado', 'p.estado')|raw }}</a></th>
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('o.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'o.nombre')|raw }}</a></th>
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('o.estado') %} class="sorted" {% endif %}>{{ entities.sortable('Estado', 'o.estado')|raw }}</a></th>
 
 
 
@@ -28,7 +26,7 @@ Listado de Obras
 {% block list_item_texts %}
 <td >
 	<a href="{{ path('obra_edit', { 'id': entity.id }) }}">
-		{{ entity.pedido.nombreObra }}
+		{{ entity.nombre }}
 	</a>
 </td>
 <td >
@@ -52,7 +50,8 @@ Listado de Obras
 	<div id="formBuscar">
 		
 		{{form_row(formBuscar._token)}}
-		{{form_row(formBuscar.p_numero)}}
+		{{form_row(formBuscar.o_numero)}}
+		{{form_row(formBuscar.o_nombre)}}
 		
 	</div>
 {%endblock%}
@@ -70,7 +69,7 @@ Listado de Obras
 {% endblock delete_path %}
 
 {% block list_delete %}
-{% render "DecoyesoObraBundle:Obra:listDeleteform" with {'id': entity.id}  %}
+{% render "ObraBundle:Obra:listDeleteform" with {'id': entity.id}  %}
 {% endblock list_delete %}
 
 

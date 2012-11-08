@@ -4,6 +4,10 @@ relevamiento:
     requirements:
         pararouting: buscar
 
+relevamiento_por_pedido:
+    pattern:  /{pedido}/relevamientoporpedido
+    defaults: { _controller: "PedidoBundle:Relevamiento:relevamientoPorPedido" }
+
 relevamiento_show:
     pattern:  /{id}/show
     defaults: { _controller: "PedidoBundle:Relevamiento:show" }

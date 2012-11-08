@@ -6,9 +6,17 @@ solicitudmovimiento_show:
     pattern:  /{id}/show
     defaults: { _controller: "StockBundle:SolicitudMovimiento:show" }
 
+solicitudmovimiento_show_por_pedido:
+    pattern:  /{paramPedido}/showporpedido
+    defaults: { _controller: "StockBundle:SolicitudMovimiento:showPorPedido" }
+
 solicitudmovimiento_new:
     pattern:  /{paramPedido}/new
     defaults: { _controller: "StockBundle:SolicitudMovimiento:new" }
+
+solicitudmovimiento_new_venta_directa:
+    pattern:  /{paramPedido}/newventadirecta
+    defaults: { _controller: "StockBundle:SolicitudMovimiento:newVentaDirecta" }
 
 solicitudmovimiento_create:
     pattern:  /create

@@ -30,7 +30,7 @@ class AppKernel extends Kernel
             new Decoyeso\UbicacionBundle\UbicacionBundle(),
         	new Decoyeso\ProductoBundle\ProductoBundle(),
 
-            new Decoyeso\ObraBundle\DecoyesoObraBundle(),
+            new Decoyeso\ObraBundle\ObraBundle(),
             new Decoyeso\ProduccionBundle\DecoyesoProduccionBundle(),
             new Decoyeso\StockBundle\StockBundle(),
         );

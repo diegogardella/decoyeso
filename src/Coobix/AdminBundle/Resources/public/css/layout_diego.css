@@ -29,3 +29,68 @@
 	padding:0px 5px;
 	height: 30px;
 }
+
+.menuMasOpciones,.menuAcciones,.menuNotificaciones{
+	float:right;
+	position:relative;
+	width: auto;
+}
+
+.menuMasOpciones ul,.menuAcciones ul{
+	background-color: #fff;
+	border: solid 2px #24AEE0;
+	padding:5px;
+	top:38px;
+	right:8%;
+	position:absolute;
+	width: 225px;
+}
+
+.menusDropDownSeccion ul li{
+	clear:left;
+	margin:5px auto;
+}
+
+.menusDropDownSeccion ul .separador{
+	clear:left;
+	padding:5px 2;
+	border:solid 1px #f0f0f0;
+}
+
+.menusDropDownSeccion ul li button,.menusDropDownSeccion ul li a{
+	border:none;
+	background: none;
+	font-size: 14px;
+	color:#555;
+	padding:2px 5px;
+	margin:0px;
+	cursor:pointer;
+}
+
+.menusDropDownSeccion ul li button:hover,.menusDropDownSeccion ul li a:hover{
+	color:#fff;
+	background-color: #24AEE0;
+	width: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+hr{
+	float:left;
+	width: 100%;
+	margin:10px 0px;
+	border-style:solid none;
+	border-left:none;
+	border-right:none;
+	border-top:none;
+	border-bottom:solid 1px #ccc;
+}

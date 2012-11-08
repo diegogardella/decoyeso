@@ -24,7 +24,7 @@ class ClienteController extends Controller
     	$buscador->setRequest($this->getRequest());
     	$buscador->setPararouting($pararouting);
     
-    	$buscador->setSql('SELECT c FROM ClientesBundle:Cliente c');
+    	$buscador->setSql('SELECT c FROM ClientesBundle:Cliente c ORDER BY c.id DESC');
     
     	$opciones=array(
     			"c_tipo"=>array('choice',array("label"=>"Tipo de cliente",'choices'=>	array(""=>"",1 => 'Persona Física', 2 => 'Organización'))),

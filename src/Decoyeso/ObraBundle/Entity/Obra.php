@@ -30,6 +30,12 @@ class Obra
      */
     private $numero;
 
+    /**
+     * @var string $nombre
+     *
+     * @ORM\Column(name="nombre", type="string", length=255)
+     */
+    private $nombre;
     
     /**
      *
@@ -43,7 +49,7 @@ class Obra
     /**
      * @var Pedido $pedido
      * @Assert\NotNull
-     * @ORM\OneToOne(targetEntity="Decoyeso\PedidoBundle\Entity\Pedido", inversedBy="obra" )
+     * @ORM\OneToOne(targetEntity="Decoyeso\PedidoBundle\Entity\Pedido" )
      */
     private $pedido;
     
@@ -93,7 +99,7 @@ class Obra
      */
     public function __toString()
     {
-    	return $this->getPedido()->getNombreObra()." ".$this->getNumero();
+    	return $this->getNombre();
     }
     
     /**
@@ -221,4 +227,25 @@ class Obra
     {
         return $this->pedido;
     }
+    
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     */
+    public function setNombre($nombre)
+    {
+    	$this->nombre = $nombre;
+    }
+    
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+    	return $this->nombre;
+    }
+    
 }

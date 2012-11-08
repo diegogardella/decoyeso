@@ -20,49 +20,8 @@
 			evaluarCamposForm();
 		
 			$('#cliente_tipo').change(function(){
-					
 					evaluarCamposForm();
-			});
-			
-			$('#pedidosClienteContenido').css('display','none');
-			$('#clienteDatosBtn').css('display','none');
-			$('#clientePedidosCrearBtn').css('display','none');
-			
-			$('#clientePedidosBtn').click(function(){
-				
-				$('#datosClienteContenido').css('display','none');
-				$('#clientePedidosBtn').css('display','none');
-				$('#clienteListarBtn').css('display','none');
-				$('#clienteEliminarBtn').css('display','none');
-				$('#msjInfo').css('display','none');
-				
-				$('#pedidosClienteContenido').css('display','');
-				$('#clienteDatosBtn').css('display','');
-				$('#clientePedidosCrearBtn').css('display','');
-				
-				$('#tituloContenido').html('Pedidos del Cliente');
-				
-			});
-			
-			$('#clienteDatosBtn').click(function(){
-				
-
-				$('#pedidosClienteContenido').css('display','none');
-				$('#clienteDatosBtn').css('display','none');
-				$('#clientePedidosCrearBtn').css('display','none');
-				
-				$('#datosClienteContenido').css('display','');
-				$('#clientePedidosBtn').css('display','');
-				$('#clienteListarBtn').css('display','');
-				$('#clienteEliminarBtn').css('display','');
-				$('#msjInfo').css('display','');
-				
-				$('#tituloContenido').html('Datos del Cliente');
-				
-			});
-			
-			
-			
+			});			
 
 		});
 		

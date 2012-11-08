@@ -4,6 +4,10 @@ presupuesto:
     requirements:
         pararouting: buscar
 
+presupuesto_por_pedido:
+    pattern:  /{pedido}/presupuestoporpedido
+    defaults: { _controller: "PedidoBundle:Presupuesto:presupuestoPorPedido" }
+
 presupuesto_new:
     pattern:  /{pedido}/new
     defaults: { _controller: "PedidoBundle:Presupuesto:new", pedido:0 }

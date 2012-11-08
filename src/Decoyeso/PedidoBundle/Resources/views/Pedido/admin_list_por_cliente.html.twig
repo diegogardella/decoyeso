@@ -1,0 +1,54 @@
+{% extends "CoobixAdminBundle:Default:list.html.twig" %}
+
+{%block main_path%}
+<ul>
+	<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id': cliente.id}) }}">Cliente: {{cliente.nombre}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedidos_por_cliente',{'cliente': cliente.id}) }}">Listar Pedidos del Cliente</a></li>
+</ul>
+{%endblock main_path%}
+
+{% block module_tit %}
+	Listado de Pedidos del Cliente
+{% endblock module_tit %}
+
+{% block list_tits %}
+
+{% set widthCols =  94/5  %}
+
+<th style="width: {{ widthCols }}">Nombre</th>
+<th style="width: {{ widthCols }}">Entregar el</th>
+<th style="width: {{ widthCols }}">Prioridad</th>
+<th style="width: {{ widthCols }}">Estado</th>
+
+
+{% endblock list_tits %}
+
+{% block list_item_texts %}
+<td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
+<td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}"> {{ entity.fechaEntrega | date('d/m/Y') }}</a></td>
+<td align="center"><a href="{{ path('pedido_edit', { 'id': entity.id }) }}" >{{entity.prioridadNombre}}</a></td>
+<td align="center"><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.estadoNombre }}</a></td>
+{% endblock list_item_texts %}
+
+
+{%block buscador %}
+{%endblock buscador %}
+
+
+{% block menuOpcionesItems %}
+	<li><a id="clientePedidosCrearBtn" href="{{path('pedido_new',{'cliente':cliente.id})}}">Crear pedido a cliente</a></li>
+	<li class="separador"></li>
+	<li><a id="clientePedidosBtn"  href="{{path('cliente_edit',{'id':cliente.id})}}">Editar Cliente</a></li>
+{% endblock menuOpcionesItems %}
+
+{% block menuAcciones%}
+{% endblock menuAcciones%}
+
+{% block edit_path %} 
+{{ path('pedido_edit', { 'id': entity.id }) }} 
+{% endblock edit_path %}
+
+{% block list_navigation %}
+{% endblock list_navigation %}
+
+

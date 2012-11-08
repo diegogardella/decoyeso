@@ -160,6 +160,7 @@ $(document).ready(function(){
 				var index = i[1];
 				
 				$("#unidad_"+index).val(ui.item.unidad);
+				$("#id_"+index).val(ui.item.id);
 				$("#precioUnitario_"+index).val(ui.item.precio);
 				
 			},

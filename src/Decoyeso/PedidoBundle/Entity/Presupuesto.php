@@ -503,4 +503,12 @@ class Presupuesto
     {
         return $this->estado;
     }
+    
+    public function getEstadoNombre(){
+    	$estado[0]='En espera';
+    	$estado[1]='Aprobado';
+    	$estado[2]='No aprobado';
+    	return $estado[$this->getEstado()];
+    }
+    
 }

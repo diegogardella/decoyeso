@@ -2,33 +2,6 @@
 	$(window).ready(function(){
 
 
-
-		
-		   function evaluarCamposForm(){
-			   
-				if($('#pedido_tipo').val()==1){
-					$('#div_pedido_nombreObra label').html('Nombre');
-					if($('#pedido_nombreObra').val()==''){
-						$('#pedido_nombreObra').val('Venta Directa');
-					}
-				}else{
-					$('#div_pedido_nombreObra label').html('Nombre de Obra');
-					if($('#pedido_nombreObra').val()=='Venta Directa'){
-						$('#pedido_nombreObra').val('');
-					}
-				}
-				
-			}
-		
-		
-		
-			evaluarCamposForm();
-		
-			$('#pedido_tipo').change(function(){
-					
-					evaluarCamposForm();
-			});
-
 			
 			function mostrarPedido(){
 				$('#pedidoListarBtn').css('display','');

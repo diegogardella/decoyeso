@@ -11,7 +11,7 @@ Listado de Presupuestos
 
 {% block list_tits %}
 
-{% set widthCols =  94/4  %}
+{% set widthCols =  94/3  %}
 
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('pre.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Número', 'pre.numero')|raw }}</a></a></th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('pre.pedido.cliente.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Cliente', 'pre.pedido.cliente.nombre')|raw }}</a></a></th>
@@ -24,7 +24,7 @@ Listado de Presupuestos
 {% block list_item_texts %}
 <td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.numero }}</a></td>
 <td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.pedido.cliente.nombre }}</a></td>
-<td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.pedido.numero }}-{{ entity.pedido.nombreObra }}</a></td>
+<td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.pedido.numero }}-{{ entity.pedido.nombre }}</a></td>
 {% endblock list_item_texts %}
 
 
@@ -43,7 +43,7 @@ Listado de Presupuestos
 	
 	
 		{{form_row(formBuscar.p_numero)}}
-		{{form_row(formBuscar.p_nombreObra)}}
+		{{form_row(formBuscar.p_nombre)}}
 
 	</div>
 {%endblock%}

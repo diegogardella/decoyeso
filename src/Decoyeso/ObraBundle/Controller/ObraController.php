@@ -23,23 +23,46 @@ class ObraController extends Controller
 		$buscador->setRequest($this->getRequest());
 		$buscador->setPararouting($pararouting);
 	
-		$buscador->setSql('SELECT p FROM DecoyesoObraBundle:Obra p order by p.estado asc, p.fechaCreado desc');
+		$buscador->setSql('SELECT o FROM ObraBundle:Obra o ORDER BY o.estado ASC, o.fechaCreado DESC');
 	
-		$opciones=array(
-				"p_numero"=>array(null,array("label"=>"Número de obra")),
+		/*$opciones=array(
+				"o_numero"=>array(null,array("label"=>"Número de obra")),
     			
     			);
 		
-		$buscador->setOpcionesForm($opciones);
+		$buscador->setOpcionesForm($opciones);*/
 	
 		$resultados=$buscador->exeBuscar();
-	
-	
-		return $this->render('DecoyesoObraBundle:Obra:admin_list.html.twig', array(
+
+		return $this->render('ObraBundle:Obra:admin_list.html.twig', array(
 				'entities' => $resultados["entities"],
 				'formBuscar'=>$resultados["form"]->createView(),
 		));
 	
+	
+	}
+	
+	
+	public function newFromPedidoAction($pedido)
+	{
+		$em = $this->getDoctrine()->getEntityManager();
+		$pedidoO = $em->getRepository('PedidoBundle:Pedido')->find($pedido);
+	        	
+		$obra = New Obra();
+		$obra->setNombre($pedidoO->getNombre());
+		$obra->setPedido($pedidoO);
+		$obra->setEstado(0);
+		$em->persist($obra);
+    
+         //Cambio el estado en el pedido
+        $pedidoO->setEstado(5);
+        $em->persist($pedidoO);
+         
+        $em->flush();
+	
+		$this->get('session')->setFlash('msj_info','La Obra se ha creado correctamente');
+	
+		return $this->redirect($this->generateUrl('obra_edit',array('id'=>$obra->getId())));
 	
 	}
 	
@@ -61,11 +84,10 @@ class ObraController extends Controller
 	
 		$form   = $this->createForm(new ObraType(), $entity);
 	
-		return $html =   $this->render('DecoyesoObraBundle:Obra:admin_new.html.twig', array(
-				'entity' => $entity,
-				'form'   => $form->createView()
-		));
-	
+		return $this->render('ObraBundle:Obra:admin_new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView()
+        ));	
 	}
 	
 	
@@ -94,7 +116,7 @@ class ObraController extends Controller
 	
 		}
 	
-        return $this->render('DecoyesoObraBundle:Obra:admin_new.html.twig', array(
+        return $this->render('ObraBundle:Obra:admin_new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
@@ -108,7 +130,7 @@ class ObraController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('DecoyesoObraBundle:Obra')->find($id);
+        $entity = $em->getRepository('ObraBundle:Obra')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Obra entity.');
@@ -116,7 +138,7 @@ class ObraController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('DecoyesoObraBundle:Obra:show.html.twig', array(
+        return $this->render('ObraBundle:Obra:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
 
@@ -124,6 +146,13 @@ class ObraController extends Controller
     }
 
 
+    public function editFromPedidoAction($paramPedido)
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$entity = $em->getRepository('ObraBundle:Obra')->findOneByPedido($paramPedido);
+    
+    	return $this->redirect($this->generateUrl('obra_edit', array('id' => $entity->getId())));
+    }
 
 
     /**
@@ -134,7 +163,7 @@ class ObraController extends Controller
     {
     	$em = $this->getDoctrine()->getEntityManager();
     
-    	$entity = $em->getRepository('DecoyesoObraBundle:Obra')->find($id);
+    	$entity = $em->getRepository('ObraBundle:Obra')->find($id);
     
     
     	if (!$entity) {
@@ -144,7 +173,7 @@ class ObraController extends Controller
     	$editForm = $this->createForm(new ObraType(), $entity);
     	$deleteForm = $this->createDeleteForm($id);
     
-    	return $this->render('DecoyesoObraBundle:Obra:admin_edit.html.twig', array(
+    	return $this->render('ObraBundle:Obra:admin_edit.html.twig', array(
     			'entity'      => $entity,
     			'edit_form'   => $editForm->createView(),
     			'delete_form' => $deleteForm->createView()
@@ -159,7 +188,7 @@ class ObraController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('DecoyesoObraBundle:Obra')->find($id);
+        $entity = $em->getRepository('ObraBundle:Obra')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Obra entity.');
@@ -185,7 +214,7 @@ class ObraController extends Controller
             return $this->redirect($this->generateUrl('obra_edit', array('id' => $id)));
         }
 
-        return $this->render('DecoyesoObraBundle:Obra:edit.html.twig', array(
+        return $this->render('ObraBundle:Obra:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -205,7 +234,7 @@ class ObraController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('DecoyesoObraBundle:Obra')->find($id);
+            $entity = $em->getRepository('ObraBundle:Obra')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Obra entity.');

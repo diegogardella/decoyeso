@@ -1,4 +1,4 @@
 DecoyesoObraBundle:
-    resource: "@DecoyesoObraBundle/Resources/config/routing/obra.yml"
+    resource: "@ObraBundle/Resources/config/routing/obra.yml"
     prefix:   /obra
     

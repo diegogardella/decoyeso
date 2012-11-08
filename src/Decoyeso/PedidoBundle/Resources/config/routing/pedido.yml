@@ -4,6 +4,14 @@ pedido:
     requirements:
         pararouting: buscar
 
+pedidos_por_cliente:
+    pattern:  /{cliente}/pedidoporcliente
+    defaults: { _controller: "PedidoBundle:Pedido:pedidoPorCliente" }
+
+pedido_finalizar:
+    pattern:  /{id}/finalizar
+    defaults: { _controller: "PedidoBundle:Pedido:finalizar" }
+
 pedido_show:
     pattern:  /{id}/show
     defaults: { _controller: "PedidoBundle:Pedido:show" }

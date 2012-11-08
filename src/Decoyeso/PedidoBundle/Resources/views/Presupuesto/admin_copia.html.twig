@@ -12,17 +12,40 @@
 	{% if entity.pedido %}
 		<ul>
 			<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
-			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombreObra}}</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombre}}</a></li>
 			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_edit',{'id':entity.id}) }}">Presupuesto:{{ entity.numero }}</a></li>
-			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_copia',{'id':entity.id}) }}">Crear Presupuesto</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_copia',{'id':entity.id}) }}">Copiar Presupuesto</a></li>
 		</ul>
 	{% endif %}	
 		
 {%endblock main_path%}
 
 {% block module_tit %}
-Crear Presupuesto
+Copiar Presupuesto
 {% endblock module_tit %}
+
+{% block menuOpcionesItems %}
+				
+			<li><a href="{{ path('relevamiento_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Relevamientos del Pedido</a></li>
+			<li><a href="{{path('relevamiento_new',{'pedido':entity.pedido.id})}}">Crear Relevamiento al Pedido</a></li>
+			<li class="separador"></li>
+			
+			<li><a  href="{{ path('presupuesto_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Presupuestos del Pedido</a></li>
+			<li><a  href="{{path('presupuesto_new',{'pedido':entity.pedido.id})}}">Crear Presupuesto al Pedido</a></li>
+			<li class="separador"></li>
+						
+			<li><a href="{{path('pedidos_por_cliente',{'cliente':entity.pedido.cliente.id})}}">Listar Pedidos del Cliente</a></li>
+			<li><a href="{{path('pedido_edit',{'id':entity.pedido.id})}}">Editar Pedido</a></li>
+			<li><a href="{{path('pedido_new',{'cliente':entity.pedido.cliente.id})}}">Crear Pedido a Cliente</a></li>
+			
+			<li class="separador"></li>
+			<li><a href="{{path('cliente_edit',{'id':entity.pedido.cliente.id})}}">Editar Cliente</a></li>
+
+	
+{% endblock menuOpcionesItems %}
+	
+{% block menuAcciones%}
+{% endblock menuAcciones%}
 
 
 
@@ -74,6 +97,7 @@ Crear Presupuesto
 				class="checkCasillero">
 				</td>
 				<td class="NpresupuestoCol0">
+				<input type="hidden" value="{{ item.id }}" name="id_{{ i }}" id="id_{{ i }}" >
 				<input type="text" value="{{ item.designacion }}" name="designacion_{{ i }}" id="designacion_{{ i }}" class="inputLargo inputDesignaciones">
 				</td>
 				<td class="NpresupuestoCol1">

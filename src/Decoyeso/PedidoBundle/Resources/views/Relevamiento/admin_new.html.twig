@@ -9,16 +9,45 @@
 	{%if entity.pedido %}
 		<ul>
 			<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
-			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombreObra}}</a></li>
-			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('relevamiento_edit',{'id':entity.id}) }}">Crear Relevamiento</a></li
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombre}}</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('relevamiento_new',{'pedido':entity.pedido.id}) }}">Crear Relevamiento del Pedido</a></li
 		</ul>
 	{%endif%}
 	
 {%endblock main_path%}
 
 {% block module_tit %}
-Crear Relevamiento
+	Crear Relevamiento
 {% endblock module_tit %}
+
+{% block menuOpciones %}
+	{%if entity.pedido %}
+		<div class="menuAcciones menusDropDownSeccion" id="idmenuAcciones">
+			<a href="javascript:void(0)" class="btn_blue right" style="background-color: rgb(48, 109, 137);">Opciones</a>
+			<ul style="display: none;">							
+				
+			
+			<li><a href="{{ path('relevamiento_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Relevamientos del Pedido</a></li>
+			<li class="separador"></li>
+			
+			<li><a  href="{{ path('presupuesto_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Presupuestos del Pedido</a></li>
+			<li><a  href="{{path('presupuesto_new',{'pedido':entity.pedido.id})}}">Crear Presupuesto al Pedido</a></li>
+			<li class="separador"></li>
+						
+			<li><a href="{{path('pedidos_por_cliente',{'cliente':entity.pedido.cliente.id})}}">Listar Pedidos del Cliente</a></li>
+			<li><a href="{{path('pedido_edit',{'id':entity.pedido.id})}}">Editar Pedido</a></li>
+			<li><a href="{{path('pedido_new',{'cliente':entity.pedido.cliente.id})}}">Crear Pedido a Cliente</a></li>
+			
+			<li class="separador"></li>
+			<li><a href="{{path('cliente_edit',{'id':entity.pedido.cliente.id})}}">Editar Cliente</a></li>
+		
+			</ul>
+		</div>	
+	{% endif %}
+{% endblock menuOpciones %}
+	
+{% block menuAcciones%}
+{% endblock menuAcciones%}
 
 {% block create_path %}
 {{ path('relevamiento_create') }}

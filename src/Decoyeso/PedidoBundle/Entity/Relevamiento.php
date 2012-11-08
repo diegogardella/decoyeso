@@ -31,7 +31,7 @@ class Relevamiento
     /**
      * @var text $descripcion
      *
-     * @ORM\Column(name="nombre", type="string")
+     * @ORM\Column(name="nombre", type="string",nullable="true")
      */
     private $nombre;
     

@@ -1,15 +1,5 @@
 {% extends "CoobixAdminBundle:Default:new.html.twig" %}
 
-
-
-{% block breadcrumb_in %}
-<div class="breadcrumbs">
-<a href="{{ path('pedido') }}" class="current" >Pedidos</a>
-<div class="breadcrumb_divider"></div> 
-<a href="{{ path('pedido_new') }}" class="current" >Crear</a>
-</div>
-{% endblock breadcrumb_in %} 
-
 {%block main_path%}
 	
 	{%if entity.cliente %}
@@ -21,10 +11,30 @@
 	
 {%endblock main_path%}
 
-
 {% block module_tit %}
-Crear Pedido
+	Crear Pedido
 {% endblock module_tit %}
+
+{% block menuOpciones %}
+	{%if entity.cliente %}
+		<div class="menuAcciones menusDropDownSeccion" id="idmenuAcciones">
+			<a href="javascript:void(0)" class="btn_blue right" style="background-color: rgb(48, 109, 137);">Opciones</a>
+			<ul style="display: none;">
+			
+				<li><a href="{{path('pedidos_por_cliente',{'cliente':entity.cliente.id})}}">Listar Pedidos del Cliente</a></li>
+				<li class="separador"></li>
+				<li><a href="{{path('cliente_edit',{'id':entity.cliente.id})}}">Editar Cliente</a></li>
+			
+			</ul>
+		</div>
+			
+	{% endif %}
+{% endblock menuOpciones %}
+	
+{% block menuAcciones%}
+{% endblock menuAcciones%}
+
+
 
 {% block create_path %}
 {{ path('pedido_create') }}

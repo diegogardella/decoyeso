@@ -18,7 +18,7 @@ class PedidoType extends AbstractType
         $builder
         	->add('cliente','entity', array('class'=>'Decoyeso\\ClientesBundle\\Entity\\Cliente','label'=>'Cliente','empty_value'=>"Seleccione cliente",'multiple'=>false, 'expanded'=>false))
         	->add('tipo', 'choice', array('label'=>'Tipo','choices'=>array('1'=>'Venta directa','2'=>'Obra de construcción')))
-        	->add('nombreObra', 'text', array('label'=>'Obra'))
+        	->add('nombre')
         	->add('provincia','entity',array(
         			'label'=>'Provincia',
         			'read_only'=>true,

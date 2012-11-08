@@ -66,6 +66,7 @@ class Cliente
      * @var string $email
      *
      * @ORM\Column(name="email", type="string", length=255,nullable="true")
+     * @assert\Email(message="Por favor, ingrese un e-mail válido")
      */
     protected $email;
     
