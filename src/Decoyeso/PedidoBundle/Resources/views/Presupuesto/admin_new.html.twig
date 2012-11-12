@@ -11,8 +11,8 @@
 	{% if entity.pedido %}
 		<ul>
 			<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
-			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.obra}}</a></li>
-			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_new',{'pedido':entity.pedido.id}) }}">Nuevo Presupuesto</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombre}}</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_new',{'pedido':entity.pedido.id}) }}">Crear Presupuesto</a></li>
 		</ul>
 	{% endif %}	
 		
@@ -22,6 +22,34 @@
 Crear Presupuesto
 {% endblock module_tit %}
 
+{% block menuOpciones %}
+{% if entity.pedido %}
+
+	<div class="menuMasOpciones menusDropDownSeccion" id="idmenuMasOpciones">
+		<a href="javascript:void(0)" class="btn_blue right" id="idBtnMasOpciones" style="background-color: rgb(48, 109, 137);">Opciones</a>
+		<ul style="display: none;" id="idUlMasOpciones">
+			<li><a href="{{ path('relevamiento_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Relevamientos del Pedido</a></li>
+			<li><a href="{{path('relevamiento_new',{'pedido':entity.pedido.id})}}">Crear Relevamiento al Pedido</a></li>
+			<li class="separador"></li>
+			
+			<li><a  href="{{ path('presupuesto_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Presupuestos del Pedido</a></li>
+			<li class="separador"></li>
+						
+			<li><a href="{{path('pedidos_por_cliente',{'cliente':entity.pedido.cliente.id})}}">Listar Pedidos del Cliente</a></li>
+			<li><a href="{{path('pedido_edit',{'id':entity.pedido.id})}}">Editar Pedido</a></li>
+			<li><a href="{{path('pedido_new',{'cliente':entity.pedido.cliente.id})}}">Crear Pedido a Cliente</a></li>
+			
+			<li class="separador"></li>
+			<li><a href="{{path('cliente_edit',{'id':entity.pedido.cliente.id})}}">Editar Cliente</a></li>								
+	
+		</ul>
+	</div>
+
+{% endif %}
+{% endblock menuOpciones %}
+
+{% block menuAcciones %}
+{% endblock menuAcciones %}
 
 {% block form_content %}
 		{% block errorMsj %}{% endblock errorMsj %}
@@ -34,11 +62,15 @@ Crear Presupuesto
 		{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 		{{ form_errors(form) }}
 		
+		<div style="display:none">{{ form_widget(form.pedido) }}</div>
+		
+		<div class="form_row" id="div_relevamiento_nombre">
+			<label class=" required" for="relevamiento_nombre">Pedido</label>
+			<div class="field_widget">{{ entity.pedido }}</div>
+		</div>
+		
 		{{ form_errors(form.nombre) }}
 		{{ form_row(form.nombre) }}
-		
-		{{ form_errors(form.pedido) }}
-		{{ form_row(form.pedido) }}
 		
 		{{ form_errors(form.mostrarFirmas) }}
 		{{ form_row(form.mostrarFirmas) }}
@@ -66,6 +98,7 @@ Crear Presupuesto
 				<input type="checkbox"  name="check_{{ i }}" id="check_{{ i }}" value ="{{ i }}" class="checkCasillero">
 				</td>
 				<td class="NpresupuestoCol0">
+				<input type="hidden"  name="id_{{ i }}" id="id_{{ i }}">
 				<input type="text"  name="designacion_{{ i }}" id="designacion_{{ i }}" class="inputLargo inputDesignaciones">
 				</td>
 				<td class="NpresupuestoCol1">

@@ -16,20 +16,20 @@ Listado de Clientes
 {% block list_tits %}
 
 {% set widthCols =  94/5  %}
-<th style="width: {{ widthCols }}%" {% if entities.isSorted('c.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Número', 'c.numero')|raw }}</th>
 <th style="width: {{ widthCols }}%" {% if entities.isSorted('c.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Apellido, Nombre', 'c.nombre')|raw }}</th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('c.telefono') %} class="sorted" {% endif %}>{{ entities.sortable('Teléfono', 'c.telefono')|raw }}</a></th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('c.celular') %} class="sorted" {% endif %}>{{ entities.sortable('Celular', 'c.celular')|raw }}</a></th>
+<th style="width: {{ widthCols }}%" {% if entities.isSorted('c.email') %} class="sorted" {% endif %}>{{ entities.sortable('E-mail', 'c.email')|raw }}</th>
 
 
 {% endblock list_tits %}
 
 {% block list_item_texts %}
 
-<td ><a href="{{ path('cliente_edit', { 'id': entity.id }) }}">{{ entity.numero }}</a></td>
 <td ><a href="{{ path('cliente_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
 <td ><a href="{{ path('cliente_edit', { 'id': entity.id }) }}">{{entity.telefono}}</a></td>
 <td ><a href="{{ path('cliente_edit', { 'id': entity.id }) }}">{{entity.celular}}</a></td>
+<td ><a href="{{ path('cliente_edit', { 'id': entity.id }) }}">{{ entity.email }}</a></td>
 
 {% endblock list_item_texts %}
 
@@ -37,6 +37,21 @@ Listado de Clientes
 	<form method="post" action="{{path('cliente',{pararouting:"buscar"})}}" novalidate="true">
 {%endblock%}
 
+{%block camposFormBuscar%}
+	{{form_row(formBuscar.c_numero)}}
+	{{form_row(formBuscar.c_nombre)}}
+	{{form_row(formBuscar.c_tipo)}}
+	{{form_row(formBuscar.c_cuitOcuil)}}
+	{{form_row(formBuscar.c_telefono)}}
+	{{form_row(formBuscar.c_celular)}}
+	{{form_row(formBuscar.c_email)}}
+	{{form_row(formBuscar.c_direccionBarrio)}}
+	{{form_row(formBuscar.c_direccionCalle)}}
+	{{form_row(formBuscar.c_direccionNumero)}}
+		
+{%endblock%}
+    	
+{% block menuAcciones%}	{% endblock menuAcciones%}
 
 
 {% block new_path %} 

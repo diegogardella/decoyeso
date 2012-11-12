@@ -1,29 +1,53 @@
 {% extends "CoobixAdminBundle:Default:new.html.twig" %}
-
-{% block breadcrumb_in %}
-
-{% endblock breadcrumb_in %} 
+{% import "PedidoBundle:Pedido:macros.html.twig" as macrosPedido %}
 
 {%block main_path%}
 	
 	{%if entity.pedido %}
 		<ul>
 			<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
-			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombreObra}}</a></li>
-			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('relevamiento_edit',{'id':entity.id}) }}">Crear Relevamiento</a></li
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombre}}</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('relevamiento_new',{'pedido':entity.pedido.id}) }}">Crear Relevamiento del Pedido</a></li
 		</ul>
 	{%endif%}
 	
 {%endblock main_path%}
 
 {% block module_tit %}
-Crear Relevamiento
+	Crear Relevamiento
 {% endblock module_tit %}
 
-{% block create_path %}
-{{ path('relevamiento_create') }}
-{% endblock create_path %}
+{% block menuOpcionesItems %}
+	{{ macrosPedido.menuOpciones(entity.pedido) }}		
+{% endblock menuOpcionesItems %}
+	
+{% block menuAcciones%}
+{% endblock menuAcciones%}
 
-{% block list_path %}
-{{ path('relevamiento') }}
-{% endblock list_path %}
+{%block opcionesGuia  %}
+	{{ macrosPedido.guia(entity.pedido) }}
+{%endblock opcionesGuia  %}
+
+
+{% block form_content %}
+			{% block errorMsj %}{% endblock errorMsj %}
+			<form novalidate action="{% block create_path %}{{ path('relevamiento_create') }}{% endblock create_path %}" method="post" {{ form_enctype(form) }}>
+			{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+			
+			<div style="display:none">{{ form_widget(form.pedido) }}</div>
+			<div class="form_row" id="div_relevamiento_nombre">
+				<label class=" required" for="relevamiento_nombre">Pedido</label>
+				<div class="field_widget">{{ entity.pedido }}</div>
+			</div>
+			
+			{{ form_rest(form) }}
+			
+			<p>
+				<button class="btn_green_button right" id="btnGuardarCambios" type="submit">Guardar cambios</button>
+			</p>
+			</form>
+			
+			
+			<div class="fix"></div>
+{% endblock form_content %}
+

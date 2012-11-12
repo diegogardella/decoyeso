@@ -67,12 +67,11 @@ class Pedido
     
 
     /**
-     * @var string $nombreObra
+     * @var string $nombre
      *
-     * @ORM\Column(name="nombreObra", type="string", length="255")
-	 * @assert\NotBlank(message="Por favor, ingrese el nombre de la obra")
+     * @ORM\Column(name="nombre", type="string", length="255")
      */
-    private $nombreObra;
+    private $nombre;
 
     /**
      * @var text $descripcion
@@ -125,12 +124,7 @@ class Pedido
      */
     private $presupuestos;
     
-    /**
-     * @var Obra $obra
-     *
-     * @ORM\OneToOne(targetEntity="\Decoyeso\ObraBundle\Entity\Obra", mappedBy="pedido", cascade={"remove"}))
-     */
-    private $obra;
+
     
     /**
      * @var provincia
@@ -158,26 +152,26 @@ class Pedido
     private $localidad;    
     
     
-    /**
+     /**
      * @var string $barrio
      *
-     * @ORM\Column(name="barrio", type="string", length=255, nullable="true")
+     * @ORM\Column(name="direccionBarrio", type="string", length=255,nullable="true")
      */
-    private $barrio;
+    protected $direccionBarrio;
     
     /**
      * @var string $calle
      *
-     * @ORM\Column(name="calle", type="string", length=255, nullable="true")
+     * @ORM\Column(name="direccionCalle", type="string", length=255, nullable="true")
      */
-    private $calle;
+    protected $direccionCalle;
     
     /**
      * @var string $numeroCalle
      *
-     * @ORM\Column(name="numeroCalle", type="string", length=255, nullable="true")
+     * @ORM\Column(name="direccionNumero", type="string", length=255, nullable="true")
      */
-    private $numeroCalle;
+    protected $direccionNumero;
     
     /**
      * @var integer $solicitudMovimientoElemento
@@ -215,7 +209,7 @@ class Pedido
 
     public function __toString()
     {
-    	return $this->numero."-".$this->nombreObra;
+    	return $this->numero.", ".$this->nombre;
     }
 
  
@@ -249,7 +243,7 @@ class Pedido
     	
     	switch ($this->getEstado()){
     		case 1:
-    			return "Creado";
+    			return "Pedido Creado";
     		break;
     		
     		case 2:
@@ -260,7 +254,23 @@ class Pedido
     			return "Presupuesto creado";
     			
     		case 4:
-    			return "Presupuesto aprobado";
+    			return "Presupuesto Aprobado";
+    		break;
+    		
+    		case 5:
+    			return "Solicitud a Stock Enviada";    			
+    		break;
+    		
+    		case 6:
+    			return "Solicitud a Stock Procesada";
+    		break;
+    		
+    		case 7:
+    			return "Pedido Finalizado";
+    		break;
+    		
+    		case 8:
+    			return "Pedido Reabierto";
     		break;
     		
     	}
@@ -277,6 +287,13 @@ class Pedido
     	    	
     	if(count($this->getPresupuestos())>0){
     		$bEstados=3;
+    	}
+    	
+    	
+    	foreach ($this->getPresupuestos() as $presupuesto){
+    		if($presupuesto->getEstado()==1){
+    			$bEstados=4;
+    		}	
     	}
     	
     	$this->estado=$bEstados;
@@ -311,7 +328,7 @@ class Pedido
     {
         $this->relevamientos = new \Doctrine\Common\Collections\ArrayCollection();
     $this->presupuestos = new \Doctrine\Common\Collections\ArrayCollection();
-    $this->obra = new \Doctrine\Common\Collections\ArrayCollection();
+    
     }
     
     /**
@@ -385,23 +402,23 @@ class Pedido
     }
 
     /**
-     * Set nombreObra
+     * Set nombre
      *
-     * @param string $nombreObra
+     * @param strinombre
      */
-    public function setNombreObra($nombreObra)
+    public function setNombre($nombre)
     {
-        $this->nombreObra = $nombreObra;
+        $this->nombre = $nombre;
     }
 
     /**
-     * Get nombreObra
+     * Get nombre
      *
      * @return string 
      */
-    public function getNombreObra()
+    public function getNombre()
     {
-        return $this->nombreObra;
+        return $this->nombre;
     }
 
     /**
@@ -504,65 +521,6 @@ class Pedido
         return $this->fechaActualizado;
     }
 
-    /**
-     * Set barrio
-     *
-     * @param string $barrio
-     */
-    public function setBarrio($barrio)
-    {
-        $this->barrio = $barrio;
-    }
-
-    /**
-     * Get barrio
-     *
-     * @return string 
-     */
-    public function getBarrio()
-    {
-        return $this->barrio;
-    }
-
-    /**
-     * Set calle
-     *
-     * @param string $calle
-     */
-    public function setCalle($calle)
-    {
-        $this->calle = $calle;
-    }
-
-    /**
-     * Get calle
-     *
-     * @return string 
-     */
-    public function getCalle()
-    {
-        return $this->calle;
-    }
-
-    /**
-     * Set numeroCalle
-     *
-     * @param string $numeroCalle
-     */
-    public function setNumeroCalle($numeroCalle)
-    {
-        $this->numeroCalle = $numeroCalle;
-    }
-
-    /**
-     * Get numeroCalle
-     *
-     * @return string 
-     */
-    public function getNumeroCalle()
-    {
-        return $this->numeroCalle;
-    }
 
     /**
      * Set cliente
@@ -624,25 +582,6 @@ class Pedido
         return $this->presupuestos;
     }
 
-    /**
-     * Add obra
-     *
-     * @param Decoyeso\ObraBundle\Entity\Obra $obra
-     */
-    public function addObra(\Decoyeso\ObraBundle\Entity\Obra $obra)
-    {
-        $this->obra[] = $obra;
-    }
-
-    /**
-     * Get obra
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getObra()
-    {
-        return $this->obra;
-    }
 
     /**
      * Set provincia
@@ -745,13 +684,63 @@ class Pedido
     }
 
     /**
-     * Set obra
+     * Set direccionBarrio
      *
-     * @param Decoyeso\ObraBundle\Entity\Obra $obra
+     * @param string $direccionBarrio
      */
-    public function setObra(\Decoyeso\ObraBundle\Entity\Obra $obra)
+    public function setDireccionBarrio($direccionBarrio)
     {
-        $this->obra = $obra;
+        $this->direccionBarrio = $direccionBarrio;
+    }
+
+    /**
+     * Get direccionBarrio
+     *
+     * @return string 
+     */
+    public function getDireccionBarrio()
+    {
+        return $this->direccionBarrio;
+    }
+
+    /**
+     * Set direccionCalle
+     *
+     * @param string $direccionCalle
+     */
+    public function setDireccionCalle($direccionCalle)
+    {
+        $this->direccionCalle = $direccionCalle;
+    }
+
+    /**
+     * Get direccionCalle
+     *
+     * @return string 
+     */
+    public function getDireccionCalle()
+    {
+        return $this->direccionCalle;
+    }
+
+    /**
+     * Set direccionNumero
+     *
+     * @param string $direccionNumero
+     */
+    public function setDireccionNumero($direccionNumero)
+    {
+        $this->direccionNumero = $direccionNumero;
+    }
+
+    /**
+     * Get direccionNumero
+     *
+     * @return string 
+     */
+    public function getDireccionNumero()
+    {
+        return $this->direccionNumero;
     }
 
     /**

@@ -10,6 +10,9 @@
 
 {% block module_tit %}Editar Servicio{% endblock module_tit %}
 
+{% block menuAcciones%}{% endblock menuAcciones%}
+
+{% block menuOpciones%}{% endblock menuOpciones%}
 
 {% block list_path %}
 {{ path('servicio') }}
@@ -24,7 +27,7 @@
 		 {% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 		
 			
-{{ form_widget(edit_form.insumos,{'attr':{'value':''} }) }}
+			{{ form_widget(edit_form.insumos,{'attr':{'value':''} }) }}
 			{{ form_widget(edit_form.productos,{'attr':{'value':''} }) }}
 			
 			{{ form_row(edit_form.nombre) }}

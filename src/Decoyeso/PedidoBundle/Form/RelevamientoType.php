@@ -12,7 +12,7 @@ class RelevamientoType extends AbstractType
         $builder
        		->add('pedido','entity', array('class'=>'Decoyeso\\PedidoBundle\\Entity\\Pedido','empty_value'=>'Seleccione pedido','label'=>'Pedido','multiple'=>false, 'expanded'=>false))
        		->add('nombre','text',array('label'=>'Nombre'))
-            	->add('descripcion','textarea',array('label'=>'Descripción','attr'=> array('class'=>'no_editor_textarea')))
+            ->add('descripcion','textarea',array('label'=>'Descripción','attr'=> array('class'=>'no_editor_textarea')))
             
         ;
     } 

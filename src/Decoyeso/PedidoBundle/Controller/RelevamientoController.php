@@ -46,6 +46,21 @@ public function indexAction($pararouting="index")
 	
 	
 	}
+	
+	public function relevamientoPorPedidoAction($pedido){
+	
+		$em = $this->getDoctrine()->getEntityManager();
+	
+		$pedidoDelRelevamiento = $em->getRepository('PedidoBundle:Pedido')->find($pedido);
+	
+		$entity = $em->getRepository('PedidoBundle:Relevamiento')->findBy(array('pedido'=>$pedido),array('fechaCreado'=>'DESC'));
+	
+		return $this->render('PedidoBundle:Relevamiento:admin_list_por_pedido.html.twig', array(
+				'entities' => $entity,
+				'pedido'=>$pedidoDelRelevamiento
+		));
+	
+	}
 
     /**
      * Finds and displays a Relevamiento entity.

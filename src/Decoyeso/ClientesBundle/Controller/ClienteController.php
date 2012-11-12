@@ -24,17 +24,15 @@ class ClienteController extends Controller
     	$buscador->setRequest($this->getRequest());
     	$buscador->setPararouting($pararouting);
     
-    	$buscador->setSql('SELECT c FROM ClientesBundle:Cliente c');
+    	$buscador->setSql('SELECT c FROM ClientesBundle:Cliente c ORDER BY c.id DESC');
     
     	$opciones=array(
     			"c_tipo"=>array('choice',array("label"=>"Tipo de cliente",'choices'=>	array(""=>"",1 => 'Persona Física', 2 => 'Organización'))),
-    			"c_nombre"=>array(null,array("label"=>"Apellido, Nombre")),
-    			"c_fechaActualizado"=>array("date", array("empty_value"=>array("month"=>"Mes","year"=>"Año","day"=>"Día"),"format"=>"d-m-Y",'pattern'=> '{{ day }}{{ month }}{{ year }}','label'=>'Actualizado el')),
-    			"c_fechaCreado"=>array("date",array("empty_value"=>array("month"=>"Mes","year"=>"Año","day"=>"Día"),"format"=>"d-m-Y",'pattern'=> '{{ day }}{{ month }}{{ year }}','label'=>'Creado el')),
+    			"c_nombre"=>array(null,array("label"=>"Nombre")),
     			"c_cuitOcuil"=>array(null,array("label"=>"Cuit o Cuil ")),
-    			"c_barrio"=>array(null,array("label"=>"Dirección - Barrio")),
-    			"c_calle"=>array(null,array("label"=>"Dirección - Calle")),
-    			"c_numeroCalle"=>array(null,array("label"=>"Dirección - Número")),
+    			"c_direccionBarrio"=>array(null,array("label"=>"Dirección - Barrio")),
+    			"c_direccionCalle"=>array(null,array("label"=>"Dirección - Calle")),
+    			"c_direccionNumero"=>array(null,array("label"=>"Dirección - Número")),
     			"c_numero"=>array(null,array("label"=>"Número")),
     			"c_email"=>array(null,array("label"=>"E-mail")),
     			"c_dni"=>array(null,array("label"=>"DNI"))

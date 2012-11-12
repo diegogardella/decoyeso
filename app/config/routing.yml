@@ -6,10 +6,6 @@ DecoyesoProduccionBundle:
     resource: "@DecoyesoProduccionBundle/Resources/config/routing.yml"
     prefix:   /
 
-DecoyesoObraBundle:
-    resource: "@DecoyesoObraBundle/Resources/config/routing.yml"
-    prefix:   /
-
 ProductoBundle:
     resource: "@ProductoBundle/Resources/config/routing.yml"
     prefix: /

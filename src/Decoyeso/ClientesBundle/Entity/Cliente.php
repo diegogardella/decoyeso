@@ -66,6 +66,7 @@ class Cliente
      * @var string $email
      *
      * @ORM\Column(name="email", type="string", length=255,nullable="true")
+     * @assert\Email(message="Por favor, ingrese un e-mail válido")
      */
     protected $email;
     
@@ -97,23 +98,23 @@ class Cliente
     /**
      * @var string $barrio
      *
-     * @ORM\Column(name="barrio", type="string", length=255,nullable="true")
+     * @ORM\Column(name="direccionBarrio", type="string", length=255,nullable="true")
      */
-    protected $barrio;
+    protected $direccionBarrio;
     
     /**
      * @var string $calle
      *
-     * @ORM\Column(name="calle", type="string", length=255, nullable="true")
+     * @ORM\Column(name="direccionCalle", type="string", length=255, nullable="true")
      */
-    protected $calle;
+    protected $direccionCalle;
     
     /**
      * @var string $numeroCalle
      *
-     * @ORM\Column(name="numeroCalle", type="string", length=255, nullable="true")
+     * @ORM\Column(name="direccionNumero", type="string", length=255, nullable="true")
      */
-    protected $numeroCalle;
+    protected $direccionNumero;
     
     /**
      * @var string $dni
@@ -319,13 +320,13 @@ class Cliente
     }
 
     /**
-     * Set barrio
+     * Set direccionBarrio
      *
-     * @param string $barrio
+     * @param string $direccionBarrio
      */
-    public function setBarrio($barrio)
+    public function setDireccionBarrio($direccionBarrio)
     {
-        $this->barrio = $barrio;
+        $this->direccionBarrio = $direccionBarrio;
     }
 
     /**
@@ -333,9 +334,9 @@ class Cliente
      *
      * @return string 
      */
-    public function getBarrio()
+    public function getDireccionBarrio()
     {
-        return $this->barrio;
+        return $this->direccionBarrio;
     }
 
     /**
@@ -343,9 +344,9 @@ class Cliente
      *
      * @param string $calle
      */
-    public function setCalle($calle)
+    public function setDireccionCalle($direccionCalle)
     {
-        $this->calle = $calle;
+        $this->direccionCalle = $direccionCalle;
     }
 
     /**
@@ -353,9 +354,9 @@ class Cliente
      *
      * @return string 
      */
-    public function getCalle()
+    public function getDireccionCalle()
     {
-        return $this->calle;
+        return $this->direccionCalle;
     }
 
     /**
@@ -503,9 +504,9 @@ class Cliente
      *
      * @param string $numeroCalle
      */
-    public function setNumeroCalle($numeroCalle)
+    public function setDireccionNumero($direccionNumero)
     {
-        $this->numeroCalle = $numeroCalle;
+        $this->direccionNumero = $direccionNumero;
     }
 
     /**
@@ -513,9 +514,9 @@ class Cliente
      *
      * @return string 
      */
-    public function getNumeroCalle()
+    public function getDireccionNumero()
     {
-        return $this->numeroCalle;
+        return $this->direccionNumero;
     }
 
     /**

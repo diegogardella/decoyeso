@@ -1,39 +1,53 @@
 {% extends "CoobixAdminBundle:Default:new.html.twig" %}
-
-
-{% block breadcrumb_in %}
-
-	<div class="breadcrumbs">
-		<a href="{{ path('solicitudmovimiento') }}" class="current" >Agregar Producto</a>
-	</div>
-	<div class="breadcrumb_divider"> 
-		<a href="{{ path('solicitudmovimiento_new') }}" class="current" >Agregar</a>
-	</div>
-	
-{% endblock breadcrumb_in %} 
-
-{% block module_tit %}
-Pedido a Stock
-{% endblock module_tit %}
+{% import "PedidoBundle:Pedido:macros.html.twig" as macrosPedido %}
 
 {%block main_path%}
 <ul>
 	<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
-	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombreObra}}</a></li>
-	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('obra_edit',{'id':entity.id}) }}">Pedido a Stock: {{entity.fechaHoraRequerido | date('d/m/Y H:i')}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombre}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('solicitudmovimiento_show',{'id':entity.id}) }}">Ver Solicitud a Stock</a></li>
 </ul>
 {%endblock main_path%}
 
+{% block module_tit %}
+Ver Solicitud a Stock
+{% endblock module_tit %}
 
-{% block list_path %}
-	{{ path('solicitudmovimiento') }}
-{% endblock list_path %}
+
+{% block menuOpcionesItems %}
+	{{ macrosPedido.menuOpciones(entity.pedido) }}		
+{% endblock menuOpcionesItems %}
+
+{%block opcionesGuia  %}
+	{{ macrosPedido.guia(entity.pedido) }}
+{%endblock opcionesGuia  %}
+
+{% block menuAccionesItems %}		
+
+<li>
+	<a target="_blank" class="btn_blue " href="{{ path('solicitudmovimiento_imprimir', { 'id': entity.id }) }}">
+		<span class="print_icon"></span>
+		Imprimir
+	</a>
+</li>
+
+{% endblock menuAccionesItems %}
 
 {% block form_content %}
+
+		<div class="form_row" id="div_pedido_numero">
+			<label class=" required" for="pedido_numero">Número</label>
+			<div>{{ entity.numero }}</div>
+		</div>
 		
 		<div class="form_row" id="div_pedido_numero">
 			<label class=" required" for="pedido_numero">Pedido</label>
 			<div>{{ entity.pedido }}</div>
+		</div>
+		<div  class="form_row">
+			
+				<label class=" required" >Destino</label>
+				<div class="field_widget">{{ entity.direccionDestino }}</div>
 		</div>
 		
 		<div class="form_row" id="div_pedido_numero">
@@ -42,13 +56,35 @@ Pedido a Stock
 		</div>
 		
 		<div class="form_row" id="div_pedido_numero">
-			<label class=" required" for="pedido_numero">Fecha y hora requerido</label>
+			<label class=" required" for="pedido_numero">Se creo el</label>
+			<div>{{ entity.fechaHoraCreado | date('d/m/Y H:i') }}</div>
+		</div>
+		<div class="form_row" id="div_pedido_numero">
+			<label class=" required" for="pedido_numero">Requerido el</label>
 			<div>{{ entity.fechaHoraRequerido | date('d/m/Y H:i') }}</div>
 		</div>
+		{% if entity.fechaHoraCierre!=null %}
+			<div class="form_row" id="div_pedido_numero">
+				<label class=" required" for="pedido_numero">Procesado el</label>
+				<div>{{ entity.fechaHoraCierre | date('d/m/Y H:i') }}</div>
+			</div>
+		{% endif %}
+		
+		<div class="form_row" id="div_pedido_numero">
+			<label class=" required" for="pedido_numero">Creado por</label>
+			<div>{{ entity.usuarioCreo }}</div>
+		</div>
+		
+		{% if entity.usuarioCerro!=null %}
+			<div class="form_row" id="div_pedido_numero">
+				<label class=" required" for="pedido_numero">Procesado por</label>
+				<div>{{ entity.usuarioCerro }}</div>
+			</div>
+		{% endif %}
 		
 		<div class="form_row" id="div_pedido_numero">
 			<label class=" required" for="pedido_numero">Observación</label>
-			<div>{{ entity.observacion }}</div>
+			<div>{% if entity.observacion!=''  %} {{ entity.observacion }} {% else %} Sin observación {% endif %}</div>
 		</div>
 		
 		
@@ -57,29 +93,38 @@ Pedido a Stock
 				<label class=" required" >Productos/Insumos</label>
 				<div class="field_widget">
 				
-					<table style="width: 600px;"  class="field_widget_productos" id="tableListProductos">
-						<tr>
-							<th width="300">Nombre</th>
-							<th>Cant. Solicitada</th>
-							<th>Cant. Reservada</th>
-						</tr>
-						{% for elemento in entity.solicitudMovimientoElemento %}
-							<tr>
-								<td >{{ elemento.elemento.nombre }}</td>
-								<td >{{ elemento.cantidadSolicitada }} {{ elemento.elemento.unidad }}</td>
-								<td >
-									{% if elemento.cantidadReservada!='' %}
-										 {{ elemento.cantidadReservada }} {{ elemento.elemento.unidad }} 
-									{% endif %}
-								</td>
-							</tr>
-						{%else%}
-							<tr>
-								<td colspan="2">No hay productos y/o insumos</td>
-							</tr>
-						{%endfor%}						
-					</table>
+					<div class="tab_container border_radius">
+						<table  class="records_list">
+							<thead>
+								<tr>
+									<th width="450">Nombre</th>
+									<th align="center">Cant. Solicitada</th>
+									<th align="center">Cant. Entregada</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% for elemento in entity.solicitudMovimientoElemento %}
+								<tr>
+									<td >{{ elemento.elemento.nombre }}</td>
+									<td align="center" >{{ elemento.cantidadSolicitada }} {{ elemento.elemento.unidad }}</td>
+									<td align="center" >
+										{% if elemento.movimientoStock!=null %}
+											{{ elemento.movimientoStock.cantidad }} {{ elemento.elemento.unidad }}
+										{% else %}
+											-- --
+										{% endif %}
+									</td>
+									
+								</tr>
+							{%else%}
+								<tr>
+									<td colspan="2">No hay productos y/o insumos</td>
+								</tr>
+							{%endfor%}
+							</tbody>						
+						</table>
 					
+					<div class="tab_container border_radius">
 				</div>
 				
 			</div>

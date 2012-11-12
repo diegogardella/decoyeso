@@ -10,22 +10,16 @@ Listado de Relevamientos
 {% endblock module_tit %}
 
 {% block list_tits %}
-
-{% set widthCols =  94/5  %}
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('r.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Número', 'r.numero')|raw }}</a></a></th>
+{% set widthCols =  94/3  %}
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('r.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'r.nombre')|raw }}</a></a></th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('p.pedido.cliente.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Cliente', 'p.pedido.cliente.nombre')|raw }}</a></a></th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('p.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Pedido', 'p.numero')|raw }}</a></a></th>
-
 {% endblock list_tits %}
 
 {% block list_item_texts %}
-<td ><a href="{{ path('relevamiento_edit', { 'id': entity.id }) }}">{{ entity.numero }}</a></td>
 <td ><a href="{{ path('relevamiento_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
 <td ><a href="{{ path('relevamiento_edit', { 'id': entity.id }) }}">{{ entity.pedido.cliente.nombre }}</a></td>
-<td ><a href="{{ path('relevamiento_edit', { 'id': entity.id }) }}">{{ entity.pedido.numero }}-{{ entity.pedido.nombreObra }}</a></td>
-
-
+<td ><a href="{{ path('relevamiento_edit', { 'id': entity.id }) }}">{{ entity.pedido.numero }}-{{ entity.pedido.nombre }}</a></td>
 {% endblock list_item_texts %}
 
 {%block FormBuscar%}
@@ -38,15 +32,17 @@ Listado de Relevamientos
 		{{form_row(formBuscar._token)}}
 		
 		{{form_row(formBuscar.r_numero)}}
+				{{form_row(formBuscar.r_nombre)}}
 		{{form_row(formBuscar.r_descripcion)}}
-		{{form_row(formBuscar.r_fechaCreado)}}
-		{{form_row(formBuscar.r_fechaActualizado)}}
+
 	
 		{{form_row(formBuscar.p_numero)}}
-		{{form_row(formBuscar.p_nombreObra)}}
+		{{form_row(formBuscar.p_nombre)}}
 
 	</div>
 {%endblock%}
+
+{% block menuAcciones %}{% endblock menuAcciones %}
 
 {% block new_path %} 
 {{ path('relevamiento_new') }}

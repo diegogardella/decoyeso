@@ -1,29 +1,33 @@
 {% extends "CoobixAdminBundle:Default:new.html.twig" %}
-
-
-
-{% block breadcrumb_in %}
-
-{% endblock breadcrumb_in %} 
+{% import "PedidoBundle:Pedido:macros.html.twig" as macrosPedido %}
 
 {%block main_path%}
 
-	
 	{% if entity.pedido %}
 		<ul>
 			<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
-			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombreObra}}</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombre}}</a></li>
 			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_edit',{'id':entity.id}) }}">Presupuesto:{{ entity.numero }}</a></li>
-			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_copia',{'id':entity.id}) }}">Crear Presupuesto</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('presupuesto_copia',{'id':entity.id}) }}">Copiar Presupuesto</a></li>
 		</ul>
 	{% endif %}	
 		
 {%endblock main_path%}
 
 {% block module_tit %}
-Crear Presupuesto
+Copiar Presupuesto
 {% endblock module_tit %}
 
+{% block menuOpcionesItems %}
+	{{ macrosPedido.menuOpciones(entity.pedido) }}		
+{% endblock menuOpcionesItems %}
+	
+{% block menuAcciones%}
+{% endblock menuAcciones%}
+
+{%block opcionesGuia  %}
+	{{ macrosPedido.guia(entity.pedido) }}
+{%endblock opcionesGuia  %}
 
 
 {% block form_content %}
@@ -36,12 +40,17 @@ Crear Presupuesto
 	
 		{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 		{{ form_errors(form) }}
+
+		<div style="display:none">{{ form_widget(form.pedido) }}</div>
+		
+		<div class="form_row" id="div_relevamiento_nombre">
+			<label class=" required" for="relevamiento_nombre">Pedido</label>
+			<div class="field_widget">{{ entity.pedido }}</div>
+		</div>
 		
 		{{ form_errors(form.nombre) }}
 		{{ form_row(form.nombre) }}
-		
-		{{ form_errors(form.pedido) }}
-		{{ form_row(form.pedido) }}
+
 		
 		{{ form_errors(form.mostrarFirmas) }}
 		{{ form_row(form.mostrarFirmas) }}
@@ -74,6 +83,7 @@ Crear Presupuesto
 				class="checkCasillero">
 				</td>
 				<td class="NpresupuestoCol0">
+				<input type="hidden" value="{{ item.id }}" name="id_{{ i }}" id="id_{{ i }}" >
 				<input type="text" value="{{ item.designacion }}" name="designacion_{{ i }}" id="designacion_{{ i }}" class="inputLargo inputDesignaciones">
 				</td>
 				<td class="NpresupuestoCol1">

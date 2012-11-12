@@ -53,34 +53,63 @@
 	
 	{% block module_header%}
 		<div class="module_header">
-			{% block module_header_content%}
-			<div class="module_tit txt3">{% block module_tit %}TITULO TITLE{% endblock module_tit %}</div>
-			
-			
-			{% block module_header_delete%}
-			<form action="{% block delete_path %}{{ path('admin_entity_delete', { 'id': entity.id }) }}{% endblock delete_path %}" method="post">
-				{{ form_widget(delete_form) }}
-				<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
-			</form>
-			{% endblock module_header_delete%}
-			
-			
-			{% block module_header_list%}
-			<a id="pedidoListarBtn" class="btn_blue right" href="{% block list_path %}{{ path('admin_entity_list') }}{% endblock list_path %}">Ir al listado</a>
-			{% endblock module_header_list%}
-			
-			{% block module_header_otros%}
-
-			{% endblock module_header_otros%}
-			
-			{% endblock module_header_content%}
-		</div>
 		
-		
-		
+			{% block module_header_contenido%}
+			
+				<div class="module_tit txt3">{% block module_tit %}TITLE LIST{% endblock module_tit %}</div>
 				
-		
-	{% endblock module_header%}
+				{% block menuAcciones%}
+					<div id="idmenuAcciones" class="menuAcciones menusDropDownSeccion">
+						<a class="btn_blue right" href="javascript:void(0)">Acciones</a>
+						<ul style="display:none" >
+							{% block menuAccionesItems%}
+							
+								{% block new_path_btn %}
+									<li>
+										<a  href="{% block new_path %}{{ path('admin_entity_new') }}{% endblock new_path %}">
+											Crear
+										</a>
+									</li>
+								{% endblock new_path_btn %}
+								
+								{% block module_header_delete%}
+									<li>
+								
+										<form action="{% block delete_path %}{{ path('admin_entity_delete', { 'id': entity.id }) }}{% endblock delete_path %}" method="post">
+											{{ form_widget(delete_form) }}
+											<button   type="submit">Eliminar</button>
+										</form>
+										
+									</li>
+								{% endblock module_header_delete%}
+								
+							{% endblock menuAccionesItems%}
+						</ul>
+					</div>
+				{% endblock menuAcciones%}
+				
+				{% block menuOpciones%}
+					<div id="idmenuMasOpciones" class="menuMasOpciones menusDropDownSeccion">
+						<a id="idBtnMasOpciones" class="btn_blue right" href="javascript:void(0)">Opciones</a>
+						<ul id="idUlMasOpciones" style="display:none" >
+							{% block menuOpcionesItems %}
+							{% endblock menuOpcionesItems %}
+						</ul>
+					</div>
+				{% endblock menuOpciones%}
+			
+				{% block opcionesGuia  %}
+				{% endblock opcionesGuia  %}
+			
+			
+			{% endblock module_header_contenido %}
+		</div>
+	{% endblock module_header%}	
+	
+	<hr>
+	
+	
+	{% block module_content_antes%}{% endblock module_content_antes%}
 	
 	<div class="module_content">
 	

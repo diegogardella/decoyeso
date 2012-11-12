@@ -54,6 +54,34 @@ public function indexAction($pararouting="index")
 	
 	}
 
+	
+	public function cambiarEstadoAction($id,$estado){
+	
+		$em = $this->getDoctrine()->getEntityManager();	
+		$pedido = $em->getRepository('PedidoBundle:Pedido')->find($id);
+		$pedido->setEstado($estado);
+		$em->persist($pedido);
+		$em->flush();
+
+		return $this->redirect($this->generateUrl('pedido_edit',array('id'=>$pedido->getId())));
+	}
+	
+	
+	public function pedidoPorClienteAction($cliente){
+		
+		$em = $this->getDoctrine()->getEntityManager();
+		
+		$clienteDelPedido = $em->getRepository('ClientesBundle:Cliente')->find($cliente);		
+		
+		$entity = $em->getRepository('PedidoBundle:Pedido')->findBy(array('cliente'=>$cliente),array('estado'=>'ASC','fechaEntrega'=>'ASC','prioridad'=>'DESC'));
+		
+		return $this->render('PedidoBundle:Pedido:admin_list_por_cliente.html.twig', array(
+				'entities' => $entity,
+				'cliente'=>$clienteDelPedido
+		));
+		
+	}
+	
     /**
      * Finds and displays a Pedido entity.
      *
@@ -190,9 +218,7 @@ public function indexAction($pararouting="index")
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
         $entity = $em->getRepository('PedidoBundle:Pedido')->find($id);
-
         
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Pedido entity.');
@@ -242,6 +268,7 @@ public function indexAction($pararouting="index")
 
         if ($editForm->isValid()) {
             $em->persist($entity);
+            $entity->verificarEstado();
             $em->flush();
             
             

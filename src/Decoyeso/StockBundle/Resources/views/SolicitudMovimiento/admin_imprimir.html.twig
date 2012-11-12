@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+	
+		<base href="{{ app.request.scheme ~ '://' ~ app.request.httpHost }}" />
+
+	{% block stylesheets %}
+	<style>
+	
+	
+	
+	*{	font-family:sans-serif;	}
+	
+	/* Formulario Presupuesto */
+	table{border-collapse:collapse;border-spacing:0;}
+
+	.documento{
+		float:left;
+		width: 700px;
+	}
+	
+	.cuerpo{
+		float:left;
+		border:2px solid #444;
+		width: 100%px;
+	}
+		
+	.header{
+		width: 100%;
+		float:left;
+	}	
+	
+	.headerTop{
+		width: 100%;
+		float:left;
+	}
+	
+	.destino{
+		width: 99%;
+		float:left;
+		padding:5px;
+		font-size: 13px;
+		border-top: 1px solid #444;
+	}
+	
+	.logoCategoria{	
+		float:left;
+		width: 27%;
+		padding:10px;
+	}
+	
+	.logo{	
+		float:left;
+		width: 100%;
+		font-size:2em;
+	}
+	
+	.categoria{	
+		float:left;
+		margin-top:5px;
+		width: 100%;
+		font-size:15px;
+		text-align: center;
+	}
+	
+	
+	.tituloNumeroFecha{
+		float:right;
+		width: 67%;	
+		padding:5px;
+		border-left: 1px solid #444;	
+	}
+	
+	.titulo{
+		float:left;
+		width: 98%;
+		border-bottom: 1px solid #444;
+		padding:5px;
+	}
+	
+	.numeroFecha{
+		float:left;
+		width: 98%;
+		padding:5px;
+		
+	}
+	
+	.numero{
+		float:left;
+		width: 64%;
+		height: 100%;
+	}
+	
+	.fecha{
+		float:left;
+		width: 35%;
+		height: 35px;;
+		border-left: 1px solid #444;
+	}
+	
+	.itemFecha{
+		float:right;
+		width: 25%;
+		margin-left: 10px;
+	}
+	
+	.itemFecha label{
+		float:left;
+		width:100%;
+		font-size: 9px;
+		text-align: center;
+		border-bottom: 1px solid #444;
+	}
+	
+	.itemFecha div{
+		float:left;
+		width:100%;
+		font-size: 11px;
+		font-weight:bold;		
+		text-align: center
+	}
+	
+	.cantidadDetalle{
+		width: 100%;
+		float:left;
+	}
+	
+	.cantidadDetalle thead{
+		font-size:12px;
+	}
+
+	.cantidadDetalle tr td,.cantidadDetalle tr th{
+		border-top: 1px solid #444;
+	}
+	
+	.cantidadDetalle thead tr th:first-child{
+		width: 100px;
+		padding:3px;
+		border-right: 1px solid #444;
+		
+	}
+	
+	.cantidadDetalle tbody tr td{
+		font-size:12px;
+		padding:3px;
+	}
+	
+	.cantidadDetalle tbody tr td:first-child{
+		font-size:12px;
+		text-align: center;
+		border-right: 1px solid #444;
+	}
+	
+	.firmas{
+		width: 100%;
+		float:left;
+	}
+	
+	.firmaItems{	
+		float:left;	
+		width: 23%;
+		border: 1px solid #444;
+		margin-top:10px;
+		margin-right: 12px;
+		height: 50px;
+	}
+	
+	.firmaItems:last-child{
+		margin-right:0;
+	}
+	
+	.firmaItems label{
+		float:left;
+		width:100%;	
+		font-size: 10px;
+		border-bottom:1px solid #444;
+		text-align: center;
+		
+	}
+	
+	.firmaItems div{
+		float:left;
+		width:100%;	
+	}
+	
+</style>
+
+	{% endblock stylesheets %}
+
+
+    </head>
+    <body>
+    	<div class="documento">
+			<div class="cuerpo">
+				<div class="header" >
+					<div class="headerTop" >
+							<div class="logoCategoria">
+								<div class="logo">DECOYESO</div>
+								<div class="categoria">A</div>
+							</div>
+							<div class="tituloNumeroFecha">
+								<div class="titulo">REMITO DE MOVIMIENTO INTERNO DE MATERIALES</div>
+								<div class="numeroFecha">
+									<div class="numero">N° {{ entity.numero }}</div>
+									<div class="fecha">
+										<div class="itemFecha">
+											<label>AÑO</label>
+											<div>{{ entity.fechaHoraCierre | date('Y') }}</div>
+										</div>
+					
+										<div class="itemFecha">
+											<label>MES</label>
+											<div>{{ entity.fechaHoraCierre | date('m') }}</div>
+										</div>
+										<div class="itemFecha">
+											<label>DÍA</label>
+											<div>{{ entity.fechaHoraCierre | date('d') }}</div>
+										</div>
+									</div>
+								</div>
+							</div>
+					</div>
+					<div class="destino">DESTINO: &nbsp; {{ entity.direccionDestino }}</div>
+			  </div>	
+			  
+			  	<table class="cantidadDetalle">
+			  		<thead>
+			  			<tr>
+				  			<th>CANT.</th>
+				  			<th>DETALLE</th>
+				  		</tr>
+			  		</thead>
+			  		<tbody>
+			  			{% for movimiento in entity.solicitudMovimientoElemento %}
+			  			<tr>
+			  				<td> {{ movimiento.movimientoStock.cantidad }}</td>
+			  				<td>{{ movimiento.elemento.nombre }}</td>
+			  			</tr>
+			  			{% endfor %}
+			  		</tbody>
+		  
+		  		</table>
+				  	
+		  </div>
+		  <div class="firmas">
+			  
+			  <div class="firmaItems">
+			  	<label>Solicitada</label>
+			  	<div></div>
+			  </div>
+			  
+			  <div class="firmaItems">
+			  	<label>Entrega</label>
+			  	<div></div>
+			  </div>
+			  
+			  <div class="firmaItems">
+			  	<label>Retira</label>
+			  	<div></div>
+			  </div>
+			  
+			  <div class="firmaItems">
+			  	<label>Recibe</label>
+			  	<div></div>
+			  </div>
+			  
+		  </div>
+	  
+   </div>
+</body>
+	  
+</html>
+

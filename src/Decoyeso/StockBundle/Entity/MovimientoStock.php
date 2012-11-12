@@ -25,7 +25,7 @@ class MovimientoStock
     /**
      * @var integer $producto
      *
-     * @ORM\ManyToOne(targetEntity="Decoyeso\ProductoBundle\Entity\Elemento")
+     * @ORM\ManyToOne(targetEntity="Decoyeso\ProductoBundle\Entity\Elemento" , inversedBy="movimientoStock")
      */
     private $elemento;
 

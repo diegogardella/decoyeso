@@ -8,7 +8,6 @@ use Decoyeso\PedidoBundle\Entity\Presupuesto;
 use Decoyeso\PedidoBundle\Form\PresupuestoType;
 use Symfony\Component\HttpFoundation\Response;
 
-use Decoyeso\ObraBundle\Entity\Obra as Obra;	
 
 
 /**
@@ -23,8 +22,6 @@ class PresupuestoController extends Controller
 	{
 		
 		$string = $this->getRequest()->get("term");
-		
-		
 		
 		$em = $this->getDoctrine()->getEntityManager();
 	
@@ -134,6 +131,21 @@ class PresupuestoController extends Controller
     
     }
 
+    public function presupuestoPorPedidoAction($pedido){
+    
+    	$em = $this->getDoctrine()->getEntityManager();
+    
+    	$pedidoDelPresupuesto = $em->getRepository('PedidoBundle:Pedido')->find($pedido);
+    
+    	$entity = $em->getRepository('PedidoBundle:Presupuesto')->findBy(array('pedido'=>$pedido),array('fechaCreado'=>'DESC'));
+    
+    	return $this->render('PedidoBundle:Presupuesto:admin_list_por_pedido.html.twig', array(
+    			'entities' => $entity,
+    			'pedido'=>$pedidoDelPresupuesto
+    	));
+    
+    }
+    
     /**
      * Displays a form to create a new Presupuesto entity.
      *
@@ -207,6 +219,7 @@ class PresupuestoController extends Controller
         	continue;
     
        		$items[$i]['check'] = $request->get("check_$i");
+       		$items[$i]['id'] = $request->get("id_$i");
         	$items[$i]['designacion'] = $request->get("designacion_$i");
     	    $items[$i]['unidad'] = $request->get("unidad_$i");
   	        $items[$i]['cantidad'] = $request->get("cantidad_$i");
@@ -223,12 +236,19 @@ class PresupuestoController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
+            $IdPedido=$entity->getPedido()->getId();
             $em->persist($entity);
             $em->flush();
 			
             $log = $this->get('log');
             $log->create($entity, "Presupuesto Creado");
 
+            $pedido=$em->getRepository('PedidoBundle:Pedido')->find($IdPedido);
+            $pedido->VerificarEstado();
+            $em->persist($pedido);
+            $em->flush();
+            
+            
 	     	$this->get('session')->setFlash('msj_info','El presupuesto se ha creado correctamente');
 
             return $this->redirect($this->generateUrl('presupuesto_edit',array('id'=>$entity->getId())));
@@ -291,6 +311,7 @@ class PresupuestoController extends Controller
      */
     public function editAction($id)
     {
+    	
     	$em = $this->getDoctrine()->getEntityManager();
 
         $entity = $em->getRepository('PedidoBundle:Presupuesto')->find($id);
@@ -303,16 +324,14 @@ class PresupuestoController extends Controller
 		        
         $editForm = $this->createForm(new PresupuestoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
-        $aprobarConObraForm = $this->createAprobarForm($id,0);
-        $aprobarVtaDirectaForm = $this->createAprobarForm($id,1);
+        $aprobarForm = $this->createAprobarForm($id,1);
         
        
         return $this->render('PedidoBundle:Presupuesto:admin_show.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        	'aprobar_con_obra_form' => $aprobarConObraForm->createView(),
-        	'aprobar_vta_directa_form' => $aprobarVtaDirectaForm->createView(),
+        	'aprobar_form' => $aprobarForm->createView(),
         ));
     }
     
@@ -343,6 +362,8 @@ class PresupuestoController extends Controller
         	
         	$presupuestos = $em->getRepository('PedidoBundle:Presupuesto')->findByPedido($entity->getPedido()->getId());
 
+        	$IdPedido=$entity->getPedido()->getId();
+        	
         	foreach($presupuestos as $p):
         		$p->setEstado(2);
         		$em->persist($p);
@@ -351,21 +372,11 @@ class PresupuestoController extends Controller
         	$entity->setEstado(1);
         	$em->persist($entity);
         	
+        	$pedido=$em->getRepository('PedidoBundle:Pedido')->find($IdPedido);
+        	$pedido->VerificarEstado();
+        	$em->persist($pedido);
+        	$em->flush();
         	
-        	
-        	//Si tipo == 0 entonces hay q crear una obra
-        	if ($form["tipo"] == 0) {
-	        	//Me fijo si hay una obra con ese pedido
-	        	$obra = $em->getRepository('DecoyesoObraBundle:Obra')->findByPedido($entity->getPedido()->getId());
-	        	
-	            if (!$obra) {
-		        	$obra = New Obra();
-		        	$obra->setNombre($entity->getPedido()->getNombreObra());
-		        	$obra->setPedido($entity->getPedido());
-		        	$obra->setEstado(0);
-		        	$em->persist($obra);
-	            }
-        	}
             
             //Cambio el estado en el pedido
             $entity->getPedido()->setEstado(4);
@@ -385,8 +396,7 @@ class PresupuestoController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        	'aprobar_con_obra_form' => $aprobarConObraForm->createView(),
-        	'aprobar_vta_directa_form' => $aprobarVtaDirectaForm->createView(),
+        	'aprobar_form' => $aprobarForm->createView(),
         ));
     }
     

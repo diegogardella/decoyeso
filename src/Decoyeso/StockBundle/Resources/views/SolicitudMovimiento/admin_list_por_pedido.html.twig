@@ -1,0 +1,101 @@
+{% extends "CoobixAdminBundle:Default:list.html.twig" %}
+{% import "PedidoBundle:Pedido:macros.html.twig" as macrosPedido %}
+
+{%block main_path%}
+<ul>
+	<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':pedido.cliente.id}) }}">Cliente: {{pedido.cliente}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':pedido.id}) }}">Pedido: {{pedido }}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('solicitudmovimiento_por_pedido',{'pedido':pedido.id}) }}">Listar Solicitudes a Stock</a></li>
+</ul>
+{%endblock main_path%}
+
+{% block module_tit %}
+Listado de Solicitudes a Stock
+{% endblock module_tit %}
+
+{% block menuOpcionesItems %}
+	{{ macrosPedido.menuOpciones(pedido) }}		
+{% endblock menuOpcionesItems %}
+
+{% block menuAcciones %}		
+{% endblock menuAcciones %}
+
+{%block opcionesGuia  %}
+	{{ macrosPedido.guia(pedido) }}
+{%endblock opcionesGuia  %}
+
+{% block list_tits %}
+
+	{% set widthCols =  94/4  %}
+	<th style="width: {{ widthCols }}">Creado el</th>
+	<th style="width: {{ widthCols }}">Requerido el</th>
+	<th style="width: {{ widthCols }}">Procesado el</th>
+	<th style="width: {{ widthCols }}">Estado</th>
+
+{% endblock list_tits %}
+
+{% block list_item_texts %}
+	<td ><a href="{{ path('solicitudmovimiento_show', { 'id': entity.id }) }}" >{{entity.fechaHoraCreado | date('d/m/Y')}}</a></td>
+	<td ><a href="{{ path('solicitudmovimiento_show', { 'id': entity.id }) }}" >{{entity.fechaHoraRequerido | date('d/m/Y')}}</a></td>
+	<td ><a href="{{ path('solicitudmovimiento_show', { 'id': entity.id }) }}" >{{entity.fechaHoraCierre | date('d/m/Y')}}</a></td>
+	<td ><a href="{{ path('solicitudmovimiento_show', { 'id': entity.id }) }}">{{ entity.estadoNombre }}</a></td>
+{% endblock list_item_texts %}
+
+{%block buscador%}
+{%endblock buscador%}
+
+
+{%block list_content_antes%}
+<div class="tab_container border_radius">
+		
+			
+		<table class="records_list">
+			<thead>
+				<tr>					
+					<th width="450" >Producto/Insumo</th>
+					<th align="center" >Cant. Presupuestada</th>
+					<th align="center" >Cant. Solicitada</th>
+					<th align="center" >Cant. Entregada</th>
+					<th align="center" >Cant. En Stock</th>
+				</tr>
+			</thead>
+					
+			<tbody>
+			{% for arrayElementosCantidad in arrayElementosCantidades %}
+				<tr>
+					<td >{{ arrayElementosCantidad.designacion  }}</td>
+					<td align="center">{{ arrayElementosCantidad.cantidadPresupuesto  }}</td>
+					<td align="center">{{ arrayElementosCantidad.cantidadSolicitada  }}</td>
+					<td align="center">{{ arrayElementosCantidad.cantidadEntregada  }}</td>
+					<td align="center">{{ arrayElementosCantidad.cantidadEnStock  }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+			
+		</table>
+							
+</div>
+
+<hr>
+{%endblock list_content_antes%}
+
+{% block list_navigation %}	
+{% endblock list_navigation %}
+
+{% block new_path %} 
+
+{% endblock new_path %}
+
+{% block edit_path %} 
+{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }} 
+{% endblock edit_path %}
+
+{% block delete_path %}
+
+{% endblock delete_path %}
+
+
+
+
+
+
