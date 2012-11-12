@@ -188,6 +188,59 @@ line-height:20px;
 	margin: 5px 10px 25px;
 }
 
+/*color azul*/
+.NColor2 {
+	background-color: #306D89;
+}
+
+/*color amarillo*/
+.NColor1 {
+	background-color: #FFDD79;
+}
+
+/*color gris*/
+.NColor0 {
+	background-color: #E1E5EF;
+}
+
+/*color verde*/
+.NColor3 {
+	background-color: #22CC58;
+}
+
+/*color rojo*/
+.NColor4  {
+	background-color: #EA5646;
+}
+
+
+
+.NletraRoja {
+	color: #E01111;
+	font-weight: bold;
+}
+
+.NletraVerde {
+	color: #22CC58;
+	font-weight: bold;
+}
+
+.NulItemsDatosProceso {
+
+}
+
+.NulItemsDatosProceso li {
+	margin: 3px 0px;
+
+	width: 310px;
+
+	
+}
+
+.NulItemsDatosProceso li span {
+	width: 29%;
+}
+
 
 
 

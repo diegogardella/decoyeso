@@ -1,0 +1,35 @@
+		<div class="NSecadorCont itemSecadorPlaca">
+
+			<span class="txt3">Secador:</span> <span class="Ntxt3">{{ sP.nombre }}</span><br>
+			<span class="txt3">Capacidad:</span> <span class="Ntxt3">{{ sP.capacidad }} Un.</span><br>
+			
+			 
+			<div class="fix"><br></div>
+		
+			<div class="NSecador">
+				{% for lugar in sP.lugaresSecador %}
+					
+					{% if lugar.getDisponible() == 0 %}
+						<div class="NLugar" id="{{ loop.index }}"></div>
+					{% endif %}
+					{% if lugar.getDisponible() == 1 %}
+						{% set color = lugar.calcularEtapaDeSecado(sP.getTiempoSecado) %}
+						<div class="NLugar NColor{{ color }} " id="{{ loop.index }}"></div>
+
+					{% endif %}
+					
+						
+						
+					{% if (loop.index % 45 == 0) %}
+					<div class="NLugarSep"></div>
+					{% endif %}
+					{% if (loop.index == 90) %}
+					<div class="fix"></div>
+					{% endif %}
+						
+				{% endfor %}
+			</div>
+		
+		</div>
+		
+		<div class="fix"><br></div>

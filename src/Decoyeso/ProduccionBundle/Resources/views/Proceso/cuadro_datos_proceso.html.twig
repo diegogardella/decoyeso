@@ -1,0 +1,55 @@
+{# CUADRO DATOS DEL PROCESO #}
+		<table id="tablaItems" class="NTablaItemsProceso">
+
+			<tr>
+				<td style="width: 49%">
+					<ul class="NulItemsDatosProceso">
+						<li class="" >
+							<span class="txt3">PROCESO:&nbsp;</span> 
+							<span class="Ntxt3">{{ entity.getNumero() }}</span>
+						</li>
+						<li>
+							<span class="txt3">ESTADO:&nbsp;&nbsp;&nbsp;</span> 
+							<span class="Ntxt3">{{ entity.getNombreEstado() }}</span>
+						</li>
+					</ul>
+
+				</td>
+				<td style="width: 49%">
+					<ul class="NulItemsDatosProceso">
+						<li class="" >
+							<span class="txt3">FECHA CREADO:</span> 
+							<span class="Ntxt3">{{ entity.getFechaCreado()  | date("d/m/Y")}}</span>
+						</li>
+						
+					{% if (entity.getFechaInicio()) %}
+						<li class="" >
+							<span class="txt3">FECHA INICIO:&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+							<span class="Ntxt3">{{ entity.getFechaInicio()  | date("d/m/Y")}}</span>
+						</li>
+					{% endif %}
+					{% if (entity.getFechaFin()) %}
+						<li class="" >
+							<span class="txt3">FECHA FIN:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+							<span class="Ntxt3">{{ entity.getFechaFin()  | date("d/m/Y")}}</span>
+						</li>
+					{% endif %}
+
+					</ul>
+				</td>
+				
+			</tr>
+		
+			
+
+			
+			
+						
+		
+		</table>
+		<div class="fix"><br></div>
+		{# CUADRO DATOS DEL PROCESO #}
+		
+		
+		
+	

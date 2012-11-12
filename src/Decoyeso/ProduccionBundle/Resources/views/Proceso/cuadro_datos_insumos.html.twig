@@ -1,0 +1,70 @@
+<table id="tablaItems" class="NTablaItemsProceso">
+			<tr>
+				<td colspan="5" align="center" class=" txt3 ">INSUMOS</td>
+			</tr>
+			{% if entity.estado > 1  %}
+			<tr>
+				<td  align="center" class=" txt3 ">CONSUMIDOS</td>
+				<td colspan="4" align="left" class=" txt3 "></td>
+			</tr>
+			<tr><td colspan="5" ></td></tr>
+			
+			<tr>
+				<td align="left" class=" txt3 ">TOTAL PROD.</td>
+				{% for di in entity.getDatosInsumos() %}
+					<td align="center" class=" txt3 ">{{ di.nombre }}</td>	
+				{% endfor %}
+			</tr>
+			
+			<tr class="NItemsTr" >
+				<td align="left" class="">{{ totalCantidadProducida }} productos</td>
+				{% for di in entity.getDatosInsumos() %}
+					<td align="center" class="">{{ di.cantidadProducida }} {{ di.unidad }}</td>
+				{% endfor %}
+			</tr>
+			<tr><td colspan="5" ><br/></td></tr>
+			{% endif %}
+			
+
+			
+			{% if entity.estado <= 1  %}	
+			<tr>
+				<td  align="center" class=" txt3 ">A CONSUMIR (ESTIMADO)</td>
+				<td colspan="4" align="left" class=" txt3 "></td>
+			</tr>
+			<tr><td colspan="5" ></td></tr>
+			
+			<tr>
+				<td align="left" class=" txt3 ">TOTAL PROD.</td>
+				{% for di in entity.getDatosInsumos() %}
+					<td align="center" class=" txt3 ">{{ di.nombre }}</td>	
+				{% endfor %}
+			</tr>
+			
+
+			<tr class="NItemsTr" >
+				<td align="left" class="">{{ totalCantidad }} productos</td>
+				{% for di in entity.getDatosInsumos() %}
+					<td align="center" class="">{{ di.cantidad }} {{ di.unidad }}</td>
+				{% endfor %}
+			</tr>
+			
+			<tr><td colspan="5" ><div class="Nlinea"></div></td></tr>
+			<tr class="NItemsTr" >
+				<td align="left" class="txt3">ESTADO</td>
+				{% for di in entity.getDatosInsumos() %}
+					{% if (di.disponible ) %}
+					<td align="center" class=""> 
+						<span class="NletraVerde">Con Stock</span>
+					</td>
+					{% else %}
+					<td align="center" class="NletraRoja">
+						<span class="NletraRoja">Sin Stock</span>
+					</td>
+					{% endif %}
+				{% endfor %}
+			</tr>
+			
+			{% endif %}
+		</table>
+		<div class="fix"><br/></div>

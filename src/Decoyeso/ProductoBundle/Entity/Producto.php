@@ -22,6 +22,12 @@ class Producto extends Elemento
 	private $tipo;
 	
 	/**
+	 *
+	 * @ORM\OneToMany(targetEntity="ProductoInsumo", mappedBy="producto")
+	 */
+	private $productoInsumo;
+	
+	/**
 	 * Get tipo
 	 *
 	 * @return integer
@@ -42,4 +48,28 @@ class Producto extends Elemento
 	}
 	
 
+    public function __construct()
+    {
+        $this->productoInsumo = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add productoInsumo
+     *
+     * @param Decoyeso\ProductoBundle\Entity\ProductoInsumo $productoInsumo
+     */
+    public function addProductoInsumo(\Decoyeso\ProductoBundle\Entity\ProductoInsumo $productoInsumo)
+    {
+        $this->productoInsumo[] = $productoInsumo;
+    }
+
+    /**
+     * Get productoInsumo
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getProductoInsumo()
+    {
+        return $this->productoInsumo;
+    }
 }

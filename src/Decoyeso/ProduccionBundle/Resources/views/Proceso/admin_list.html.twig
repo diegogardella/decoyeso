@@ -77,7 +77,9 @@ Listado de Procesos
 {% endblock delete_path %}
 
 {% block list_delete %}
-{% render "DecoyesoProduccionBundle:Proceso:listDeleteform" with {'id': entity.id}  %}
+{% if (entity.getEstado <1) %}
+	{% render "DecoyesoProduccionBundle:Proceso:listDeleteform" with {'id': entity.id}  %}
+{% endif %}
 {% endblock list_delete %}
 
 

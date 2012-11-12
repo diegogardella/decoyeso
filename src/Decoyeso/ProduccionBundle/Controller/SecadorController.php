@@ -45,8 +45,7 @@ class SecadorController extends Controller
     public function estadoAction()
     {
     	$em = $this->getDoctrine()->getEntityManager();
-    
-    		
+        		
     	//Traigo secadores de placas
     	$query = $em->createQuery('SELECT se FROM DecoyesoProduccionBundle:Secador se
     			WHERE se.tipo = :se_tipo
@@ -66,12 +65,125 @@ class SecadorController extends Controller
     	));
     	$secadoresMolduras = $query->getResult();
     
+    	$request = $this->getRequest();
+    	
+    	$filtro = 0;
+    	$tipo = 0;
     
-    	return $this->render('DecoyesoProduccionBundle:Secador:admin_estado.html.twig', array(
-    			'secadoresPlacas' => $secadoresPlacas,
-    			'secadoresMolduras' => $secadoresMolduras,
+    	
+    	if ($request->query->has("filtro")) {
+    		$filtro = $request->get("filtro");
+    	}
+    	
+    	if ($request->query->has("tipo")) {
+    		$tipo = $request->get("tipo");
+    	}
+    	
+    	if ($tipo == 0 ) {
+	    	return $this->render('DecoyesoProduccionBundle:Secador:admin_estado.html.twig', array(
+	    			'secadoresPlacas' => $secadoresPlacas,
+	    			'secadoresMolduras' => $secadoresMolduras,
+	    			'filtro' => $filtro,
+	    			'tipo' => $tipo,
+	    			
+	    	));	
+    	}
+    	
+    	else {
+    		return $this->render('DecoyesoProduccionBundle:Secador:admin_estado.html.twig', array(
+    				'secadoresPlacas' => $secadoresPlacas,
+    				'secadoresMolduras' => $secadoresMolduras,
+    				'filtro' => $filtro,
+    				'tipo' => $tipo,
+    		));
+    	}
+    	
+    	
+    }
+    
+    
+   
+    
+    
+    public function estadoSecadorAction($secadores)
+    {
+    	//Si es secador de placas
+    	if ($secador->getTipo() == 0) {
+    		return $this->render('DecoyesoProduccionBundle:Secador:secador_placas.html.twig', array(
+    				'secadores' => $secadores,
+    		));
+    	}
+    	//Si es secador de Molduras
+    	if ($secador->getTipo() == 1) {
+    		return $this->render('DecoyesoProduccionBundle:Secador:secador_molduras.html.twig', array(
+    				'secadores' => $secadores,
+    		));
+    	}
+    	
+    }
+    
+
+    public function disponibilidadSecadoresAction($datos)
+    {
+    	$totalCantidadPlacas = $datos["totalCantidadPlacas"];	
+    	$totalCantidadMolduras = $datos["totalCantidadMolduras"];
+    	
+    	$cantidadLugaresLibresEnSecadoresPlacas = $this->cantidadLugaresLibresEnSecadores(0);
+    	$cantidadLugaresLibresEnSecadoresMolduras = $this->cantidadLugaresLibresEnSecadores(1);
+    	
+    	return $this->render('DecoyesoProduccionBundle:Secador:cuadro_disponibilidad_secadores.html.twig', array(
+    			'totalCantidadPlacas' => $totalCantidadPlacas,
+    			'totalCantidadMolduras' => $totalCantidadMolduras,
+    			'cantidadLugaresLibresEnSecadoresPlacas' => $cantidadLugaresLibresEnSecadoresPlacas,
+    			'cantidadLugaresLibresEnSecadoresMolduras' => $cantidadLugaresLibresEnSecadoresMolduras,
     	));
     }
+    
+    
+    public function cantidadLugaresLibresEnSecadores($tipo) {
+    	
+    	$em = $this->getDoctrine()->getEntityManager();
+    	
+    	$cantidad = 0;
+    	
+    	$query = $em->createQuery('SELECT COUNT(lu.id) FROM DecoyesoProduccionBundle:LugarSecador lu
+    			JOIN lu.secador se
+    			WHERE lu.disponible = :lu_disponible AND
+    			se.tipo = :se_tipo
+    			');
+    	$query->setParameters(array(
+    			'lu_disponible' => 0,
+    			'se_tipo' => $tipo,
+    			
+    	));
+    	$cantidad = $query->getSingleScalarResult();
+    	
+    	return $cantidad;
+    }
+    
+    public function cantidadLugaresLibreEnSecadore($idSecador) {
+    
+    	$em = $this->getDoctrine()->getEntityManager();
+    
+    	$cantidad = 0;
+    
+    	$query = $em->createQuery('SELECT COUNT(lu.id) FROM DecoyesoProduccionBundle:LugarSecador lu
+    			JOIN lu.secador se
+    			WHERE se.id = :se_id AND
+    			lu.disponible = :lu_disponible
+    			
+    			');
+    	$query->setParameters(array(
+    			'lu_disponible' => 0,
+    			'se_id' => $idSecador,
+    
+    	));
+    	$cantidad = $query->getSingleScalarResult();
+    
+    	return $cantidad;
+    }
+    
+    
 
     /**
      * Finds and displays a Secador entity.

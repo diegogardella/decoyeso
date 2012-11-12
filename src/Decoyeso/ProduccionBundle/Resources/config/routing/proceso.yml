@@ -47,7 +47,11 @@ proceso_finalizar_update:
 
 proceso_asignar:
     pattern:  /{id}/asignar
-    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:asignarProductosSecadores" }
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:asignarProductosAlStock" }
+    
+proceso_asignar_update:
+    pattern:  /{id}/asignar_update
+    defaults: { _controller: "DecoyesoProduccionBundle:Proceso:asignarProductosAlStockUpdate" }
 
 
 

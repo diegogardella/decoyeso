@@ -743,4 +743,24 @@ class Pedido
     {
         return $this->solicitudMovimiento;
     }
+
+    /**
+     * Set obra
+     *
+     * @param Decoyeso\ObraBundle\Entity\Obra $obra
+     */
+    public function setObra(\Decoyeso\ObraBundle\Entity\Obra $obra)
+    {
+        $this->obra = $obra;
+    }
+
+    /**
+     * Add solicitudMovimiento
+     *
+     * @param Decoyeso\StockBundle\Entity\SolicitudMovimiento $solicitudMovimiento
+     */
+    public function addSolicitudMovimiento(\Decoyeso\StockBundle\Entity\SolicitudMovimiento $solicitudMovimiento)
+    {
+        $this->solicitudMovimiento[] = $solicitudMovimiento;
+    }
 }
