@@ -1,37 +1,93 @@
 {% extends "CoobixAdminBundle:Default:new.html.twig" %}
+{% import "PedidoBundle:Pedido:macros.html.twig" as macrosPedido %}
 
-
-{% block breadcrumb_in %}
-
-	<div class="breadcrumbs">
-		<a href="{{ path('solicitudmovimiento') }}" class="current" >Agregar Producto</a>
-	</div>
-	<div class="breadcrumb_divider"> 
-		<a href="{{ path('solicitudmovimiento_new') }}" class="current" >Agregar</a>
-	</div>
-	
-{% endblock breadcrumb_in %} 
+{%block main_path%}
+<ul>
+	<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido }}</a></li>
+	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{path('solicitudmovimiento_new',{'paramPedido':entity.pedido.id})}}">Crear Solicitud a Stock</a></li>
+</ul>
+{%endblock main_path%}
 
 {% block module_tit %}
 Crear solicitud
 {% endblock module_tit %}
 
+{% block menuOpcionesItems %}
+	{{ macrosPedido.menuOpciones(entity.pedido) }}		
+{% endblock menuOpcionesItems %}
+
+{%block opcionesGuia  %}
+	{{ macrosPedido.guia(entity.pedido) }}
+{%endblock opcionesGuia  %}
+
+{% block menuOpcionesItems %}
+	{{ macrosPedido.menuOpciones(entity.pedido) }}		
+{% endblock menuOpcionesItems %}
+
+{% block menuAcciones %}		
+{% endblock menuAcciones %}
 
 {% block list_path %}
 	{{ path('solicitudmovimiento') }}
 {% endblock list_path %}
 
+{% block module_content_antes%}
+
+<div class="tab_container border_radius">
+		
+		<table class="records_list">
+			<thead>
+				<tr>					
+					<th width="450" >Producto/Insumo</th>
+					<th align="center" >Cant. Presupuestada</th>
+					<th align="center" >Cant. Solicitada</th>
+					<th align="center" >Cant. Entregada</th>
+					<th align="center" >Cant. En Stock</th>
+				</tr>
+			</thead>
+					
+			<tbody>
+			{% for arrayElementosCantidad in arrayElementosCantidades %}
+				<tr>
+					<td >{{ arrayElementosCantidad.designacion  }}</td>
+					<td align="center">{{ arrayElementosCantidad.cantidadPresupuesto  }}</td>
+					<td align="center">{{ arrayElementosCantidad.cantidadSolicitada  }}</td>
+					<td align="center">{{ arrayElementosCantidad.cantidadEntregada  }}</td>
+					<td align="center">{{ arrayElementosCantidad.cantidadEnStock  }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+			
+		</table>
+							
+	</div>
+	
+	<hr>
+
+{% endblock module_content_antes%}
+
 {% block form_content %}
 	{% block errorMsj %}{% endblock errorMsj %}
+	
+	
 	<form novalidate action="{% block create_path %}{{ path('solicitudmovimiento_create') }}{% endblock create_path %}" method="post" {{ form_enctype(form) }}>
 		{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 		
-		{{ form_row(form.pedido) }}
+		<div  class="form_row">
+			
+				<label class=" required" >Pedido</label>
+				<div class="field_widget">{{ entity.pedido }}</div>
+		</div>
+		
+		{{ form_row(form.direccionDestino) }}
+		
+		<div style="display:none">{{ form_row(form.pedido) }}</div>
 		{{ form_row(form.fechaHoraRequerido) }}
 		{{ form_row(form.observacion) }}
 		{{ form_rest(form) }}
 		
-		<input type="text" name="solicitudmovimiento[elementos]" id="solicitudmovimiento_elementos" value=''>
+		<input type="hidden" name="solicitudmovimiento[elementos]" id="solicitudmovimiento_elementos" value=''>
 		
 		<div  class="form_row">
 			
@@ -57,12 +113,14 @@ Crear solicitud
 							<td><input style="float:left;" type="text" maxlength="12" id="idElementoCantidad" name="elementoCantidad" value=""></td>
 							<td><button type="button" style="float:left;" id="idAgregarElemento" >Agregar</button></td>
 						</tr>
-						
-					</table>
+											</table>
 					
 				</div>
 				
 			</div>
+			
+			
+	
 			
 		<p>
 			<button class="btn_green_button right" id="btnGuardarCambios" type="submit">Guardar cambios</button>

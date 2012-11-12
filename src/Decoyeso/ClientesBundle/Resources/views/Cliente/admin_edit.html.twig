@@ -64,58 +64,7 @@
 		
 {% endblock form_content %}
 
-{% block otros %}
-
-	<div id="pedidosClienteContenido">	
-	
-			
-			
-			<div class="tab_container border_radius">
-		
-					<table class="records_list">
-		
-						<thead>
-							<tr>
-								<th >Nombre</th>
-								<th>Entregar el</th>
-								<th align="center" >Prioridad</th>
-								<th align="center">Estado</th>
-								<th align="center"></th>
-							</tr>
-						</thead>
-							
-						<tbody>
-						{% for pedido in entity.pedido %}
-							<tr>
-								<td><a href="{{ path('pedido_edit', { 'id': pedido.id }) }}" title="Editar">{{pedido.nombre}}</a></td>
-								<td><a href="{{ path('pedido_edit', { 'id': pedido.id }) }}" title="Editar">{{pedido.fechaEntrega | date('d/m/Y') }}</a></td>
-								<td align="center"><a href="{{ path('pedido_edit', { 'id': pedido.id }) }}" title="Editar">{{pedido.prioridadNombre}}</a></td>
-								<td align="center"><a href="{{ path('pedido_edit', { 'id': pedido.id }) }}" title="Editar">{{pedido.estadoNombre}}</a></td>
-								<td width="20">
-									<ul>
-										<li>
-											<a class="list_edit_btn" href="{{ path('pedido_edit', { 'id': pedido.id }) }}" title="Editar"></a>
-										</li>
-									</ul>
-								</td>
-							</tr>
-							
-							{% else %}
-							<tr class="trColor1">
-								<td colspan="0">
-									<span class="txt16">No existen registros.</span>
-								</td>
-							</tr>
-						{% endfor %}
-						</tbody>
-					</table>
-				
-							
-			</div>
-			
-		</div>
-
-{%endblock otros%}
+{% block otros %}{%endblock otros%}
 
 {% block javascript_extra %}
 

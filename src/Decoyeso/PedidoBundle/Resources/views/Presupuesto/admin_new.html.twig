@@ -62,11 +62,15 @@ Crear Presupuesto
 		{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 		{{ form_errors(form) }}
 		
+		<div style="display:none">{{ form_widget(form.pedido) }}</div>
+		
+		<div class="form_row" id="div_relevamiento_nombre">
+			<label class=" required" for="relevamiento_nombre">Pedido</label>
+			<div class="field_widget">{{ entity.pedido }}</div>
+		</div>
+		
 		{{ form_errors(form.nombre) }}
 		{{ form_row(form.nombre) }}
-		
-		{{ form_errors(form.pedido) }}
-		{{ form_row(form.pedido) }}
 		
 		{{ form_errors(form.mostrarFirmas) }}
 		{{ form_row(form.mostrarFirmas) }}

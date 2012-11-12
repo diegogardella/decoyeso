@@ -37,6 +37,20 @@ Listado de Clientes
 	<form method="post" action="{{path('cliente',{pararouting:"buscar"})}}" novalidate="true">
 {%endblock%}
 
+{%block camposFormBuscar%}
+	{{form_row(formBuscar.c_numero)}}
+	{{form_row(formBuscar.c_nombre)}}
+	{{form_row(formBuscar.c_tipo)}}
+	{{form_row(formBuscar.c_cuitOcuil)}}
+	{{form_row(formBuscar.c_telefono)}}
+	{{form_row(formBuscar.c_celular)}}
+	{{form_row(formBuscar.c_email)}}
+	{{form_row(formBuscar.c_direccionBarrio)}}
+	{{form_row(formBuscar.c_direccionCalle)}}
+	{{form_row(formBuscar.c_direccionNumero)}}
+		
+{%endblock%}
+    	
 {% block menuAcciones%}	{% endblock menuAcciones%}
 
 

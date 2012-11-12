@@ -9,6 +9,9 @@ use Decoyeso\StockBundle\Entity\SolicitudMovimientoElemento;
 use Decoyeso\StockBundle\Entity\SolicitudMovimiento;
 use Decoyeso\StockBundle\Form\SolicitudMovimientoType;
 
+use Decoyeso\StockBundle\Entity\MovimientoStock;
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * SolicitudMovimiento controller.
  *
@@ -52,6 +55,26 @@ class SolicitudMovimientoController extends Controller
     			'formBuscar'=>$resultados["form"]->createView(),
     	));
     }
+    
+    
+    public function solicitudMovimientoPorPedidoAction($pedido){
+    
+    	$em = $this->getDoctrine()->getEntityManager();
+    
+    	$pedidoDeSolicitud = $em->getRepository('PedidoBundle:Pedido')->find($pedido);
+    
+    	$entity = $em->getRepository('StockBundle:SolicitudMovimiento')->findBy(array('pedido'=>$pedido),array('fechaHoraRequerido'=>'DESC'));
+     
+    	$elementosYCantidades=$this->getCantidades($pedido);
+
+    	return $this->render('StockBundle:SolicitudMovimiento:admin_list_por_pedido.html.twig', array(
+    			'entities' => $entity,
+    			'pedido'=>$pedidoDeSolicitud,
+    			'arrayElementosCantidades'=>$elementosYCantidades['cantidades'],
+    	));
+    
+    }
+    
 
     /**
      * Finds and displays a SolicitudMovimiento entity.
@@ -62,7 +85,7 @@ class SolicitudMovimientoController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $entity = $em->getRepository('StockBundle:SolicitudMovimiento')->find($id);
-
+        
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find SolicitudMovimiento entity.');
         }
@@ -72,59 +95,47 @@ class SolicitudMovimientoController extends Controller
         return $this->render('StockBundle:SolicitudMovimiento:admin_show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
-
         ));
     }
-    
     
     /**
      * Finds and displays a SolicitudMovimiento entity.
      *
      */
-    public function showPorPedidoAction($paramPedido)
+    public function imprimirAction($id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
     
-    	$entity = $em->getRepository('StockBundle:SolicitudMovimiento')->findOneByPedido($paramPedido);
+    	$entity = $em->getRepository('StockBundle:SolicitudMovimiento')->find($id);    	 
     
-    	return $this->redirect($this->generateUrl('solicitudmovimiento_show', array('id' => $entity->getId())));
+    	if (!$entity) {
+    		throw $this->createNotFoundException('Unable to find SolicitudMovimiento entity.');
+    	}
+    
 
-    }
-    
-    
-    /**
-     * Displays a form to create a new SolicitudMovimiento entity.
-     *
-     */
-    
-    
-    public function newVentaDirectaAction($paramPedido)
-    {
-    	$em=$this->getDoctrine()->getEntityManager();
-    	$entity = new SolicitudMovimiento();
-    
-    	$pedido=$em->getRepository('PedidoBundle:Pedido')->find($paramPedido);   
     	
-    	$presupuesto=$em->getRepository('PedidoBundle:Presupuesto')->findBy(array('pedido'=>$paramPedido,'estado'=>1));
-    	    	
-    	$valorItems="";
-    	$presupuestoItems=json_decode($presupuesto[0]->getItems(),true);
-    	
-    	foreach($presupuestoItems as $key=>$value ){
-    	  if($value["id"]!=''){
-    	  	$valorItems.=";".$value["id"]."@".$value["cantidad"]."@".$value["unidad"]."@".$value["designacion"];
-    	  }
-    	}    		    	
-    	
-    	$form   = $this->createForm(new SolicitudMovimientoType(), $entity);
-    
-    	return $this->render('StockBundle:SolicitudMovimiento:admin_new_venta_directa.html.twig', array(
-    			'entity' => $entity,
-    			'form'   => $form->createView(),
-    			'presupuestoItems'=>$presupuestoItems,
-    			'valorItems'=>$valorItems
+    	$html = $this->renderView('StockBundle:SolicitudMovimiento:admin_imprimir.html.twig', array(
+    			'entity'      => $entity,    
     	));
+    	
+    	 /*return $this->render('StockBundle:SolicitudMovimiento:admin_imprimir.html.twig', array(
+    	 		'entity'      => $entity,
+    	 ));
+    	
+    	/*
+    	 spread
+    	*/
+    	$pdfGenerator = $this->get('spraed.pdf.generator');
+    	 
+    	return new Response($pdfGenerator->generatePDF($html),
+    			200,
+    			array(
+    					'Content-Type' => 'application/pdf',
+    					'Content-Disposition' => 'inline; filename="Remito -'.$entity->getNumero().'.pdf"'
+    			)
+    	);
     }
+    
     
     
     public function newAction($paramPedido)
@@ -134,15 +145,19 @@ class SolicitudMovimientoController extends Controller
         
         $pedido=$em->getRepository('PedidoBundle:Pedido')->find($paramPedido);
         $entity->setPedido($pedido);
+        $entity->setDireccionDestino($entity->getPedido()->getProvincia()->getNombre().",".$entity->getPedido()->getDepartamento()->getNombre().", ".$entity->getPedido()->getLocalidad()->getNombre()." - ".$entity->getPedido()->getDireccionBarrio().", ".$entity->getPedido()->getDireccionCalle().", ".$entity->getPedido()->getDireccionNumero());
         
-        $elementos=$em->getRepository('ProductoBundle:Elemento')->findAll();
+        $elementosYCantidades=$this->getCantidades($paramPedido);
+        
+        $elementos=$em->createQuery('SELECT e FROM ProductoBundle:Elemento e WHERE e.id IN ('.$elementosYCantidades["idsElementosEnPresupuesto"].')')->getResult();       
         
         $form   = $this->createForm(new SolicitudMovimientoType(), $entity);
         
         return $this->render('StockBundle:SolicitudMovimiento:admin_new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
-        	'elementos'=>$elementos,        		
+        	'elementos'=>$elementos,
+        	'arrayElementosCantidades'=>$elementosYCantidades['cantidades'],
         ));
     }
 
@@ -161,9 +176,9 @@ class SolicitudMovimientoController extends Controller
                 
          $em = $this->getDoctrine()->getEntityManager();
            
+         $entity->setUsuarioCreo($this->container->get('security.context')->getToken()->getUser());
          $entity->setFechaHoraCreado(new \DateTime());
-         $entity->setEstado(1);
-           
+         $entity->setEstado(1);           
          $entity->getPedido()->setEstado(5);
          
          $em->persist($entity);
@@ -184,18 +199,27 @@ class SolicitudMovimientoController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('StockBundle:SolicitudMovimiento')->find($id);
+        
+        $elementosYCantidades=$this->getCantidades($entity->getPedido()->getId());
+
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find SolicitudMovimiento entity.');
         }
 
-        $editForm = $this->createEditForm($entity->getPedido()->getId());
+        if($entity->getEstado()==2){
+        	return $this->redirect($this->generateUrl('solicitudmovimiento_show',array('id'=>$entity->getId())));
+        }
+        
+        
+        $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('StockBundle:SolicitudMovimiento:admin_edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+        	'arrayElementosCantidades'=>$elementosYCantidades['cantidades'],
         ));
     }
 
@@ -212,15 +236,37 @@ class SolicitudMovimientoController extends Controller
         $entity = $em->getRepository('StockBundle:SolicitudMovimiento')->find($id);
         $entity->getPedido()->setEstado(6);
         $entity->setEstado(2);
+        $entity->setUsuarioCerro($this->container->get('security.context')->getToken()->getUser());
+        $entity->setFechaHoraCierre(new \Datetime());
         $em->persist($entity);
-        
-    	foreach($form['solicitudMovimientoElementoCantidadReservada'] as $key =>$value){    		
+            	
+    	$movimientoStock=array();
+    	$j=0;
+    	foreach($form['solicitudMovimientoElementoCantidadEntregada'] as $key =>$value){
+    	
     		$elementoSolicitudMovimiento=$em->getRepository('StockBundle:SolicitudMovimientoElemento')->find($key);
-    		$elementoSolicitudMovimiento->setCantidadReservada($value);
-    		$em->persist($elementoSolicitudMovimiento);    		
+    		
+    		$movimientoStock[$j]=new MovimientoStock();
+    		$movimientoStock[$j]->setElemento($elementoSolicitudMovimiento->getElemento());
+    		$movimientoStock[$j]->setCantidad($value);
+    		$movimientoStock[$j]->setAccion(2);
+    		$movimientoStock[$j]->setUsuario($this->container->get('security.context')->getToken()->getUser());
+    		$movimientoStock[$j]->setFechaHora(new \DateTime());
+    		$movimientoStock[$j]->setObservacion('Se confirmo solicitud y se entrego producto y/o insumo');
+    	
+    		$em->persist($movimientoStock[$j]);
+    		$em->flush();
+    		
+    		$elementoSolicitudMovimiento->setMovimientoStock($movimientoStock[$j]);
+    		$em->persist($elementoSolicitudMovimiento);
+    		$em->flush();
+
+    		$j++;
+    	
     	}
     	
-    	$em->flush();
+    	
+    	
     	
         return $this->redirect($this->generateUrl('solicitudmovimiento_edit', array('id' => $id)));
         
@@ -260,10 +306,12 @@ class SolicitudMovimientoController extends Controller
         ;
     }
     
-    private function createEditForm($pedido)
+    private function createEditForm($entity)
     {
-    	return $this->createFormBuilder(array('pedido' => $pedido))
+    	
+    	return $this->createFormBuilder(array('pedido' => $entity->getPedido()->getId(),'direccionDestino'=>$entity->getDireccionDestino()))
     	->add('pedido', 'hidden')
+    	->add('direccionDestino', 'text',array('label'=>'Destino'))
     	->getForm()
     	;
     }
@@ -277,7 +325,8 @@ class SolicitudMovimientoController extends Controller
     		 
     		$elementoMovimiento[$i]=new SolicitudMovimientoElemento();
     		$elemento=explode('@',$elementos[$i]);
-    
+       		
+    		
     		$objetoElemento=$em->getRepository('ProductoBundle:Elemento')->find($elemento[0]);
     		$elementoMovimiento[$i]->setSolicitudMovimiento($solicitudMovimiento);
     		$elementoMovimiento[$i]->setElemento($objetoElemento);
@@ -289,6 +338,117 @@ class SolicitudMovimientoController extends Controller
     	 
     	$em->flush();
     
+    }
+    
+    public function getCantidades($paramPedido){
+    	
+    	$em=$this->getDoctrine()->getEntityManager();
+    	$presupuesto=$em->getRepository('PedidoBundle:Presupuesto')->findBy(array('pedido'=>$paramPedido,'estado'=>1));
+    	$presupuestoItems=json_decode($presupuesto[0]->getItems(),true);    	
+    	
+    	$arrayElementosCantidades=array();
+    	$idsElementos="0";
+    	$i=0;
+    	
+    	foreach($presupuestoItems as $key=>$value ){
+    		
+    		if($value["id"]!=''){
+    	
+    			$elemento=$em->getRepository('ProductoBundle:Elemento')->find($value["id"]);
+    			$cla=explode('\\',get_class($elemento));
+    			$nombreDeClase=$cla[count($cla)-1];
+    	
+    			if($nombreDeClase=="Servicio"){
+    				 
+    				 
+    				$servicioProductos=$em->getRepository('ProductoBundle:ServicioProducto')->findByServicio($value["id"]);
+    				foreach($servicioProductos as $servicioProducto){
+    	
+    					$id=$servicioProducto->getProducto()->getId();
+    	
+    					if(array_key_exists($id,$arrayElementosCantidades)){
+    						 
+    						$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$arrayElementosCantidades[$id]["cantidadPresupuesto"]+($value["cantidad"]*$servicioProducto->getCantidad());
+    						 
+    					}else{
+    						 
+    						$arrayElementosCantidades[$id]['id']=$servicioProducto->getProducto()->getId();
+    						$arrayElementosCantidades[$id]["designacion"]=$servicioProducto->getProducto()->getNombre();
+    						$arrayElementosCantidades[$id]["unidad"]=$servicioProducto->getProducto()->getUnidad();
+    						 
+    						$idsElementos.=",".$id;
+    						 
+    						$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$servicioProducto->getCantidad();
+    						$arrayElementosCantidades[$id]["cantidadEnStock"]=$servicioProducto->getProducto()->getCantidadEnStock();
+    						$arrayElementosCantidades[$id]["cantidadSolicitada"]=$servicioProducto->getProducto()->getCantidadSolicitadaStock($paramPedido);
+    						$arrayElementosCantidades[$id]["cantidadEntregada"]=$servicioProducto->getProducto()->getCantidadEntregadaStock($paramPedido);
+    						 
+    						 
+    					}
+    	
+    					 
+    				}
+    				 
+    				     				 
+    				$servicioInsumos=$em->getRepository('ProductoBundle:ServicioInsumo')->findByServicio($value["id"]);
+    				foreach($servicioInsumos as $servicioInsumo){
+    					 
+    					$id=$servicioInsumo->getInsumo()->getId();
+    					 
+    					if(array_key_exists($id,$arrayElementosCantidades)){
+    	
+    						$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$arrayElementosCantidades[$id]["cantidadPresupuesto"]+($value["cantidad"]*$servicioInsumo->getCantidad());
+    	
+    					}else{
+    	
+    						$arrayElementosCantidades[$id]['id']=$servicioInsumo->getInsumo()->getId();
+    						$arrayElementosCantidades[$id]["designacion"]=$servicioInsumo->getInsumo()->getNombre();
+    						$arrayElementosCantidades[$id]["unidad"]=$servicioInsumo->getInsumo()->getUnidad();
+    						 
+    						$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$servicioInsumo->getCantidad();
+    						$arrayElementosCantidades[$id]["cantidadEnStock"]=$servicioInsumo->getInsumo()->getCantidadEnStock();
+    						$arrayElementosCantidades[$id]["cantidadSolicitada"]=$servicioInsumo->getInsumo()->getCantidadSolicitadaStock($paramPedido);
+    						$arrayElementosCantidades[$id]["cantidadEntregada"]=$servicioInsumo->getInsumo()->getCantidadEntregadaStock($paramPedido);
+    						$idsElementos.=",".$id;
+    						 
+    					}
+    					 
+    					 
+    				}
+    				     				    				
+    				 
+    			}else{
+    				 
+    				$id=$value["id"];
+    				 
+    				if(array_key_exists($id,$arrayElementosCantidades)){
+    					 
+    					$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$arrayElementosCantidades[$id]["cantidadPresupuesto"]+$value["cantidad"];
+    					 
+    				}else{
+    					 
+    					$arrayElementosCantidades[$id]['id']=$id;
+    					$arrayElementosCantidades[$id]["designacion"]=$value["designacion"];
+    					$arrayElementosCantidades[$id]["unidad"]=$value["unidad"];
+    	    	
+    					$idsElementos.=",".$id;
+    	
+    					$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$value["cantidad"];
+    					$arrayElementosCantidades[$id]["cantidadEnStock"]=$elemento->getCantidadEnStock();
+    					$arrayElementosCantidades[$id]["cantidadSolicitada"]=$elemento->getCantidadSolicitadaStock($paramPedido);
+    					$arrayElementosCantidades[$id]["cantidadEntregada"]=$elemento->getCantidadEntregadaStock($paramPedido);
+    					 
+    				}
+    				 
+    			}
+    	
+    		}
+    	}
+    	
+    	
+    	
+    	return array('idsElementosEnPresupuesto'=>$idsElementos,'cantidades'=>$arrayElementosCantidades);
+    	
     }
     
 }

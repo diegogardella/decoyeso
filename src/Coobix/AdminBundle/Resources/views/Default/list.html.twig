@@ -49,11 +49,12 @@
 					</div>
 				{% endblock menuOpciones %}
 				
-				
+				{%block opcionesGuia  %} {%endblock opcionesGuia  %}
 			
 			{% endblock module_header_contenido %}
 		</div>
 	{% endblock module_header%}	
+	
 	<hr>
 	
 	{%block buscador%}
@@ -80,8 +81,11 @@
 	
 		</div>
 		
-	   {%endblock%}
+	{%endblock%}
 	
+	{% block list_content_antes %}
+		
+	{% endblock list_content_antes %}
 
 	<div class="tab_container border_radius">
 		
@@ -162,6 +166,6 @@
 	</div>
 {% endblock list_navigation %}
 
-		{% block otros %}{% endblock otros %}
+{% block otros %}{% endblock otros %}
 
 {% endblock main_content %}

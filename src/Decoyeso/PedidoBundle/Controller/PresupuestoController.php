@@ -8,7 +8,6 @@ use Decoyeso\PedidoBundle\Entity\Presupuesto;
 use Decoyeso\PedidoBundle\Form\PresupuestoType;
 use Symfony\Component\HttpFoundation\Response;
 
-use Decoyeso\ObraBundle\Entity\Obra as Obra;	
 
 
 /**
@@ -312,6 +311,7 @@ class PresupuestoController extends Controller
      */
     public function editAction($id)
     {
+    	
     	$em = $this->getDoctrine()->getEntityManager();
 
         $entity = $em->getRepository('PedidoBundle:Presupuesto')->find($id);
@@ -324,16 +324,14 @@ class PresupuestoController extends Controller
 		        
         $editForm = $this->createForm(new PresupuestoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
-        $aprobarConObraForm = $this->createAprobarForm($id,0);
-        $aprobarVtaDirectaForm = $this->createAprobarForm($id,1);
+        $aprobarForm = $this->createAprobarForm($id,1);
         
        
         return $this->render('PedidoBundle:Presupuesto:admin_show.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        	'aprobar_con_obra_form' => $aprobarConObraForm->createView(),
-        	'aprobar_vta_directa_form' => $aprobarVtaDirectaForm->createView(),
+        	'aprobar_form' => $aprobarForm->createView(),
         ));
     }
     
@@ -398,8 +396,7 @@ class PresupuestoController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        	'aprobar_con_obra_form' => $aprobarConObraForm->createView(),
-        	'aprobar_vta_directa_form' => $aprobarVtaDirectaForm->createView(),
+        	'aprobar_form' => $aprobarForm->createView(),
         ));
     }
     

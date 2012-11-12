@@ -29,13 +29,6 @@ class SolicitudMovimientoElemento
     private $cantidadSolicitada;
 
     /**
-     * @var float $cantidadReservada
-     *
-     * @ORM\Column(name="cantidadReservada", type="float",nullable=true)
-     */
-    private $cantidadReservada;
-
-    /**
      * @var integer $elemento
      *
      * @ORM\ManyToOne(targetEntity="Decoyeso\ProductoBundle\Entity\Elemento")
@@ -49,13 +42,13 @@ class SolicitudMovimientoElemento
      */
     private $solicitudMovimiento;
 
-    /*
+    /**
      * @var integer $movimientoStock
      *
      * @ORM\OneToOne(targetEntity="MovimientoStock")
-     
+     */
     private $movimientoStock;
-*/
+	
 
     /**
      * Get id

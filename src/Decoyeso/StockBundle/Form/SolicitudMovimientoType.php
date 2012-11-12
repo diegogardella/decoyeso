@@ -12,6 +12,7 @@ class SolicitudMovimientoType extends AbstractType
         $builder
         	->add('pedido')
             ->add('fechaHoraRequerido','date', array("format"=>"d-m-Y",'pattern'=> '{{ day }}{{ month }}{{ year }}','label'=>'Fecha requerido'))
+        	->add('direccionDestino','text',array('label'=>"Destino"))
             ->add('observacion')
         ;
     }

@@ -55,9 +55,9 @@ class ClienteType extends AbstractType
             		
             			}
             		))
-            ->add('barrio', 'text', array('label'=> 'Dirección, Barrio', 'required'=>false))
-            ->add('calle', 'text', array('label'=> 'Dirección, Calle', 'required'=>false))
-            ->add('numeroCalle', 'text', array('label'=> 'Dirección, Número', 'required'=>false))
+            ->add('direccionBarrio', 'text', array('label'=> 'Dirección, Barrio', 'required'=>false))
+            ->add('direccionCalle', 'text', array('label'=> 'Dirección, Calle', 'required'=>false))
+            ->add('direccionNumero', 'text', array('label'=> 'Dirección, Número', 'required'=>false))
             
 
             ->add('observaciones','textarea', array('label'=>'Observaciones', 'required'=>false, 'attr'=> array('class'=>'no_editor_textarea')))

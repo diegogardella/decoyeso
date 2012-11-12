@@ -38,3 +38,7 @@ pedido_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "PedidoBundle:Pedido:delete" }
     requirements: { _method: post }
+
+pedido_cambiarEstado:
+    pattern:  /{id}/{estado}/cambiare
+    defaults: { _controller: "PedidoBundle:Pedido:cambiarEstado" }    

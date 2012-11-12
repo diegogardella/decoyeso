@@ -8,22 +8,20 @@
 
 
 {% block module_tit %}
-Listado de Pedidos de Productos/Insumos a Stock
+Listado de Solicitudes a Stock
 {% endblock module_tit %}
 
 {% block list_tits %}
 
 	{% set widthCols =  94/4  %}
-	<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Número', 'p.numero')|raw }}</a></th>
-	<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombreObra') %} class="sorted" {% endif %}>{{ entities.sortable('Obra', 'p.nombreObra')|raw }}</th>
+	<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Pedido', 'p.numero')|raw }}</a></th>
 	<th align="center" style="width: {{ widthCols }}%"{% if entities.isSorted('sm.fechaHoraRequerido') %} class="sorted" {% endif %}>{{ entities.sortable('Requerido el', 'sm.fechaHoraRequerido')|raw }}</th>
 	<th align="center" style="width: {{ widthCols }}%"{% if entities.isSorted('sm.estado') %} class="sorted" {% endif %}>{{ entities.sortable('Estado', 'sm.estado')|raw }}</th>
 
 {% endblock list_tits %}
 
 {% block list_item_texts %}
-	<td ><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}">{{ entity.pedido.numero }}</a></td>
-	<td ><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}">{{ entity.pedido.nombre }}</a></td>
+	<td ><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}">{{ entity.pedido }}</a></td>
 	<td align="center"><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}" >{{entity.fechaHoraRequerido | date('d/m/Y')}}</a></td>
 	<td align="center"><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}">{{ entity.estadoNombre }}</a></td>
 {% endblock list_item_texts %}

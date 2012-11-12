@@ -1,31 +1,80 @@
 {% extends "CoobixAdminBundle:Default:new.html.twig" %}
-
+{% import "PedidoBundle:Pedido:macros.html.twig" as macrosPedido %}
 
 {% block breadcrumb_in %}
 
 {% endblock breadcrumb_in %} 
 
 {% block module_tit %}
-Reservar Pedido de Productos/Insumos a Stock
+Confirmar Solicitud a Stock
 {% endblock module_tit %}
 
+{% block menuOpcionesItems %}
+	{{ macrosPedido.menuOpciones(entity.pedido) }}		
+{% endblock menuOpcionesItems %}
+
+{%block opcionesGuia  %}
+	{{ macrosPedido.guia(entity.pedido) }}
+{%endblock opcionesGuia  %}
 
 {% block list_path %}
 	{{ path('solicitudmovimiento') }}
 {% endblock list_path %}
 
+{% block module_content_antes %}
+
+	<div class="tab_container border_radius">
+			
+			<table class="records_list">
+				<thead>
+					<tr>					
+						<th width="450" >Producto/Insumo</th>
+						<th align="center" >Cant. Presupuestada</th>
+						<th align="center" >Cant. Solicitada</th>
+						<th align="center" >Cant. Entregada</th>
+						<th align="center" >Cant. En Stock</th>
+					</tr>
+				</thead>
+						
+				<tbody>
+				{% for arrayElementosCantidad in arrayElementosCantidades %}
+					<tr>
+						<td >{{ arrayElementosCantidad.designacion  }}</td>
+						<td align="center">{{ arrayElementosCantidad.cantidadPresupuesto  }}</td>
+						<td align="center">{{ arrayElementosCantidad.cantidadSolicitada  }}</td>
+						<td align="center">{{ arrayElementosCantidad.cantidadEntregada  }}</td>
+						<td align="center">{{ arrayElementosCantidad.cantidadEnStock  }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+				
+			</table>
+								
+		</div>
+		
+		<hr>
+
+{% endblock module_content_antes %}
+
 {% block form_content %}
 	{% block errorMsj %}{% endblock errorMsj %}
+	
+	
 	<form novalidate action="{% block update_path %}{{ path('solicitudmovimiento_update', { 'id': entity.id }) }}{% endblock update_path %}" method="post" {{ form_enctype(edit_form) }}>
 		{% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 		
-
-		{{ form_widget(edit_form) }}
+		
+		<div class="form_row" id="div_pedido_numero">
+			<label class=" required" for="pedido_numero">Número</label>
+			<div>{{ entity.numero }}</div>
+		</div>
 		
 		<div class="form_row" id="div_pedido_numero">
 			<label class=" required" for="pedido_numero">Pedido</label>
 			<div>{{ entity.pedido }}</div>
 		</div>
+		
+		{{ form_row(edit_form.direccionDestino) }}
 		
 		<div class="form_row" id="div_pedido_numero">
 			<label class=" required" for="pedido_numero">Estado</label>
@@ -33,14 +82,37 @@ Reservar Pedido de Productos/Insumos a Stock
 		</div>
 		
 		<div class="form_row" id="div_pedido_numero">
-			<label class=" required" for="pedido_numero">Fecha y hora requerido</label>
+			<label class=" required" for="pedido_numero">Se creo el</label>
+			<div>{{ entity.fechaHoraCreado | date('d/m/Y H:i') }}</div>
+		</div>
+		<div class="form_row" id="div_pedido_numero">
+			<label class=" required" for="pedido_numero">Requerido el</label>
 			<div>{{ entity.fechaHoraRequerido | date('d/m/Y H:i') }}</div>
 		</div>
+		{% if entity.fechaHoraCierre!=null %}
+			<div class="form_row" id="div_pedido_numero">
+				<label class=" required" for="pedido_numero">Procesado el</label>
+				<div>{{ entity.fechaHoraCierre | date('d/m/Y H:i') }}</div>
+			</div>
+		{% endif %}
+		
+		<div class="form_row" id="div_pedido_numero">
+			<label class=" required" for="pedido_numero">Creado por</label>
+			<div>{{ entity.usuarioCreo }}</div>
+		</div>
+		
+		{% if entity.usuarioCerro!=null %}
+			<div class="form_row" id="div_pedido_numero">
+				<label class=" required" for="pedido_numero">Procesado por</label>
+				<div>{{ entity.usuarioCerro }}</div>
+			</div>
+		{% endif %}
 		
 		<div class="form_row" id="div_pedido_numero">
 			<label class=" required" for="pedido_numero">Observación</label>
-			<div>{{ entity.observacion }}</div>
+			<div>{% if entity.observacion!=''  %} {{ entity.observacion }} {% else %} Sin observación {% endif %}</div>
 		</div>
+		
 		
 		<div  class="form_row">
 			
@@ -51,14 +123,14 @@ Reservar Pedido de Productos/Insumos a Stock
 						<tr>
 							<th width="300">Nombre</th>
 							<th>Cant. Solicitada</th>
-							<th>Cant. Reservada</th>
+							<th>Cant. Entregada</th>
 						</tr>
 						{% set i=0 %}
 						{% for elemento in entity.solicitudMovimientoElemento %}
 							<tr>
 								<td >{{ elemento.elemento.nombre }}</td>
 								<td >{{ elemento.cantidadSolicitada }} {{ elemento.elemento.unidad }}</td>
-								<td ><input type="text" value="{{ elemento.cantidadReservada }}"  name="form[solicitudMovimientoElementoCantidadReservada][{{ elemento.id }}]" /> {{ elemento.elemento.unidad }}</td>
+								<td ><input type="text" value="{{ elemento.cantidadSolicitada }}"  name="form[solicitudMovimientoElementoCantidadEntregada][{{ elemento.id }}]" /> {{ elemento.elemento.unidad }}</td>
 								{% set i=i+1 %}
 							</tr>
 						{%else%}
@@ -73,7 +145,7 @@ Reservar Pedido de Productos/Insumos a Stock
 			</div>
 		
 		
-		
+			{{ form_rest(edit_form) }}
 		<p>
 			<button class="btn_green_button right" id="btnGuardarCambios" type="submit">Guardar cambios</button>
 		</p>
@@ -83,13 +155,5 @@ Reservar Pedido de Productos/Insumos a Stock
 	<div class="fix"></div>
 {% endblock form_content %}
 
-{% block javascript_extra %}
-	<script type="text/javascript" src="{{ asset('bundles/stock/js/solicitudmovimiento.js') }}" /></script>
-	<script type="text/javascript">
-		$(window).ready(function(){
-			$('#productos_insumos').val('');
-			$('#producto_productos').val('');			
-		});	
-	</script>
-	
+{% block javascript_extra %}	
 {% endblock javascript_extra %}

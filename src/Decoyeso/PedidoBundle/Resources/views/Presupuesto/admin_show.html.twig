@@ -1,8 +1,7 @@
 {% extends "CoobixAdminBundle:Default:edit.html.twig" %}
 
-{% block breadcrumb_in %}
+{% import "PedidoBundle:Pedido:macros.html.twig" as macrosPedido %}
 
-{% endblock breadcrumb_in %} 
 
 {%block main_path%}
 <ul>
@@ -18,62 +17,19 @@
 {% endblock module_tit %}
 
 {% block menuOpcionesItems %}
-			
-			{% if (entity.pedido.estado == 6 or entity.pedido.estado == 5) %}
-				<li><a href="{{path('pedido_finalizar',{'id':entity.pedido.id})}}">Finalizar Pedido</a></li>
-				<li class="separador"></li>
-			{% endif %}
-
-			
-			{% if (entity.pedido.estado == 4 and entity.pedido.tipo==2) %}
-				<li><a href="{{path('obra_new_from_pedido',{'pedido':entity.pedido.id})}}">Crear Obra Para el Pedido</a></li>
-				<li class="separador"></li>
-			{% elseif (entity.pedido.estado == 4 and entity.pedido.tipo==1) %}
-				<li><a href="{{path('solicitudmovimiento_new_venta_directa',{'paramPedido':entity.pedido.id})}}">Solicitar Productos a Stock</a></li>
-				<li class="separador"></li>
-			{% elseif ((entity.pedido.estado > 5) and entity.pedido.tipo==1) %}
-				<li><a href="{{path('solicitudmovimiento_show_por_pedido',{'paramPedido':entity.pedido.id})}}">Ver Solicitud a Stock</a></li>
-				<li class="separador"></li>
-			{% elseif ((entity.pedido.estado > 5) and entity.pedido.tipo==2) %}
-				<li><a href="{{path('obra_edit_from_pedido',{'paramPedido':entity.pedido.id})}}">Ver Obra del Pedido</a></li>
-				<li class="separador"></li>				
-			{% endif %}	
-			
-			{% if (entity.pedido.requiereRelevamiento) %}
-				<li><a href="{{ path('relevamiento_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Relevamientos del Pedido</a></li>
-				<li><a href="{{path('relevamiento_new',{'pedido':entity.pedido.id})}}">Crear Relevamiento al Pedido</a></li>
-				<li class="separador"></li>
-			{% endif %}
-			
-			<li><a  href="{{ path('presupuesto_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Presupuestos del Pedido</a></li>
-			<li><a  href="{{path('presupuesto_new',{'pedido':entity.pedido.id})}}">Crear Presupuesto al Pedido</a></li>
-			<li class="separador"></li>
-						
-			<li><a href="{{path('pedidos_por_cliente',{'cliente':entity.pedido.cliente.id})}}">Listar Pedidos del Cliente</a></li>
-			<li><a href="{{path('pedido_edit',{'id':entity.pedido.id})}}">Editar Pedido</a></li>
-			<li><a href="{{path('pedido_new',{'cliente':entity.pedido.cliente.id})}}">Crear Pedido a Cliente</a></li>
-			
-			<li class="separador"></li>
-			<li><a href="{{path('cliente_edit',{'id':entity.pedido.cliente.id})}}">Editar Cliente</a></li>
-
-	
+	{{ macrosPedido.menuOpciones(entity.pedido) }}		
 {% endblock menuOpcionesItems %}
+
+{%block opcionesGuia  %}
+	{{ macrosPedido.guia(entity.pedido) }}
+{%endblock opcionesGuia  %}
 	
 {% block menuAccionesItems%}
 
-<li>
-	{% if (entity.estado == 0 and entity.pedido.tipo==1) %}	
-		<form action="{{ path('presupuesto_aprobar', { 'id': entity.id }) }}" method="post">
-			{{ form_widget(aprobar_vta_directa_form) }}
-			<button class="btn_green_button " type="submit">Aprobar Presupuesto</button>
-		</form>
-	{% endif %}
-
-</li>
 <li>			
-	{% if (entity.estado == 0 and entity.pedido.tipo==2) %}	
+	{% if (entity.estado == 0) %}	
 		<form action="{{ path('presupuesto_aprobar', { 'id': entity.id }) }}" method="post">
-			{{ form_widget(aprobar_con_obra_form) }}
+			{{ form_widget(aprobar_form) }}
 			<button  class="btn_green_button " type="submit">Aprobar Presupuesto</button>
 		</form>
 	{% endif %}
@@ -104,6 +60,7 @@
 
 
 
+
 {% block form_content %}
 		{% block errorMsj %}{% endblock errorMsj %}
 		
@@ -120,7 +77,7 @@
 			<tr>
 				<td> 
 					<span class="txt3">PEDIDO:</span>
-					<span class="txt4">{{ entity.getPedido.numero }}</span>
+					<span class="txt4">{{ entity.getPedido }}</span>
 				</td>
 				<td>
 					<span class="txt3">TELÉFONO:</span>
@@ -142,16 +99,16 @@
 				<td>
 				<span class="txt3">DIRECCION:</span>
 				<span class="txt4">
-				{% if (entity.getPedido.getCliente.getBarrio)  %}
-				B&deg; {{ entity.getPedido.getCliente.getBarrio }}.
+				{% if (entity.getPedido.getCliente.getDireccionBarrio)  %}
+				B&deg; {{ entity.getPedido.getCliente.getDireccionBarrio }}.
 				{% endif %}
 				
-				{% if (entity.getPedido.getCliente.getBarrio)  %}
-				{{ entity.getPedido.getCliente.getCalle }}
+				{% if (entity.getPedido.getCliente.getDireccionCalle)  %}
+				{{ entity.getPedido.getCliente.getDireccionCalle }}
 				{% endif %}
 				
-				{% if (entity.getPedido.getCliente.getBarrio)  %}
-				{{ entity.getPedido.getCliente.getNumeroCalle }}
+				{% if (entity.getPedido.getCliente.getDireccionNumero)  %}
+				{{ entity.getPedido.getCliente.getDireccionNumero }}
 				{% endif %}
 				</span>
 				</td>

@@ -71,13 +71,18 @@
 						</ul>
 					</div>
 				{% endblock menuOpciones%}
+				
+				{%block opcionesGuia  %} {%endblock opcionesGuia  %}
 			
 		</div>
 	{% endblock module_header%}
 	
 	<hr>
 	
+	{% block module_content_antes%}{% endblock module_content_antes%}
+	
 	<div class="module_content">
+		
 		{%block msj_info%}
 		
 			{% if app.session.hasFlash('msj_info') %}
@@ -87,19 +92,20 @@
 			{% endif %}
 	
 		{%endblock msj_info%}
+		
 	
 		{% block form_content %}
-		{% block errorMsj %}{% endblock errorMsj %}
-		<form novalidate action="{% block create_path %}{{ path('admin_entity_create') }}{% endblock create_path %}" method="post" {{ form_enctype(form) }}>
-		{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
-		{{ form_widget(form) }}
-		<p>
-			<button class="btn_green_button right" id="btnGuardarCambios" type="submit">Guardar cambios</button>
-		</p>
-		</form>
-		
-		
-		<div class="fix"></div>
+			{% block errorMsj %}{% endblock errorMsj %}
+			<form novalidate action="{% block create_path %}{{ path('admin_entity_create') }}{% endblock create_path %}" method="post" {{ form_enctype(form) }}>
+			{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+			{{ form_widget(form) }}
+			<p>
+				<button class="btn_green_button right" id="btnGuardarCambios" type="submit">Guardar cambios</button>
+			</p>
+			</form>
+			
+			
+			<div class="fix"></div>
 		{% endblock form_content %}
 	</div>
 </div>

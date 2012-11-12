@@ -20,32 +20,33 @@ class SolicitudMovimiento
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @var integer $numero
+     *
+     * @ORM\Column(name="numero", type="string",length="12",nullable="true")
+     */
+    private $numero;
 
     /**
      * @var datetime $fechaHoraCreado
      *
-     * @ORM\Column(name="fechaHoraCreado", type="date")
+     * @ORM\Column(name="fechaHoraCreado", type="datetime")
      */
     private $fechaHoraCreado;
     
     /**
      * @var datetime $fechaHoraCreado
      *
-     * @ORM\Column(name="fechaHoraRequerido", type="date")
+     * @ORM\Column(name="fechaHoraRequerido", type="datetime")
      */
     private $fechaHoraRequerido;
 
-    /**
-     * @var datetime $fechaHoraReserva
-     *
-     * @ORM\Column(name="fechaHoraReserva", type="date",nullable=true)
-     */
-    private $fechaHoraReserva;
 
     /**
      * @var datetime $fechaHoraCierre
      *
-     * @ORM\Column(name="fechaHoraCierre", type="date",nullable=true)
+     * @ORM\Column(name="fechaHoraCierre", type="datetime",nullable=true)
      */
     private $fechaHoraCierre;
 
@@ -80,6 +81,35 @@ class SolicitudMovimiento
      */
     private $observacion;
     
+    /**
+     * @var integer $direccionDestino
+     *
+     * @ORM\Column(name="direccionDestino", type="string",length="255",nullable="true")
+     */
+    private $direccionDestino;
+    
+
+    /**
+     * @var integer $usuario
+     *
+     * @ORM\ManyToOne(targetEntity="\Decoyeso\UsuarioBundle\Entity\Usuario")
+     */
+    private $usuarioCreo;
+    
+    /**
+     * @var integer $usuario
+     *
+     * @ORM\ManyToOne(targetEntity="\Decoyeso\UsuarioBundle\Entity\Usuario")
+     */
+    private $usuarioCerro;    
+        
+    /**
+     * @ORM\postPersist
+     */
+    public function postPersist()
+    {
+    	$this->numero="REM".str_pad($this->getId(),5,0,STR_PAD_LEFT);
+    }
 
     /**
      * Get id
@@ -109,26 +139,6 @@ class SolicitudMovimiento
     public function getFechaHoraCreado()
     {
         return $this->fechaHoraCreado;
-    }
-
-    /**
-     * Set fechaHoraReserva
-     *
-     * @param datetime $fechaHoraReserva
-     */
-    public function setFechaHoraReserva($fechaHoraReserva)
-    {
-        $this->fechaHoraReserva = $fechaHoraReserva;
-    }
-
-    /**
-     * Get fechaHoraReserva
-     *
-     * @return datetime 
-     */
-    public function getFechaHoraReserva()
-    {
-        return $this->fechaHoraReserva;
     }
 
     /**
@@ -173,8 +183,8 @@ class SolicitudMovimiento
     
     public function getEstadoNombre()
     {	
-    	$estado[1]='Enviada a stock';
-    	$estado[2]='Reserva realizada';
+    	$estado[1]='Solicitud Enviada';
+    	$estado[2]='Solicitud Procesada';
     	
     	return $estado[$this->estado];
     }
@@ -198,6 +208,7 @@ class SolicitudMovimiento
     {
         return $this->pedido;
     }
+    
     public function __construct()
     {
         $this->solicitudMovimientoElemento = new \Doctrine\Common\Collections\ArrayCollection();
@@ -261,5 +272,86 @@ class SolicitudMovimiento
     public function getObservacion()
     {
         return $this->observacion;
+    }
+
+    /**
+     * Set usuarioCreo
+     *
+     * @param Decoyeso\UsuarioBundle\Entity\Usuario $usuarioCreo
+     */
+    public function setUsuarioCreo(\Decoyeso\UsuarioBundle\Entity\Usuario $usuarioCreo)
+    {
+        $this->usuarioCreo = $usuarioCreo;
+    }
+
+    /**
+     * Get usuarioCreo
+     *
+     * @return Decoyeso\UsuarioBundle\Entity\Usuario 
+     */
+    public function getUsuarioCreo()
+    {
+        return $this->usuarioCreo;
+    }
+
+    /**
+     * Set usuarioCerro
+     *
+     * @param Decoyeso\UsuarioBundle\Entity\Usuario $usuarioCerro
+     */
+    public function setUsuarioCerro(\Decoyeso\UsuarioBundle\Entity\Usuario $usuarioCerro)
+    {
+        $this->usuarioCerro = $usuarioCerro;
+    }
+
+    /**
+     * Get usuarioCerro
+     *
+     * @return Decoyeso\UsuarioBundle\Entity\Usuario 
+     */
+    public function getUsuarioCerro()
+    {
+        return $this->usuarioCerro;
+    }
+    
+    /**
+     * Set numero
+     *
+     * @param string $numero
+     */
+    public function setNumero($numero)
+    {
+    	$this->numero = $numero;
+    }
+    
+    /**
+     * Get numero
+     *
+     * @return string
+     */
+    public function getNumero()
+    {
+    	return $this->numero;
+    }
+    
+
+    /**
+     * Set direccionDestino
+     *
+     * @param string $direccionDestino
+     */
+    public function setDireccionDestino($direccionDestino)
+    {
+        $this->direccionDestino = $direccionDestino;
+    }
+
+    /**
+     * Get direccionDestino
+     *
+     * @return string 
+     */
+    public function getDireccionDestino()
+    {
+        return $this->direccionDestino;
     }
 }

@@ -1,4 +1,5 @@
 {% extends "CoobixAdminBundle:Default:list.html.twig" %}
+{% import "PedidoBundle:Pedido:macros.html.twig" as macrosPedido %}
 
 {%block main_path%}
 <ul>
@@ -35,25 +36,12 @@
 
 
 {% block menuOpcionesItems %}
-
-		{% if pedido.requiereRelevamiento %}
-			<li><a  href="{{ path('relevamiento_por_pedido',{'pedido':pedido.id}) }}">Listar Relevamientos del Pedido</a></li>
-			<li><a href="{{path('relevamiento_new',{'pedido':pedido.id})}}">Crear Relevamiento al Pedido</a></li>
-			<li class="separador"></li>
-		{% endif %}
-
-		<li><a  href="{{path('presupuesto_new',{'pedido':pedido.id})}}">Crear Presupuesto al Pedido</a></li>
-		
-		<li class="separador"></li>
-		<li><a href="{{path('pedidos_por_cliente',{'cliente':pedido.cliente.id})}}">Listar Pedidos del Cliente</a></li>
-		<li><a href="{{path('pedido_edit',{'id':pedido.id})}}">Editar Pedido</a></li>
-		<li><a href="{{path('pedido_new',{'cliente':pedido.cliente.id})}}">Crear Pedido a Cliente</a></li>
-		
-		<li class="separador"></li>
-		
-		<li><a href="{{path('cliente_edit',{'id':pedido.cliente.id})}}">Editar Cliente</a></li>
-		
+	{{ macrosPedido.menuOpciones(pedido) }}		
 {% endblock menuOpcionesItems %}
+
+{%block opcionesGuia  %}
+	{{ macrosPedido.guia(pedido) }}
+{%endblock opcionesGuia  %}
 
 {% block menuAcciones%}
 {% endblock menuAcciones%}

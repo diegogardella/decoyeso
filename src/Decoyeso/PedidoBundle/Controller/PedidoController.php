@@ -55,11 +55,11 @@ public function indexAction($pararouting="index")
 	}
 
 	
-	public function finalizarAction($id){
+	public function cambiarEstadoAction($id,$estado){
 	
 		$em = $this->getDoctrine()->getEntityManager();	
 		$pedido = $em->getRepository('PedidoBundle:Pedido')->find($id);
-		$pedido->setEstado(7);
+		$pedido->setEstado($estado);
 		$em->persist($pedido);
 		$em->flush();
 

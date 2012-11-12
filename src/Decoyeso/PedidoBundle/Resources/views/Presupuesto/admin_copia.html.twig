@@ -1,14 +1,8 @@
 {% extends "CoobixAdminBundle:Default:new.html.twig" %}
-
-
-
-{% block breadcrumb_in %}
-
-{% endblock breadcrumb_in %} 
+{% import "PedidoBundle:Pedido:macros.html.twig" as macrosPedido %}
 
 {%block main_path%}
 
-	
 	{% if entity.pedido %}
 		<ul>
 			<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
@@ -25,28 +19,15 @@ Copiar Presupuesto
 {% endblock module_tit %}
 
 {% block menuOpcionesItems %}
-				
-			<li><a href="{{ path('relevamiento_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Relevamientos del Pedido</a></li>
-			<li><a href="{{path('relevamiento_new',{'pedido':entity.pedido.id})}}">Crear Relevamiento al Pedido</a></li>
-			<li class="separador"></li>
-			
-			<li><a  href="{{ path('presupuesto_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Presupuestos del Pedido</a></li>
-			<li><a  href="{{path('presupuesto_new',{'pedido':entity.pedido.id})}}">Crear Presupuesto al Pedido</a></li>
-			<li class="separador"></li>
-						
-			<li><a href="{{path('pedidos_por_cliente',{'cliente':entity.pedido.cliente.id})}}">Listar Pedidos del Cliente</a></li>
-			<li><a href="{{path('pedido_edit',{'id':entity.pedido.id})}}">Editar Pedido</a></li>
-			<li><a href="{{path('pedido_new',{'cliente':entity.pedido.cliente.id})}}">Crear Pedido a Cliente</a></li>
-			
-			<li class="separador"></li>
-			<li><a href="{{path('cliente_edit',{'id':entity.pedido.cliente.id})}}">Editar Cliente</a></li>
-
-	
+	{{ macrosPedido.menuOpciones(entity.pedido) }}		
 {% endblock menuOpcionesItems %}
 	
 {% block menuAcciones%}
 {% endblock menuAcciones%}
 
+{%block opcionesGuia  %}
+	{{ macrosPedido.guia(entity.pedido) }}
+{%endblock opcionesGuia  %}
 
 
 {% block form_content %}
@@ -59,12 +40,17 @@ Copiar Presupuesto
 	
 		{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 		{{ form_errors(form) }}
+
+		<div style="display:none">{{ form_widget(form.pedido) }}</div>
+		
+		<div class="form_row" id="div_relevamiento_nombre">
+			<label class=" required" for="relevamiento_nombre">Pedido</label>
+			<div class="field_widget">{{ entity.pedido }}</div>
+		</div>
 		
 		{{ form_errors(form.nombre) }}
 		{{ form_row(form.nombre) }}
-		
-		{{ form_errors(form.pedido) }}
-		{{ form_row(form.pedido) }}
+
 		
 		{{ form_errors(form.mostrarFirmas) }}
 		{{ form_row(form.mostrarFirmas) }}

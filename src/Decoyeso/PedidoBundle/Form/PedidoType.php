@@ -54,9 +54,9 @@ class PedidoType extends AbstractType
         	
         	))
         	        	
-        	->add('barrio', 'text', array('label'=>'Barrio', 'required'=>false))
-        	->add('calle', 'text', array('label'=>'Calle', 'required'=>false))
-        	->add('numeroCalle','text', array('label'=>"Número", 'required'=>false))
+        	->add('direccionBarrio', 'text', array('label'=>'Barrio', 'required'=>false))
+        	->add('direccionCalle', 'text', array('label'=>'Calle', 'required'=>false))
+        	->add('direccionNumero','text', array('label'=>"Número", 'required'=>false))
         	->add('requiereRelevamiento','choice',array('choices' =>array(0=>"No",1=>"Si"),"label"=>"Requiere relevamiento"))
         	->add('prioridad','choice',array('choices' =>array(1=>"Baja",2=>"Media",3=>"Alta",4=>"Muy alta"),"label"=>"Prioridad"))
         	->add('fechaSolicitado','date', array("format"=>"d-m-Y",'pattern'=> '{{ day }}{{ month }}{{ year }}','label'=>'Fecha de solicitación'))
