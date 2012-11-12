@@ -97,6 +97,28 @@ class LugarSecador
     {
     	return $this->nombre;
     }
+    
+    public function diasEnSecador() {
+    	$hoy = new \DateTime;
+    	$fechaAsignado = $this->fechaAsignado;
+    	
+    	$dif = $hoy->diff($fechaAsignado);
+    	return $dif->format("%d");
+    }
+    //Subsecretaria de juventud, santiago del estero 369. Arias Alberto
+    public function calcularEtapaDeSecado($tiempoSecadoSecador) {
+    	//Seco = 0
+    	if ($this->diasEnSecador() > $tiempoSecadoSecador) return 0;
+    	
+    	//Semi Seco = 1
+    	if ($this->diasEnSecador() > $tiempoSecadoSecador/2) return 1;
+
+    	//Mojado = 2
+    	if ($this->diasEnSecador() < $tiempoSecadoSecador/2) return 2;
+    	
+    	
+  
+    }
 
     /**
      * Get id

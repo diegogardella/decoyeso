@@ -46,6 +46,12 @@ class ProcesoProducto
      * @ORM\Column(name="cantidadProducida", type="float")
      */
     private $cantidadProducida;
+    
+    /**
+     *
+     * @ORM\Column(name="cantidadIngresadaStock", type="float")
+     */
+    private $cantidadIngresadaStock;
 
     /**
      * Set cantidad
@@ -72,7 +78,7 @@ class ProcesoProducto
      *
      * @param  Decoyeso\ProductoBundle\Entity\Producto $producto
      */
-    public function setProducto(\ Decoyeso\ProductoBundle\Entity\Producto $producto)
+    public function setProducto(\Decoyeso\ProductoBundle\Entity\Producto $producto)
     {
         $this->producto = $producto;
     }
@@ -135,5 +141,25 @@ class ProcesoProducto
     public function getCantidadProducida()
     {
         return $this->cantidadProducida;
+    }
+
+    /**
+     * Set cantidadIngresadaStock
+     *
+     * @param float $cantidadIngresadaStock
+     */
+    public function setCantidadIngresadaStock($cantidadIngresadaStock)
+    {
+        $this->cantidadIngresadaStock = $cantidadIngresadaStock;
+    }
+
+    /**
+     * Get cantidadIngresadaStock
+     *
+     * @return float 
+     */
+    public function getCantidadIngresadaStock()
+    {
+        return $this->cantidadIngresadaStock;
     }
 }

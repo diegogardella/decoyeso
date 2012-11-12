@@ -52,6 +52,16 @@ class Proceso
      */
     private $fechaInicio;
     
+    
+    /**
+     * @var date $datosInsumos
+     *
+     * @ORM\Column(name="datosInsumos", type="text", nullable="true")
+     */
+    
+    
+    private $datosInsumos;
+     
     /**
      * @var date $fechaFin
      *
@@ -274,5 +284,25 @@ class Proceso
     public function getLugaresSecador()
     {
         return $this->lugaresSecador;
+    }
+
+    /**
+     * Set datosInsumos
+     *
+     * @param text $datosInsumos
+     */
+    public function setDatosInsumos($datosInsumos)
+    {
+        $this->datosInsumos = $datosInsumos;
+    }
+
+    /**
+     * Get datosInsumos
+     *
+     * @return text 
+     */
+    public function getDatosInsumos()
+    {
+        return json_decode($this->datosInsumos, true);
     }
 }

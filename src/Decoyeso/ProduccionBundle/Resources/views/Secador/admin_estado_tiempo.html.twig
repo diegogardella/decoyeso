@@ -25,40 +25,17 @@
 			Secadores de Molduras
 		</a>
 		
-
-		
-		
 		
 	<div class="NTabContainer border_radius" id="solapaEstadoPlacas">
-		<div class="NTabContainerBtn " >
-		
 
-		
-			<a href="{{ path('secador_estado') }}?filtro=0&tipo=0" 
-			class="
-			{% if (filtro == 0) %}txt3{% else %} Ntxt3 {% endif %} 
-			">Capacidad</a> 
-			| 
-			<a href="{{ path('secador_estado') }}?filtro=1&tipo=0" class="
-			{% if (filtro == 1) %}txt3{% else %} Ntxt3 {% endif %} 
-			">Tiempo de Secado</a>  
-			| 
-			<a href="{{ path('secador_estado') }}?filtro=2&tipo=0" class="
-			{% if (filtro == 2) %}txt3{% else %} Ntxt3 {% endif %} 
-			">Proceso</a> 
-			
-		</div>
 		
 		
 		<div class="fix"><br></div>
 		
 		{% for sP in secadoresPlacas %}
-			{% if (filtro ==0) %}
-				{% include 'DecoyesoProduccionBundle:Secador:secador_placas.html.twig' with {'sP': sP} %}
-			{% endif %}
-			{% if (filtro ==1) %}
-				{% include 'DecoyesoProduccionBundle:Secador:secador_placas_tiempo.html.twig' with {'sP': sP} %}
-			{% endif %}
+			
+			{% include 'DecoyesoProduccionBundle:Secador:secador_placas_tiempo.html.twig' with {'sP': sP} %}
+		
 		{% else %}
 		
 		<div class="txt3">
@@ -79,7 +56,7 @@
 		
 		{% for sP in secadoresMolduras %}
 		
-			{% include 'DecoyesoProduccionBundle:Secador:secador_placas.html.twig' with {'sP': sP} %}
+			{% include 'DecoyesoProduccionBundle:Secador:secador_placas_tiempo.html.twig' with {'sP': sP} %}
 		
 		{% else %}
 		

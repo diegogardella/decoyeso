@@ -16,21 +16,82 @@ Listado de Logs
 
 {% endblock module_tit %}
 
-{% block list_tits %}
 
-{% set widthCols =  94/5  %}
 
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('u.apellido') %} class="sorted" {% endif %}>{{ entities.sortable('Usuario', 'u.apellido')|raw }}</th>
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('l.log') %} class="sorted" {% endif %}>{{ entities.sortable('Acción', 'l.log')|raw }}</th>
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('l.fechaHoraCreado') %} class="sorted" {% endif %}>{{ entities.sortable('Creado el', 'l.fechaHoraCreado')|raw }}</th>
 
-{% endblock list_tits %}
 
-{% block list_item_texts %}
-<td >{{ entity.getUsuario }}</td>
-<td >{{ entity.getLog }}</td>
-<td >{{ entity.getFechaHoraCreado | date ('d/m/Y H:i:s')}}</td>
-{% endblock list_item_texts %}
+
+
+
+
+{% block list_content %}
+
+<table class="records_list">
+	<thead>
+		<tr>
+			{% block list_tits %}
+			{% set widthCols =  94/3  %}
+			<th style="width: 47%"{% if entities.isSorted('l.log') %} class="sorted" {% endif %}>{{ entities.sortable('Acción', 'l.log')|raw }}</th>
+			<th style="width: 23%"{% if entities.isSorted('u.apellido') %} class="sorted" {% endif %}>{{ entities.sortable('Usuario', 'u.apellido')|raw }}</th>
+			<th style="width: 24%"{% if entities.isSorted('l.fechaHoraCreado') %} class="sorted" {% endif %}>{{ entities.sortable('Creado el', 'l.fechaHoraCreado')|raw }}</th>
+			{% endblock list_tits %}
+			<th   style="width: 6%" >&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for entity in entities %}
+		{% if (entity.getPrioridad() == 0) %}
+			{% set classTr = "trColor1" %}
+		{% endif %}
+		{% if (entity.getPrioridad() == 1) %}
+			{% set classTr = "NColor1" %} 
+		{% endif %}
+		{% if (entity.getPrioridad() == 2) %}
+			{% set classTr = "NColor4" %}
+		{% endif %}
+		
+		<tr class="{{ classTr }}">
+			{% block list_item_texts %}
+			<td >{{ entity.getLog }}</td>
+			<td >{{ entity.getUsuario }}</td>
+			
+			<td >{{ entity.getFechaHoraCreado | date ('d/m/Y H:i:s')}}</td>
+			{% endblock list_item_texts %}	
+			{% block list_buttons %}
+			<td class="" >
+				<ul>
+				<li></li>
+				<li>
+				{% block list_delete %}
+				{#	{% render "ClientesBundle:Cliente:listDeleteform" with {'id': entity.id}  %}	#}
+				{% endblock list_delete %}
+				</li>
+				</ul>
+			</td>
+			{% endblock list_buttons %}
+		</tr>
+					
+	{% else %}
+		<tr class="trColor1">
+			<td colspan="0">
+				<span class="txt16">No existen registros.</span>
+			</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+{% endblock list_content %}
+
+
+
+
+
+
+
+
+
+
 
 
 {%block FormBuscar%}
@@ -71,18 +132,7 @@ Listado de Logs
 
 
 
-{% block list_buttons %}
-<td class="" >
-	<ul>
-	<li></li>
-	<li>
-	{% block list_delete %}
-	{#	{% render "ClientesBundle:Cliente:listDeleteform" with {'id': entity.id}  %}	#}
-	{% endblock list_delete %}
-	</li>
-	</ul>
-</td>
-{% endblock list_buttons %}
+
 
 
 

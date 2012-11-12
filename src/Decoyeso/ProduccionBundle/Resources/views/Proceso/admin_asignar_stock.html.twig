@@ -32,15 +32,12 @@
 {% block form_content %}
 		{% block errorMsj %}{% endblock errorMsj %}
 		
-		<form action="" method="post" id="procesoForm" {{ form_enctype(edit_form) }}>
+		<form action="{{ path('proceso_asignar_update', { 'id': entity.id }) }}" method="post" id="procesoForm" {{ form_enctype(edit_form) }}>
 		<div class="formProcesoCont">
 		<br>
 		<br>	
 	
-		{% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
-		{{ form_errors(edit_form) }}
-		
-		{# Cantidad de productos a producir #}
+{# Cantidad de productos a producir #}
 		{% set totalCantidad = 0 %}
 		
 		{# Cantidad de Placas a producir #}
@@ -75,54 +72,61 @@
 		'entity': entity
 		 
 } %}
-	
 		
 		<div class="fix"><br><br><br></div>
+		
+		
 		
 		
 		{# CUADRO DATOS PROCESO #}
 		{% include 'DecoyesoProduccionBundle:Proceso:cuadro_datos_proceso.html.twig' with {'datos': datos} %}
 		{# CUADRO DATOS PROCESO #}
 		
-		{# CUADRO DATOS DE PRODUCTOS A FABRICAR #}
-		{% include 'DecoyesoProduccionBundle:Proceso:cuadro_datos_productos.html.twig' with {'datos': datos} %}
-		{# CUADRO DATOS DE PRODUCTOS A FABRICAR #}
+
 		
-		{# CUADRO DATOS INSUMOS #}
-		{% include 'DecoyesoProduccionBundle:Proceso:cuadro_datos_insumos.html.twig' with {'datos': datos} %}
-		{# CUADRO DATOS INSUMOS #}
+		{# CUADRO DATOS DE PRODUCTOS A INGRESAR #}
+		<table id="tablaItems" class="NTablaItemsProceso">
+			<tr>
+				<td  colspan="3" align="center" class=" txt3 ">RESUMEN DE PRODUCTOS QUE INGRESAN A STOCK</td>
+			</tr>
+						
+			<tr>
+				<td class=" txt3 ">PRODUCTO</td>
+				<td align="center" class=" txt3 ">FABRICADOS</td>
+				<td align="center" class=" txt3 " >INGRESAN A STOCK</td>
+			</tr>
+			
 		
+			{% for pp in procesoProducto %} 
+			<tr class="NItemsTr" id="NItemsTr">
+			
+				<td class="">{{ pp.producto.nombre }}</td>
+				
+				<td align="center" class="">{{ pp.cantidad }}</td>
+				
+				<td align="center" class="">
+					<input type="text" name="cantidadIngresada_{{ pp.producto.id }}" id="cantidadIngresada_{{ pp.producto.id }}" class="inputCorto inputCantidadProducida" value="{{ pp.cantidad }}">
+				</td>
+			</tr>
+			{% endfor %}
+			
+		</table>
+		<div class="fix"><br></div>
+		{# CUADRO DATOS DE PRODUCTOS A INGRESAR #}
+
 		
-		{% if (entity.estado < 1) %}
-		{# CUADRO DATOS SECADORES 
-		{% render "DecoyesoProduccionBundle:Secador:disponibilidadSecadores" with {'datos': datos}  %}
-		#}
-		{# CUADRO DATOS SECADORES #}
-		{% endif %}
-		
-		{#
-		{% if (entity.estado > 0) %}
-			muestra las posiciones de los productos
-		{% endif %}
-		#}
-		
+			<input type="hidden" name="numFilas" id="numFilas" value="0">
+	
+
+	
 	
 
 	</div>	
 		
 		<div class="fix"></div>
 		<p>
-			{% if entity.estado == 0  %}
-			<a href="{{ path('proceso_iniciar', { 'id': entity.id }) }}" class="btn_green_button right" type="submit">INICIAR</a>
-			<a href="{{ path('proceso_edit', { 'id': entity.id }) }}" class="btn_blue right" type="submit">Modificar</a>
-			{% endif %}
-			{% if entity.estado == 1  %}
-			<a href="{{ path('proceso_finalizar', { 'id': entity.id }) }}" class="btn_blue right" type="submit">Finalizar</a>
-			{% endif %}
-			{% if entity.estado == 2  %}
-			<a href="{{ path('proceso_asignar', { 'id': entity.id }) }}" class="btn_blue right" type="submit">Asignar Productos al stock</a>
 
-			{% endif %}
+			<button class="btn_green_button right" type="submit">LISTO</button>
 		</p>
 		
 		<div class="fix"></div>

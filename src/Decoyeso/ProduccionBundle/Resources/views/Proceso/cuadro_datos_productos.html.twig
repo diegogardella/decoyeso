@@ -1,0 +1,31 @@
+
+		<table id="tablaItems" class="NTablaItemsProceso">
+			<tr>
+				<td  colspan="3" align="center" class=" txt3 ">RESUMEN DE PRODUCTOS A FABRICAR</td>
+			</tr>
+						
+			<tr>
+				<td class=" txt3 ">PRODUCTO</td>
+				<td align="center" class=" txt3 ">A FABRICAR</td>
+				<td align="center" class=" txt3 " >FABRICADOS</td>
+			</tr>
+			
+		
+			{% for pp in procesoProducto %} 
+			
+			
+			<tr class="NItemsTr" >
+				<td align="left" class="">{{ pp.producto }}</td>
+				<td align="center" class="">{{ pp.cantidad }}</td>
+				<td align="center" class="">{{ pp.cantidadProducida }}</td>
+			</tr>
+			{% endfor %}
+			<tr><td colspan="3" ><div class="Nlinea"></div></td></tr>
+			<tr>
+				<td class=" txt3 ">TOTAL</td>
+				<td align="center" class="">{{ totalCantidad }}</td>
+				<td align="center" class="" >{{ totalCantidadProducida }}</td>
+			</tr>
+		</table>
+		<div class="fix"><br></div>
+		

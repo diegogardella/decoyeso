@@ -30,5 +30,5 @@ secador_delete:
     requirements: { _method: post }
 
 secador_estado:
-    pattern:  /estado
+    pattern:  /estado/
     defaults: { _controller: "DecoyesoProduccionBundle:Secador:estado" }

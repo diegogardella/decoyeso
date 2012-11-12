@@ -35,6 +35,12 @@ class Producto extends Elemento
 	private $tipo;
 	
 	/**
+	 *
+	 * @ORM\OneToMany(targetEntity="ProductoInsumo", mappedBy="producto")
+	 */
+	private $productoInsumo;
+	
+	/**
 	 * Get tipo
 	 *
 	 * @return integer
@@ -54,6 +60,7 @@ class Producto extends Elemento
 		$this->tipo = $tipo;
 	}
 	
+
 
 	public function __construct()
 	{
@@ -167,5 +174,4 @@ class Producto extends Elemento
     	
     }
 
-    
 }

@@ -25,7 +25,7 @@ class Log
     /**
      * @var string $entidad
      *
-     * @ORM\Column(name="entidad", type="string", length=255)
+     * @ORM\Column(name="entidad", type="string", length=255, nullable="true")
      */
     private $entidad;
      
@@ -39,9 +39,25 @@ class Log
     /**
      * @var integer $idEntidad
      *
-     * @ORM\Column(name="idEntidad", type="integer")
+     * @ORM\Column(name="idEntidad", type="integer", nullable="true")
      */
     private $idEntidad;
+    
+    
+    /**
+     * @var string $permisos
+     * @ORM\Column(name="permisos", type="string", length=255, nullable="true")
+     */
+    private $permisos;
+    
+    /**
+     * @var integer $prioridad
+     *
+     * @ORM\Column(name="prioridad", type="integer", nullable="true")
+     */
+    private $prioridad;
+    
+    
     
 
     /**
@@ -101,11 +117,23 @@ class Log
      {
 
      	$user = $this->securityContext->getToken()->getUser();
-
      	$this->setUsuario($user);
-     	$this->setEntidad(get_class($entity));
-     	$this->setIdEntidad($entity->getId());
-     	$this->setLog($msj.": ".$entity);
+     	
+     	//Si no le pusieron permiso
+     	if (!$this->getPermisos()) $this->setPermisos("ROLE_SUPER_ADMIN");
+     	if (!$this->getPrioridad()) $this->setPrioridad(0);
+     	
+     	
+		if ($entity) {
+			$this->setEntidad(get_class($entity));
+			$this->setIdEntidad($entity->getId());
+			$this->setLog($msj.": ".$entity);
+		}
+		else{
+			$this->setLog($msj);
+		}
+		
+     	
      	
      	$em = $this->doctrine->getEntityManager();
      	$em->persist($this);
@@ -243,5 +271,45 @@ class Log
     public function getFechaHoraCreado()
     {
         return $this->fechaHoraCreado;
+    }
+
+    /**
+     * Set permisos
+     *
+     * @param string $permisos
+     */
+    public function setPermisos($permisos)
+    {
+        $this->permisos = $permisos;
+    }
+
+    /**
+     * Get permisos
+     *
+     * @return string 
+     */
+    public function getPermisos()
+    {
+        return $this->permisos;
+    }
+
+    /**
+     * Set prioridad
+     *
+     * @param integer $prioridad
+     */
+    public function setPrioridad($prioridad)
+    {
+        $this->prioridad = $prioridad;
+    }
+
+    /**
+     * Get prioridad
+     *
+     * @return integer 
+     */
+    public function getPrioridad()
+    {
+        return $this->prioridad;
     }
 }
