@@ -1,17 +1,6 @@
 {% extends "CoobixAdminBundle:Default:edit.html.twig" %}
 
-{% block breadcrumb_in %}
-<div class="breadcrumbs">
-<a href="{{ path('servicio') }}" class="current" >Servicio</a>
-<div class="breadcrumb_divider"></div> 
-<a href="{{ path('servicio_edit', { 'id': entity.id }) }}" class="current" >Editar</a>
-</div>
-{% endblock breadcrumb_in %} 
-
 {% block module_tit %}Editar Servicio{% endblock module_tit %}
-
-{% block menuAcciones%}{% endblock menuAcciones%}
-
 {% block menuOpciones%}{% endblock menuOpciones%}
 
 {% block list_path %}

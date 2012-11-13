@@ -11,6 +11,8 @@
 Listado de Productos
 {% endblock module_tit %}
 
+{% block menuAcciones %}{% endblock menuAcciones %}
+
 {% block list_tits %}
 
 {% set widthCols =  94/4  %}
@@ -32,7 +34,6 @@ Listado de Productos
 {%block FormBuscar%}
 	<form method="post" action="{{path('producto',{pararouting:"buscar"})}}" novalidate="true">
 {%endblock%}
-
 
 
 {% block new_path %} 

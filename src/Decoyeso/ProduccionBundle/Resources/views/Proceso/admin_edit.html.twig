@@ -1,33 +1,27 @@
 {% extends "CoobixAdminBundle:Default:edit.html.twig" %}
 
-{% block breadcrumb_in %}
+{%block main_path%}{%endblock main_path%}
 
-{% endblock breadcrumb_in %} 
-
-{%block main_path%}
-<ul>
-{#
-	<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.cliente.id}) }}">Cliente: {{entity.cliente}}</a></li>
-	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.id}) }}">Pedido: {{entity.numero}}, {{entity.obra}}</a></li>
-#}
-</ul>
-{%endblock main_path%}
-
-{% block module_header%}
-		<div class="module_header">
-			<div id="tituloContenido" class="module_tit txt3">Datos del Proceso</div>
+{% block module_tit %}Datos del Proceso{% endblock module_tit %}		
 			
-			
-			{% if entity.estado < 2  %}
-			<form action="{{ path('proceso_delete', { 'id': entity.id }) }}" method="post">
-				{{ form_widget(delete_form) }}
-				<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
-			</form>
-			{% endif %}
-			<a id="pedidoListarBtn" class="btn_blue right" href="{{path('proceso')}}">Ir al listado</a>
-		
+{% block menuAcciones%}
+	{% if entity.estado < 2  %}
+		<div class="menuAcciones menusDropDownSeccion" id="idmenuAcciones">
+			<a href="javascript:void(0)" class="btn_blue right" style="background-color: rgb(48, 109, 137);">Acciones</a>
+			<ul style="display: none;">
+				<li>
+					<form action="{{ path('proceso_delete', { 'id': entity.id }) }}" method="post">
+						{{ form_widget(delete_form) }}
+						<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
+					</form>
+				</li>
+			</ul>
 		</div>
-{% endblock module_header%}
+	{% endif %}
+{% endblock menuAcciones%}
+			
+{% block menuOpciones %} {% endblock menuOpciones %}
+
 
 {% block form_content %}
 		{% block errorMsj %}{% endblock errorMsj %}
