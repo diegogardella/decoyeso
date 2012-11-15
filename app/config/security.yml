@@ -28,7 +28,7 @@ security:
         
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
+        ROLE_ADMIN: ROLE_USER
         ROLE_ADMINISTRACION: ROLE_ADMIN
         ROLE_DEPOSITO: ROLE_ADMIN
         ROLE_SUPER_ADMIN: [ROLE_ADMINISTRACION,ROLE_DEPOSITO]

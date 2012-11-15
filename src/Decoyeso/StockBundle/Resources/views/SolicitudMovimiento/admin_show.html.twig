@@ -22,16 +22,37 @@ Ver Solicitud a Stock
 	{{ macrosPedido.guia(entity.pedido) }}
 {%endblock opcionesGuia  %}
 
-{% block menuAccionesItems %}		
+{% block menuAcciones %}		
 
-<li>
-	<a target="_blank" class="btn_blue " href="{{ path('solicitudmovimiento_imprimir', { 'id': entity.id }) }}">
-		<span class="print_icon"></span>
-		Imprimir
-	</a>
-</li>
+	{% if entity.estado==2 %}
+	
+	   <div class="menuMasOpciones menusDropDownSeccion" id="idmenuAcciones">
+			<a href="javascript:void(0)" class="btn_blue right" >Acciones</a>
+			<ul style="display: none;" id="idUlMasOpciones">
+				<li>
+					<a target="_blank" class="btn_blue " href="{{ path('solicitudmovimiento_imprimir', { 'id': entity.id }) }}">
+					<span class="print_icon"></span>
+						Imprimir
+					</a>
+				</li>
+			</ul>
+		</div>
+	{% endif %}
 
-{% endblock menuAccionesItems %}
+	{% if entity.estado==1 %}
+		 <div class="menuMasOpciones menusDropDownSeccion" id="idmenuAcciones">
+			  <a href="javascript:void(0)" class="btn_blue right" >Acciones</a>
+			  <ul style="display: none;" id="idUlMasOpciones">
+					<li>
+					<a  href="{{ path('solicitudmovimiento_cambiarEstado', { 'id': entity.id,'estado':3 }) }}">
+						Cancelar Solicitud
+					</a>				
+				</li>
+			 </ul>	
+		</div>		
+	{% endif  %}
+
+{% endblock menuAcciones %}
 
 {% block form_content %}
 

@@ -99,16 +99,16 @@
 				<td>
 				<span class="txt3">DIRECCION:</span>
 				<span class="txt4">
-				{% if (entity.getPedido.getCliente.getDireccionBarrio)  %}
-				B&deg; {{ entity.getPedido.getCliente.getDireccionBarrio }}.
+				{% if (entity.getPedido.getDireccionBarrio)  %}
+				B&deg; {{ entity.getPedido.getDireccionBarrio }}.
 				{% endif %}
 				
-				{% if (entity.getPedido.getCliente.getDireccionCalle)  %}
-				{{ entity.getPedido.getCliente.getDireccionCalle }}
+				{% if (entity.getPedido.getDireccionCalle)  %}
+				{{ entity.getPedido.getDireccionCalle }}
 				{% endif %}
 				
-				{% if (entity.getPedido.getCliente.getDireccionNumero)  %}
-				{{ entity.getPedido.getCliente.getDireccionNumero }}
+				{% if (entity.getPedido.getDireccionNumero)  %}
+				{{ entity.getPedido.getDireccionNumero }}
 				{% endif %}
 				</span>
 				</td>

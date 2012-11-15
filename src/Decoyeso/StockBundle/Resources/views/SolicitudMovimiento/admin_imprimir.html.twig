@@ -6,43 +6,71 @@
 	
 		<base href="{{ app.request.scheme ~ '://' ~ app.request.httpHost }}" />
 
-	{% block stylesheets %}
-	<style>
 	
+	
+<style type="text/css" media="all">	
 	
 	
 	*{	font-family:sans-serif;	}
 	
 	/* Formulario Presupuesto */
-	table{border-collapse:collapse;border-spacing:0;}
+	table{border-collapse:collapse;border-spacing:0;page-break-after:always; }
+	tr{ page-break-inside:avoid; page-break-after:auto }
 
-	.documento{
-		float:left;
-		width: 700px;
-	}
 	
-	.cuerpo{
+	/* CONFIGURAR PDF: http://flyingsaucerproject.github.com/flyingsaucer/r8/guide/users-guide-R8.html*/
+	@page {
+		size: A4 portrait; /* can use also 'landscape' for orientation */
+		margin-bottom: 140px;
+		
+		@bottom-center {
+			content: element(footer);
+		}
+			
+		
+	}
+			
+	.header{
+		display: block;
 		float:left;
-		border:2px solid #444;
-		width: 100%px;
+		/*position: running(header);*/
 	}
 		
-	.header{
-		width: 100%;
-		float:left;
-	}	
+	.footer{
+		display: block;
+		height:60px;
+		position: running(footer);
+	}
+		
+	.page-number:before {
+		content: counter(page); 
+	}
+	
+	.page-count:before {
+		content: counter(pages);  
+	}
+
+	
+	.cuerpo{
+		display: block;
+		width: 98.3%;
+	}
+		
 	
 	.headerTop{
-		width: 100%;
+		width: 98%;
 		float:left;
+		border-left: 1px solid #444;	
+		border-top: 1px solid #444;
+		border-right: 1px solid #444;
 	}
 	
 	.destino{
-		width: 99%;
+		width: 96.7%;
 		float:left;
 		padding:5px;
 		font-size: 13px;
-		border-top: 1px solid #444;
+		border: 1px solid #444;
 	}
 	
 	.logoCategoria{	
@@ -125,6 +153,7 @@
 	.cantidadDetalle{
 		width: 100%;
 		float:left;
+		page-break-after:always;
 	}
 	
 	.cantidadDetalle thead{
@@ -132,13 +161,12 @@
 	}
 
 	.cantidadDetalle tr td,.cantidadDetalle tr th{
-		border-top: 1px solid #444;
+		border: 1px solid #444;
 	}
 	
 	.cantidadDetalle thead tr th:first-child{
 		width: 100px;
 		padding:3px;
-		border-right: 1px solid #444;
 		
 	}
 	
@@ -147,24 +175,14 @@
 		padding:3px;
 	}
 	
-	.cantidadDetalle tbody tr td:first-child{
-		font-size:12px;
-		text-align: center;
-		border-right: 1px solid #444;
-	}
 	
-	.firmas{
-		width: 100%;
-		float:left;
-	}
 	
 	.firmaItems{	
-		float:left;	
-		width: 23%;
+		float:left;
+		width: 22%;
 		border: 1px solid #444;
-		margin-top:10px;
-		margin-right: 12px;
 		height: 50px;
+		margin-left: 10px;
 	}
 	
 	.firmaItems:last-child{
@@ -183,18 +201,24 @@
 	.firmaItems div{
 		float:left;
 		width:100%;	
+		height: 20px;
 	}
+	
+	
+	
+	
+		
+
 	
 </style>
 
-	{% endblock stylesheets %}
+	
 
 
     </head>
     <body>
-    	<div class="documento">
-			<div class="cuerpo">
-				<div class="header" >
+
+    		<div class="header" >
 					<div class="headerTop" >
 							<div class="logoCategoria">
 								<div class="logo">DECOYESO</div>
@@ -224,7 +248,9 @@
 					</div>
 					<div class="destino">DESTINO: &nbsp; {{ entity.direccionDestino }}</div>
 			  </div>	
-			  
+    	
+			<div class="cuerpo">
+				
 			  	<table class="cantidadDetalle">
 			  		<thead>
 			  			<tr>
@@ -242,34 +268,159 @@
 			  		</tbody>
 		  
 		  		</table>
+		  			
 				  	
 		  </div>
-		  <div class="firmas">
+		  
+		  
+		  <div class="footer">
 			  
-			  <div class="firmaItems">
-			  	<label>Solicitada</label>
-			  	<div></div>
-			  </div>
+				  <div class="firmaItems">
+				  	<label>Solicitada</label>
+				  	<div></div>
+				  </div>
+				  
+				  <div class="firmaItems">
+				  	<label>Entrega</label>
+				  	<div></div>
+				  </div>
+				  
+				  <div class="firmaItems">
+				  	<label>Retira</label>
+				  	<div></div>
+				  </div>
+				  
+				  <div class="firmaItems">
+				  	<label>Recibe</label>
+				  	<div></div>
+				  </div>
+				  
+
+				  
+	 		</div>   
+   
+   
+   			
+   			<div style="page-break-before: always;">&nbsp;</div>
+   			
+   			
+   			<div class="header" >
+						<div class="headerTop" >
+								<div class="logoCategoria">
+									<div class="logo">DECOYESO</div>
+									<div class="categoria">B</div>
+								</div>
+								<div class="tituloNumeroFecha">
+									<div class="titulo">REMITO DE MOVIMIENTO INTERNO DE MATERIALES</div>
+									<div class="numeroFecha">
+										<div class="numero">N° {{ entity.numero }}</div>
+										<div class="fecha">
+											<div class="itemFecha">
+												<label>AÑO</label>
+												<div>{{ entity.fechaHoraCierre | date('Y') }}</div>
+											</div>
+						
+											<div class="itemFecha">
+												<label>MES</label>
+												<div>{{ entity.fechaHoraCierre | date('m') }}</div>
+											</div>
+											<div class="itemFecha">
+												<label>DÍA</label>
+												<div>{{ entity.fechaHoraCierre | date('d') }}</div>
+											</div>
+										</div>
+									</div>
+								</div>
+						</div>
+						<div class="destino">DESTINO: &nbsp; {{ entity.direccionDestino }}</div>
+				  </div>	
+   			
+   				<div class="cuerpo">
+				
+				  	<table class="cantidadDetalle">
+				  		<thead>
+				  			<tr>
+					  			<th>CANT.</th>
+					  			<th>DETALLE</th>
+					  		</tr>
+				  		</thead>
+				  		<tbody>
+				  			{% for movimiento in entity.solicitudMovimientoElemento %}
+				  			<tr>
+				  				<td> {{ movimiento.movimientoStock.cantidad }}</td>
+				  				<td>{{ movimiento.elemento.nombre }}</td>
+				  			</tr>
+				  			{% endfor %}
+				  			
+				  			
+				  		</tbody>
 			  
-			  <div class="firmaItems">
-			  	<label>Entrega</label>
-			  	<div></div>
-			  </div>
+			  		</table>
+		  			
+				  	
+		 		 </div>
+		 		 
+		 		 
+		 	<div style="page-break-before: always;">&nbsp;</div>
+   			
+   			
+   			<div class="header" >
+						<div class="headerTop" >
+								<div class="logoCategoria">
+									<div class="logo">DECOYESO</div>
+									<div class="categoria">C</div>
+								</div>
+								<div class="tituloNumeroFecha">
+									<div class="titulo">REMITO DE MOVIMIENTO INTERNO DE MATERIALES</div>
+									<div class="numeroFecha">
+										<div class="numero">N° {{ entity.numero }}</div>
+										<div class="fecha">
+											<div class="itemFecha">
+												<label>AÑO</label>
+												<div>{{ entity.fechaHoraCierre | date('Y') }}</div>
+											</div>
+						
+											<div class="itemFecha">
+												<label>MES</label>
+												<div>{{ entity.fechaHoraCierre | date('m') }}</div>
+											</div>
+											<div class="itemFecha">
+												<label>DÍA</label>
+												<div>{{ entity.fechaHoraCierre | date('d') }}</div>
+											</div>
+										</div>
+									</div>
+								</div>
+						</div>
+						<div class="destino">DESTINO: &nbsp; {{ entity.direccionDestino }}</div>
+				  </div>	
+   			
+   				<div class="cuerpo">
+				
+				  	<table class="cantidadDetalle">
+				  		<thead>
+				  			<tr>
+					  			<th>CANT.</th>
+					  			<th>DETALLE</th>
+					  		</tr>
+				  		</thead>
+				  		<tbody>
+				  			{% for movimiento in entity.solicitudMovimientoElemento %}
+				  			<tr>
+				  				<td> {{ movimiento.movimientoStock.cantidad }}</td>
+				  				<td>{{ movimiento.elemento.nombre }}</td>
+				  			</tr>
+				  			{% endfor %}
+				  		</tbody>
 			  
-			  <div class="firmaItems">
-			  	<label>Retira</label>
-			  	<div></div>
-			  </div>
-			  
-			  <div class="firmaItems">
-			  	<label>Recibe</label>
-			  	<div></div>
-			  </div>
-			  
-		  </div>
-	  
-   </div>
+			  		</table>
+		  			
+				  	
+		 		 </div>
+   			
 </body>
 	  
 </html>
+
+
 

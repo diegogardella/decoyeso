@@ -38,3 +38,7 @@ solicitudmovimiento_delete:
 solicitudmovimiento_imprimir:
     pattern:  /{id}/imprimir
     defaults: { _controller: "StockBundle:SolicitudMovimiento:imprimir" }
+
+solicitudmovimiento_cambiarEstado:
+    pattern:  /{id}/{estado}/cambiare
+    defaults: { _controller: "StockBundle:SolicitudMovimiento:cambiarEstado" }  

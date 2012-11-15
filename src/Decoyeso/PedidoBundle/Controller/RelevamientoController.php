@@ -97,6 +97,7 @@ public function indexAction($pararouting="index")
         if($pedido!=0){
         	$pedidoEntity=$em->getRepository('PedidoBundle:Pedido')->find($pedido);
         	$entity->setPedido($pedidoEntity);
+        	$entity->setNombre($pedidoEntity->getNombre());
         }
         
         $form   = $this->createForm(new RelevamientoType(), $entity);

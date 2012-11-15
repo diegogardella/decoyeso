@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Decoyeso\StockBundle\Entity\SolicitudMovimientoRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class SolicitudMovimiento
 {
@@ -89,6 +90,7 @@ class SolicitudMovimiento
     private $direccionDestino;
     
 
+    
     /**
      * @var integer $usuario
      *
@@ -102,15 +104,19 @@ class SolicitudMovimiento
      * @ORM\ManyToOne(targetEntity="\Decoyeso\UsuarioBundle\Entity\Usuario")
      */
     private $usuarioCerro;    
-        
+    
+    
+
+    
     /**
      * @ORM\postPersist
      */
     public function postPersist()
     {
-    	$this->numero="REM".str_pad($this->getId(),5,0,STR_PAD_LEFT);
+    	$this->numero="SOL".str_pad($this->getId(),5,0,STR_PAD_LEFT);
     }
-
+    
+    
     /**
      * Get id
      *
@@ -185,6 +191,8 @@ class SolicitudMovimiento
     {	
     	$estado[1]='Solicitud Enviada';
     	$estado[2]='Solicitud Procesada';
+    	$estado[3]='Solicitud Cancelada';
+    	$estado[4]='Solicitud Rechazada';
     	
     	return $estado[$this->estado];
     }
