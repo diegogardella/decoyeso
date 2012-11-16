@@ -741,6 +741,7 @@ class Pedido
     public function getDireccionNumero()
     {
         return $this->direccionNumero;
+
     }
 
     /**

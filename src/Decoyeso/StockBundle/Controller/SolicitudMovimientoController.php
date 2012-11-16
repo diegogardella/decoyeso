@@ -28,7 +28,7 @@ class SolicitudMovimientoController extends Controller
     	$buscador->setRequest($this->getRequest());
     	$buscador->setPararouting($pararouting);
     
-    	$buscador->setSql('SELECT sm FROM StockBundle:SolicitudMovimiento sm join sm.pedido p ORDER BY sm.estado, sm.fechaHoraRequerido ASC');
+    	$buscador->setSql('SELECT sm FROM StockBundle:SolicitudMovimiento sm join sm.pedido p ORDER BY sm.estado ASC, sm.fechaHoraRequerido DESC, sm.id ASC');
     
     	/*$opciones=array(
     			"c_tipo"=>array('choice',array("label"=>"Tipo de cliente",'choices'=>	array(""=>"",1 => 'Persona Física', 2 => 'Organización'))),
@@ -63,7 +63,7 @@ class SolicitudMovimientoController extends Controller
     
     	$pedidoDeSolicitud = $em->getRepository('PedidoBundle:Pedido')->find($pedido);
     
-    	$entity = $em->getRepository('StockBundle:SolicitudMovimiento')->findBy(array('pedido'=>$pedido),array('fechaHoraRequerido'=>'DESC'));
+    	$entity = $em->getRepository('StockBundle:SolicitudMovimiento')->findBy(array('pedido'=>$pedido),array('estado'=>'ASC','fechaHoraRequerido'=>'DESC','id'=>'DESC'));
      
     	$elementosYCantidades=$this->getCantidades($pedido);
 
@@ -137,6 +137,21 @@ class SolicitudMovimientoController extends Controller
     }
     
     
+    public function cambiarEstadoAction($id,$estado){
+    
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$solicitudMovimiento = $em->getRepository('StockBundle:SolicitudMovimiento')->find($id);
+    	
+    	$solicitudMovimiento->setEstado($estado);
+    	$solicitudMovimiento->setUsuarioCerro($this->container->get('security.context')->getToken()->getUser());
+    	$solicitudMovimiento->setFechaHoraCierre(new \Datetime());
+    	
+    	$em->persist($solicitudMovimiento);
+    	$em->flush();
+    
+    	return $this->redirect($this->generateUrl('solicitudmovimiento_show',array('id'=>$solicitudMovimiento->getId())));
+    }
+    
     
     public function newAction($paramPedido)
     {
@@ -207,7 +222,7 @@ class SolicitudMovimientoController extends Controller
             throw $this->createNotFoundException('Unable to find SolicitudMovimiento entity.');
         }
 
-        if($entity->getEstado()==2){
+        if($entity->getEstado()!=1){
         	return $this->redirect($this->generateUrl('solicitudmovimiento_show',array('id'=>$entity->getId())));
         }
         

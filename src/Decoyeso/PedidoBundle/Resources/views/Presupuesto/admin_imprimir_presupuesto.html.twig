@@ -244,22 +244,23 @@ height:100px;
 				<td>
 				<span class="txt3">DIRECCION:</span>
 				<span class="txt4">
-				{% if (entity.getPedido.getCliente.getBarrio)  %}
-				B&deg; {{ entity.getPedido.getCliente.getBarrio }}.
+				{% if (entity.getPedido.getDireccionBarrio)  %}
+				B&deg; {{ entity.getPedido.getDireccionBarrio }}.
 				{% endif %}
 				
-				{% if (entity.getPedido.getCliente.getBarrio)  %}
-				{{ entity.getPedido.getCliente.getCalle }}
+				{% if (entity.getPedido.getDireccionCalle)  %}
+				{{ entity.getPedido.getDireccionCalle }}
 				{% endif %}
 				
-				{% if (entity.getPedido.getCliente.getBarrio)  %}
-				{{ entity.getPedido.getCliente.getNumeroCalle }}
+				{% if (entity.getPedido.getDireccionNumero)  %}
+				{{ entity.getPedido.getDireccionNumero }}
 				{% endif %}
 				</span>
 				</td>
 				<td>
-				<span class="txt3">MAIL:</span>
-				<span class="txt4">{{ entity.getPedido.getCliente.getEmail }}</span>
+				<span class="txt3">FECHA:</span>
+				<span class="txt4">{{ hoy|date('d/m/Y') }}</span>
+				
 				</td>
 			</tr>
 			

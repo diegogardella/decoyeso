@@ -160,6 +160,7 @@ class PresupuestoController extends Controller
         if($pedido!=0){
         	$entityPedido=$em->getRepository('PedidoBundle:Pedido')->find($pedido);
         	$entity->setPedido($entityPedido);
+        	$entity->setNombre($entityPedido->getNombre());
         }
         
         $form   = $this->createForm(new PresupuestoType(), $entity);
@@ -282,6 +283,7 @@ class PresupuestoController extends Controller
     	
     	$html = $this->renderView('PedidoBundle:Presupuesto:admin_imprimir_presupuesto.html.twig', array(
     			'entity'      => $entity,
+    			'hoy'=>new \Datetime(),
     	));
     	/*
     	return $this->render('PedidoBundle:Presupuesto:admin_imprimir_presupuesto.html.twig', array(

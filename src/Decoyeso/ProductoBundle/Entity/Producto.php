@@ -20,6 +20,13 @@ class Producto extends Elemento
 	
 	 
 	 /**
+	  *
+	  * @ORM\OneToMany(targetEntity="ProductoInsumo", mappedBy="producto")
+	  */
+	 private $productoInsumo;
+	 
+	 
+	 /**
 	  * @var integer $elemento
 	  *
 	  * @ORM\OneToMany(targetEntity="Decoyeso\StockBundle\Entity\SolicitudMovimientoElemento", mappedBy="elemento")
@@ -34,11 +41,7 @@ class Producto extends Elemento
 	 */
 	private $tipo;
 	
-	/**
-	 *
-	 * @ORM\OneToMany(targetEntity="ProductoInsumo", mappedBy="producto")
-	 */
-	private $productoInsumo;
+
 	
 	/**
 	 * Get tipo
@@ -61,32 +64,14 @@ class Producto extends Elemento
 	}
 	
 
-    
-    /**
-     * Add productoInsumo
-     *
-     * @param Decoyeso\ProductoBundle\Entity\ProductoInsumo $productoInsumo
-     */
-    public function addProductoInsumo(\Decoyeso\ProductoBundle\Entity\ProductoInsumo $productoInsumo)
-    {
-        $this->productoInsumo[] = $productoInsumo;
-    }
 
-    /**
-     * Get productoInsumo
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getProductoInsumo()
-    {
-        return $this->productoInsumo;
-    }
 
 	public function __construct()
 	{
 		$this->productoInsumo = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->movimientoStock = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->solicitudMovimientoElemento = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->productoInsumo = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 
     
@@ -194,7 +179,29 @@ class Producto extends Elemento
     	return $cantidad;
     	
     }
+    
 
     
+    
+    /**
+     * Add productoInsumo
+     *
+     * @param Decoyeso\ProductoBundle\Entity\ProductoInsumo $productoInsumo
+     */
+    public function addProductoInsumo(\Decoyeso\ProductoBundle\Entity\ProductoInsumo $productoInsumo)
+    {
+    	$this->productoInsumo[] = $productoInsumo;
+    }
+    
+    /**
+     * Get productoInsumo
+     *
+     * @return Doctrine\Common\Collections\Collection
+     */
+    public function getProductoInsumo()
+    {
+    	return $this->productoInsumo;
+    }
+
 
 }

@@ -59,19 +59,19 @@
 				<div class="module_tit txt3">{% block module_tit %}TITLE LIST{% endblock module_tit %}</div>
 				
 				{% block menuAcciones%}
-						{% block module_header_delete%}
-<form action="{% block delete_path %}{{ path('admin_entity_delete', { 'id': entity.id }) }}{% endblock delete_path %}" method="post">
-{{ form_widget(delete_form) }}
-<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
-</form>
-{% endblock module_header_delete%}
 
+					{% block module_header_delete%}
+					<form action="{% block delete_path %}{{ path('admin_entity_delete', { 'id': entity.id }) }}{% endblock delete_path %}" method="post">
+					{{ form_widget(delete_form) }}
+					<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
+					</form>
+					{% endblock module_header_delete%}
+			
+			
+					{% block module_header_otros%}
+					
+					{% endblock module_header_otros%}
 
-
-
-{% block module_header_otros%}
-
-{% endblock module_header_otros%}
 				{% endblock menuAcciones%}
 				
 				{% block menuOpciones%}

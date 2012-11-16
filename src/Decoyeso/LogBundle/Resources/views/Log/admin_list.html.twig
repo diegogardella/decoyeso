@@ -1,5 +1,6 @@
 {% extends "CoobixAdminBundle:Default:list.html.twig" %}
 
+
 {% block breadcrumb_in %}
 <div class="breadcrumbs">
 <a href="{{ path('log') }}" class="current" >Logs</a>
@@ -13,10 +14,13 @@
 		{% endblock new_path_btn %}
 
 
+{% block menuOpciones%}{% endblock menuOpciones%}
+
 {% block module_tit %}
 Listado de Notificaciones
 
 {% endblock module_tit %}
+
 
 
 {% block list_content %}
