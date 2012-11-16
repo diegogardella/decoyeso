@@ -46,7 +46,7 @@ presupuesto_imprimir:
 
 
 presupuesto_arreglar:
-    pattern:  /{id}/arreglar
+    pattern:  /arreglar
     defaults: { _controller: "PedidoBundle:Presupuesto:arreglar" }
 
 presupuesto_items:

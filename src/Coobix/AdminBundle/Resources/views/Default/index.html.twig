@@ -83,6 +83,15 @@
 		
 			{% if is_granted('ROLE_ADMIN') %}
 			{% endif %}
+			
+			
+			<div class="menuTab">
+				<div class="tabTit txt3" id="logTit">Notificaciones</div>
+				<ul class="tabUl">
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('log') }}">Listar Notificaciones</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('log_new') }}">Crear Notificación</a></li>
+				</ul>	
+			</div>
 		
 		
 			<div class="menuTab">
@@ -182,12 +191,7 @@
 				</ul>	
 			</div>
 			
-			<div class="menuTab">
-				<div class="tabTit txt3" id="logTit">Logs</div>
-				<ul class="tabUl">
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('log') }}">Listar Logs</a></li>
-				</ul>	
-			</div>
+
 			
 			
 			

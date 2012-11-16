@@ -15,7 +15,7 @@ class SecadorType extends AbstractType
             		array( 0 => 'Secador de Placas', 1 => 'Secador de Molduras')
             ))
             ->add('capacidad')
-            ->add('tiempoSecado', 'text', array('label'=> 'Tiempo de Secado (En Dias)'))
+            ->add('tiempoSecado', 'integer', array('label'=> 'Tiempo de Secado (En Dias)'))
             ->add('observacion')
         ;
     }

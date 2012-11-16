@@ -43,7 +43,6 @@ Listado de Usuarios
 		{{form_row(formBuscar._token)}}
 		{{form_row(formBuscar.u_nombre)}}
 		{{form_row(formBuscar.u_apellido)}}
-		{{form_row(formBuscar.u_celular)}}
 		{{form_row(formBuscar.u_email)}}
 	</div>
 {%endblock%}
@@ -66,6 +65,9 @@ Listado de Usuarios
 	{% render "UsuarioBundle:Usuario:listDeleteform" with {'id': entity.id}  %}
 {% endif %}
 {% endblock list_delete %}
+
+{% block menuOpciones %}
+{% endblock menuOpciones %}
 
 
 

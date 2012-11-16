@@ -1,8 +1,9 @@
 <IfModule mod_rewrite.c>
-	
-	RewriteEngine on
-
-	
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ app.php [QSA,L]
+    php_value date.timezone "America/Argentina/La_Rioja"
+    DirectoryIndex app.php index.php index.html
 </IfModule>
 
 

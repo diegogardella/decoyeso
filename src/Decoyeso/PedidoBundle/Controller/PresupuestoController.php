@@ -470,7 +470,7 @@ class PresupuestoController extends Controller
      * ARREGLAR BD PARA AGREGAR LOS ITEMS
      *
      */
-    public function arreglarAction($id)
+    public function arreglarAction()
     {
     
     	$em = $this->getDoctrine()->getEntityManager();
@@ -497,6 +497,7 @@ class PresupuestoController extends Controller
 	    		$items[$r]['check']= null;
 	    		$items[$r]['precioVtaSinIva']= "";
 	    		$items[$r]['precioVtaConIva']= "";
+	    		$items[$r]['id']= 0;
 	    		
 	    		$i = $items[$r];
 	    		

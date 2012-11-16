@@ -27,7 +27,7 @@
 {% block list_item_texts %}
 <td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.numero }}</a></td>
 <td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
-<td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.estadoNombre }}</a></td>
+<td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.getEstadoNombre }}</a></td>
 {% endblock list_item_texts %}
 
 

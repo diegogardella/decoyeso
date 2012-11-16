@@ -59,6 +59,10 @@
 			{% if (filtro ==1) %}
 				{% include 'DecoyesoProduccionBundle:Secador:secador_placas_tiempo.html.twig' with {'sP': sP} %}
 			{% endif %}
+			
+			{% if (filtro ==2) %}
+				
+			{% endif %}
 		{% else %}
 		
 		<div class="txt3">
@@ -79,7 +83,18 @@
 		
 		{% for sP in secadoresMolduras %}
 		
-			{% include 'DecoyesoProduccionBundle:Secador:secador_placas.html.twig' with {'sP': sP} %}
+			{% if (filtro ==0) %}
+				{% include 'DecoyesoProduccionBundle:Secador:secador_molduras.html.twig' with {'sP': sP} %}
+			{% endif %}
+			{% if (filtro ==1) %}
+				{% include 'DecoyesoProduccionBundle:Secador:secador_molduras_tiempo.html.twig' with {'sP': sP} %}
+			{% endif %}
+			
+			{% if (filtro ==2) %}
+		
+			{% endif %}
+		
+		
 		
 		{% else %}
 		

@@ -505,9 +505,13 @@ class Presupuesto
     }
     
     public function getEstadoNombre(){
+    	
     	$estado[0]='En espera';
     	$estado[1]='Aprobado';
     	$estado[2]='No aprobado';
+    	if ($this->getEstado() == null)
+    		return $estado[0];
+
     	return $estado[$this->getEstado()];
     }
     

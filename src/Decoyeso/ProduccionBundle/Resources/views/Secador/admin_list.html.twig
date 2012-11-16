@@ -15,10 +15,10 @@ Listado de Secador
 
 {% set widthCols =  94/2 %}
 
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('nombre', 'p.nombre')|raw }}</a></th>
-
-
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'p.nombre')|raw }}</a></th>
+
+
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Tipo', 'p.tipo')|raw }}</a></th>
 
 
 
@@ -34,7 +34,7 @@ Listado de Secador
 <td >
 	<a href="{{ path('secador_edit', { 'id': entity.id }) }}">
 		
-		{{ entity.nombre }}
+		{{ entity.getNombreTipo }}
 		
 	</a>
 </td>

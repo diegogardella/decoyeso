@@ -3,6 +3,7 @@
 namespace Decoyeso\ProduccionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Decoyeso\ProduccionBundle\Entity\Secador
@@ -24,7 +25,8 @@ class Secador
 
     /**
      * @var string $nombre
-     *
+     * @Assert\NotBlank(message="Por favor, escriba una nombre")
+     * @Assert\MaxLength(255)
      * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
@@ -38,10 +40,19 @@ class Secador
     
     /**
      * @var integer $tiempoSecado
-     * 
+     * @Assert\NotBlank(message="Por favor, ingrese el tiempo de secado")
+     * @Assert\Type(type="integer", message="Ingrese un número")
      * @ORM\Column(name="tiempoSecado", type="integer")
      */
     private  $tiempoSecado;
+
+    /**
+     * @var integer $capacidad
+     * @Assert\NotBlank(message="Por favor, ingrese la capacidad")
+     * @Assert\Type(type="integer", message="Ingrese un número")
+     * @ORM\Column(name="capacidad", type="integer")
+     */
+    private $capacidad;
 
     /**
      * @var text $observacion
@@ -49,13 +60,7 @@ class Secador
      * @ORM\Column(name="observacion", type="text", nullable="true")
      */
     private $observacion;
-
-    /**
-     * @var integer $capacidad
-     *
-     * @ORM\Column(name="capacidad", type="integer")
-     */
-    private $capacidad;
+    
     
     /**
      * @var lugaresSecador
@@ -78,6 +83,14 @@ class Secador
      * @ORM\Column(name="fechaActualizado", type="date")
      */
     private $fechaActualizado;
+    
+    
+    public function getNombreTipo()
+    {
+    	$nombreTipo[0] = "Placa";
+    	$nombreTipo[1] = "Moldura";
+    	return $nombreTipo[$this->tipo];
+    }
     
     /**
      * @ORM\prePersist

@@ -22,8 +22,21 @@ class LogController extends Controller
 		$buscador=$this->get("buscador");
 		$buscador->setRequest($this->getRequest());
 		$buscador->setPararouting($pararouting);
+		
+		$todas = 0;
+		$prioridad = 0;
+		
+		$request = $this->getRequest();
 	
-		$buscador->setSql('SELECT l FROM LogBundle:Log l join l.usuario u order by l.fechaHoraCreado desc');
+			if ($request->get("todas") == 1) {
+				$prioridad = -1;
+			}
+
+		
+		
+		$buscador->setSql('SELECT l FROM LogBundle:Log l join l.usuario u 
+				WHERE l.prioridad != '.$prioridad.' 
+				order by l.fechaHoraCreado DESC');
 	
 		$opciones=array(
 				"u_nombre"=>array(null,array("label"=>"Nombre de usuario")),
@@ -63,7 +76,48 @@ class LogController extends Controller
     }
 
 
+    /**
+     * Displays a form to create a new Mesa entity.
+     *
+     */
+    public function newAction()
+    {
+    	$entity = $this->get('log');
+    	$form   = $this->createForm(new LogType(), $entity);
+    
+    	return $this->render('LogBundle:Log:admin_new.html.twig', array(
+    			'entity' => $entity,
+    			'form'   => $form->createView()
+    	));
+    }
+    
+    /**
+     * Creates a new Mesa entity.
+     *
+     */
+    public function createAction()
+    {
+    	$entity = $this->get('log');
+    	$request = $this->getRequest();
+    	$form    = $this->createForm(new LogType(), $entity);
+    	$form->bindRequest($request);
+    
+    	if ($form->isValid()) {
+    		$entity->setUsuario($this->container->get('security.context')->getToken()->getUser());
+    		$em = $this->getDoctrine()->getEntityManager();
+    		$em->persist($entity);
+    		$em->flush();
+    
 
+    		return $this->redirect($this->generateUrl('log'));
+    
+    	}
+    
+    	return $this->render('LogBundle:Log:admin_new.html.twig', array(
+    			'entity' => $entity,
+    			'form'   => $form->createView()
+    	));
+    }
 
     
 

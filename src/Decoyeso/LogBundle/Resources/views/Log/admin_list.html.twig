@@ -7,27 +7,22 @@
 {% endblock breadcrumb_in %} 
 
 		{% block new_path_btn %}
-
+		<a href="{{ path('log') }}?todas=1">ver todas</a>
+		<a href="{{ path('log') }}">ver importantes</a>
+		
 		{% endblock new_path_btn %}
 
 
 {% block module_tit %}
-Listado de Logs
+Listado de Notificaciones
 
 {% endblock module_tit %}
-
-
-
-
-
-
-
 
 
 {% block list_content %}
 
 <table class="records_list">
-	<thead>
+				<thead>
 		<tr>
 			{% block list_tits %}
 			{% set widthCols =  94/3  %}
@@ -39,14 +34,35 @@ Listado de Logs
 		</tr>
 	</thead>
 	<tbody>
+	{% set fecha = 0 %}
 	{% for entity in entities %}
+		{% if (entity.getFechaCreado()| date ('d/m/Y') != fecha) %}
+		{% set fecha = entity.getFechaCreado()| date ('d/m/Y') %}
+
+		<tr class="trColor1">
+			<td colspan="4" style="text-align: center;">
+				<span  class="NfechaLog">
+				{{ entity.getFechaCreado | date ('d/m/Y')}}
+				</span>
+			</td>
+		</tr>
+		{% endif %}
+	
+	
+		{% if is_granted(entity.getPermisos()) %}
+		
+		
+		
 		{% if (entity.getPrioridad() == 0) %}
 			{% set classTr = "trColor1" %}
 		{% endif %}
 		{% if (entity.getPrioridad() == 1) %}
-			{% set classTr = "Ncolor5" %} 
+			{% set classTr = "NColor3" %} 
 		{% endif %}
 		{% if (entity.getPrioridad() == 2) %}
+			{% set classTr = "Ncolor5" %}
+		{% endif %}
+		{% if (entity.getPrioridad() == 3) %}
 			{% set classTr = "NColor4" %}
 		{% endif %}
 		
@@ -70,7 +86,7 @@ Listado de Logs
 			</td>
 			{% endblock list_buttons %}
 		</tr>
-					
+		{% endif %}	
 	{% else %}
 		<tr class="trColor1">
 			<td colspan="0">

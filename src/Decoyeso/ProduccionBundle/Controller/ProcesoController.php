@@ -274,9 +274,7 @@ class ProcesoController extends Controller
     		throw $this->createNotFoundException('Unable to find Proceso entity.');
     	}
     	
-    	
-    
-    	
+
     	$entity->setEstado(1);
     	$entity->setFechaInicio(new \DateTime);
     	$em->flush($entity);

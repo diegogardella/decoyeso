@@ -3,6 +3,7 @@
 namespace Decoyeso\LogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Decoyeso\LogBundle\Entity\Log
@@ -31,8 +32,8 @@ class Log
      
     /**
      * @var string $log
-     *
-     * @ORM\Column(name="log", type="string", length=255)
+     * @Assert\NotBlank(message="Por favor, ingrese un texto")
+     * @ORM\Column(name="log", type="text")
      */
     private $log;
     
@@ -52,7 +53,7 @@ class Log
     
     /**
      * @var integer $prioridad
-     *
+     * 0 = Sin prioridad, 1 = baja, 2 = media, 3 = alta
      * @ORM\Column(name="prioridad", type="integer", nullable="true")
      */
     private $prioridad;
@@ -79,7 +80,7 @@ class Log
      * @var $usuario
      * (Lado Propietario)
      * @ORM\ManyToOne(targetEntity="Decoyeso\UsuarioBundle\Entity\Usuario", inversedBy="logs" )
-     * @ORM\JoinColumn(name="usuario_id", referencedColumnName="id", nullable="true")
+     * @ORM\JoinColumn(name="usuario_id", referencedColumnName="id")
      */
     private $usuario;
     

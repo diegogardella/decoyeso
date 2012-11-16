@@ -28,7 +28,7 @@ class AdminController extends Controller
      */
     public function indexAction()
     {
-    	return $this->redirect($this->generateUrl('cliente'));
+    	return $this->redirect($this->generateUrl('log'));
     }
     
     
