@@ -3,6 +3,7 @@
 namespace Decoyeso\ProduccionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Decoyeso\ProduccionBundle\Entity\Mesa
@@ -24,8 +25,9 @@ class Mesa
 
     /**
      * @var string $nombre
-     *
-     * @ORM\Column(name="nombre", type="string", length=255, nullable="true")
+     * @Assert\NotBlank(message="Por favor, escriba una nombre")
+     * @Assert\MaxLength(255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
 
@@ -38,7 +40,8 @@ class Mesa
     
     /**
      * @var integer $capacidad
-     *
+     * @Assert\NotBlank(message="Por favor, ingrese la capacidad")
+     * @Assert\Type(type="integer", message="Ingrese un número")
      * @ORM\Column(name="capacidad", type="integer")
      */
     private $capacidad;

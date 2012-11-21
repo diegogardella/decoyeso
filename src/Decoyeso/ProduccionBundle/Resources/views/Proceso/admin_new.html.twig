@@ -121,7 +121,7 @@ Crear Proceso
 			{% for producto in productos %}
 			fila +=	'<option value="{{ producto.id }}">{{ producto.nombre }}</option>';
 			{% else %}
-			fila +=	'<option value="0">No existen productos</option>'
+			fila +=	'<option value="0">No existen productos.</option>'
 			{%endfor%}						
 			fila +=	'</select></td><td class="NItemsCol1">&nbsp;<input type="text" name="cantidad_'+numFila+'" id="cantidad_'+numFila+'" class="inputCorto inputCantidad">&nbsp;</td><td class=""><a href="javascript:void(0);" class="linkEliminarFila" id="linkEliminarFila_'+numFila+'"></a></td></tr>';
 					

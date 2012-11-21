@@ -26,7 +26,7 @@ class UsuarioController extends Controller
 	public function indexAction($pararouting="index")
 	{
 		if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
-			throw $this->createNotFoundException('No tiene permisos.');
+			throw $this->createNotFoundException('ERROR: No tiene permisos.');
 		endif;
 		
 		$buscador=$this->get("buscador");
@@ -54,7 +54,7 @@ class UsuarioController extends Controller
     	
     	if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
     		if ($id != $this->get('security.context')->getToken()->getUser()->getId()):
-    		   	throw $this->createNotFoundException('No tiene permisos.');
+    		   	throw $this->createNotFoundException('ERROR: No tiene permisos.');
     		endif;
     	endif;
     	
@@ -64,7 +64,7 @@ class UsuarioController extends Controller
     
     
     	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find User entity.');
+    		throw $this->createNotFoundException('ERROR: No se encontró el usuario.');
     	}
     
     	$editForm = $this->createForm(new ProfileUsuarioType(), $entity);
@@ -90,7 +90,7 @@ class UsuarioController extends Controller
     {
     	
     	if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
-    		throw $this->createNotFoundException('No tiene permisos.');
+    		throw $this->createNotFoundException('ERROR: No tiene permisos.');
     	endif;
     	$form = $this->createDeleteForm($id);
     	$request = $this->getRequest();
@@ -102,11 +102,12 @@ class UsuarioController extends Controller
     		$entity = $em->getRepository('UsuarioBundle:Usuario')->find($id);
     
     		if (!$entity) {
-    			throw $this->createNotFoundException('Unable to find Usuario entity.');
+    			throw $this->createNotFoundException('ERROR: No se econtró el usuario.');
     		}
     		
     		//LOG
     		$log = $this->get('log');
+    		$log->setPrioridad(2);
     		$log->create($entity, "Usuario Eliminado");
    			
     		$userManager = $this->get('fos_user.user_manager');
@@ -132,11 +133,27 @@ class UsuarioController extends Controller
     public function listDeleteformAction($id)
     {
     	if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
-    		throw $this->createNotFoundException('No tiene permisos.');
+    		throw $this->createNotFoundException('ERROR: No tiene permisos.');
     	endif;
     	$deleteForm = $this->createDeleteForm($id);
     
     	return $this->render('CoobixAdminBundle:Default:list_delete_form.html.twig', array(
+    			'delete_form' => $deleteForm->createView(),
+    			'url' => $this->generateUrl('usuario_delete', array('id' => $id)),
+    			'id'=>$id,
+    			'msj'=>'¿Seguro desea eliminar el usuario?'
+    	));
+    
+    }
+    
+    public function accionDeleteformAction($id)
+    {
+    	if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
+    	throw $this->createNotFoundException('ERROR: No tiene permisos.');
+    	endif;
+    	$deleteForm = $this->createDeleteForm($id);
+    
+    	return $this->render('CoobixAdminBundle:Default:accion_delete_form.html.twig', array(
     			'delete_form' => $deleteForm->createView(),
     			'url' => $this->generateUrl('usuario_delete', array('id' => $id)),
     			'id'=>$id,
@@ -152,7 +169,7 @@ class UsuarioController extends Controller
     public function newAction()
     {
     	if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
-    		throw $this->createNotFoundException('No tiene permisos.');
+    		throw $this->createNotFoundException('ERROR: No tiene permisos.');
     	endif;
         $userManager = $this->get('fos_user.user_manager');
         $entity = $userManager->createUser();
@@ -161,6 +178,7 @@ class UsuarioController extends Controller
 
         return $this->render('UsuarioBundle:Usuario:admin_new.html.twig', array(
             'entity' => $entity,
+        		'errorContrasena' => "",
             'form'   => $form->createView()
         ));
     }
@@ -173,7 +191,7 @@ class UsuarioController extends Controller
      public function createAction()
      {
      	if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')):
-     		throw $this->createNotFoundException('No tiene permisos.');
+     		throw $this->createNotFoundException('ERROR: No tiene permisos.');
      	endif;
      	$userManager = $this->get('fos_user.user_manager');
      	$entity = $userManager->createUser();
@@ -181,9 +199,15 @@ class UsuarioController extends Controller
      	$request = $this->getRequest();
      	$form    = $this->createForm(new RegistrationUsuarioNewType(), $entity);
      	$form->bindRequest($request);
-          
+     	
+     	$c = false;
+     	$variables = $request->request->get("usuarioRegistration");
+     	
+		if ($variables["plainPassword"] != "") {
+     		$c = true;
+     	}
 
-	 	if ($form->isValid()) {
+	 	if ($form->isValid() && $c) {
     		$entity->setEnabled(true);
      		$entity->addRole($entity->getPermisos());
     
@@ -193,6 +217,7 @@ class UsuarioController extends Controller
     
 		    //LOG
 		    $log = $this->get('log');
+		    $log->setPrioridad(2);
 		    $log->create($entity, "Usuario Creado");
 		    
 		    $editForm = $this->createForm(new ProfileUsuarioType(), $entity);
@@ -206,6 +231,7 @@ class UsuarioController extends Controller
     
      	return $this->render('UsuarioBundle:Usuario:admin_new.html.twig', array(
      	'entity' => $entity,
+     	'errorContrasena' => "Ingrese nuevamente la contraseña",
      	'form'   => $form->createView()
      	));
      }
@@ -218,7 +244,7 @@ class UsuarioController extends Controller
      	$entity = $userManager->findUserBy(array("id"=>$id));
           
      	if (!$entity) {
-     		throw $this->createNotFoundException('Unable to find User entity.');
+     		throw $this->createNotFoundException('ERROR: No se econtró el usuario.');
      	}
      
      	$editForm   = $this->createForm(new ProfileUsuarioType(), $entity);
@@ -308,9 +334,11 @@ class UsuarioController extends Controller
     		$userManager->updateUser($entity);
     
     		$this->get('session')->setFlash('msj_info','La contraseña se ha modificado correctamente');
+    		
     		//LOG
     		$log = $this->get('log');
-    		$log->create($entity, "Contraseña Actualizada");
+    		$log->setPrioridad(1);
+    		$log->create($entity, "Contraseña actualizada a usuario");
     
     		return $this->redirect($this->generateUrl('usuario_edit', array('id' => $entity->getId())));
     
@@ -388,7 +416,9 @@ class UsuarioController extends Controller
     		$this->get('session')->setFlash('msj_info','Los permisos se modificaron correctamente');
     		//LOG
     		$log = $this->get('log');
-    		$log->create($entity, "Permisos Actualizados");
+    		$log->setPrioridad(3);
+    		
+    		$log->create($entity, "Se modificaron los permisos de accesos a ''".$entity->getNombrePermiso()."'' al usuario");
     
     		return $this->redirect($this->generateUrl('usuario_edit', array('id' => $entity->getId())));
     

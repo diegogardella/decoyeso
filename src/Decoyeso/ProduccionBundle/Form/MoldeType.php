@@ -4,15 +4,19 @@ namespace Decoyeso\ProduccionBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use Doctrine\ORM\EntityRepository;
+
 
 class MoldeType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('producto')
+        	->add('producto')
             ->add('cantidad')
             ->add('observacion')
+
+
         ;
     }
 

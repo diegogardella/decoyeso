@@ -5,7 +5,7 @@
 Listado de Procesos
 {% endblock module_tit %}
 
-{% block menuAcciones%}{% endblock menuAcciones%}		
+
 
 {% block list_tits %}
 
@@ -56,7 +56,8 @@ Listado de Procesos
 		
 		{{form_row(formBuscar._token)}}
 		{{form_row(formBuscar.p_numero)}}
-		
+		{{form_row(formBuscar.p_fechaCreado)}}
+				
 	</div>
 {%endblock%}
 
@@ -79,6 +80,7 @@ Listado de Procesos
 {% endblock list_delete %}
 
 
-
+{% block menuOpciones %}
+{% endblock menuOpciones %}
 
 

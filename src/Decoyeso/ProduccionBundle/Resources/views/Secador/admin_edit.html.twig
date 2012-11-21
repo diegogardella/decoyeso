@@ -9,14 +9,14 @@
 				
 {% block menuOpciones %} {% endblock menuOpciones %}
 		
-{% block menuAccionesItems%}
+			
+{% block menuAcciones%}
+{% render "DecoyesoProduccionBundle:Secador:accionDeleteform" with {'id': entity.id}  %}
+{% endblock menuAcciones%}
 
- <form action="{{ path('secador_delete', { 'id': entity.id }) }}" method="post">
-	{{ form_widget(delete_form) }}
-	<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
- </form>
 
-{% endblock menuAccionesItems%}
+
+
 
 {% block form_content %}
 		<form action="{% block update_path %}{{ path('secador_update', { 'id': entity.id }) }}{% endblock update_path %}" method="post" {{ form_enctype(edit_form) }}>

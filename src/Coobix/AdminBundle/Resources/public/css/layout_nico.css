@@ -256,6 +256,20 @@ line-height:20px;
 text-align: center;
 }
 
+#NSepBtn {
+	margin: 10px 0 0;
+}
+
+.NSep20 {
+	height: 10px;
+    width: 20px;
+}
+
+.NVaciarSecador {
+	float: right;
+    margin: 0;
+}
+
 
 
 

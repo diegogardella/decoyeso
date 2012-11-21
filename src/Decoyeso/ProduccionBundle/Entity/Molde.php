@@ -3,6 +3,9 @@
 namespace Decoyeso\ProduccionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
+
 
 /**
  * Decoyeso\ProduccionBundle\Entity\Molde
@@ -10,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Decoyeso\ProduccionBundle\Entity\MoldeRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @DoctrineAssert\UniqueEntity("producto")
+
  */
 class Molde
 {
@@ -22,12 +27,7 @@ class Molde
      */
     private $id;
     
-    /**
-     * @var string $nombre
-     *
-     * @ORM\Column(name="nombre", type="string", length=255, nullable="true")
-     */
-    private $nombre;
+
     
     /**
      * @var string $observacion
@@ -38,13 +38,14 @@ class Molde
 
     /**
      * @var Producto $producto
-     * @ORM\OneToOne(targetEntity="Decoyeso\ProductoBundle\Entity\Producto")
+     * @ORM\OneToOne(targetEntity="\Decoyeso\ProductoBundle\Entity\Producto", inversedBy="molde")
      */
     private $producto;
 
     /**
      * @var integer $cantidad
-     *
+     * @Assert\NotBlank(message="Por favor, ingrese la cantidad")
+     * @Assert\Type(type="integer", message="Ingrese un número")
      * @ORM\Column(name="cantidad", type="integer")
      */
     private $cantidad;
@@ -86,15 +87,15 @@ class Molde
      */
     public function postPersist()
     {
-    	//$this->nombre= "MOL".str_pad($this->getId(),5,0,STR_PAD_LEFT);
-    	$this->nombre= "MOLDE-".$this->getProducto();
     }
     
     
     public function __toString() 
     {
-    	return $this->nombre;
+    	return "MOLDE-".$this->getProducto();
     }
+
+
 
     /**
      * Get id
@@ -104,26 +105,6 @@ class Molde
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set nombre
-     *
-     * @param string $nombre
-     */
-    public function setNombre($nombre)
-    {
-        $this->nombre = $nombre;
-    }
-
-    /**
-     * Get nombre
-     *
-     * @return string 
-     */
-    public function getNombre()
-    {
-        return $this->nombre;
     }
 
     /**
@@ -144,26 +125,6 @@ class Molde
     public function getObservacion()
     {
         return $this->observacion;
-    }
-
-    /**
-     * Set producto
-     *
-     * @param Decoyeso\ProductoBundle\Entity\Producto $producto
-     */
-    public function setProducto(\Decoyeso\ProductoBundle\Entity\Producto $producto)
-    {
-        $this->producto = $producto;
-    }
-
-    /**
-     * Get producto
-     *
-     * @return Decoyeso\ProductoBundle\Entity\Producto 
-     */
-    public function getProducto()
-    {
-        return $this->producto;
     }
 
     /**
@@ -224,5 +185,25 @@ class Molde
     public function getFechaActualizado()
     {
         return $this->fechaActualizado;
+    }
+
+    /**
+     * Set producto
+     *
+     * @param Decoyeso\ProductoBundle\Entity\Producto $producto
+     */
+    public function setProducto(\Decoyeso\ProductoBundle\Entity\Producto $producto)
+    {
+        $this->producto = $producto;
+    }
+
+    /**
+     * Get producto
+     *
+     * @return Decoyeso\ProductoBundle\Entity\Producto 
+     */
+    public function getProducto()
+    {
+        return $this->producto;
     }
 }

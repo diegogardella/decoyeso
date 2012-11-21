@@ -2,7 +2,7 @@
 
 $(window).load(function(){
 
-	$('.list_delete_btn').click(function(){
+	$('.list_delete_btn, .btnEditEliminar').click(function(){
 		 
 		var id=this.id.split("_");
 		
@@ -11,6 +11,8 @@ $(window).load(function(){
 		  }
 		
 	});
+	
+	
 
 });
 

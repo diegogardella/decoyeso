@@ -32,3 +32,11 @@ secador_delete:
 secador_estado:
     pattern:  /estado/
     defaults: { _controller: "DecoyesoProduccionBundle:Secador:estado" }
+
+secador_vaciar:
+    pattern:  /{id}/vaciar
+    defaults: { _controller: "DecoyesoProduccionBundle:Secador:vaciarSecador" }
+    
+secador_estimacion:
+    pattern:  /estimacion
+    defaults: { _controller: "DecoyesoProduccionBundle:Secador:mostrarEstimacion" }
