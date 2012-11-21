@@ -20,7 +20,7 @@ class CambiarPermisosUsuarioType extends AbstractType
                          ->add('permisos','choice',
             		array(
             			'choices' =>array(
-            						"ROLE_SUPER_ADMIN"=> "SUPER ADMINISTRADOR",
+            						"ROLE_SUPER_ADMIN"=> "USUARIO GERENTE",
             						"ROLE_ADMINISTRACION"=> "USUARIO ADMINISTRACION",
             						"ROLE_DEPOSITO"=> "USUARIO DEPOSITO",
            						

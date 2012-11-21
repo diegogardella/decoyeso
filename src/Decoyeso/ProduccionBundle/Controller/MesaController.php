@@ -52,7 +52,7 @@ class MesaController extends Controller
         $entity = $em->getRepository('DecoyesoProduccionBundle:Mesa')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Mesa entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró la mesa.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -96,9 +96,9 @@ class MesaController extends Controller
             $em->flush();
             
             $log = $this->get('log');
-            $log->create($entity, "Mesa Creada");
+            $log->create($entity, "Mesa creada");
             
-            $this->get('session')->setFlash('msj_info','La Mesa se ha creado correctamente');
+            $this->get('session')->setFlash('msj_info','La mesa se ha creado correctamente.');
 
             return $this->redirect($this->generateUrl('mesa_edit', array('id' => $entity->getId())));
             
@@ -121,7 +121,7 @@ class MesaController extends Controller
         $entity = $em->getRepository('DecoyesoProduccionBundle:Mesa')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Mesa entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró la mesa.');
         }
 
         $editForm = $this->createForm(new MesaType(), $entity);
@@ -145,7 +145,7 @@ class MesaController extends Controller
         $entity = $em->getRepository('DecoyesoProduccionBundle:Mesa')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Mesa entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró la mesa.');
         }
 
         $editForm   = $this->createForm(new MesaType(), $entity);
@@ -160,9 +160,9 @@ class MesaController extends Controller
             $em->flush();
             
             $log = $this->get('log');
-            $log->create($entity, "Mesa Actualizada");
+            $log->create($entity, "Mesa actualizada");
             
-            $this->get('session')->setFlash('msj_info','La Mesa se ha actualizado correctamente');
+            $this->get('session')->setFlash('msj_info','La mesa se ha actualizado correctamente.');
 
             return $this->redirect($this->generateUrl('mesa_edit', array('id' => $id)));
         }
@@ -190,12 +190,12 @@ class MesaController extends Controller
             $entity = $em->getRepository('DecoyesoProduccionBundle:Mesa')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Mesa entity.');
+                throw $this->createNotFoundException('ERROR: no se encontró la mesa.');
             }
             
             //LOG
             $log = $this->get('log');
-            $log->create($entity, "Mesa Eliminada");
+            $log->create($entity, "Mesa eliminada");
 
             $em->remove($entity);
             $em->flush();
@@ -217,6 +217,19 @@ class MesaController extends Controller
     	$deleteForm = $this->createDeleteForm($id);
     
     	return $this->render('CoobixAdminBundle:Default:list_delete_form.html.twig', array(
+    			'delete_form' => $deleteForm->createView(),
+    			'url' => $this->generateUrl('mesa_delete', array('id' => $id)),
+    			'id'=>$id,
+    			'msj'=>'¿Seguro desea eliminar la mesa?'
+    	));
+    
+    }
+    
+    public function accionDeleteformAction($id)
+    {
+    	$deleteForm = $this->createDeleteForm($id);
+    
+    	return $this->render('CoobixAdminBundle:Default:accion_delete_form.html.twig', array(
     			'delete_form' => $deleteForm->createView(),
     			'url' => $this->generateUrl('mesa_delete', array('id' => $id)),
     			'id'=>$id,

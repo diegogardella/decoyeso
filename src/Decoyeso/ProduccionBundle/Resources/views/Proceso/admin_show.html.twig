@@ -11,23 +11,18 @@
 			
 {% block menuAcciones%}
 	{% if entity.estado < 1  %}
-		<div class="menuAcciones menusDropDownSeccion" id="idmenuAcciones">
-			<a href="javascript:void(0)" class="btn_blue right" style="background-color: rgb(48, 109, 137);">Acciones</a>
-			<ul style="display: none;">
-				<li>
+		{% render "DecoyesoProduccionBundle:Proceso:accionDeleteform" with {'id': entity.id}  %}
 					
-						<form action="{{ path('proceso_delete', { 'id': entity.id }) }}" method="post">
-							{{ form_widget(delete_form) }}
-							<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
-						</form>
-				
-				</li>
-			</ul>
-		</div>
+		<a  href="{{ path('proceso_actualizar', { 'id': entity.id }) }}" class="btn_blue right" >
+		Actualizar
+		</a>	
 	{% endif %}
+	
+
 {% endblock menuAcciones%}
 			
-{% block menuOpciones %} {% endblock menuOpciones %}
+{% block menuOpciones %}
+{% endblock menuOpciones %}
 
 
 {% block form_content %}
@@ -53,7 +48,7 @@
 		{# Cantidad de productos producidos #}
 		{% set totalCantidadProducida = 0 %}
 			
-		{% for pp in procesoProducto %} 
+		{% for pp in productosDelProceso %} 
 			
 			{% set totalCantidad = totalCantidad + pp.cantidad %}
 			{% set totalCantidadProducida = totalCantidadProducida + pp.cantidadProducida %}
@@ -95,17 +90,18 @@
 		
 		
 		{% if (entity.estado < 1) %}
-		{# CUADRO DATOS SECADORES 
-		{% render "DecoyesoProduccionBundle:Secador:disponibilidadSecadores" with {'datos': datos}  %}
-		#}
-		{# CUADRO DATOS SECADORES #}
+			{# CUADRO DATOS SECADORES #}
+			{% render "DecoyesoProduccionBundle:Secador:disponibilidadSecadores" with {'datos': datos}  %}
+			{# CUADRO DATOS SECADORES #}
 		{% endif %}
 		
-		{#
-		{% if (entity.estado > 0) %}
-			muestra las posiciones de los productos
-		{% endif %}
-		#}
+		
+		
+		{# CUADRO ESTIMACION SECADORES #}
+		{% render "DecoyesoProduccionBundle:Secador:mostrarEstimacion"  %}
+		{# CUADRO ESTIMACION SECADORES #}
+		
+		
 		
 	
 

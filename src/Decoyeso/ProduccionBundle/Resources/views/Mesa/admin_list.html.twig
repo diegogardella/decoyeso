@@ -1,16 +1,16 @@
 {% extends "CoobixAdminBundle:Default:list.html.twig" %}
 
 {% block module_tit %}Listado de Mesas{% endblock module_tit %}			
-{% block menuAcciones%} {% endblock menuAcciones%}		
+	
 
 {% block list_tits %}
 
 {% set widthCols =  94/2 %}
 
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('nombre', 'p.nombre')|raw }}</a></th>
-
-
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'p.nombre')|raw }}</a></th>
+
+
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Capacidad', 'p.capacidad')|raw }}</a></th>
 
 
 
@@ -26,7 +26,7 @@
 <td >
 	<a href="{{ path('mesa_edit', { 'id': entity.id }) }}">
 		
-		{{ entity.nombre }}
+		{{ entity.capacidad }}
 		
 	</a>
 </td>
@@ -45,6 +45,7 @@
 		
 		{{form_row(formBuscar._token)}}
 		{{form_row(formBuscar.p_nombre)}}
+		{{form_row(formBuscar.p_capacidad)}}
 		
 	</div>
 {%endblock%}
@@ -64,6 +65,10 @@
 {% block list_delete %}
 {% render "DecoyesoProduccionBundle:Mesa:listDeleteform" with {'id': entity.id}  %}
 {% endblock list_delete %}
+
+
+{% block menuOpciones %}
+{% endblock menuOpciones %}
 
 
 

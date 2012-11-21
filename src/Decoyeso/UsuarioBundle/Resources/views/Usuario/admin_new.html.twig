@@ -12,18 +12,45 @@
 
 {%block msj_info%}
 	{{ parent() }}
-
 {% endblock msj_info %}
 
+
+
+		{% block form_content %}
+			{% block errorMsj %}{% endblock errorMsj %}
+			<form novalidate action="{{ path('usuario_create') }}" method="post" {{ form_enctype(form) }}>
+			{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
+			
+			
+    {{ form_row(form.nombre) }}
+    {{ form_row(form.apellido) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.username) }}
+    
+    <div class="form_row">
+    
+    	{{ errorContrasena }}
+    
+    {{ form_label(form.plainPassword) }}
+    {{ form_widget(form.plainPassword) }}
+	</div>	
+			{{ form_rest(form) }}
+
+			<p>
+				<button class="btn_green_button right" id="btnGuardarCambios" type="submit">Guardar cambios</button>
+			</p>
+			</form>
+			
+			
+			<div class="fix"></div>
+		{% endblock form_content %}
 
 
 {% block module_tit %}
 Crear Usuario
 {% endblock module_tit %}
 
-{% block create_path %}
-{{ path('usuario_create') }}
-{% endblock create_path %}
+
 
 {% block list_path %}
 {{ path('usuario') }}

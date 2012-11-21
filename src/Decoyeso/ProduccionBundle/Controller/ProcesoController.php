@@ -31,13 +31,19 @@ class ProcesoController extends Controller
 	
 		$opciones=array(
 				"p_numero"=>array(null,array("label"=>"Número de Proceso")),
-    			
+				"p_fechaCreado"=>array("date", array("empty_value"=>array("month"=>"Mes","year"=>"Año","day"=>"Día"),"format"=>"d-m-Y",'pattern'=> '{{ day }}{{ month }}{{ year }}','label'=>'Creado el')),
     			);
 		
 		$buscador->setOpcionesForm($opciones);
 	
 		$resultados=$buscador->exeBuscar();
+		
+
+		
+
 	
+
+		
 	
 		return $this->render('DecoyesoProduccionBundle:Proceso:admin_list.html.twig', array(
 				'entities' => $resultados["entities"],
@@ -47,8 +53,7 @@ class ProcesoController extends Controller
 	
 	}
 	
-	
-	
+		
 	/**
 	 * Displays a form to create a new Proceso entity.
 	 *
@@ -91,22 +96,26 @@ class ProcesoController extends Controller
 		$em = $this->getDoctrine()->getEntityManager();
 	
 		if ($form->isValid()) {
-	
+			
+			/* Creo proceso y le asigno los productos */
 			$em->persist($entity);
-			$em->flush();
 			$this->agregarProdutosAlProceso($entity);
-	
+			$em->flush();
+			
 			/* Estimación de insumos a consumir*/
 			$insumos = $this->calcularUsoDeInsumos($entity->getId());
 			$entity->setDatosInsumos(json_encode($insumos));
 			$em->persist($entity);
 			$em->flush();
+			
+			/* Me fijo si hay lugar en secadores */
+			
 	
 	
 			$log = $this->get('log');
-			$log->create($entity, "Proceso Creado");
+			$log->create($entity, "Proceso creado");
 	
-			$this->get('session')->setFlash('msj_info','El Proceso se ha creado correctamente');
+			$this->get('session')->setFlash('msj_info','El proceso se ha creado correctamente.');
 	
 			return $this->redirect($this->generateUrl('proceso_show',array('id'=>$entity->getId())));
 	
@@ -128,14 +137,10 @@ class ProcesoController extends Controller
     	$em = $this->getDoctrine()->getEntityManager();
     
     	$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
-    
-    
+        
     	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find Proceso entity.');
+    		throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
     	}
-    
-    	$editForm = $this->createForm(new ProcesoType(), $entity);
-    	$deleteForm = $this->createDeleteForm($id);
     	
     	$em = $this->getDoctrine()->getEntityManager();
     	
@@ -146,21 +151,19 @@ class ProcesoController extends Controller
     	$productos = $query->getResult();
     	
     	//Traigo productos del proceso
-    	$query = $em->createQuery('SELECT prp FROM DecoyesoProduccionBundle:ProcesoProducto prp
-    			WHERE prp.proceso = :po_id
-    			');
-    	$query->setParameters(array(
-    			'po_id' => $entity->getId(),
-    	));
-    	$procesoProducto = $query->getResult();
+    	$productosDelProceso = $this->getProductosDelProceso($entity->getId());
     	
-    	
+    	//
     	//$this->asignarProductosSecadores($entity->getId());
+
+    	$editForm = $this->createForm(new ProcesoType(), $entity);
+
+    	$deleteForm = $this->createDeleteForm($entity->getId());
     	
     	return $this->render('DecoyesoProduccionBundle:Proceso:admin_show.html.twig', array(
     			'entity'      => $entity,
     			'productos'      => $productos,
-    			'procesoProducto'      => $procesoProducto,
+    			'productosDelProceso'      => $productosDelProceso,
     			'edit_form'   => $editForm->createView(),
     			'delete_form' => $deleteForm->createView()
     	));
@@ -178,13 +181,9 @@ class ProcesoController extends Controller
     
     	$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
     
-    
     	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find Proceso entity.');
+    		throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
     	}
-    
-    	$editForm = $this->createForm(new ProcesoType(), $entity);
-    	$deleteForm = $this->createDeleteForm($id);
     
     	$em = $this->getDoctrine()->getEntityManager();
     
@@ -195,20 +194,16 @@ class ProcesoController extends Controller
     	$productos = $query->getResult();
     
     	//Traigo productos del proceso
-    	$query = $em->createQuery('SELECT prp FROM DecoyesoProduccionBundle:ProcesoProducto prp
-    			WHERE prp.proceso = :po_id
-    			');
-    	$query->setParameters(array(
-    			'po_id' => $id,
-    	));
-    	$procesoProducto = $query->getResult();
+    	$productosDelProceso = $this->getProductosDelProceso($id);
     
-    
+    	$editForm = $this->createForm(new ProcesoType(), $entity);
+    	
+    	$deleteForm = $this->createDeleteForm($id);
     
     	return $this->render('DecoyesoProduccionBundle:Proceso:admin_edit.html.twig', array(
     			'entity'      => $entity,
     			'productos'      => $productos,
-    			'procesoProducto'      => $procesoProducto,
+    			'productosDelProceso'      => $productosDelProceso,
     			'edit_form'   => $editForm->createView(),
     			'delete_form' => $deleteForm->createView()
     	));
@@ -225,7 +220,7 @@ class ProcesoController extends Controller
     	$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
     
     	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find Obra entity.');
+    		throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
     	}
     
     	$editForm   = $this->createForm(new ProcesoType(), $entity);
@@ -237,23 +232,22 @@ class ProcesoController extends Controller
     
     	if ($editForm->isValid()) {
     
-    		//$this->agregarProdutosAlProceso($entity);
+    		/* Asigno los productos */
     		$em->persist($entity);
+    		$this->agregarProdutosAlProceso($entity);
     		$em->flush();
     
-    		$this->agregarProdutosAlProceso($entity);
-    
-    		/* Estimación de insumos a consumir*/
+    		/* Estimación de insumos a consumir */
     		$insumos = $this->calcularUsoDeInsumos($entity->getId());
     		$entity->setDatosInsumos(json_encode($insumos));
     		$em->persist($entity);
     		$em->flush();
     
-    		$this->get('session')->setFlash('msj_info','El proceso se ha modificado correctamente');
+    		$this->get('session')->setFlash('msj_info','El proceso se ha modificado correctamente.');
     
     		//LOG
     		$log = $this->get('log');
-    		$log->create($entity, "Proceso Actualizado");
+    		$log->create($entity, "Proceso actualizado");
     
     		return $this->redirect($this->generateUrl('proceso_show', array('id' => $id)));
     	}
@@ -266,43 +260,71 @@ class ProcesoController extends Controller
     }
     
     
-    public function iniciarAction ($id) {
+    public function actualizarAction ($id) 
+    {
+    	
     	$em = $this->getDoctrine()->getEntityManager();
+    	
+    	$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
+    	
+    	if (!$entity) {
+    		throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
+    	}
+    	
+    	/* Estimación de insumos a consumir */
+    	$insumos = $this->calcularUsoDeInsumos($entity->getId());
+    	$entity->setDatosInsumos(json_encode($insumos));
+    	$em->persist($entity);
+    	$em->flush();
+    	
+    	$log = $this->get('log');
+    	$log->create($entity, "Proceso actualizado");
+    	
+    	$this->get('session')->setFlash('msj_info','El Proceso se actualizó correctamente.');
+    	
+    	return $this->redirect($this->generateUrl('proceso_show', array('id' => $id)));
+    	
+    }
+    
+    
+    public function iniciarAction ($id) 
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+    	
     	$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
     
     	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find Proceso entity.');
+    		throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
     	}
     	
-
     	$entity->setEstado(1);
     	$entity->setFechaInicio(new \DateTime);
     	$em->flush($entity);
     	
     	$log = $this->get('log');
-    	$log->create($entity, "Proceso Iniciado");
+    	$log->create($entity, "Proceso iniciado");
     	
+    
     	//Me fijo si se inicio el proceso sin insumos
-    	$datosInsumos = $entity->getDatosInsumos();
-    	$insumos = "";
-    	foreach($datosInsumos as $d):
-	    	if(!$d["disponible"]) {
-	    		$insumos .= " ".$d["nombre"].",";
+    	if ($datosInsumos = $entity->getDatosInsumos()) {
+    	
+	    	$insumos = "";
+	    	foreach($datosInsumos as $d):
+		    	if(!$d["disponible"]) {
+		    		$insumos .= " ".$d["nombre"].",";
+		    	}
+		    endforeach;
+		    
+	    	if ($insumos!="") {
+	    		$log = $this->get('log');
+	    		$log->setPrioridad(2);
+	    		$log->setPermisos("ROLE_DEPOSITO");
+	    		$log->create(false, "El proceso ".$entity." se ha iniciado sin stock necesario de".substr($insumos, 0, -1));
 	    	}
-	    endforeach;
-	    
-    	if ($insumos!="") {
-    		$log = $this->get('log');
-    		$log->setPrioridad(1);
-    		$log->setPermisos("ROLE_DEPOSITO");
-    		$log->create(false, "El Proceso ".$entity." se ha Iniciado sin stock necesario de".substr($insumos, 0, -1));
+	    	
     	}
 
-    	
-    	
-    	
-    	
-    	$this->get('session')->setFlash('msj_info','El Proceso se ha Iniciado correctamente');
+    	$this->get('session')->setFlash('msj_info','El Proceso se ha iniciado correctamente.');
     
     	return $this->redirect($this->generateUrl('proceso_show', array('id' => $id)));
     }
@@ -316,7 +338,7 @@ class ProcesoController extends Controller
     
     
     	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find Proceso entity.');
+    		throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
     	}
     
     	$editForm = $this->createForm(new ProcesoFinalizarType(), $entity);
@@ -330,19 +352,14 @@ class ProcesoController extends Controller
     			');
     	$productos = $query->getResult();
     
+    	
     	//Traigo productos del proceso
-    	$query = $em->createQuery('SELECT prp FROM DecoyesoProduccionBundle:ProcesoProducto prp
-    			WHERE prp.proceso = :po_id
-    			');
-    	$query->setParameters(array(
-    			'po_id' => $id,
-    	));
-    	$procesoProducto = $query->getResult();
+    	$productosDelProceso = $this->getProductosDelProceso($id);
     
     	return $this->render('DecoyesoProduccionBundle:Proceso:admin_finalizar.html.twig', array(
     			'entity'      => $entity,
     			'productos'      => $productos,
-    			'procesoProducto'      => $procesoProducto,
+    			'productosDelProceso'      => $productosDelProceso,
     			'edit_form'   => $editForm->createView(),
     			'delete_form' => $deleteForm->createView()
     	));
@@ -356,30 +373,23 @@ class ProcesoController extends Controller
     	$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
     
     	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find Proceso entity.');
+    		throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
     	}
-    
-    	$request = $this->getRequest();
-    
-    	//Traigo productos del proceso
-    	$query = $em->createQuery('SELECT prp FROM DecoyesoProduccionBundle:ProcesoProducto prp
-    			WHERE prp.proceso = :po_id
-    			');
-    	$query->setParameters(array(
-    			'po_id' => $id,
-    	));
-    	$procesoProducto = $query->getResult();
-    
-    	foreach ($procesoProducto as $pp):
-    
-    	if ($request->request->has("cantidadProducida_".$pp->getProducto()->getId())) {
-    		$pp->setCantidadProducida($request->get("cantidadProducida_".$pp->getProducto()->getId()));
-    	}
-    	else {
-    		$pp->setCantidadProducida(0);
-    	}
-    
-    	$em->persist($entity);
+   
+		//Traigo productos del proceso
+		$productosDelProceso = $this->getProductosDelProceso($entity->getId());
+		
+		$request = $this->getRequest();
+    	foreach ($productosDelProceso as $pp):
+	    
+	    	if ($request->request->has("cantidadProducida_".$pp->getProducto()->getId())) {
+	    		$pp->setCantidadProducida($request->get("cantidadProducida_".$pp->getProducto()->getId()));
+	    	}
+	    	else {
+	    		$pp->setCantidadProducida(0);
+	    	}
+	    
+	    	$em->persist($entity);
     	endforeach;
     	$entity->setEstado(2);
     	$entity->setFechaFin(new \DateTime);
@@ -398,9 +408,10 @@ class ProcesoController extends Controller
     	}
     	
     	$log = $this->get('log');
+    	$log->setPrioridad(1);
     	$log->create($entity, "Proceso Finalizado");
     	
-    	$this->get('session')->setFlash('msj_info','El Proceso se ha Finalizado correctamente');
+    	$this->get('session')->setFlash('msj_info','El proceso ha finalizado correctamente.');
     
     
     	return $this->redirect($this->generateUrl('proceso_show', array('id' => $id)));
@@ -417,7 +428,7 @@ class ProcesoController extends Controller
     	$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
     
     	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find Proceso entity.');
+    		throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
     	}
     	
     	
@@ -427,23 +438,17 @@ class ProcesoController extends Controller
     			');
     	$productos = $query->getResult();
     	
-    	//Traigo productos del proceso
-    	$query = $em->createQuery('SELECT prp FROM DecoyesoProduccionBundle:ProcesoProducto prp
-    			WHERE prp.proceso = :po_id
-    			');
-    	$query->setParameters(array(
-    			'po_id' => $entity->getId(),
-    	));
-    	$procesoProducto = $query->getResult();
+		//Traigo productos del proceso
+		$productosDelProceso = $this->getProductosDelProceso($entity->getId());
     	
-    	
-    	    	$editForm = $this->createForm(new ProcesoType(), $entity);
+
+    	$editForm = $this->createForm(new ProcesoType(), $entity);
     	$deleteForm = $this->createDeleteForm($id);
     	
     	return $this->render('DecoyesoProduccionBundle:Proceso:admin_asignar_stock.html.twig', array(
     			'entity'      => $entity,
     			'productos'      => $productos,
-    			'procesoProducto'      => $procesoProducto,
+    			'procesoProducto'      => $productosDelProceso,
     			'edit_form'   => $editForm->createView(),
     			'delete_form' => $deleteForm->createView()
     	));
@@ -452,14 +457,6 @@ class ProcesoController extends Controller
 
     }
     
-    
-
-    
-    
-
-
-	
-
 	
 	public function asignarProductosAlStockUpdateAction($id) {
 	
@@ -468,21 +465,15 @@ class ProcesoController extends Controller
 		$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
 	
 		if (!$entity) {
-			throw $this->createNotFoundException('Unable to find Proceso entity.');
+			throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
 		}
-	
-		$request = $this->getRequest();
-	
+
 		//Traigo productos del proceso
-		$query = $em->createQuery('SELECT prp FROM DecoyesoProduccionBundle:ProcesoProducto prp
-				WHERE prp.proceso = :po_id
-				');
-		$query->setParameters(array(
-				'po_id' => $id,
-		));
-		$procesoProducto = $query->getResult();
+		$productosDelProceso = $this->getProductosDelProceso($entity->getId());
 	
-		foreach ($procesoProducto as $pp):
+		
+		$request = $this->getRequest();
+		foreach ($productosDelProceso as $pp):
 	
 		if ($request->request->has("cantidadIngresada_".$pp->getProducto()->getId())) {
 			$pp->setCantidadIngresadaStock($request->get("cantidadIngresada_".$pp->getProducto()->getId()));
@@ -505,9 +496,10 @@ class ProcesoController extends Controller
 	
 	
 		$log = $this->get('log');
+		$log->setPrioridad(1);
 		$log->create($entity, "Se asignaron los productos al stock");
 		
-		$this->get('session')->setFlash('msj_info','Los productos se asignaron correctamente');
+		$this->get('session')->setFlash('msj_info','Los productos se asignaron correctamente.');
 		
 		
 		return $this->redirect($this->generateUrl('proceso_show', array('id' => $id)));
@@ -523,43 +515,37 @@ class ProcesoController extends Controller
 		$proceso= $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
 	
 		if (!$proceso) {
-			throw $this->createNotFoundException('Unable to find Proceso entity.');
+			throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
 		}
 	
-		$request = $this->getRequest();
-	
+				
 		//Traigo productos del proceso
-		$query = $em->createQuery('SELECT prp FROM DecoyesoProduccionBundle:ProcesoProducto prp
-				WHERE prp.proceso = :po_id
-				');
-		$query->setParameters(array(
-				'po_id' => $proceso->getId(),
-		));
-		$productos = $query->getResult();
+		$productosDelProceso = $this->getProductosDelProceso($proceso->getId());
+		
 	
-		if (!$productos) {
-			throw $this->createNotFoundException('El proceso no tiene productos.');
+		if (!$productosDelProceso) {
+			throw $this->createNotFoundException('ERROR: El proceso no tiene productos.');
 		}
 	
 		//Recorro los productos para juntarlos por placas o molduras
 		$placas = array();
 		$molduras = array();
-		foreach ($productos as $pp):
-	
-		//Placas
-		if ($pp->getProducto()->getTipo() == 0) {
-			for ($i=0; $i<$pp->getCantidad(); $i++) {
-				$placas[] = $pp->getProducto();
+		foreach ($productosDelProceso as $pp):
+		
+			//Placas
+			if ($pp->getProducto()->getTipo() == 0) {
+				for ($i=0; $i<$pp->getCantidad(); $i++) {
+					$placas[] = $pp->getProducto();
+				}
+		
 			}
-	
-		}
-		//Molduras
-		if ($pp->getProducto()->getTipo() == 1) {
-			for ($i=0; $i<$pp->getCantidad(); $i++) {
-				$molduras[] = $pp->getProducto();
+			//Molduras
+			if ($pp->getProducto()->getTipo() == 1) {
+				for ($i=0; $i<$pp->getCantidad(); $i++) {
+					$molduras[] = $pp->getProducto();
+				}
 			}
-		}
-	
+		
 		endforeach;
 	
 	
@@ -571,7 +557,7 @@ class ProcesoController extends Controller
 			$secadores = $em->getRepository('DecoyesoProduccionBundle:Secador')->findByTipo(0);
 	
 			if (!$secadores) {
-				throw $this->createNotFoundException('No hay secadores.');
+				throw $this->createNotFoundException('ERROR: No hay secadores.');
 			}
 	
 			if ($secadores) {
@@ -582,20 +568,18 @@ class ProcesoController extends Controller
 	
 				$cantidadPlacas = count($placas);
 				foreach ($secadoresParaElProceso as $sP):
-				$lugaresSecador = $sP->getLugaresSecador();
-				foreach ($lugaresSecador as $lP):
-				if ($cantidadPlacas < 1) break;
-				if (!$lP->getDisponible()) {
-					$cantidadPlacas--;
-					$lP->setDisponible(1);
-					$lP->setProceso($proceso);
-					$lP->setFechaAsignado (new \DateTime);
-	
-					echo $lP->calularDias();
-					exit();
-					$em->persist($lP);
-				}
-				endforeach;
+					$lugaresSecador = $sP->getLugaresSecador();
+					foreach ($lugaresSecador as $lP):
+						if ($cantidadPlacas < 1) break;
+						if (!$lP->getDisponible()) {
+							$cantidadPlacas--;
+							$lP->setDisponible(2);
+							$lP->setProceso($proceso);
+							$lP->setFechaAsignado (new \DateTime);
+							//$lP->calcularDias();
+							$em->persist($lP);
+						}
+					endforeach;
 				endforeach;
 			}
 	
@@ -605,6 +589,8 @@ class ProcesoController extends Controller
 	
 		}
 	
+		
+		/*
 		//Si hay placas para producir
 		if (count($molduras)>0) {
 	
@@ -612,7 +598,7 @@ class ProcesoController extends Controller
 			$secadores = $em->getRepository('DecoyesoProduccionBundle:Secador')->findByTipo(1);
 	
 			if (!$secadores) {
-				throw $this->createNotFoundException('No hay secadores.');
+				throw $this->createNotFoundException('ERROR: No hay secadores.');
 			}
 	
 			if ($secadores) {
@@ -639,11 +625,23 @@ class ProcesoController extends Controller
 	
 			$em->flush();
 	
-	
+			
 	
 		}
+		*/
+
+	}
 	
-		//return $this->redirect($this->generateUrl('proceso_show', array('id' => $id)));
+	public function calcularDisponibilidadDeSecador($secador) {
+
+		$lugaresLibres = 0;
+		
+		foreach($secador->getLugaresSecador() as $l):
+			if (!$l->getDisponible()) $lugaresLibres++;
+		endforeach;
+				
+		return $lugaresLibres;
+	
 	}
 	
 	
@@ -653,29 +651,20 @@ class ProcesoController extends Controller
 		
 		$em = $this->getDoctrine()->getEntityManager();
 		
-		$insumosStock=$em->getRepository('StockBundle:MovimientoStock')->findByElemento($insumo->getId());
-		$cantidadInsumoStock=0;
-		foreach($insumosStock as $insumoStock){
-			if($insumoStock->getAccion()==1){
-				$cantidadInsumoStock=$cantidadInsumoStock+$insumoStock->getCantidad();
-			}else{
-				$cantidadInsumoStock=$cantidadInsumoStock-$insumoStock->getCantidad();
-			}
-		}
-		
+		$cantidadInsumoStock = $insumo->getCantidadEnStock();
+						
 		if (($cantidadInsumoStock - $cantidad ) < 0) return false;
 		else return true;
 		
 	}
 	
-	public function calcularUsoDeInsumos($id) {
-		
+	public function getProductosDelProceso($id) {
 		//Traigo el Proceso
 		$em = $this->getDoctrine()->getEntityManager();
 		$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
-			
+		
 		if (!$entity) {
-			throw $this->createNotFoundException('Unable to find Proceso entity.');
+			throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
 		}
 		
 		//Traigo productos del proceso
@@ -687,28 +676,42 @@ class ProcesoController extends Controller
 		));
 		$productosDelProceso = $query->getResult();
 		
-		$insumosTotales = false;
+		return $productosDelProceso;
 		
-		if ($productosDelProceso) {
-			foreach ($productosDelProceso as $p):
-				$insumosDelProducto = $p->getProducto()->getProductoInsumo();
-				foreach ($insumosDelProducto as $ip):
-					$idInsumo = $ip->getInsumo()->getId();
-					if (!isset($insumosTotales[$idInsumo]["cantidad"]))
-						$insumosTotales[$idInsumo]["cantidad"] = 0;
-					$insumosTotales[$idInsumo]["cantidad"] += $p->getCantidad() * $ip->getCantidad();
-					if (!isset($insumosTotales[$idInsumo]["cantidadProducida"]))
-						$insumosTotales[$idInsumo]["cantidadProducida"] = 0;
-					$insumosTotales[$idInsumo]["cantidadProducida"] += $p->getCantidadProducida() * $ip->getCantidad();
-					$insumosTotales[$idInsumo]["nombre"] = $ip->getInsumo()->getNombre();
-					$insumosTotales[$idInsumo]["unidad"] = $ip->getInsumo()->getUnidad();
-					$insumosTotales[$idInsumo]["id"] = $idInsumo;
-					$insumosTotales[$idInsumo]["disponible"] = $this->calcularDisponibilidadDeInsumos($ip->getInsumo(), $insumosTotales[$idInsumo]["cantidad"]);
-				endforeach;
-			endforeach;	
+	}
+	
+	public function calcularUsoDeInsumos($id) {
+		
+		$productosDelProceso = $this->getProductosDelProceso($id);
+		if (!$productosDelProceso) {
+			throw $this->createNotFoundException('ERROR: El proceso no tiene productos.');
 		}
 		
+		
+		$insumosTotales = false;
+		
+		
+		foreach ($productosDelProceso as $p):
+			$insumosDelProducto = $p->getProducto()->getProductoInsumo();
+			
+			foreach ($insumosDelProducto as $ip):
+				$idInsumo = $ip->getInsumo()->getId();
+				if (!isset($insumosTotales[$idInsumo]["cantidad"]))
+					$insumosTotales[$idInsumo]["cantidad"] = 0;
+				$insumosTotales[$idInsumo]["cantidad"] += $p->getCantidad() * $ip->getCantidad();
+				if (!isset($insumosTotales[$idInsumo]["cantidadProducida"]))
+					$insumosTotales[$idInsumo]["cantidadProducida"] = 0;
+				$insumosTotales[$idInsumo]["cantidadProducida"] += $p->getCantidadProducida() * $ip->getCantidad();
+				$insumosTotales[$idInsumo]["nombre"] = $ip->getInsumo()->getNombre();
+				$insumosTotales[$idInsumo]["unidad"] = $ip->getInsumo()->getUnidad();
+				$insumosTotales[$idInsumo]["id"] = $idInsumo;
+				$insumosTotales[$idInsumo]["disponible"] = $this->calcularDisponibilidadDeInsumos($ip->getInsumo(), $insumosTotales[$idInsumo]["cantidad"]);
+			endforeach;
+		endforeach;
+		
+		
 		return $insumosTotales;
+		
 		
 	
 	}
@@ -760,60 +763,54 @@ class ProcesoController extends Controller
 		$request = $this->getRequest();
 		$em = $this->getDoctrine()->getEntityManager();
 		$numFilas = $request->get("numFilas");
+		
+		
+		//Si ya existe el proceso (update) le borro todos los productos
+		if ($entity->getId()) {
+			$productos = $em->getRepository('DecoyesoProduccionBundle:ProcesoProducto')->findByProceso($entity->getId());
+
+			foreach ($productos as $p):
+				$em->remove($p);
+			endforeach;
+		}
+				
 	
-		$productos = $em->getRepository('DecoyesoProduccionBundle:ProcesoProducto')->findByProceso($entity->getId());
-		//echo count ($productos);
-		foreach ($productos as $p):
-		$em->remove($p);
-		endforeach;
-	
-		$em->flush();
-	
-	
-	
+		//Guardo la informacion del formulario en el array Items	
 		for($i=0; $i<$numFilas; $i++):
-		if (!$request->request->has("designacion_$i"))	continue;
-		if (trim($request->get("cantidad_$i")) == "")	continue;
-	
-		$items[$i]['designacion'] = $request->get("designacion_$i");
-		$items[$i]['cantidad'] = $request->get("cantidad_$i");
-		$items[$i]['cantidad_producida'] = 0;
+			if (!$request->request->has("designacion_$i"))	continue;
+			if (trim($request->get("cantidad_$i")) == "")	continue;
+			
+			$items[$request->get("designacion_$i")]['designacion'] = $request->get("designacion_$i");
+			if (isset($items[$request->get("designacion_$i")]['cantidad']))
+				$items[$request->get("designacion_$i")]['cantidad'] += $request->get("cantidad_$i");
+			else
+				$items[$request->get("designacion_$i")]['cantidad'] = $request->get("cantidad_$i");
+			$items[$request->get("designacion_$i")]['cantidad_producida'] = 0;
 		endfor;
 	
 	
-	
+		//Agrego los productos al proceso
 		if (isset($items)):
-		foreach ($items as $item):
-		$producto = $em->getRepository('ProductoBundle:Producto')->findOneById($item['designacion']);
-	
-		if (!$producto) continue;
-	
-		$procesoProducto = new ProcesoProducto();
-		$procesoProducto->setProceso($entity);
-		$procesoProducto->setProducto($producto);
-		$procesoProducto->setCantidad($item['cantidad']);
-		$procesoProducto->setCantidadProducida($item['cantidad_producida']);
-		$procesoProducto->setCantidadIngresadaStock(0);
-		$em->persist($procesoProducto);
-	
-	
-		endforeach;
+			foreach ($items as $item):
+				$producto = $em->getRepository('ProductoBundle:Producto')->findOneById($item['designacion']);
+			
+				if (!$producto) continue;
+			
+				$procesoProducto = new ProcesoProducto();
+				$procesoProducto->setProceso($entity);
+				$procesoProducto->setProducto($producto);
+				$procesoProducto->setCantidad($item['cantidad']);
+				$procesoProducto->setCantidadProducida($item['cantidad_producida']);
+				$procesoProducto->setCantidadIngresadaStock(0);
+				$em->persist($procesoProducto);
+
+			endforeach;
 		endif;
 	
 		$em->flush();
 	
 	}
 	
-	
-
-   
-    
-    
-
-    
-    
-
-    
     
     private function createDeleteForm($id)
     {
@@ -835,16 +832,28 @@ class ProcesoController extends Controller
     	));
     }
     
+    public function accionDeleteformAction($id)
+    {
+    	$deleteForm = $this->createDeleteForm($id);
+    
+    	return $this->render('CoobixAdminBundle:Default:accion_delete_form.html.twig', array(
+    			'delete_form' => $deleteForm->createView(),
+    			'url' => $this->generateUrl('proceso_delete', array('id' => $id)),
+    			'id'=>$id,
+    			'msj'=>'¿Seguro desea eliminar el proceso?'
+    	));
+    }
+    
 
 
 
 
-/**
- * Deletes a Proceso entity.
- *
- */
-public function deleteAction($id)
-{
+	/**
+	 * Deletes a Proceso entity.
+	 *
+	 */
+	public function deleteAction($id)
+	{
 	$form = $this->createDeleteForm($id);
 	$request = $this->getRequest();
 
@@ -855,25 +864,18 @@ public function deleteAction($id)
 		$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
 
 		if (!$entity) {
-			throw $this->createNotFoundException('Unable to find Proceso entity.');
+			throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
 		}
 
-		//Traigo productos del proceso
-		$query = $em->createQuery('SELECT prp FROM DecoyesoProduccionBundle:ProcesoProducto prp
-				WHERE prp.proceso = :po_id
-				');
-		$query->setParameters(array(
-				'po_id' => $id,
-		));
-		$procesoProducto = $query->getResult();
+		$productosDelProceso = $this->getProductosDelProceso($id);
 
-		foreach ($procesoProducto as $pp) {
+		foreach ($productosDelProceso as $pp) {
 			$em->remove($pp);
 		}
 
 		//LOG
 		$log = $this->get('log');
-		$log->create($entity, "Proceso Eliminado");
+		$log->create($entity, "Proceso eliminado");
 
 		$em->remove($entity);
 		$em->flush();
@@ -883,4 +885,6 @@ public function deleteAction($id)
 
 	return $this->redirect($this->generateUrl('proceso'));
 	}
+	
+	
 }

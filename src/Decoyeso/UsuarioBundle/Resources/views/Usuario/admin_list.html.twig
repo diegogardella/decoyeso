@@ -16,16 +16,16 @@ Listado de Usuarios
 {% set widthCols =  94/4  %}
 
 
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('u.apellido') %} class="sorted" {% endif %}>{{ entities.sortable('Apellido', 'u.apellido')|raw }}</th>
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('u.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'u.nombre')|raw }}</a></th>
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('u.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'u.apellido')|raw }}</th>
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('u.username') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre de Usuario', 'u.nombre')|raw }}</a></th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('u.email') %} class="sorted" {% endif %}>{{ entities.sortable('E-mail', 'u.email')|raw }}</th>
 
 {% endblock list_tits %}
 
 {% block list_item_texts %}
 
-<td ><a href="{{ path('usuario_edit', { 'id': entity.id }) }}">{{ entity.apellido }}</a></td>
-<td ><a href="{{ path('usuario_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
+<td ><a href="{{ path('usuario_edit', { 'id': entity.id }) }}">{{ entity.apellido }} {{ entity.nombre }}</a></td>
+<td ><a href="{{ path('usuario_edit', { 'id': entity.id }) }}">{{ entity.username }}</a></td>
 <td ><a href="{{ path('usuario_edit', { 'id': entity.id }) }}">
 
 {{ entity.email }}
@@ -42,7 +42,6 @@ Listado de Usuarios
 	<div id="formBuscar">
 		{{form_row(formBuscar._token)}}
 		{{form_row(formBuscar.u_nombre)}}
-		{{form_row(formBuscar.u_apellido)}}
 		{{form_row(formBuscar.u_email)}}
 	</div>
 {%endblock%}

@@ -24,12 +24,12 @@ class LogController extends Controller
 		$buscador->setPararouting($pararouting);
 		
 		$todas = 0;
-		$prioridad = 0;
+		$prioridad = -1;
 		
 		$request = $this->getRequest();
 	
 			if ($request->get("todas") == 1) {
-				$prioridad = -1;
+				$prioridad = 0;
 			}
 
 		
@@ -39,10 +39,10 @@ class LogController extends Controller
 				order by l.fechaHoraCreado DESC');
 	
 		$opciones=array(
-				"u_nombre"=>array(null,array("label"=>"Nombre de usuario")),
-				"u_apellido"=>array(null,array("label"=>"Apellido de usuario")),
+				
+				"u_username"=>array(null,array("label"=>"Usuario")),
 				"l_log"=>array(null,array("label"=>"Acción")),
-				"l_fechaActualizado"=>array("date",array("label"=>"Actualizado el","format"=>"d-m-Y",'pattern'=> '{{ day }}{{ month }}{{ year }}',"empty_value"=>array("month"=>"Mes","year"=>"Año","day"=>"Día"))),
+				
 				
 		);
 		
