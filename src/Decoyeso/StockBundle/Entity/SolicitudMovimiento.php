@@ -192,7 +192,7 @@ class SolicitudMovimiento
     	$estado[1]='Solicitud Enviada';
     	$estado[2]='Solicitud Procesada';
     	$estado[3]='Solicitud Cancelada';
-    	$estado[4]='Solicitud Rechazada';
+    	$estado[4]='Solicitud Cancelada, Cambió Presupuesto';
     	
     	return $estado[$this->estado];
     }

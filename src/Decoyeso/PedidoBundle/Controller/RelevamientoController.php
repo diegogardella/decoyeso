@@ -27,11 +27,9 @@ public function indexAction($pararouting="index")
 	
 		$opciones=array(
 				"r_numero"=>array(null,array("label"=>"Número")),
-				"r_descripcion"=>array(null,array("label"=>"Descripción")),
 				"r_nombre"=>array(null,array("label"=>"Nombre")),
-    			"r_fechaCreado"=>array("date",array("empty_value"=>array("month"=>"Mes","year"=>"Año","day"=>"Día"),"format"=>"d-m-Y",'pattern'=> '{{ day }}{{ month }}{{ year }}','label'=>'Creado el')),
-    			"p_obra"=>array(null,array("label"=>"Obra")),
-    			"p_numero"=>array(null,array("label"=>"Número de pedido")),
+    			"p_nombre"=>array(null,array("label"=>"Nombre de Pedido")),
+    			"p_numero"=>array(null,array("label"=>"Número de Pedido")),
     			);
 		
 		$buscador->setOpcionesForm($opciones);

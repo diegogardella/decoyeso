@@ -11,7 +11,8 @@ class MovimientoStockProductoType extends AbstractType
     {
         $builder
             ->add('accion','hidden')
-			->add('elemento','entity',array('label'=>'Productos','class'=>'Decoyeso\\ProductoBundle\\Entity\\Producto'))          
+			->add('elemento','entity',array('label'=>'Productos','class'=>'Decoyeso\\ProductoBundle\\Entity\\Producto'))
+			->add('motivo','choice',array('choices'=>array(1=>'Nuevo',3=>'Reingreso',4=>'Mal Estado',6=>'Rotura Accidental',8=>'Otro')))
             ->add('observacion')
             ->add('cantidad')
         ;

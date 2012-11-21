@@ -5,6 +5,7 @@ namespace Decoyeso\PedidoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Decoyeso\PedidoBundle\Entity\Presupuesto;
+use Decoyeso\PedidoBundle\Entity\PresupuestoElemento;
 use Decoyeso\PedidoBundle\Form\PresupuestoType;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -114,9 +115,9 @@ class PresupuestoController extends Controller
     	
     	$opciones=array(
     			"pre_numero"=>array(null,array("label"=>"Número")),
-    			"pre_fechaCreado"=>array("date",array("label"=>"Creado el","format"=>'d-m-Y','pattern' => '{{ day }}{{ month }}{{ year }}',"empty_value"=>array("month"=>"Mes","year"=>"Año","day"=>"Día"))),
-    			"p_obra"=>array(null,array("label"=>"Obra")),
-    			"p_numero"=>array(null,array("label"=>"Número de pedido")),
+    			"pre_nombre"=>array(null,array("label"=>"Nombre")),
+    			"p_nombre"=>array(null,array("label"=>"Nombre de Pedido")),
+    			"p_numero"=>array(null,array("label"=>"Número de Pedido")),
     	);
     	
     	$buscador->setOpcionesForm($opciones);
@@ -205,6 +206,7 @@ class PresupuestoController extends Controller
      */
     public function createAction()
     {
+    	$em = $this->getDoctrine()->getEntityManager();
         $entity  = new Presupuesto();
         $request = $this->getRequest();
         
@@ -213,12 +215,14 @@ class PresupuestoController extends Controller
         
         
         $numFilas = $request->get("numFilas");
-       
+        
+        
         for($i=0; $i<$numFilas; $i++):
-
+        
         	if (!$request->request->has("designacion_$i")) 
         	continue;
     
+        
        		$items[$i]['check'] = $request->get("check_$i");
        		$items[$i]['id'] = $request->get("id_$i");
         	$items[$i]['designacion'] = $request->get("designacion_$i");
@@ -228,12 +232,15 @@ class PresupuestoController extends Controller
     	    $items[$i]['precioVtaSinIva'] = $request->get("precioVtaSinIva_$i");
     	    $items[$i]['precioVtaConIva'] = $request->get("precioVtaConIva_$i");
    		    $items[$i]['precioTotal'] = $request->get("precioTotal_$i");
+   		    
+   		   
+   		    
         endfor;
         
-
         
 
         $entity->setItems(json_encode($items));
+        $presupuestoElemento[]=array();
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
@@ -248,6 +255,28 @@ class PresupuestoController extends Controller
             $pedido->VerificarEstado();
             $em->persist($pedido);
             $em->flush();
+            
+            $items=json_decode($entity->getItems(),true);
+            
+            for($i=0;$i<count($items);$i++){
+            	
+            	if (trim($items[$i]['designacion'])=='')
+            		continue;
+            	
+            	$presupuestoElemento[$i]=new PresupuestoElemento();
+            	$presupuestoElemento[$i]->setPresupuesto($entity);
+            	$elemento=$em->getRepository('ProductoBundle:Elemento')->find($items[$i]['id']);
+            	$presupuestoElemento[$i]->setElemento($elemento);
+            	$presupuestoElemento[$i]->setCantidad($items[$i]);
+            	 
+            	$em->persist($presupuestoElemento[$i]);
+            	
+            	
+            }
+            	
+            
+            $em->flush();
+            	
             
             
 	     	$this->get('session')->setFlash('msj_info','El presupuesto se ha creado correctamente');
@@ -366,13 +395,166 @@ class PresupuestoController extends Controller
 
         	$IdPedido=$entity->getPedido()->getId();
         	
+        	
+        	
         	foreach($presupuestos as $p):
+        		
+        		if($p->getEstado()==1){
+        		
+		        		$bHuboMovimientoEnStock=0;
+		        		$elementosSalieronDeStock=array();
+		        		 
+		        		foreach($entity->getPedido()->getSolicitudMovimiento() as $solicitudesDelPedido){
+		        			
+		        			
+		        			
+		        			if($solicitudesDelPedido->getEstado()==1){
+		        				
+		        				$solicitudesDelPedido->setEstado(4);
+		        				 
+		        			}else{
+		        				 
+		        				if($solicitudesDelPedido->getEstado()==2){
+		        					
+		        					$bHuboMovimientoEnStock=1;
+		        					foreach($solicitudesDelPedido->getSolicitudMovimientoElemento() as $solicitudMovimientoElemento){
+		        						 
+		        						$id=$solicitudMovimientoElemento->getMovimientoStock()->getElemento()->getId();
+		        						$cantidad=$solicitudMovimientoElemento->getMovimientoStock()->getCantidad();
+		        						 
+		        						if(array_key_exists($id,$elementosSalieronDeStock)){
+		        							$elementosSalieronDeStock[$id]=$elementosSalieronDeStock[$id]+$cantidad;
+		        						}else{
+		        							$elementosSalieronDeStock[$id]=$cantidad;
+		        						}
+		        						 
+		        					}
+		        					
+		        					
+		        				}
+		        				 
+		        			}
+		        		
+		        		}
+		        		
+
+		        		$em->persist($solicitudesDelPedido);        		
+        		
+		        		if($bHuboMovimientoEnStock==1){
+		        			
+		        			$productosInsumosRequeridosNuevoPresupuesto=array();
+		        			
+		        			
+		        			foreach ($entity->getPresupuestoElemento() as $presupuestoElemento){
+		        				
+		        				
+		        				$cla=explode('\\',get_class($presupuestoElemento->getElemento()));
+		        				$nombreDeClase=$cla[count($cla)-1];
+		        				 
+		        				if($nombreDeClase=="Servicio"){
+		        					
+		        					$servicioProductos=$em->getRepository('ProductoBundle:ServicioProducto')->findByServicio($presupuestoElemento->getElemento()->getId());
+		        					foreach($servicioProductos as $servicioProducto){
+		        						 
+		        						$id=$servicioProducto->getProducto()->getId();
+		        						 
+		        						if(array_key_exists($id,$productosInsumosRequeridosNuevoPresupuesto)){
+		        								
+		        							$productosInsumosRequeridosNuevoPresupuesto[$id]=$productosInsumosRequeridosNuevoPresupuesto[$id]+($presupuestoElemento->getCantidad()*$servicioProducto->getCantidad());
+		        								
+		        						}else{
+		        								
+		        							$productosInsumosRequeridosNuevoPresupuesto[$id]=($presupuestoElemento->getCantidad()*$servicioProducto->getCantidad());
+		        								
+		        						}
+		        					}
+		        					
+		        					
+		        					$servicioInsumos=$em->getRepository('ProductoBundle:ServicioInsumo')->findByServicio($presupuestoElemento->getElemento()->getId());
+		        					foreach($servicioInsumos as $servicioInsumo){
+		        						 
+		        						$id=$servicioInsumo->getInsumo()->getId();
+		        						 
+		        						if(array_key_exists($id,$productosInsumosRequeridosNuevoPresupuesto)){
+		        					
+		        							$productosInsumosRequeridosNuevoPresupuesto[$id]=$productosInsumosRequeridosNuevoPresupuesto[$id]+($presupuestoElemento->getCantidad()*$servicioInsumo->getCantidad());
+		        					
+		        						}else{
+		        					
+		        							$productosInsumosRequeridosNuevoPresupuesto[$id]=($presupuestoElemento->getCantidad()*$servicioInsumo->getCantidad());
+		        					
+		        						}
+		        					}
+		        					
+		        				}else{
+		        					
+		        					$id=$presupuestoElemento->getElemento()->getId();
+		        					
+		        					if(array_key_exists($id,$productosInsumosRequeridosNuevoPresupuesto)){
+		        					
+		        						$productosInsumosRequeridosNuevoPresupuesto[$id]=$productosInsumosRequeridosNuevoPresupuesto[$id]+$presupuestoElemento->getCantidad();
+		        					
+		        					}else{
+		        					
+		        						$productosInsumosRequeridosNuevoPresupuesto[$id]=$presupuestoElemento->getCantidad();
+		        					
+		        					}
+		        					
+		        				}
+		        				
+		        			}
+		        			
+		        			
+		        			
+		        			$InconsistenciasEnStock=array();
+		        			
+		        			foreach ($elementosSalieronDeStock as $keyElementoSalieron => $valueElementoSalieron) {
+		        				
+		        				if(array_key_exists($keyElementoSalieron,$productosInsumosRequeridosNuevoPresupuesto)){
+		        					
+		        					
+		        					
+		        					if($valueElementoSalieron>$productosInsumosRequeridosNuevoPresupuesto[$keyElementoSalieron]){
+		        						$InconsistenciasEnStock[$keyElementoSalieron]=$valueElementoSalieron-$productosInsumosRequeridosNuevoPresupuesto[$keyElementoSalieron];
+		        					}
+		        					
+		        				}else{
+		        					$InconsistenciasEnStock[$keyElementoSalieron]=$valueElementoSalieron;
+		        				}
+		        				
+		        			}
+		        			 
+		        			//////GENERAR LOGS
+		        			
+		        			$log=array();
+		        			foreach ($InconsistenciasEnStock as $key => $value) {
+		        				  $elemento=$em->getRepository('ProductoBundle:Elemento')->find($key);
+		        				  $log[$key] = $this->get('log');
+		        				  $log[$key]->setPrioridad(3);
+                           		  $log[$key]->setPermisos("ROLE_DEPOSITO");
+                           		  $log[$key]->create(false, 'Inconsistencia en Stock!!! La cantidad de '.$elemento->getNombre().' que salieron de stock debido al presupuesto '.$p->getNumero().' es menor a la cantidad presupuestada en '.$entity->getNumero().'. Para normalizar esta situación, deben reingresar a stock '.$value.' '.$elemento->getUnidad().' de '.$elemento->getNombre().' correspondientes al pedido '.$entity->getPedido()->getNumero().'.');
+                           		  $em->persist($log[$key]);
+                           		  
+                           		  echo $log[$key]->getLog()."<br><br>";
+		        			}
+		        			 
+		        			
+		        		}
+        			        		        		
+        		}
+        	
+
+        	
         		$p->setEstado(2);
         		$em->persist($p);
+        		
         	endforeach;
 
         	$entity->setEstado(1);
         	$em->persist($entity);
+        	
+        	
+        	
         	
         	$pedido=$em->getRepository('PedidoBundle:Pedido')->find($IdPedido);
         	$pedido->VerificarEstado();

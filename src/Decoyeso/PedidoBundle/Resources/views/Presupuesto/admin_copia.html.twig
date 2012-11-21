@@ -18,16 +18,11 @@
 Copiar Presupuesto
 {% endblock module_tit %}
 
-{% block menuOpcionesItems %}
-	{{ macrosPedido.menuOpciones(entity.pedido) }}		
-{% endblock menuOpcionesItems %}
-	
-{% block menuAcciones%}
-{% endblock menuAcciones%}
+{% block menuOpciones %}{% endblock menuOpciones %}
 
-{%block opcionesGuia  %}
-	{{ macrosPedido.guia(entity.pedido) }}
-{%endblock opcionesGuia  %}
+{% block menuAcciones %}
+	<a  class="btn_blue right" href="{{ path('presupuesto_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Presupuestos del Pedido</a>
+{% endblock menuAcciones %}
 
 
 {% block form_content %}

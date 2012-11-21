@@ -15,24 +15,12 @@
 	Crear Pedido
 {% endblock module_tit %}
 
-{% block menuOpciones %}
+{% block menuAcciones %}
 	{%if entity.cliente %}
-		<div class="menuAcciones menusDropDownSeccion" id="idmenuAcciones">
-			<a href="javascript:void(0)" class="btn_blue right" style="background-color: rgb(48, 109, 137);">Opciones</a>
-			<ul style="display: none;">
-			
-				<li><a href="{{path('pedidos_por_cliente',{'cliente':entity.cliente.id})}}">Listar Pedidos del Cliente</a></li>
-				<li class="separador"></li>
-				<li><a href="{{path('cliente_edit',{'id':entity.cliente.id})}}">Editar Cliente</a></li>
-			
-			</ul>
-		</div>
-			
+		<a class="btn_blue right" href="{{path('pedidos_por_cliente',{'cliente':entity.cliente.id})}}">Listar Pedidos del Cliente</a>	
 	{% endif %}
-{% endblock menuOpciones %}
+{% endblock menuAcciones %}
 	
-{% block menuAcciones%}
-{% endblock menuAcciones%}
 
 
 

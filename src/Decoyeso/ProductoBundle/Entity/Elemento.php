@@ -70,6 +70,12 @@ class Elemento
     private $costo;
     
 
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Decoyeso\PedidoBundle\Entity\PresupuestoElemento", mappedBy="elemento")
+     */
+    private $presupuestoElemento;
+    
 
     /**
      * Get id
@@ -187,4 +193,43 @@ class Elemento
     public function __toString(){
     	return $this->getNombre();
     }
+    public function __construct()
+    {
+        $this->presupuestoElemento = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add presupuestoElemento
+     *
+     * @param Decoyeso\PedidoBundle\Entity\PresupuestoElemento $presupuestoElemento
+     */
+    public function addPresupuestoElemento(\Decoyeso\PedidoBundle\Entity\PresupuestoElemento $presupuestoElemento)
+    {
+        $this->presupuestoElemento[] = $presupuestoElemento;
+    }
+
+    /**
+     * Get presupuestoElemento
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getPresupuestoElemento()
+    {
+        return $this->presupuestoElemento;
+    }
+    
+    
+    
+    public function getCantidadPresupuestadaAprobada(){
+    	
+    	$cantidad=0;
+    	foreach($this->getPresupuestoElemento() as $presupuestoElemento){    		
+    		if($presupuestoElemento->getPresupuesto()->getEstado()==1){
+    			$cantidad=$cantidad+$presupuestoElemento->getCantidad();
+    		}    		
+    	}
+    	return $cantidad;
+    }
+    
+    
 }

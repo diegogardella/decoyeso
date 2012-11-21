@@ -24,6 +24,13 @@
 {% endblock menuOpcionesItems %}
 			
 
+{% block list_path %}
+	{{ path('cliente') }}
+{% endblock list_path %}
+
+{% block delete_path %}
+	{{ path('cliente_delete', { 'id': entity.id }) }}
+{% endblock delete_path %}
 
 
 {% block form_content %}

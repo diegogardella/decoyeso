@@ -11,7 +11,8 @@ class MovimientoStockInsumoType extends AbstractType
     {
         $builder
             ->add('accion','hidden')
-            ->add('elemento','entity',array('label'=>'Insumos','class'=>'Decoyeso\\ProductoBundle\\Entity\\Insumo'))            
+            ->add('elemento','entity',array('label'=>'Insumos','class'=>'Decoyeso\\ProductoBundle\\Entity\\Insumo'))
+            ->add('motivo','choice',array('choices'=>array(1=>'Nuevo',3=>'Reingreso',4=>'Mal Estado',6=>'Rotura Accidental',8=>'Otro')))
             ->add('observacion')
             ->add('cantidad')
         ;

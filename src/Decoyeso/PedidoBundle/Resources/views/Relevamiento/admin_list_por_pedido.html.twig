@@ -33,16 +33,29 @@
 {%endblock buscador %}
 
 
-{% block menuOpcionesItems %}
-	{{ macrosPedido.menuOpciones(pedido) }}		
-{% endblock menuOpcionesItems %}
+{% block menuOpciones %}
+{% endblock menuOpciones %}
 
-{% block menuAcciones%}
-{% endblock menuAcciones%}
+
+{% block buscar_btn %}{%endblock buscar_btn%}
+
+
+{% block new_path %} 
+	{{path('relevamiento_new',{'pedido':pedido.id})}}
+{% endblock new_path %}
+
 
 {% block edit_path %} 
 {{ path('relevamiento_edit', { 'id': entity.id }) }} 
 {% endblock edit_path %}
+
+{% block delete_path %}
+{{ path('relevamiento_delete', { 'id': entity.id }) }}
+{% endblock delete_path %}
+
+{% block list_delete %}
+{% render "PedidoBundle:Relevamiento:listDeleteform" with {'id': entity.id}  %}
+{% endblock list_delete %}
 
 {% block list_navigation %}
 {% endblock list_navigation %}

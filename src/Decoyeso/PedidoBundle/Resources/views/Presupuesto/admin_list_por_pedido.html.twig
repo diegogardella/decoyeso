@@ -31,20 +31,13 @@
 {% endblock list_item_texts %}
 
 
-{%block buscador %}
-{%endblock buscador %}
+{%block buscador %}{%endblock buscador %}
+{% block menuOpciones %}{% endblock menuOpciones %}
+{% block buscar_btn %}{%endblock buscar_btn%}
 
-
-{% block menuOpcionesItems %}
-	{{ macrosPedido.menuOpciones(pedido) }}		
-{% endblock menuOpcionesItems %}
-
-{%block opcionesGuia  %}
-	{{ macrosPedido.guia(pedido) }}
-{%endblock opcionesGuia  %}
-
-{% block menuAcciones%}
-{% endblock menuAcciones%}
+{% block new_path %} 
+	{{path('presupuesto_new',{'pedido':pedido.id})}}
+{% endblock new_path %}
 
 {% block edit_path %} 
 {{ path('presupuesto_edit', { 'id': entity.id }) }} 
@@ -53,4 +46,12 @@
 {% block list_navigation %}
 {% endblock list_navigation %}
 
+
+{% block delete_path %}
+	{{ path('presupuesto_delete', { 'id': entity.id }) }}
+{% endblock delete_path %}
+
+{% block list_delete %}
+	{% render "PedidoBundle:Presupuesto:listDeleteform" with {'id': entity.id}  %}
+{% endblock list_delete %}
 

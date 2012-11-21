@@ -13,16 +13,8 @@
 Listado de Solicitudes a Stock
 {% endblock module_tit %}
 
-{% block menuOpcionesItems %}
-	{{ macrosPedido.menuOpciones(pedido) }}		
-{% endblock menuOpcionesItems %}
 
-{% block menuAcciones %}		
-{% endblock menuAcciones %}
-
-{%block opcionesGuia  %}
-	{{ macrosPedido.guia(pedido) }}
-{%endblock opcionesGuia  %}
+{%block buscador%}{%endblock buscador%}
 
 {% block list_tits %}
 
@@ -41,8 +33,7 @@ Listado de Solicitudes a Stock
 	<td ><a href="{{ path('solicitudmovimiento_show', { 'id': entity.id }) }}">{{ entity.estadoNombre }}</a></td>
 {% endblock list_item_texts %}
 
-{%block buscador%}
-{%endblock buscador%}
+
 
 
 {%block list_content_antes%}
@@ -82,8 +73,12 @@ Listado de Solicitudes a Stock
 {% block list_navigation %}	
 {% endblock list_navigation %}
 
-{% block new_path %} 
 
+{% block menuOpciones %}{% endblock menuOpciones %}
+{% block buscar_btn %}{%endblock buscar_btn%}
+
+{% block new_path %} 
+	{{path('solicitudmovimiento_new',{'paramPedido':pedido.id})}}
 {% endblock new_path %}
 
 {% block edit_path %} 

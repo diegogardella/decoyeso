@@ -1,11 +1,5 @@
 {% extends "CoobixAdminBundle:Default:list.html.twig" %}
 
-{% block breadcrumb_in %}
-<div class="breadcrumbs">
-<a href="{{ path('pedido') }}" class="current" >Pedidos</a>
-</div>
-{% endblock breadcrumb_in %} 
-
 
 {% block module_tit %}
 Listado de Pedidos
@@ -47,14 +41,12 @@ Listado de Pedidos
 		{{form_row(formBuscar._token)}}
 		{{form_row(formBuscar.p_numero)}}
 		{{form_row(formBuscar.p_nombre)}}
-		{{form_row(formBuscar.p_descripcion)}}
+
 		{{form_row(formBuscar.p_requiereRelevamiento)}}		
 		{{form_row(formBuscar.p_prioridad)}}
 		{{form_row(formBuscar.p_estado)}}
 		{{form_row(formBuscar.p_fechaSolicitado)}}
 		{{form_row(formBuscar.p_fechaEntrega)}}
-		{{form_row(formBuscar.p_fechaCreado)}}
-		{{form_row(formBuscar.p_fechaActualizado)}}
 		
 		{{form_row(formBuscar.c_nombre)}}
 		{{form_row(formBuscar.c_numero)}}
@@ -63,7 +55,7 @@ Listado de Pedidos
 	</div>
 {%endblock%}
 
-{% block menuAcciones%}	{% endblock menuAcciones%}
+{% block menuOpciones%}	{% endblock menuOpciones%}
 
 {% block new_path %} 
 {{ path('pedido_new') }}

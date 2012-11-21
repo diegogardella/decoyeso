@@ -28,22 +28,15 @@ class SolicitudMovimientoController extends Controller
     	$buscador->setRequest($this->getRequest());
     	$buscador->setPararouting($pararouting);
     
-    	$buscador->setSql('SELECT sm FROM StockBundle:SolicitudMovimiento sm join sm.pedido p ORDER BY sm.estado ASC, sm.fechaHoraRequerido DESC, sm.id ASC');
+    	$buscador->setSql('SELECT sm FROM StockBundle:SolicitudMovimiento sm join sm.pedido p ORDER BY sm.estado ASC, sm.fechaHoraRequerido ASC, sm.id ASC');
     
-    	/*$opciones=array(
-    			"c_tipo"=>array('choice',array("label"=>"Tipo de cliente",'choices'=>	array(""=>"",1 => 'Persona Física', 2 => 'Organización'))),
-    			"c_nombre"=>array(null,array("label"=>"Apellido, Nombre")),
-    			"c_fechaActualizado"=>array("date", array("empty_value"=>array("month"=>"Mes","year"=>"Año","day"=>"Día"),"format"=>"d-m-Y",'pattern'=> '{{ day }}{{ month }}{{ year }}','label'=>'Actualizado el')),
-    			"c_fechaCreado"=>array("date",array("empty_value"=>array("month"=>"Mes","year"=>"Año","day"=>"Día"),"format"=>"d-m-Y",'pattern'=> '{{ day }}{{ month }}{{ year }}','label'=>'Creado el')),
-    			"c_cuitOcuil"=>array(null,array("label"=>"Cuit o Cuil ")),
-    			"c_barrio"=>array(null,array("label"=>"Dirección - Barrio")),
-    			"c_calle"=>array(null,array("label"=>"Dirección - Calle")),
-    			"c_numeroCalle"=>array(null,array("label"=>"Dirección - Número")),
-    			"c_numero"=>array(null,array("label"=>"Número")),
-    			"c_email"=>array(null,array("label"=>"E-mail")),
-    			"c_dni"=>array(null,array("label"=>"DNI"))
+    	$opciones=array(
+    			"sm_estado"=>array('choice',array("label"=>"Estado",'choices'=>	array(""=>"",1 => 'Solicitud Enviada', 2 => 'Solicitud Procesada', 3 => 'Solicitud Cancelada'))),
+    			"sm_numero"=>array(null,array("label"=>"Número")),
+    			"p_numero"=>array(null,array("label"=>"Número de Pedido")),
+    			"p_nombre"=>array(null,array("label"=>"Nombre de Pedido")),
     			);
-    	$buscador->setOpcionesForm($opciones);*/
+    	$buscador->setOpcionesForm($opciones);
     	
 
     
@@ -161,6 +154,7 @@ class SolicitudMovimientoController extends Controller
         $pedido=$em->getRepository('PedidoBundle:Pedido')->find($paramPedido);
         $entity->setPedido($pedido);
         $entity->setDireccionDestino($entity->getPedido()->getProvincia()->getNombre().",".$entity->getPedido()->getDepartamento()->getNombre().", ".$entity->getPedido()->getLocalidad()->getNombre()." - ".$entity->getPedido()->getDireccionBarrio().", ".$entity->getPedido()->getDireccionCalle().", ".$entity->getPedido()->getDireccionNumero());
+        $entity->setFechaHoraRequerido(new \DateTime('tomorrow 08:00'));
         
         $elementosYCantidades=$this->getCantidades($paramPedido);
         
@@ -396,7 +390,7 @@ class SolicitudMovimientoController extends Controller
     						$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$servicioProducto->getCantidad();
     						$arrayElementosCantidades[$id]["cantidadEnStock"]=$servicioProducto->getProducto()->getCantidadEnStock();
     						$arrayElementosCantidades[$id]["cantidadSolicitada"]=$servicioProducto->getProducto()->getCantidadSolicitadaStock($paramPedido);
-    						$arrayElementosCantidades[$id]["cantidadEntregada"]=$servicioProducto->getProducto()->getCantidadEntregadaStock($paramPedido);
+    						$arrayElementosCantidades[$id]["cantidadEntregada"]=$servicioProducto->getProducto()->getCantidadEntregadaStockSolicitud($paramPedido);
     						 
     						 
     					}
@@ -423,7 +417,7 @@ class SolicitudMovimientoController extends Controller
     						$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$servicioInsumo->getCantidad();
     						$arrayElementosCantidades[$id]["cantidadEnStock"]=$servicioInsumo->getInsumo()->getCantidadEnStock();
     						$arrayElementosCantidades[$id]["cantidadSolicitada"]=$servicioInsumo->getInsumo()->getCantidadSolicitadaStock($paramPedido);
-    						$arrayElementosCantidades[$id]["cantidadEntregada"]=$servicioInsumo->getInsumo()->getCantidadEntregadaStock($paramPedido);
+    						$arrayElementosCantidades[$id]["cantidadEntregada"]=$servicioInsumo->getInsumo()->getCantidadEntregadaStockSolicitud($paramPedido);
     						$idsElementos.=",".$id;
     						 
     					}
@@ -451,7 +445,7 @@ class SolicitudMovimientoController extends Controller
     					$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$value["cantidad"];
     					$arrayElementosCantidades[$id]["cantidadEnStock"]=$elemento->getCantidadEnStock();
     					$arrayElementosCantidades[$id]["cantidadSolicitada"]=$elemento->getCantidadSolicitadaStock($paramPedido);
-    					$arrayElementosCantidades[$id]["cantidadEntregada"]=$elemento->getCantidadEntregadaStock($paramPedido);
+    					$arrayElementosCantidades[$id]["cantidadEntregada"]=$elemento->getCantidadEntregadaStockSolicitud($paramPedido);
     					 
     				}
     				 

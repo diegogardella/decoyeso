@@ -17,33 +17,10 @@
 Crear Presupuesto
 {% endblock module_tit %}
 
-{% block menuOpciones %}
-{% if entity.pedido %}
-
-	<div class="menuMasOpciones menusDropDownSeccion" id="idmenuMasOpciones">
-		<a href="javascript:void(0)" class="btn_blue right" id="idBtnMasOpciones" style="background-color: rgb(48, 109, 137);">Opciones</a>
-		<ul style="display: none;" id="idUlMasOpciones">
-			<li><a href="{{ path('relevamiento_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Relevamientos del Pedido</a></li>
-			<li><a href="{{path('relevamiento_new',{'pedido':entity.pedido.id})}}">Crear Relevamiento al Pedido</a></li>
-			<li class="separador"></li>
-			
-			<li><a  href="{{ path('presupuesto_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Presupuestos del Pedido</a></li>
-			<li class="separador"></li>
-						
-			<li><a href="{{path('pedidos_por_cliente',{'cliente':entity.pedido.cliente.id})}}">Listar Pedidos del Cliente</a></li>
-			<li><a href="{{path('pedido_edit',{'id':entity.pedido.id})}}">Editar Pedido</a></li>
-			<li><a href="{{path('pedido_new',{'cliente':entity.pedido.cliente.id})}}">Crear Pedido a Cliente</a></li>
-			
-			<li class="separador"></li>
-			<li><a href="{{path('cliente_edit',{'id':entity.pedido.cliente.id})}}">Editar Cliente</a></li>								
-	
-		</ul>
-	</div>
-
-{% endif %}
-{% endblock menuOpciones %}
+{% block menuOpciones %}{% endblock menuOpciones %}
 
 {% block menuAcciones %}
+	<a  class="btn_blue right" href="{{ path('presupuesto_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Presupuestos del Pedido</a>
 {% endblock menuAcciones %}
 
 {% block form_content %}

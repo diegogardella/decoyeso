@@ -163,7 +163,11 @@
 			<div class="menuTab">
 				<div class="tabTit txt3" id="pedidoTit">Stock</div>
 				<ul class="tabUl">
-				
+
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('movimientostock',{'pararouting':'producto'}) }}">Resumen Stock de Productos</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('movimientostock',{'pararouting':'insumo'}) }}">Resumen Stock de Insumos</a></li>
+					<li class="sepItemsTabUl"></li>
+									
 					<li class="itemsTabUl"><a class="txt16" href="{{ path('solicitudmovimiento') }}">Listar Solicitudes</a></li>
 					<li class="sepItemsTabUl"></li>
 				

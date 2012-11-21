@@ -105,12 +105,28 @@ class Producto extends Elemento
     			$cantidadProductoStock=$cantidadProductoStock-$productoStock->getCantidad();
     		}
     	}
-    	
     	return $cantidadProductoStock;
     	
     }
     
-
+    
+    public function getCantidadEntregadaStock(){
+    
+    	$cantidad=0;
+    	foreach($this->getMovimientoStock() as $productoStock){
+    		if($productoStock->getAccion()==2){
+    			if($productoStock->getMotivo()==2){
+    				$cantidad=$cantidad+$productoStock->getCantidad();
+    			}
+    		}else{
+    			if($productoStock->getMotivo()==3){
+    				$cantidad=$cantidad-$productoStock->getCantidad();
+    			}
+    		}
+    	}
+    
+    	return $cantidad;
+    }
     
 
     /**
@@ -158,7 +174,7 @@ class Producto extends Elemento
     }
     
     
-    public function getCantidadEntregadaStock($pedido=0){
+    public function getCantidadEntregadaStockSolicitud($pedido=0){
     	
     	$cantidad=0;
     	

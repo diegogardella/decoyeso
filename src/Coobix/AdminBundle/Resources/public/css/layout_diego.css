@@ -1,25 +1,18 @@
 
-.field_widget_insumos,.field_widget_productos,.field_widget_elementos{
-	width: auto;
-}
-
-.field_widget_insumos tr th,.field_widget_productos tr th,.field_widget_elementos tr th{
-	background-color: #ccc; 
-}
-
 .field_widget_insumos tr th:first-child,.field_widget_productos tr th:first-child,.field_widget_elementos tr th:first-child{
 	text-align: left;
 	
 }
 
 .field_widget_insumos tr td select,.field_widget_productos tr td select,.field_widget_elementos tr td select{
-	width: 350px;
-	padding:5px;
-	height: 30px
+	width: 500px;
+	padding:3px;
+	
 }
 
 .field_widget_insumos tr td input[type="text"],.field_widget_productos tr td input[type="text"],.field_widget_elementos tr td input[type="text"]{
 	width: 50px;
+	height:10px;
 	padding:5px;
 }
 
@@ -42,26 +35,29 @@
 	top:38px;
 	right:8%;
 	position:absolute;
-	width: 225px;
+	width: 200px;
 }
 
 .menusDropDownSeccion ul li{
-	clear:left;
-	margin:5px auto;
+	float:right;
+	width:100%;
+	margin:1px auto;
 }
 
 .menusDropDownSeccion ul .separador{
-	clear:left;
+	float:right;
+	width:100%;
 	padding:5px 2;
 	border:solid 1px #f0f0f0;
 }
 
 .menusDropDownSeccion ul li button,.menusDropDownSeccion ul li a{
+	float:right;
 	border:none;
 	background: none;
-	font-size: 14px;
+	font-size: 13px;
 	color:#555;
-	padding:2px 5px;
+	padding:5px;
 	margin:0px;
 	cursor:pointer;
 }
@@ -71,15 +67,6 @@
 	background-color: #24AEE0;
 	width: auto;
 }
-
-
-
-
-
-
-
-
-
 
 
 
