@@ -37,7 +37,9 @@
 			<tr>
 				<td align="left" class=" txt3 ">TOTAL PROD.</td>
 				{% for di in entity.getDatosInsumos() %}
-					<td align="center" class=" txt3 ">{{ di.nombre }}</td>	
+					<td align="center" class=" txt3 ">{{ di.nombre }}</td>
+				{% else %}
+					<td align="center" class=" txt3 ">&nbsp;</td>
 				{% endfor %}
 			</tr>
 			
@@ -46,6 +48,8 @@
 				<td align="left" class="">{{ totalCantidad }} productos</td>
 				{% for di in entity.getDatosInsumos() %}
 					<td align="center" class="">{{ di.cantidad }} {{ di.unidad }}</td>
+					{% else %}
+					<td align="center" class=" txt3 ">No se consumirán insumos.</td>
 				{% endfor %}
 			</tr>
 			

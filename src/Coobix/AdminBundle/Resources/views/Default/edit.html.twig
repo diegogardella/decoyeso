@@ -61,9 +61,11 @@
 				{% block menuAcciones%}
 
 					{% block module_header_delete%}
+					
+					
 					<form action="{% block delete_path %}{{ path('admin_entity_delete', { 'id': entity.id }) }}{% endblock delete_path %}" method="post">
 					{{ form_widget(delete_form) }}
-					<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
+					<button  class="btn_red_button right" type="submit">Eliminar</button>
 					</form>
 					{% endblock module_header_delete%}
 			
@@ -111,7 +113,7 @@
 	{%endblock msj_info%}
 		
 	{% block form_content %}
-		<form action="{% block update_path %}{{ path('admin_entity_update') }}{% endblock update_path %}" method="post" {{ form_enctype(edit_form) }}>
+		<form novalidate action="{% block update_path %}{{ path('admin_entity_update') }}{% endblock update_path %}" method="post" {{ form_enctype(edit_form) }}>
 		{% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 		{{ form_widget(edit_form) }}
 			<p>

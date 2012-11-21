@@ -198,7 +198,7 @@ width: 20%;
 
 .menuTab {
     float: left;
-    padding: 10px 0 10px 10px;
+    padding: 10px 0 3px 10px;
     width: 95%;
 }
 
@@ -252,12 +252,22 @@ background: url(../images/icons/user.png) no-repeat;
 }
 
 #logTit {
-background: url(../images/icons/page_white_text.png) no-repeat;
+background: url(../images/icons/bell.png) no-repeat;
 }
 
 #pedidoTit {
 background: url(../images/icons/cart_add.png) no-repeat;
 }
+
+#stockTit {
+background: url(../images/icons/box.png) no-repeat;
+}
+
+#estadisticasTit {
+background: url(../images/icons/chart_bar.png) no-repeat;
+}
+
+
 
 #pageTit {
 background: url(../images/icons/page_white_world.png) no-repeat;

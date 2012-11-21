@@ -19,15 +19,13 @@
 {{ path('usuario') }}
 {% endblock list_path %}
 
-	{% block delete_path %}
-			{{ path('usuario_delete', { 'id': entity.id }) }}
-		{% endblock delete_path %}
+
 
 
 
 {% block module_header_delete%}
 {% if (app.user.id != entity.id) %}
-{{ parent() }}
+	{% render "UsuarioBundle:Usuario:accionDeleteform" with {'id': entity.id}  %}
 {% endif %}
 {% endblock module_header_delete%}
 

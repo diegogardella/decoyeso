@@ -53,7 +53,7 @@ class MoldeController extends Controller
         $entity = $em->getRepository('DecoyesoProduccionBundle:Molde')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Molde entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró el molde.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -97,9 +97,9 @@ class MoldeController extends Controller
             $em->flush();
             
             $log = $this->get('log');
-            $log->create($entity, "Molde Creado");
+            $log->create($entity, "Molde creado");
             
-            $this->get('session')->setFlash('msj_info','El Molde se ha creado correctamente');
+            $this->get('session')->setFlash('msj_info','El molde se ha creado correctamente.');
 
             return $this->redirect($this->generateUrl('molde_edit', array('id' => $entity->getId())));
             
@@ -122,7 +122,7 @@ class MoldeController extends Controller
         $entity = $em->getRepository('DecoyesoProduccionBundle:Molde')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Molde entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró el molde.');
         }
 
         $editForm = $this->createForm(new MoldeType(), $entity);
@@ -146,7 +146,7 @@ class MoldeController extends Controller
         $entity = $em->getRepository('DecoyesoProduccionBundle:Molde')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Molde entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró el molde.');
         }
 
         $editForm   = $this->createForm(new MoldeType(), $entity);
@@ -161,9 +161,9 @@ class MoldeController extends Controller
             $em->flush();
             
             $log = $this->get('log');
-            $log->create($entity, "Molde Actualizado");
+            $log->create($entity, "Molde actualizado");
             
-            $this->get('session')->setFlash('msj_info','El Molde se ha actualizado correctamente');
+            $this->get('session')->setFlash('msj_info','El molde se ha actualizado correctamente.');
 
             return $this->redirect($this->generateUrl('molde_edit', array('id' => $id)));
         }
@@ -191,12 +191,12 @@ class MoldeController extends Controller
             $entity = $em->getRepository('DecoyesoProduccionBundle:Molde')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Molde entity.');
+                throw $this->createNotFoundException('ERROR: no se encontró el molde.');
             }
             
             //LOG
             $log = $this->get('log');
-            $log->create($entity, "Molde Eliminado");
+            $log->create($entity, "Molde eliminado");
 
             $em->remove($entity);
             $em->flush();
@@ -225,4 +225,18 @@ class MoldeController extends Controller
     	));
     
     }
+    
+    public function accionDeleteformAction($id)
+    {
+    	$deleteForm = $this->createDeleteForm($id);
+    
+    	return $this->render('CoobixAdminBundle:Default:accion_delete_form.html.twig', array(
+    			'delete_form' => $deleteForm->createView(),
+    			'url' => $this->generateUrl('molde_delete', array('id' => $id)),
+    			'id'=>$id,
+    			'msj'=>'¿Seguro desea eliminar el molde?'
+    	));
+    
+    }
+    
 }

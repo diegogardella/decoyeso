@@ -41,59 +41,17 @@ class Producto extends Elemento
 	 */
 	private $tipo;
 	
-
 	
 	/**
-	 * Get tipo
+	 * @var Molde $molde
 	 *
-	 * @return integer
+	 * @ORM\OneToOne(targetEntity="\Decoyeso\ProduccionBundle\Entity\Molde", mappedBy="producto")
 	 */
-	public function getTipo()
-	{
-		return $this->tipo;
-	}
+	private $molde;
+
 	
-	/**
-	 * Set nombre
-	 *
-	 * @param string $nombre
-	 */
-	public function setTipo($tipo)
-	{
-		$this->tipo = $tipo;
-	}
 	
-
-
-
-	public function __construct()
-	{
-		$this->productoInsumo = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->movimientoStock = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->solicitudMovimientoElemento = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->productoInsumo = new \Doctrine\Common\Collections\ArrayCollection();
-	}
-
-    
-    /**
-     * Add movimientoStock
-     *
-     * @param Decoyeso\StockBundle\Entity\MovimientoStock $movimientoStock
-     */
-    public function addMovimientoStock(\Decoyeso\StockBundle\Entity\MovimientoStock $movimientoStock)
-    {
-        $this->movimientoStock[] = $movimientoStock;
-    }
-
-    /**
-     * Get movimientoStock
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getMovimientoStock()
-    {
-        return $this->movimientoStock;
-    }
+  
     
     public function getCantidadEnStock(){
     	
@@ -149,6 +107,7 @@ class Producto extends Elemento
         return $this->solicitudMovimientoElemento;
     }
     
+
     
     public function getCantidadSolicitadaStock($pedido=0){
     	    		
@@ -197,8 +156,53 @@ class Producto extends Elemento
     }
     
 
+    public function __construct()
+    {
+        $this->movimientoStock = new \Doctrine\Common\Collections\ArrayCollection();
+	    $this->productoInsumo = new \Doctrine\Common\Collections\ArrayCollection();
+	    $this->solicitudMovimientoElemento = new \Doctrine\Common\Collections\ArrayCollection();
+    }
     
-    
+    /**
+     * Set tipo
+     *
+     * @param integer $tipo
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return integer 
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Add movimientoStock
+     *
+     * @param Decoyeso\StockBundle\Entity\MovimientoStock $movimientoStock
+     */
+    public function addMovimientoStock(\Decoyeso\StockBundle\Entity\MovimientoStock $movimientoStock)
+    {
+        $this->movimientoStock[] = $movimientoStock;
+    }
+
+    /**
+     * Get movimientoStock
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getMovimientoStock()
+    {
+        return $this->movimientoStock;
+    }
+
     /**
      * Add productoInsumo
      *
@@ -206,18 +210,56 @@ class Producto extends Elemento
      */
     public function addProductoInsumo(\Decoyeso\ProductoBundle\Entity\ProductoInsumo $productoInsumo)
     {
-    	$this->productoInsumo[] = $productoInsumo;
+        $this->productoInsumo[] = $productoInsumo;
     }
-    
+
     /**
      * Get productoInsumo
      *
-     * @return Doctrine\Common\Collections\Collection
+     * @return Doctrine\Common\Collections\Collection 
      */
     public function getProductoInsumo()
     {
-    	return $this->productoInsumo;
+        return $this->productoInsumo;
     }
 
+    /**
+     * Add solicitudMovimientoElemento
+     *
+     * @param Decoyeso\StockBundle\Entity\SolicitudMovimientoElemento $solicitudMovimientoElemento
+     */
+    public function addSolicitudMovimientoElemento(\Decoyeso\StockBundle\Entity\SolicitudMovimientoElemento $solicitudMovimientoElemento)
+    {
+        $this->solicitudMovimientoElemento[] = $solicitudMovimientoElemento;
+    }
 
+    /**
+     * Get solicitudMovimientoElemento
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getSolicitudMovimientoElemento()
+    {
+        return $this->solicitudMovimientoElemento;
+    }
+
+    /**
+     * Set molde
+     *
+     * @param Decoyeso\ProduccionBundle\Entity\Molde $molde
+     */
+    public function setMolde(\Decoyeso\ProduccionBundle\Entity\Molde $molde)
+    {
+        $this->molde = $molde;
+    }
+
+    /**
+     * Get molde
+     *
+     * @return Decoyeso\ProduccionBundle\Entity\Molde 
+     */
+    public function getMolde()
+    {
+        return $this->molde;
+    }
 }

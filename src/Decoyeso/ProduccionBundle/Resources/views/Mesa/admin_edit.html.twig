@@ -4,14 +4,11 @@
 
 {% block module_tit %}Datos del mesa{% endblock module_tit %}		
 			
-{% block menuAccionesItems%}
-	
-	<form action="{{ path('mesa_delete', { 'id': entity.id }) }}" method="post">
-		{{ form_widget(delete_form) }}
-		<button id="pedidoEliminarBtn"  type="submit">Eliminar</button>
-	</form>
 
-{% endblock menuAccionesItems%}
+
+{% block menuAcciones%}
+{% render "DecoyesoProduccionBundle:Mesa:accionDeleteform" with {'id': entity.id}  %}
+{% endblock menuAcciones%}
 			
 {% block menuOpciones %} {% endblock menuOpciones %}
 

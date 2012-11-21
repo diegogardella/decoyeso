@@ -16,13 +16,17 @@
 					{% block new_path_btn %}
 						<a class="btn_blue right" href="{% block new_path %}{{ path('admin_entity_new') }}	
 					{% endblock new_path %}">Crear</a>
-				{% endblock new_path_btn %}
+					{% endblock new_path_btn %}
 
-				{% block buscar_btn %}
-				<a id="btnListBuscar" href="javascript:void(0)" class="btn_blue right" >
-				Buscar
-				</a>
-				{%endblock buscar_btn%}
+					{% block buscar_btn %}
+					<a id="btnListBuscar" href="javascript:void(0)" class="btn_blue right" >
+					Buscar
+					</a>
+					{%endblock buscar_btn%}
+				
+					{% block module_header_otros%}
+					
+					{% endblock module_header_otros%}
 				
 				
 			{% endblock menuAcciones%}
@@ -79,6 +83,11 @@
 	{% endblock list_content_antes %}
 
 	<div class="tab_container border_radius">
+			{% if app.session.hasFlash('msj_info') %}
+			<div id="msjInfo" class="msjInfo" >
+				{{ app.session.getFlash('msj_info') }}
+			</div>
+		{% endif %}
 		
 			{% block list_content %}
 

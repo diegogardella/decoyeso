@@ -45,29 +45,6 @@
 	</div> 
 	{% endblock header %}
 	
-	{#
-	{% block secondary_bar %}
-	<div id="secondary_bar">
-		<div class="header_secundary_bar">
-			
-			<div class="breadcrumbs">
-				<a href="{{ path('admin_dashboard') }}">Administrador</a>
-
-			</div>
-			<a href="{{ path('admin_dashboard') }}">Administrador</a>
-			
-		</div>
-		
-		<div class="breadcrumbs_container">
-			
-					{% block breadcrumb_in %}
-
-					{% endblock breadcrumb_in %} 
-			
-		
-	</div>
-	{% endblock secondary_bar %}
-#}
 
 	
 	{% block sidebar %}
@@ -86,14 +63,53 @@
 			
 			
 			<div class="menuTab">
-				<div class="tabTit txt3" id="logTit">Notificaciones</div>
+				<div class="tabTit txt3" id="logTit">
+					<a class="txt3" href="{{ path('log') }}?todas=1">Notificaciones</a>
+				</div>	
+			</div>
+			
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+			<div class="menuTab">
+				<div class="tabTit txt3" id="miAccountTit">
+					<a class="txt3" href="{{ path('usuario') }}">Usuarios</a>
+				</div>
+			</div>
+			{% else %}
+			<div class="menuTab">
+				<div class="tabTit txt3" id="miAccountTit">
+					<a class="txt3" href="{{ path('usuario_edit', { 'id': app.user.id }) }}">Mi Cuenta</a>
+				</div>
+			</div>
+			{% endif %}
+			{#
+			<div class="menuTab">
+				<div class="tabTit txt3" id="miAccountTit">Usuarios</div>
 				<ul class="tabUl">
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('log') }}">Listar Notificaciones</a></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('log_new') }}">Crear Notificación</a></li>
+					
+				
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('usuario_edit', { 'id': app.user.id }) }}">Mi Cuenta</a></li>
+					
+					{% if is_granted('ROLE_SUPER_ADMIN')  %}
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('usuario') }}">Listar Usuarios</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('usuario_new') }}">Crear Usuario</a></li>
+					{% endif %}
 				</ul>	
 			</div>
-		
-		
+			#}
+			
+			{% if is_granted('ROLE_ADMINISTRACION') %}
+			<div class="menuTab">
+				<div class="tabTit txt3" id="clienteTit"><a class="txt3" href="{{ path('cliente') }}">Clientes</a></div>
+			
+			</div>
+			{% endif %}
+			
+			
+			
+			
+
+			
+			{#
 			<div class="menuTab">
 				<div class="tabTit txt3" id="clienteTit">Clientes</div>
 				<ul class="tabUl">
@@ -101,26 +117,31 @@
 					<li class="itemsTabUl"><a class="txt16" href="{{ path('cliente_new') }}">Crear Cliente</a></li>
 				</ul>	
 			</div>
+			#}
 			
+			{% if is_granted('ROLE_ADMINISTRACION') %}
 			<div class="menuTab">
-				<div class="tabTit txt3" id="NProdTit">Producción</div>
+				<div class="tabTit txt3" id="pedidoTit">Pedidos</div>
 				<ul class="tabUl">
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('proceso') }}">Listar Procesos</a></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('proceso_new') }}">Crear Proceso</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('pedido') }}">Pedidos</a></li>
+					
+					
 					<li class="sepItemsTabUl"></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('molde') }}">Listar Moldes</a></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('molde_new') }}">Crear Molde</a></li>
+					
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('relevamiento') }}">Relevamientos</a></li>
+					{#<li class="itemsTabUl"><a class="txt16" href="{{ path('relevamiento_new') }}">Crear Relevamiento</a></li>#}
+					
 					<li class="sepItemsTabUl"></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('mesa') }}">Listar Mesas</a></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('mesa_new') }}">Crear Mesa</a></li>
-					<li class="sepItemsTabUl"></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('secador_estado') }}">Estado Secadores</a></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('secador') }}">Listar Secadores</a></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('secador_new') }}">Crear Secadores</a></li>
+					
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('presupuesto') }}">Presupuestos</a></li>
+					{#<li class="itemsTabUl"><a class="txt16" href="{{ path('presupuesto_new') }}">Crear Presupuesto</a></li>#}
+					
 				</ul>	
 			</div>
-			
+			{% endif %}
 
+			
+			{#
 			<div class="menuTab">
 				<div class="tabTit txt3" id="pedidoTit">Pedidos</div>
 				<ul class="tabUl">
@@ -130,17 +151,39 @@
 					<li class="sepItemsTabUl"></li>
 					
 					<li class="itemsTabUl"><a class="txt16" href="{{ path('relevamiento') }}">Listar Relevamientos</a></li>
-					{#<li class="itemsTabUl"><a class="txt16" href="{{ path('relevamiento_new') }}">Crear Relevamiento</a></li>#}
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('relevamiento_new') }}">Crear Relevamiento</a></li>
 					
 					<li class="sepItemsTabUl"></li>
 					
 					<li class="itemsTabUl"><a class="txt16" href="{{ path('presupuesto') }}">Listar Presupuestos</a></li>
-					{#<li class="itemsTabUl"><a class="txt16" href="{{ path('presupuesto_new') }}">Crear Presupuesto</a></li>#}
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('presupuesto_new') }}">Crear Presupuesto</a></li>
 					
 				</ul>	
 			</div>
+			#}
 			
+			{% if is_granted('ROLE_ADMINISTRACION') %}
+				<div class="menuTab">
+				<div class="tabTit txt3" id="pedidoTit">Productos y Servicios</div>
+				<ul class="tabUl">
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('producto') }}">Productos</a></li>
+					
+					
+					<li class="sepItemsTabUl"></li>
+					
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('servicio') }}">Servicios</a></li>
+
+					
+					<li class="sepItemsTabUl"></li>
+					
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('insumo') }}">Insumos</a></li>
+				
+					
+				</ul>	
+			</div>
+			{% endif %}
 			
+			{#
 			<div class="menuTab">
 				<div class="tabTit txt3" id="pedidoTit">Productos y Servicios</div>
 				<ul class="tabUl">
@@ -159,16 +202,20 @@
 					
 				</ul>	
 			</div>
+			#}
+			
+
 			
 			<div class="menuTab">
-				<div class="tabTit txt3" id="pedidoTit">Stock</div>
+				<div class="tabTit txt3" id="stockTit">Stock</div>
 				<ul class="tabUl">
 
 					<li class="itemsTabUl"><a class="txt16" href="{{ path('movimientostock',{'pararouting':'producto'}) }}">Resumen Stock de Productos</a></li>
+					<li class="sepItemsTabUl"></li>
 					<li class="itemsTabUl"><a class="txt16" href="{{ path('movimientostock',{'pararouting':'insumo'}) }}">Resumen Stock de Insumos</a></li>
 					<li class="sepItemsTabUl"></li>
-									
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('solicitudmovimiento') }}">Listar Solicitudes</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('solicitudmovimiento') }}">Solicitudes</a></li>
+
 					<li class="sepItemsTabUl"></li>
 				
 					<li class="itemsTabUl"><a class="txt16" href="{{ path('movimientostock_new',{'accion':1,'tipo':1}) }}">Agregar Productos a Stock</a></li>
@@ -181,19 +228,45 @@
 				</ul>	
 			</div>
 			
+			
+			{#
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+
 			<div class="menuTab">
-				<div class="tabTit txt3" id="miAccountTit">Usuarios</div>
+				<div class="tabTit txt3" id="estadisticasTit">Informes</div>
 				<ul class="tabUl">
-					
-				
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('usuario_edit', { 'id': app.user.id }) }}">Mi Cuenta</a></li>
-					
-					{% if is_granted('ROLE_SUPER_ADMIN')  %}
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('usuario') }}">Listar Usuarios</a></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('usuario_new') }}">Crear Usuario</a></li>
-					{% endif %}
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('proceso') }}">Procesos</a></li>
+
 				</ul>	
 			</div>
+			{% endif %}
+			#}
+			
+			
+			{% if is_granted('ROLE_DEPOSITO') %}
+
+			<div class="menuTab">
+				<div class="tabTit txt3" id="NProdTit">Producción</div>
+				<ul class="tabUl">
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('proceso') }}">Procesos</a></li>
+
+					<li class="sepItemsTabUl"></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('molde') }}">Moldes</a></li>
+
+					<li class="sepItemsTabUl"></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('mesa') }}">Mesas</a></li>
+					
+					<li class="sepItemsTabUl"></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('secador_estado') }}">Secadores</a></li>
+					{#
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('secador') }}">Listar Secadores</a></li>
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('secador_new') }}">Crear Secadores</a></li>
+					#}
+				</ul>	
+			</div>
+			{% endif %}
+			
+
 			
 
 			
@@ -202,31 +275,6 @@
 			
 			
 			
-			
-			{#
-			<div class="menuTab">
-				<div class="tabTit txt3" id="miAccountTit">Pedidos</div>
-				<ul class="tabUl">
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('pedido') }}">Listar Pedidos</a></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('pedido_new') }}">Crear Pedido</a></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('presupuesto') }}">Listar Presupuestos</a></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('presupuesto_new') }}">Crear Presupuesto</a></li>
-				</ul>	
-			</div>
-			
-			<div class="menuTab">
-				<div class="tabTit txt3" id="miAccountTit">Productos</div>
-				<ul class="tabUl">
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('producto') }}">Listar Producto</a></li>
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('producto_new') }}">Crear Producto</a></li>
-				</ul>	
-			</div>
-			#}
-			
-		{#
-				{% endif %}
-			{% endfor %}
-		#}
 		
 
 	</div>	
@@ -243,88 +291,7 @@
 		</div>
 		{% block main_content %}
 		
-		
-		{#
-		{% block alerts %}
-		<div class="alert alert_info">
-			Welcome to the free MediaLoot admin panel template, this could be an informative message.
-		</div>
-
-		<div class="alert ">A Warning Alert</div>
-
-		<div class="alert alert_warning">A Warning Alert</div>
-		
-		<div class="alert alert_error">An Error Message</div>
-		
-		<div class="alert alert_success">A Success Message</div>
-		{% endblock alerts %}
-
-
-		
-
-
-
-		{% block otros %}
-		<div class="module width_full">
-			<div class="module_header">
-				<h3>Stats</h3>
-			</div>
-			<div class="module_content">
-				<div class="stats_graph">
-					<img src="http://chart.apis.google.com/chart?chxr=0,0,3000&chxt=y&chs=520x140&cht=lc&chco=76A4FB,80C65A&chd=s:Tdjpsvyvttmiihgmnrst,OTbdcfhhggcTUTTUadfk&chls=2|2&chma=40,20,20,30" width="520" height="140" alt="" />
-				</div>
-				
-				<div class="stats_overview">
-					<div class="overview_today">
-						<p class="overview_day">Today</p>
-						<p class="overview_count">1,876</p>
-						<p class="overview_type">Hits</p>
-						<p class="overview_count">2,103</p>
-						<p class="overview_type">Views</p>
-					</div>
-					<div class="overview_previous">
-						<p class="overview_day">Yesterday</p>
-						<p class="overview_count">1,646</p>
-						<p class="overview_type">Hits</p>
-						<p class="overview_count">2,054</p>
-						<p class="overview_type">Views</p>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-		</div><!-- end of stats article -->
-		
-		
-		
-		<div class="module width_quarter">
-			<div><h3>Messages</h3></div>
-			<div class="message_list">
-				<div class="module_content">
-					<div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
-					<p><strong>John Doe</strong></p></div>
-					<div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
-					<p><strong>John Doe</strong></p></div>
-					<div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
-					<p><strong>John Doe</strong></p></div>
-					<div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
-					<p><strong>John Doe</strong></p></div>
-					<div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
-					<p><strong>John Doe</strong></p></div>
-				</div>
-			</div>
-			<div class="module_footer">
-				<form class="post_message">
-					<input type="text" value="Message" onfocus="if(!this._haschanged){this.value=''};this._haschanged=true;">
-					<input type="submit" class="btn_post_message" value=""/>
-				</form>
-			</div>
-		</div><!-- end of messages article -->
-		
-		<div class="clear"></div>
-		
-		
-		{% endblock otros %}
-#}
+	
 		
 		
 		

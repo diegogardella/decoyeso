@@ -4,7 +4,7 @@
 Listado de Moldes
 {% endblock module_tit %}
 
-{% block menuAcciones%}{% endblock menuAcciones%}
+
 
 {% block list_tits %}
 
@@ -13,7 +13,7 @@ Listado de Moldes
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('p.producto') %} class="sorted" {% endif %}>{{ entities.sortable('Producto', 'p.producto')|raw }}</a></th>
 
 
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'p.nombre')|raw }}</a></th>
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.cantidad') %} class="sorted" {% endif %}>{{ entities.sortable('Cantidad', 'p.cantidad')|raw }}</a></th>
 
 
 
@@ -29,7 +29,7 @@ Listado de Moldes
 <td >
 	<a href="{{ path('molde_edit', { 'id': entity.id }) }}">
 		
-		{{ entity.nombre }}
+		{{ entity.cantidad }}
 		
 	</a>
 </td>
@@ -47,7 +47,8 @@ Listado de Moldes
 	<div id="formBuscar">
 		
 		{{form_row(formBuscar._token)}}
-		{{form_row(formBuscar.p_nombre)}}
+	
+		{{form_row(formBuscar.p_cantidad)}}
 		
 	</div>
 {%endblock%}
@@ -67,6 +68,10 @@ Listado de Moldes
 {% block list_delete %}
 {% render "DecoyesoProduccionBundle:Molde:listDeleteform" with {'id': entity.id}  %}
 {% endblock list_delete %}
+
+
+{% block menuOpciones %}
+{% endblock menuOpciones %}
 
 
 

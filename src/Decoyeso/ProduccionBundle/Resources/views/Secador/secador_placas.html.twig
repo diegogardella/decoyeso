@@ -1,7 +1,23 @@
 		<div class="NSecadorCont itemSecadorPlaca">
-
-			<span class="txt3">Secador:</span> <span class="Ntxt3">{{ sP.nombre }}</span><br>
-			<span class="txt3">Capacidad:</span> <span class="Ntxt3">{{ sP.capacidad }} Un.</span><br>
+			<table style="width: 90%;">
+				<tr>
+					<td>
+						<span class="txt3">Secador:</span> <span class="Ntxt3">{{ sP.nombre }}</span>
+						<a href="{{ path('secador_vaciar', { 'id': sP.id }) }}" class="NVaciarSecador btn_red_button ">Vaciar Secador</a>
+					
+					</td>
+				</tr>
+				<tr>
+					<td><span class="txt3">Capacidad:</span> <span class="Ntxt3">{{ sP.capacidad }} Un.</span></td>
+		
+				</tr>
+				<tr>
+					<td></td>
+				</tr>
+			</table>
+			
+		
+			
 			
 			 
 			<div class="fix"><br></div>

@@ -5,14 +5,13 @@
 
 {% block module_tit %}Datos del Molde{% endblock module_tit %}		
 			
-{% block menuAccionesItems%}
-	<li>
-		<form action="{{ path('molde_delete', { 'id': entity.id }) }}" method="post">
-			{{ form_widget(delete_form) }}
-			<button id="pedidoEliminarBtn"  type="submit">Eliminar</button>
-		</form>
-	</li>
-{% endblock menuAccionesItems%}
+
+
+{% block menuAcciones%}
+
+{% render "DecoyesoProduccionBundle:Molde:accionDeleteform" with {'id': entity.id}  %}
+
+{% endblock menuAcciones%}
 			
 {% block menuOpciones %} {% endblock menuOpciones %}
 

@@ -65,7 +65,7 @@ class Secador
     /**
      * @var lugaresSecador
      *
-     * @ORM\OneToMany(targetEntity="LugarSecador", mappedBy="secador", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="LugarSecador", mappedBy="secador", cascade={"remove","persist"})
      *
      */
     private $lugaresSecador;
@@ -114,6 +114,10 @@ class Secador
     public function __toString()
     {
     	return $this->nombre;
+    }
+    
+    public function setLugarSecador() {
+    	$this->lugaresSecador = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -270,6 +274,8 @@ class Secador
     {
         $this->lugaresSecador = new \Doctrine\Common\Collections\ArrayCollection();
     }
+    
+
     
     /**
      * Add lugaresSecador

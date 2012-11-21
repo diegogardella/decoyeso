@@ -45,10 +45,10 @@ $(document).ready(function(){
 		
 		$("#numFilas").val(contarFilas());
 		
+
 		
 		return validarForm();
 		
-	
 	});
 	
 	
@@ -62,10 +62,13 @@ $(document).ready(function(){
 			if ($(this).val() != 0) seleccionoProducto = $(this).val();
 		});
 		if (seleccionoProducto == 0) {
-			alert ("Por favor seleccione algun producto");
+			alert ("Por favor seleccione algún producto.");
 			return false;
 			
 		}
+		
+		
+		
 		//Me fijo si ingreso cantidad cuando selecciona un producto
 		$(".inputDesignaciones" ).each(function() {
 			
@@ -74,7 +77,7 @@ $(document).ready(function(){
 				var index = i[1];
 				
 				if (!$.isNumeric($("#cantidad_"+index).val()) || $("#cantidad_"+index).val() < 1 ){
-					alert ("Por favor Ingrese la cantidad para el producto");
+					alert ("Debe ingresar la cantidad a producir del producto.");
 					res =   false;
 					return false;
 				}	
@@ -88,6 +91,50 @@ $(document).ready(function(){
 		
 		
 	}
+	
+	
+	/* Finalizar proceso */
+	
+	//Enviar Form
+	$("#procesoFinalizarForm").submit(function(e) {
+		var res = true;
+		$(".inputCantidadProducida" ).each(function() {
+			if ($(this).val() != 0) {
+				if (!$.isNumeric($(this).val()) || $(this).val() < 1 ){
+					alert ("Debe ingresar la cantidad a producida del producto.");
+					res =   false;
+					return false;
+				}	
+			}
+		});
+		return res;
+	});
+
+	
+	/* Asignar productos a stock */
+	
+	//Enviar Form
+	$("#procesoFormAsignarStock").submit(function(e) {
+		
+
+		
+		var res = true;
+		$(".inputCantidadIngresada" ).each(function() {
+			if ($(this).val() != 0) {
+				if (!$.isNumeric($(this).val()) || $(this).val() < 1 ){
+					alert ("Debe ingresar la cantidad a ingresar del producto.");
+					res =   false;
+					return false;
+				}	
+			}
+		});
+		return res;
+	});
+
+	
+
+	
+	
 
 	/*
 	$( ".inputDesignaciones" ).autocomplete({

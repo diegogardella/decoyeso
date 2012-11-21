@@ -5,22 +5,15 @@
 {% block module_tit %}Datos del Proceso{% endblock module_tit %}		
 			
 {% block menuAcciones%}
-	{% if entity.estado < 2  %}
-		<div class="menuAcciones menusDropDownSeccion" id="idmenuAcciones">
-			<a href="javascript:void(0)" class="btn_blue right" style="background-color: rgb(48, 109, 137);">Acciones</a>
-			<ul style="display: none;">
-				<li>
-					<form action="{{ path('proceso_delete', { 'id': entity.id }) }}" method="post">
-						{{ form_widget(delete_form) }}
-						<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
-					</form>
-				</li>
-			</ul>
-		</div>
+	{% if entity.estado < 1  %}
+	
+	{% render "DecoyesoProduccionBundle:Proceso:accionDeleteform" with {'id': entity.id}  %}
+			
 	{% endif %}
 {% endblock menuAcciones%}
 			
-{% block menuOpciones %} {% endblock menuOpciones %}
+{% block menuOpciones %}
+{% endblock menuOpciones %}
 
 
 {% block form_content %}
@@ -48,7 +41,7 @@
 				</td>
 			</tr>
 			{% set i = 0 %}
-			{% for pp in procesoProducto %} 
+			{% for pp in productosDelProceso %} 
 			<tr class="NItemsTr" id="NItemsTr{{ i }}">
 
 				<td class="NItemsCol0">
@@ -148,6 +141,8 @@
 
 	<link type="text/css" href="{{ asset('bundles/decoyesoproduccion/js/jqueryui1824custom/css/ui-lightness/jqueryCustom.css') }}" rel="stylesheet" />
 	<script type="text/javascript" src="{{ asset('bundles/decoyesoproduccion/js/jqueryui1824custom/js/jqueryCustom.js') }}" ></script>
+	
+	<script type="text/javascript" src="{{ asset('bundles/decoyesoproduccion/js/proceso.js') }}" ></script>
 	
 	<script type="text/javascript" src="{{ asset('bundles/decoyesoproduccion/js/proceso.js') }}" ></script>
 	

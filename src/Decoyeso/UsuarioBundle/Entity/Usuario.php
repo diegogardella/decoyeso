@@ -43,7 +43,7 @@ class Usuario extends BaseUser
     
     /**
      * @var string $apellido
-     * @Assert\MaxLength(limit="255", message="El nombre es demasiado largo.")
+     * @Assert\MaxLength(limit="255", message="El apellido es demasiado largo.")
      * @ORM\Column(name="apellido", type="string", length=255, nullable="true")
      */
     private $apellido;
@@ -57,7 +57,7 @@ class Usuario extends BaseUser
     
     /**
      * @var string $celular
-     * @Assert\MaxLength(limit="255", message="El nombre es demasiado largo.")
+     * @Assert\MaxLength(limit="255", message="El celular es demasiado largo.")
      * @ORM\Column(name="celular", type="string", length=255, nullable="true")
      */
     private $celular;
@@ -87,7 +87,7 @@ class Usuario extends BaseUser
     
     /**
      * @var string $plainPassword
-     * @Assert\MaxLength(limit="255", message="El nombre es demasiado largo.")
+     * @Assert\MaxLength(limit="255", message="La contraseña es demasiado larga.")
      */
     protected $plainPassword;
     
@@ -138,6 +138,14 @@ class Usuario extends BaseUser
     {
     	parent::__construct();
     
+    }
+    
+    public function getNombrePermiso() {
+    	$roles["ROLE_ADMINISTRACION"] = "Administracion";
+    	$roles["ROLE_DEPOSITO"] = "Deposito";
+    	$roles["ROLE_SUPER_ADMIN"] = "Gerencia";
+    	
+    	return $roles[$this->permisos];
     }
     
 

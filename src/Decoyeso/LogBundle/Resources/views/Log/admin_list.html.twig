@@ -7,11 +7,16 @@
 </div>
 {% endblock breadcrumb_in %} 
 
-		{% block new_path_btn %}
-		<a href="{{ path('log') }}?todas=1">ver todas</a>
-		<a href="{{ path('log') }}">ver importantes</a>
 		
-		{% endblock new_path_btn %}
+		
+		{% block module_header_otros %}
+		<div class="NSep20 right" ></div>	
+			<a class="btn_blue right" href="{{ path('log') }}?todas=1">Menos</a> 
+			<div class="right" id="NSepBtn">/</div>	
+			<a class="btn_blue right" href="{{ path('log') }}">Más</a>
+			
+		{% endblock module_header_otros %}
+
 
 
 {% block menuOpciones%}{% endblock menuOpciones%}
@@ -32,7 +37,7 @@ Listado de Notificaciones
 			{% set widthCols =  94/3  %}
 			<th style="width: 47%"{% if entities.isSorted('l.log') %} class="sorted" {% endif %}>{{ entities.sortable('Acción', 'l.log')|raw }}</th>
 			<th style="width: 23%"{% if entities.isSorted('u.apellido') %} class="sorted" {% endif %}>{{ entities.sortable('Usuario', 'u.apellido')|raw }}</th>
-			<th style="width: 24%"{% if entities.isSorted('l.fechaHoraCreado') %} class="sorted" {% endif %}>{{ entities.sortable('Creado el', 'l.fechaHoraCreado')|raw }}</th>
+			<th style="width: 24%"{% if entities.isSorted('l.fechaHoraCreado') %} class="sorted" {% endif %}>{{ entities.sortable('Hora', 'l.fechaHoraCreado')|raw }}</th>
 			{% endblock list_tits %}
 			<th   style="width: 6%" >&nbsp;</th>
 		</tr>
@@ -75,7 +80,7 @@ Listado de Notificaciones
 			<td >{{ entity.getLog }}</td>
 			<td >{{ entity.getUsuario }}</td>
 			
-			<td >{{ entity.getFechaHoraCreado | date ('d/m/Y H:i:s')}}</td>
+			<td >{{ entity.getFechaHoraCreado | date ('H:i:s')}}</td>
 			{% endblock list_item_texts %}	
 			{% block list_buttons %}
 			<td class="" >
@@ -121,10 +126,9 @@ Listado de Notificaciones
 {%block camposFormBuscar%}
 	<div id="formBuscar">
 		{{form_row(formBuscar._token)}}
-		{{form_row(formBuscar.u_nombre)}}
-		{{form_row(formBuscar.u_apellido)}}
 		{{form_row(formBuscar.l_log)}}
-		{{form_row(formBuscar.l_fechaCreado)}}
+		{{form_row(formBuscar.u_username)}}
+
 	</div>
 {%endblock%}
 
@@ -133,9 +137,7 @@ Listado de Notificaciones
 
 
 {% block new_path %} 
-{#
 {{ path('log_new') }}
-#}
 {% endblock new_path %}
 
 {% block edit_path %} 

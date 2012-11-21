@@ -1,0 +1,14 @@
+
+{% for sP in secadoresPlacas %}
+
+	{% include 'DecoyesoProduccionBundle:Secador:secador_placas.html.twig' with {'sP': sP} %}
+{% else %}
+		
+<div class="txt3">
+No se han creado secadores de placas.
+</div>
+{% endfor %}
+		
+		
+	
+
