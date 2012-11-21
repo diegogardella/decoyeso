@@ -1047,7 +1047,6 @@ a.pagiText:hover {
 	float:left;
 	width: 100%;
 	border-bottom:solid 1px #ccc;
-	
 	font-size:13px;
 	color: #ccc;
 }
@@ -1061,6 +1060,10 @@ a.pagiText:hover {
 .main_path ul li{
 	float:left;
 	padding-right: 4px;
+}
+
+.main_path ul li a:hover{
+	color:#333;
 }
 
 

@@ -135,7 +135,12 @@ class Presupuesto
      * @ORM\ManyToOne(targetEntity="Pedido", inversedBy="presupuestos" )
      */
     private $pedido;
-    
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Decoyeso\PedidoBundle\Entity\PresupuestoElemento", mappedBy="presupuesto")
+     */
+    private $presupuestoElemento;
     
     /**
      * @ORM\prePersist
@@ -515,4 +520,28 @@ class Presupuesto
     	return $estado[$this->getEstado()];
     }
     
+    public function __construct()
+    {
+        $this->presupuestoElemento = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add presupuestoElemento
+     *
+     * @param Decoyeso\PedidoBundle\Entity\PresupuestoElemento $presupuestoElemento
+     */
+    public function addPresupuestoElemento(\Decoyeso\PedidoBundle\Entity\PresupuestoElemento $presupuestoElemento)
+    {
+        $this->presupuestoElemento[] = $presupuestoElemento;
+    }
+
+    /**
+     * Get presupuestoElemento
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getPresupuestoElemento()
+    {
+        return $this->presupuestoElemento;
+    }
 }

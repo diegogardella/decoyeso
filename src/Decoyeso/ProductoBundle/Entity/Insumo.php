@@ -69,8 +69,20 @@ class Insumo extends Elemento
     	}
     	
     	return $cantidadProductoStock;
-    	
     }
+    
+    
+    
+    public function getCantidadEntregadaStock(){
+    	$cantidad=0;
+    	foreach($this->getMovimientoStock() as $insumoStock){
+    		if($insumoStock->getAccion()==2){
+    			$cantidad=$cantidad+$insumoStock->getCantidad();
+    		}
+    	}
+    	return $cantidad;
+    }
+    
     
 
     
@@ -121,7 +133,7 @@ class Insumo extends Elemento
     }
     
     
-    public function getCantidadEntregadaStock($pedido=0){
+    public function getCantidadEntregadaStockSolicitud($pedido=0){
     	 
     	$cantidad=0;
     	 

@@ -128,40 +128,47 @@ Confirmar Solicitud a Stock
 				<label class=" required" >Productos/Insumos</label>
 				<div class="field_widget">
 				
-					<table style="width: 600px;"  class="field_widget_productos" id="tableListProductos">
-						<tr>
-							<th width="300">Nombre</th>
-							<th>Cant. Solicitada</th>
-							<th>Cant. Entregada</th>
-						</tr>
+						<div class="tab_container border_radius">
+						<table  class="records_list field_widget_elementos">
+						  	<thead>
+								<tr>
+									<th width="300">Nombre</th>
+									<th>Cant. Solicitada</th>
+									<th>Cant. Entregada</th>
+								</tr>
+							 </thead>
 						{% set i=0 %}
+						<tbody>
 						{% for elemento in entity.solicitudMovimientoElemento %}
-							<tr>
-								<td >{{ elemento.elemento.nombre }}</td>
-								<td >{{ elemento.cantidadSolicitada }} {{ elemento.elemento.unidad }}</td>
-								<td ><input type="text" value="{{ elemento.cantidadSolicitada }}"  name="form[solicitudMovimientoElementoCantidadEntregada][{{ elemento.id }}]" /> {{ elemento.elemento.unidad }}</td>
-								{% set i=i+1 %}
-							</tr>
+								<tr>
+									<td >{{ elemento.elemento.nombre }}</td>
+									<td >{{ elemento.cantidadSolicitada }} {{ elemento.elemento.unidad }}</td>
+									<td ><input type="text" value="{{ elemento.cantidadSolicitada }}"  name="form[solicitudMovimientoElementoCantidadEntregada][{{ elemento.id }}]" /> {{ elemento.elemento.unidad }}</td>
+									{% set i=i+1 %}
+								</tr>
 						{%else%}
 							<tr>
 								<td colspan="2">No hay productos y/o insumos</td>
 							</tr>
-						{%endfor%}						
+						{%endfor%}	
+						</tbody>					
 					</table>
 					
 				</div>
-				
+
 			</div>
 		
-		
+		</div>
 			{{ form_rest(edit_form) }}
 		<p>
 			<button class="btn_green_button right" id="btnGuardarCambios" type="submit">Confirmar Solicitud</button>
 		</p>
 	</form>
-		
+	
+	
 		
 	<div class="fix"></div>
+
 {% endblock form_content %}
 
 {% block javascript_extra %}	

@@ -22,7 +22,7 @@ Listado de Solicitudes a Stock
 
 {% block list_item_texts %}
 	<td ><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}">{{ entity.pedido }}</a></td>
-	<td align="center"><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}" >{{entity.fechaHoraRequerido | date('d/m/Y')}}</a></td>
+	<td align="center"><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}" >{{entity.fechaHoraRequerido | date('d/m/Y h:i')}}</a></td>
 	<td align="center"><a href="{{ path('solicitudmovimiento_edit', { 'id': entity.id }) }}">{{ entity.estadoNombre }}</a></td>
 {% endblock list_item_texts %}
 
@@ -34,9 +34,16 @@ Listado de Solicitudes a Stock
 {%endblock%}
 
 
-{% block new_path %} 
-{{ path('solicitudmovimiento_new', { 'paramPedido': 0 }) }}
-{% endblock new_path %}
+{%block camposFormBuscar%}
+	{{form_row(formBuscar.sm_numero)}}
+	{{form_row(formBuscar.sm_estado)}}
+	{{form_row(formBuscar.p_numero)}}
+	{{form_row(formBuscar.p_nombre)}}
+	{{form_row(formBuscar._token)}}		
+{%endblock%}
+
+{% block new_path_btn %}{% endblock new_path_btn %}
+{% block menuOpciones %}{% endblock menuOpciones %}
 
 {% block edit_path %} 
 {{ path('solicitudmovimiento_edit', { 'id': entity.id }) }} 

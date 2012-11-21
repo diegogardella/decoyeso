@@ -32,6 +32,7 @@ class Relevamiento
      * @var text $descripcion
      *
      * @ORM\Column(name="nombre", type="string",nullable="true")
+	 * @assert\NotBlank(message="Por favor, ingrese nombre")
      */
     private $nombre;
     

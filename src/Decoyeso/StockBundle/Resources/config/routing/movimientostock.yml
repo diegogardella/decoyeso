@@ -1,6 +1,8 @@
 movimientostock:
-    pattern:  /
-    defaults: { _controller: "StockBundle:MovimientoStock:index" }
+    pattern:  /{pararouting}/resumen
+    defaults: { _controller: "StockBundle:MovimientoStock:index", pararouting:producto }
+    requirements:
+        pararouting: producto|insumo
 
 movimientostock_show:
     pattern:  /{id}/show

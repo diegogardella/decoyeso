@@ -1,17 +1,5 @@
 {% extends "CoobixAdminBundle:Default:new.html.twig" %}
 
-
-{% block breadcrumb_in %}
-
-	<div class="breadcrumbs">
-		<a href="{{ path('movimientostock') }}" class="current" >Agregar Productos/Insumos</a>
-	</div>
-	<div class="breadcrumb_divider"> 
-		<a href="{{ path('movimientostock_new') }}" class="current" >Agregar</a>
-	</div>
-	
-{% endblock breadcrumb_in %} 
-
 {% block module_tit %}
 	{% if entity.accion==1 %}
 		Productos/Insumos agregados a stock

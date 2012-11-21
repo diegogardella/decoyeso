@@ -1,70 +1,44 @@
 {% extends "CoobixAdminBundle:Default:list.html.twig" %}
 
 {% block breadcrumb_in %}
-
+<div class="breadcrumbs">
+<a href="{{ path('producto') }}" class="current" >Servicio</a>
+</div>
 {% endblock breadcrumb_in %} 
 
 
 {% block module_tit %}
-Listado de Relevamientos
+	Resumen Stock de {% if pararouting=='producto' %} Productos {% else %} Insumos {% endif %}
 {% endblock module_tit %}
+
 
 {% block list_tits %}
 
-{% set widthCols =  94/5  %}
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('r.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Número', 'r.numero')|raw }}</a></a></th>
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('r.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'r.nombre')|raw }}</a></a></th>
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.pedido.cliente.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Cliente', 'p.pedido.cliente.nombre')|raw }}</a></a></th>
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Pedido', 'p.numero')|raw }}</a></a></th>
+{% set widthCols =  94/4  %}
+
+
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('s.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 's.nombre')|raw }}</th>
+<th align="center">Cant. Presupuestada Sin Procesar</th>
+<th align="center">Cant. Solicitada a Stock sin Procesar</th>
+<th align="center">Cant. en Stock</th>
 
 {% endblock list_tits %}
 
 {% block list_item_texts %}
-<td ><a href="{{ path('relevamiento_edit', { 'id': entity.id }) }}">{{ entity.numero }}</a></td>
-<td ><a href="{{ path('relevamiento_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
-<td ><a href="{{ path('relevamiento_edit', { 'id': entity.id }) }}">{{ entity.pedido.cliente.nombre }}</a></td>
-<td ><a href="{{ path('relevamiento_edit', { 'id': entity.id }) }}">{{ entity.pedido.numero }}-{{ entity.pedido.nombreObra }}</a></td>
 
+<td >{{ entity.nombre }}</td>
+<td align="center">{{ (entity.getCantidadPresupuestadaAprobada-entity.getCantidadEntregadaStock) }}</td>
+<td align="center">{{ entity.getCantidadSolicitadaStock }}</td>
+<td align="center">{{ entity.cantidadEnStock }}</td>
+<td   style="width: 6%" >&nbsp;</td>
 
 {% endblock list_item_texts %}
 
-{%block FormBuscar%}
-	<form method="post" action="{{path('relevamiento',{pararouting:"buscar"})}}" novalidate="true">
-{%endblock%}
+{%block buscador%}{%endblock buscador%}
 
-{%block camposFormBuscar%}
-	<div id="formBuscar">
-		
-		{{form_row(formBuscar._token)}}
-		
-		{{form_row(formBuscar.r_numero)}}
-		{{form_row(formBuscar.r_descripcion)}}
-		{{form_row(formBuscar.r_fechaCreado)}}
-		{{form_row(formBuscar.r_fechaActualizado)}}
-	
-		{{form_row(formBuscar.p_numero)}}
-		{{form_row(formBuscar.p_nombreObra)}}
+{% block list_buttons %}{% endblock list_buttons %}
 
-	</div>
-{%endblock%}
-
-{% block new_path %} 
-{{ path('relevamiento_new') }}
-{% endblock new_path %}
-
-{% block edit_path %} 
-{{ path('relevamiento_edit', { 'id': entity.id }) }} 
-{% endblock edit_path %}
-
-{% block delete_path %}
-{{ path('relevamiento_delete', { 'id': entity.id }) }}
-{% endblock delete_path %}
-
-{% block list_delete %}
-{% render "PedidoBundle:Relevamiento:listDeleteform" with {'id': entity.id}  %}
-{% endblock list_delete %}
-
-
-
+{% block menuAcciones %}{% endblock menuAcciones %}
+{% block menuOpciones %}{% endblock menuOpciones %}
 
 

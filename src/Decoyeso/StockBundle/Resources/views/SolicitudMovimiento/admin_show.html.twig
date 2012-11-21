@@ -25,34 +25,28 @@ Ver Solicitud a Stock
 {% block menuAcciones %}		
 
 	{% if entity.estado==2 %}
-	
-	   <div class="menuMasOpciones menusDropDownSeccion" id="idmenuAcciones">
-			<a href="javascript:void(0)" class="btn_blue right" >Acciones</a>
-			<ul style="display: none;" id="idUlMasOpciones">
-				<li>
-					<a target="_blank" class="btn_blue " href="{{ path('solicitudmovimiento_imprimir', { 'id': entity.id }) }}">
-					<span class="print_icon"></span>
-						Imprimir
-					</a>
-				</li>
-			</ul>
-		</div>
+		<a target="_blank" class="btn_blue right" href="{{ path('solicitudmovimiento_imprimir', { 'id': entity.id }) }}">
+			<span class="print_icon"></span>
+			Imprimir
+		</a>
 	{% endif %}
 
-	{% if entity.estado==1 %}
-		 <div class="menuMasOpciones menusDropDownSeccion" id="idmenuAcciones">
-			  <a href="javascript:void(0)" class="btn_blue right" >Acciones</a>
-			  <ul style="display: none;" id="idUlMasOpciones">
-					<li>
-					<a  href="{{ path('solicitudmovimiento_cambiarEstado', { 'id': entity.id,'estado':3 }) }}">
-						Cancelar Solicitud
-					</a>				
-				</li>
-			 </ul>	
-		</div>		
+	{% if entity.estado==1 %}		
+		<a class="btn_red_button right right" href="{{ path('solicitudmovimiento_cambiarEstado', { 'id': entity.id,'estado':3 }) }}">
+			Cancelar Solicitud
+		</a>						
 	{% endif  %}
+	
+	{% if is_granted('ROLE_ADMIN') %}
+		<a class="btn_blue right" href="{{path('solicitudmovimiento_por_pedido',{'pedido':entity.pedido.id})}}">Listar Solicitudes a Stock del Pedido</a>
+	{% endif %}
 
 {% endblock menuAcciones %}
+
+{% block menuOpciones %}{% endblock menuOpciones %}
+
+
+
 
 {% block form_content %}
 

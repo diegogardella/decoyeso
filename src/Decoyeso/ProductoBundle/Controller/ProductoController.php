@@ -43,11 +43,8 @@ class ProductoController extends Controller
     			);
     	$buscador->setOpcionesForm($opciones);*/
     	
-
-    
     	$resultados=$buscador->exeBuscar();
-    
-    
+
     	return $this->render('ProductoBundle:Producto:admin_list.html.twig', array(
     			'entities' => $resultados["entities"],
     			'formBuscar'=>$resultados["form"]->createView(),

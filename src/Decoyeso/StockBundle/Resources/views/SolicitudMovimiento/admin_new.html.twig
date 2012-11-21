@@ -14,15 +14,10 @@ Crear solicitud
 {% endblock module_tit %}
 
 
-{%block opcionesGuia  %}
-	{{ macrosPedido.guia(entity.pedido) }}
-{%endblock opcionesGuia  %}
+{% block menuOpciones %}{% endblock menuOpciones %}
 
-{% block menuOpcionesItems %}
-	{{ macrosPedido.menuOpciones(entity.pedido) }}		
-{% endblock menuOpcionesItems %}
-
-{% block menuAcciones %}		
+{% block menuAcciones %}
+	<a  class="btn_blue right" href="{{ path('solicitudmovimiento_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Solicitudes a Stock del Pedido</a>
 {% endblock menuAcciones %}
 
 {% block list_path %}
@@ -80,7 +75,11 @@ Crear solicitud
 		{{ form_row(form.direccionDestino) }}
 		
 		<div style="display:none">{{ form_row(form.pedido) }}</div>
-		{{ form_row(form.fechaHoraRequerido) }}
+		<div class="form_row" id="div_solicitudmovimiento_direccionDestino">
+			<label class=" required" for="solicitudmovimiento_direccionDestino">Fecha y Hora Requerido</label>
+			<div class="field_widget">{{ form_widget(form.fechaHoraRequerido.date.day) }}/{{ form_widget(form.fechaHoraRequerido.date.month) }}/{{ form_widget(form.fechaHoraRequerido.date.year) }}&nbsp;&nbsp; {{ form_widget(form.fechaHoraRequerido.time.hour) }}:{{ form_widget(form.fechaHoraRequerido.time.minute) }}</div>
+		</div>
+		
 		{{ form_row(form.observacion) }}
 		{{ form_rest(form) }}
 		
@@ -91,12 +90,16 @@ Crear solicitud
 				<label class=" required" >Productos/Insumos</label>
 				<div class="field_widget">
 				
-					<table  class="field_widget_elementos" id="tableListElementos">
+				<div class="tab_container border_radius">
+					<table  class="records_list field_widget_elementos" id="tableListElementos">
+					  <thead>
 						<tr>
 							<th>Nombre</th>
 							<th>Cantidad</th>
 							<th></th>
 						</tr>
+					</thead>
+					<tbody>
 						<tr>
 							<td>
 								<select name="selectElementos" id="idSelectElemento" style="float:left;">
@@ -110,7 +113,8 @@ Crear solicitud
 							<td><input style="float:left;" type="text" maxlength="12" id="idElementoCantidad" name="elementoCantidad" value=""></td>
 							<td><button type="button" style="float:left;" id="idAgregarElemento" >Agregar</button></td>
 						</tr>
-											</table>
+					 </tbody>
+					</table>
 					
 				</div>
 				

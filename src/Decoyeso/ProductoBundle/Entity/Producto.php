@@ -63,12 +63,51 @@ class Producto extends Elemento
     			$cantidadProductoStock=$cantidadProductoStock-$productoStock->getCantidad();
     		}
     	}
-    	
     	return $cantidadProductoStock;
     	
     }
     
-   
+    
+    public function getCantidadEntregadaStock(){
+    
+    	$cantidad=0;
+    	foreach($this->getMovimientoStock() as $productoStock){
+    		if($productoStock->getAccion()==2){
+    			if($productoStock->getMotivo()==2){
+    				$cantidad=$cantidad+$productoStock->getCantidad();
+    			}
+    		}else{
+    			if($productoStock->getMotivo()==3){
+    				$cantidad=$cantidad-$productoStock->getCantidad();
+    			}
+    		}
+    	}
+    
+    	return $cantidad;
+    }
+    
+
+    /**
+     * Add solicitudMovimientoElemento
+     *
+     * @param Decoyeso\StockBundle\Entity\SolicitudMovimientoElemento $solicitudMovimientoElemento
+     */
+    public function addSolicitudMovimientoElemento(\Decoyeso\StockBundle\Entity\SolicitudMovimientoElemento $solicitudMovimientoElemento)
+    {
+        $this->solicitudMovimientoElemento[] = $solicitudMovimientoElemento;
+    }
+
+    /**
+     * Get solicitudMovimientoElemento
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getSolicitudMovimientoElemento()
+    {
+        return $this->solicitudMovimientoElemento;
+    }
+    
+
     
     public function getCantidadSolicitadaStock($pedido=0){
     	    		
@@ -94,7 +133,7 @@ class Producto extends Elemento
     }
     
     
-    public function getCantidadEntregadaStock($pedido=0){
+    public function getCantidadEntregadaStockSolicitud($pedido=0){
     	
     	$cantidad=0;
     	

@@ -35,6 +35,13 @@ class MovimientoStock
      * @ORM\Column(name="accion", type="integer",nullable=true)
      */
     private $accion;
+    
+    /**
+     * @var integer $motivo-->1-nuevo, 2-Reingreso, 3-Mal Estado, 4-Rotura Accidental
+     *
+     * @ORM\Column(name="motivo", type="integer")
+     */
+    private $motivo;
 
 
     /**
@@ -210,4 +217,24 @@ class MovimientoStock
     }
 
 
+
+    /**
+     * Set motivo
+     *
+     * @param integer $motivo
+     */
+    public function setMotivo($motivo)
+    {
+        $this->motivo = $motivo;
+    }
+
+    /**
+     * Get motivo
+     *
+     * @return integer 
+     */
+    public function getMotivo()
+    {
+        return $this->motivo;
+    }
 }

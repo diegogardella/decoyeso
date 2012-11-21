@@ -17,16 +17,13 @@
 	Crear Relevamiento
 {% endblock module_tit %}
 
-{% block menuOpcionesItems %}
-	{{ macrosPedido.menuOpciones(entity.pedido) }}		
-{% endblock menuOpcionesItems %}
-	
-{% block menuAcciones%}
-{% endblock menuAcciones%}
+{% block menuOpciones %}{% endblock menuOpciones %}
 
-{%block opcionesGuia  %}
-	{{ macrosPedido.guia(entity.pedido) }}
-{%endblock opcionesGuia  %}
+	
+{% block menuAcciones %}
+	<a href="{{ path('relevamiento_por_pedido',{'pedido': entity.getPedido.id}) }}" class="btn_blue right" >Listar Relevamientos del Pedido</a>	
+{% endblock menuAcciones %}
+
 
 
 {% block form_content %}

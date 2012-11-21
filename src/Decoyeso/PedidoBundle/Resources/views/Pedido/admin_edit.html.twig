@@ -11,15 +11,16 @@
 
 {% block module_tit %}Editar Pedido{% endblock module_tit %}			
 			
-{% block menuAccionesItems%}
-<li>
-	<form action="{{ path('pedido_delete', { 'id': entity.id }) }}" method="post">
-		{{ form_widget(delete_form) }}
-		<button type="submit">Eliminar</button>
-	</form>
-</li>
-{% endblock menuAccionesItems%}
-			
+
+{% block delete_path %}
+	{{ path('pedido_delete', { 'id': entity.id }) }}
+{% endblock delete_path %}
+
+{% block menuAcciones %}
+		{{ parent() }}
+		<a class="btn_blue right" href="{{path('pedidos_por_cliente',{'cliente':entity.cliente.id})}}">Listar Pedidos del Cliente</a>	
+{% endblock menuAcciones %}
+
 {% block menuOpcionesItems %}
 	{{ macrosPedido.menuOpciones(entity) }}		
 {% endblock menuOpcionesItems %}

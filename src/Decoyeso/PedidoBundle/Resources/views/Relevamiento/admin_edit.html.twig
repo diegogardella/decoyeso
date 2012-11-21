@@ -14,22 +14,18 @@
 	Editar Relevamiento
 {% endblock module_tit %}
 
-{% block menuOpcionesItems %}
-	{{ macrosPedido.menuOpciones(entity.pedido) }}		
-{% endblock menuOpcionesItems %}
+{% block menuOpciones %}	
+{% endblock menuOpciones %}
 	
-{% block menuAccionesItems%}
-<li>
-	<form action="{{ path('relevamiento_delete', { 'id': entity.id }) }}" method="post">
-		{{ form_widget(delete_form) }}
-		<button type="submit">Eliminar</button>
-	</form>
-</li>
-{% endblock menuAccionesItems%}
+{% block delete_path %}
+ 	{{ path('relevamiento_delete', { 'id': entity.id }) }}
+{% endblock delete_path %}
 
-{%block opcionesGuia  %}
-	{{ macrosPedido.guia(entity.pedido) }}
-{%endblock opcionesGuia  %}
+{% block menuAcciones %}
+		{{ parent() }}
+		<a  class="btn_blue right" href="{{ path('relevamiento_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Relevamientos del Pedido</a>
+{% endblock menuAcciones %}	
+
 
 {% block form_content %}
 		<form action="{% block update_path %}{{ path('relevamiento_update', { 'id': entity.id }) }}{% endblock update_path %}" method="post" {{ form_enctype(edit_form) }}>

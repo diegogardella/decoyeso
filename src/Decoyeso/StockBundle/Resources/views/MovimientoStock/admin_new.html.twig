@@ -49,3 +49,26 @@
 		
 	<div class="fix"></div>
 {% endblock form_content %}
+
+
+{%block javascript_extra%}
+	<script type="text/javascript">
+
+		{% if accion==1 %}
+			var parImpar=0;		
+		{% else %}
+			var parImpar=1;
+		{% endif %}
+
+		$('#movimientostock_motivo option').each(function(index,el){
+			
+			if(($(el).val())%2==parImpar){
+				$(el).remove();
+			}
+		});
+		
+	</script>
+	
+{%endblock javascript_extra%}
+
+

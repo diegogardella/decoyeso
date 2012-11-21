@@ -18,14 +18,37 @@ class MovimientoStockController extends Controller
      * Lists all MovimientoStock entities.
      *
      */
-    public function indexAction()
+    public function indexAction($pararouting)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $buscador=$this->get("buscador");
+    	$buscador->setRequest($this->getRequest());
+    	$buscador->setPararouting($pararouting);
+    
+    	$buscador->setSql('SELECT p FROM ProductoBundle:'.ucfirst(strtolower($pararouting)).' p ORDER BY p.nombre ASC');
+    
+    	/*$opciones=array(
+    			"c_tipo"=>array('choice',array("label"=>"Tipo de cliente",'choices'=>	array(""=>"",1 => 'Persona Física', 2 => 'Organización'))),
+    			"c_nombre"=>array(null,array("label"=>"Apellido, Nombre")),
+    			"c_fechaActualizado"=>array("date", array("empty_value"=>array("month"=>"Mes","year"=>"Año","day"=>"Día"),"format"=>"d-m-Y",'pattern'=> '{{ day }}{{ month }}{{ year }}','label'=>'Actualizado el')),
+    			"c_fechaCreado"=>array("date",array("empty_value"=>array("month"=>"Mes","year"=>"Año","day"=>"Día"),"format"=>"d-m-Y",'pattern'=> '{{ day }}{{ month }}{{ year }}','label'=>'Creado el')),
+    			"c_cuitOcuil"=>array(null,array("label"=>"Cuit o Cuil ")),
+    			"c_barrio"=>array(null,array("label"=>"Dirección - Barrio")),
+    			"c_calle"=>array(null,array("label"=>"Dirección - Calle")),
+    			"c_numeroCalle"=>array(null,array("label"=>"Dirección - Número")),
+    			"c_numero"=>array(null,array("label"=>"Número")),
+    			"c_email"=>array(null,array("label"=>"E-mail")),
+    			"c_dni"=>array(null,array("label"=>"DNI"))
+    			);
+    	$buscador->setOpcionesForm($opciones);*/
+    	
 
-        $entities = $em->getRepository('StockBundle:MovimientoStock')->findAll();
+    
+    	$resultados=$buscador->exeBuscar();
+    
 
-        return $this->render('StockBundle:MovimientoStock:index.html.twig', array(
-            'entities' => $entities
+        return $this->render('StockBundle:MovimientoStock:admin_list.html.twig', array(
+            	'entities' => $resultados["entities"],
+    			'pararouting'=>$pararouting,
         ));
     }
 

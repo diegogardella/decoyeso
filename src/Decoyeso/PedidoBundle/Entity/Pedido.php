@@ -70,6 +70,7 @@ class Pedido
      * @var string $nombre
      *
      * @ORM\Column(name="nombre", type="string", length="255")
+	 * @assert\NotBlank(message="Por favor, ingrese nombre")
      */
     private $nombre;
 
