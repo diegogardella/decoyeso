@@ -53,7 +53,7 @@ class Log
     
     /**
      * @var integer $prioridad
-     * 0 = Sin prioridad, 1 = baja, 2 = media, 3 = alta
+     * 0 = blanca, 1 = verde, 2 = amarillo, 3 = rojo
      * @ORM\Column(name="prioridad", type="integer", nullable="true")
      */
     private $prioridad;

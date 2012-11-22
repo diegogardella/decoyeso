@@ -47,7 +47,7 @@ class Producto extends Elemento
 	 *
 	 * @ORM\OneToOne(targetEntity="\Decoyeso\ProduccionBundle\Entity\Molde", mappedBy="producto")
 	 */
-	private $molde;
+	//private $molde;
 
 	
 	
@@ -87,15 +87,7 @@ class Producto extends Elemento
     }
     
 
-    /**
-     * Add solicitudMovimientoElemento
-     *
-     * @param Decoyeso\StockBundle\Entity\SolicitudMovimientoElemento $solicitudMovimientoElemento
-     */
-    public function addSolicitudMovimientoElemento(\Decoyeso\StockBundle\Entity\SolicitudMovimientoElemento $solicitudMovimientoElemento)
-    {
-        $this->solicitudMovimientoElemento[] = $solicitudMovimientoElemento;
-    }
+
 
     /**
      * Get solicitudMovimientoElemento
@@ -223,25 +215,4 @@ class Producto extends Elemento
         return $this->productoInsumo;
     }
 
-
-
-    /**
-     * Set molde
-     *
-     * @param Decoyeso\ProduccionBundle\Entity\Molde $molde
-     */
-    public function setMolde(\Decoyeso\ProduccionBundle\Entity\Molde $molde)
-    {
-        $this->molde = $molde;
-    }
-
-    /**
-     * Get molde
-     *
-     * @return Decoyeso\ProduccionBundle\Entity\Molde 
-     */
-    public function getMolde()
-    {
-        return $this->molde;
-    }
 }

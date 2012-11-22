@@ -4,7 +4,6 @@
 Listado de Insumos
 {% endblock module_tit %}
 
-{% block menuAcciones %}{% endblock menuAcciones %}
 
 {% block list_tits %}
 
@@ -29,6 +28,16 @@ Listado de Insumos
 {%endblock%}
 
 
+{%block camposFormBuscar%}
+
+	{{form_row(formBuscar.i_nombre)}}
+	{{form_row(formBuscar.i_unidad)}}
+	{{form_row(formBuscar._token)}}
+		
+{%endblock%}
+
+
+{% block menuOpciones %}{% endblock menuOpciones%}
 
 {% block new_path %} 
 {{ path('insumo_new') }}

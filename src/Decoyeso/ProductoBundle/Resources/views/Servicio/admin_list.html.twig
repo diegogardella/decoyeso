@@ -4,9 +4,6 @@
 Listado de Servicio
 {% endblock module_tit %}
 
-{% block menuAcciones %}{% endblock menuAcciones %}
-
-
 {% block list_tits %}
 
 {% set widthCols =  94/4  %}
@@ -29,7 +26,15 @@ Listado de Servicio
 	<form method="post" action="{{path('servicio',{pararouting:"buscar"})}}" novalidate="true">
 {%endblock%}
 
+{%block camposFormBuscar%}
 
+	{{form_row(formBuscar.s_nombre)}}
+	{{form_row(formBuscar.s_unidad)}}
+	{{form_row(formBuscar._token)}}	
+		
+{%endblock%}
+
+{% block menuOpciones %}	{% endblock menuOpciones%}
 
 {% block new_path %} 
 {{ path('servicio_new') }}
