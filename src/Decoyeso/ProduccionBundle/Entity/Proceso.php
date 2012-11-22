@@ -38,6 +38,23 @@ class Proceso
      */
     private $estado;
     
+    
+    /**
+     * @var date $datosInsumos
+     *
+     * @ORM\Column(name="datosInsumos", type="text", nullable="true")
+     */
+    private $datosInsumos;
+     
+    /**
+     * @var lugaresSecador
+     *
+     * @ORM\OneToMany(targetEntity="LugarSecador", mappedBy="proceso")
+     *
+     */
+    //private $lugaresSecador;
+    
+    
     /**
      * @var date $fechaCreado
      *
@@ -54,28 +71,13 @@ class Proceso
     
     
     /**
-     * @var date $datosInsumos
-     *
-     * @ORM\Column(name="datosInsumos", type="text", nullable="true")
-     */
-    
-    
-    private $datosInsumos;
-     
-    /**
      * @var date $fechaFin
      *
      * @ORM\Column(name="fechaFin", type="date", nullable="true")
      */
     private $fechaFin;
     
-    /**
-     * @var lugaresSecador
-     *
-     * @ORM\OneToMany(targetEntity="LugarSecador", mappedBy="proceso")
-     *
-     */
-    private $lugaresSecador;
+
     
     /**
      * @var date $fechaActualizado
@@ -84,6 +86,7 @@ class Proceso
      */
     private $fechaActualizado;
        
+    
     /**
      * @ORM\prePersist
      */
@@ -260,6 +263,7 @@ class Proceso
     {
         return $this->fechaFin;
     }
+    
     public function __construct()
     {
         $this->lugaresSecador = new \Doctrine\Common\Collections\ArrayCollection();

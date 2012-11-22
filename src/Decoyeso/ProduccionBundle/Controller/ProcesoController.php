@@ -95,9 +95,6 @@ class ProcesoController extends Controller
 			$this->agregarProdutosAlProceso($entity);
 			$em->flush();
 			
-			/* Estimación de insumos a consumir*/
-			$insumos = $this->calcularUsoDeInsumos($entity->getId());
-			$entity->setDatosInsumos(json_encode($insumos));
 			$em->persist($entity);
 			$em->flush();
 			
@@ -119,47 +116,7 @@ class ProcesoController extends Controller
 		));
 	}
 
-    /**
-     * Finds and displays a Proceso entity.
-     *
-     */
-
-    public function showAction($id)
-    {
-    	$em = $this->getDoctrine()->getEntityManager();
-    
-    	$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
-        
-    	if (!$entity) {
-    		throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
-    	}
-    	
-    	$em = $this->getDoctrine()->getEntityManager();
-    	
-    	//Traigo productos
-    	$query = $em->createQuery('SELECT p FROM ProductoBundle:Producto p
-    			ORDER BY p.nombre ASC
-    			');
-    	$productos = $query->getResult();
-    	
-    	//Traigo productos del proceso
-    	$productosDelProceso = $this->getProductosDelProceso($entity->getId());
-    	
-    	
-    	//$this->asignarProductosSecadores($entity->getId(), 2);
-
-    	$editForm = $this->createForm(new ProcesoType(), $entity);
-
-    	$deleteForm = $this->createDeleteForm($entity->getId());
-    	
-    	return $this->render('DecoyesoProduccionBundle:Proceso:admin_show.html.twig', array(
-    			'entity'      => $entity,
-    			'productos'      => $productos,
-    			'productosDelProceso'      => $productosDelProceso,
-    			'edit_form'   => $editForm->createView(),
-    			'delete_form' => $deleteForm->createView()
-    	));
-    }
+ 
     
     
     
@@ -229,11 +186,8 @@ class ProcesoController extends Controller
     		$this->agregarProdutosAlProceso($entity);
     		$em->flush();
     
-    		/* Estimación de insumos a consumir */
-    		$insumos = $this->calcularUsoDeInsumos($entity->getId());
-    		$entity->setDatosInsumos(json_encode($insumos));
-    		$em->persist($entity);
-    		$em->flush();
+			$em->persist($entity);
+			$em->flush();
     
     		$this->get('session')->setFlash('msj_info','El proceso se ha modificado correctamente.');
     
@@ -252,31 +206,129 @@ class ProcesoController extends Controller
     }
     
     
-    public function actualizarAction ($id) 
+    /**
+     * Finds and displays a Proceso entity.
+     *
+     */
+    
+    public function showAction($id)
     {
-    	
     	$em = $this->getDoctrine()->getEntityManager();
-    	
+    
     	$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
-    	
+    
     	if (!$entity) {
     		throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
     	}
-    	
-    	/* Estimación de insumos a consumir */
-    	$insumos = $this->calcularUsoDeInsumos($entity->getId());
-    	$entity->setDatosInsumos(json_encode($insumos));
-    	$em->persist($entity);
-    	$em->flush();
-    	
-    	$log = $this->get('log');
-    	$log->create($entity, "Proceso actualizado");
-    	
-    	$this->get('session')->setFlash('msj_info','El Proceso se actualizó correctamente.');
-    	
-    	return $this->redirect($this->generateUrl('proceso_show', array('id' => $id)));
-    	
+    
+    	$em = $this->getDoctrine()->getEntityManager();
+    
+    	//Traigo productos
+    	$query = $em->createQuery('SELECT p FROM ProductoBundle:Producto p
+    			ORDER BY p.nombre ASC
+    			');
+    	$productos = $query->getResult();
+    
+    	//Traigo productos del proceso
+    	$productosDelProceso = $this->getProductosDelProceso($entity->getId());
+    
+    
+    	/* Estimación de insumos a consumir*/
+    	if ($entity->getEstado()<1) {
+    		$insumos = $this->calcularUsoDeInsumos($entity->getId());
+    		$entity->setDatosInsumos(json_encode($insumos));
+    	}
+    
+    
+    
+    	//$this->asignarProductosSecadores($entity->getId(), 2);
+    
+    	$editForm = $this->createForm(new ProcesoType(), $entity);
+    
+    	$deleteForm = $this->createDeleteForm($entity->getId());
+    
+    	return $this->render('DecoyesoProduccionBundle:Proceso:admin_show.html.twig', array(
+    			'entity'      => $entity,
+    			'productos'      => $productos,
+    			'productosDelProceso'      => $productosDelProceso,
+    			'edit_form'   => $editForm->createView(),
+    			'delete_form' => $deleteForm->createView()
+    	));
     }
+    
+    private function createDeleteForm($id)
+    {
+    	return $this->createFormBuilder(array('id' => $id))
+    	->add('id', 'hidden')
+    	->getForm()
+    	;
+    }
+    
+    public function listDeleteformAction($id)
+    {
+    	$deleteForm = $this->createDeleteForm($id);
+    
+    	return $this->render('CoobixAdminBundle:Default:list_delete_form.html.twig', array(
+    			'delete_form' => $deleteForm->createView(),
+    			'url' => $this->generateUrl('proceso_delete', array('id' => $id)),
+    			'id'=>$id,
+    			'msj'=>'¿Seguro desea eliminar el proceso?'
+    	));
+    }
+    
+    public function accionDeleteformAction($id)
+    {
+    	$deleteForm = $this->createDeleteForm($id);
+    
+    	return $this->render('CoobixAdminBundle:Default:accion_delete_form.html.twig', array(
+    			'delete_form' => $deleteForm->createView(),
+    			'url' => $this->generateUrl('proceso_delete', array('id' => $id)),
+    			'id'=>$id,
+    			'msj'=>'¿Seguro desea eliminar el proceso?'
+    	));
+    }
+    
+
+    
+    /**
+     * Deletes a Proceso entity.
+     *
+     */
+    public function deleteAction($id)
+    {
+    	$form = $this->createDeleteForm($id);
+    	$request = $this->getRequest();
+    
+    	$form->bindRequest($request);
+    
+    	if ($form->isValid()) {
+    		$em = $this->getDoctrine()->getEntityManager();
+    		$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
+    
+    		if (!$entity) {
+    			throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
+    		}
+    
+    		$productosDelProceso = $this->getProductosDelProceso($id);
+    
+    		foreach ($productosDelProceso as $pp) {
+    			$em->remove($pp);
+    		}
+    
+    		//LOG
+    		$log = $this->get('log');
+    		$log->create($entity, "Proceso eliminado");
+    
+    		$em->remove($entity);
+    		$em->flush();
+    
+    
+    	}
+    
+    	return $this->redirect($this->generateUrl('proceso'));
+    }
+    
+
     
     
     public function iniciarAction ($id) 
@@ -288,6 +340,12 @@ class ProcesoController extends Controller
     	if (!$entity) {
     		throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
     	}
+    	
+    	/* Estimación de insumos a consumir */
+    	$insumos = $this->calcularUsoDeInsumos($entity->getId());
+    	$entity->setDatosInsumos(json_encode($insumos));
+    	$em->persist($entity);
+    	$em->flush();
     	
     	$entity->setEstado(1);
     	$entity->setFechaInicio(new \DateTime);
@@ -500,144 +558,7 @@ class ProcesoController extends Controller
 		return $this->redirect($this->generateUrl('proceso_show', array('id' => $id)));
 	
 	}
-	
-	//METODOS RELACIONADOS CON LOS SECADORES
-	
-	public function asignarProductosSecadores ($id, $estadoSecador) {
-	
-		$em = $this->getDoctrine()->getEntityManager();
-	
-		$proceso= $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
-	
-		if (!$proceso) {
-			throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
-		}
-	
-				
-		//Traigo productos del proceso
-		$productosDelProceso = $this->getProductosDelProceso($proceso->getId());
-		
-	
-		if (!$productosDelProceso) {
-			throw $this->createNotFoundException('ERROR: El proceso no tiene productos.');
-		}
-	
-		//Recorro los productos para juntarlos por placas o molduras
-		$placas = array();
-		$molduras = array();
-		foreach ($productosDelProceso as $pp):
-		
-			//Placas
-			if ($pp->getProducto()->getTipo() == 0) {
-				for ($i=0; $i<$pp->getCantidad(); $i++) {
-					$placas[] = $pp->getProducto();
-				}
-		
-			}
-			//Molduras
-			if ($pp->getProducto()->getTipo() == 1) {
-				for ($i=0; $i<$pp->getCantidad(); $i++) {
-					$molduras[] = $pp->getProducto();
-				}
-			}
-		
-		endforeach;
-	
-	
-	
-		//Si hay placas para producir
-		if (count($placas)>0) {
-	
-			//Busco Secadores de placas
-			$secadores = $em->getRepository('DecoyesoProduccionBundle:Secador')->findByTipo(0);
-	
-			if (!$secadores) {
-				throw $this->createNotFoundException('ERROR: No hay secadores.');
-			}
-	
-			if ($secadores) {
-				//Elijo el secador que conviene
-				//....
-				$secadoresParaElProceso = $secadores;
-	
-	
-				$cantidadPlacas = count($placas);
-				foreach ($secadoresParaElProceso as $sP):
-					$lugaresSecador = $sP->getLugaresSecador();
-					foreach ($lugaresSecador as $lP):
-						if ($cantidadPlacas < 1) break;
-						if (!$lP->getDisponible()) {
-							$cantidadPlacas--;
-							$lP->setDisponible($estadoSecador);
-							$lP->setProceso($proceso);
-							$lP->setFechaAsignado (new \DateTime);
-							//$lP->calcularDias();
-							$em->persist($lP);
-						}
-					endforeach;
-				endforeach;
-			}
-	
-			$em->flush();
-	
-	
-	
-		}
-	
-		
-		/*
-		//Si hay placas para producir
-		if (count($molduras)>0) {
-	
-			//Busco Secadores de placas
-			$secadores = $em->getRepository('DecoyesoProduccionBundle:Secador')->findByTipo(1);
-	
-			if (!$secadores) {
-				throw $this->createNotFoundException('ERROR: No hay secadores.');
-			}
-	
-			if ($secadores) {
-				//Elijo el secador que conviene
-				//....
-				$secadoresParaElProceso = $secadores;
-	
-	
-				$cantidadPlacas = count($placas);
-				foreach ($secadoresParaElProceso as $sP):
-				$lugaresSecador = $sP->getLugaresSecador();
-				foreach ($lugaresSecador as $lP):
-				if ($cantidadPlacas < 1) break;
-				if (!$lP->getDisponible()) {
-					$cantidadPlacas--;
-					$lP->setDisponible(1);
-					$lP->setProceso($proceso);
-					$lP->setFechaAsignado (new \DateTime);
-					$em->persist($lP);
-				}
-				endforeach;
-				endforeach;
-			}
-	
-			$em->flush();
-	
-			
-	
-		}
-		*/
 
-	}
-	
-	public function calcularDisponibilidadDeSecador($secador) {
-
-		$lugaresLibres = 0;
-		
-		foreach($secador->getLugaresSecador() as $l):
-			if (!$l->getDisponible()) $lugaresLibres++;
-		endforeach;
-				
-		return $lugaresLibres;
-	
-	}
 	
 	
 	//METODOS RELACIONADOS A LOS INSUMOS
@@ -720,6 +641,7 @@ class ProcesoController extends Controller
 		$entity  = new MovimientoStock();
 		$entity->setElemento($insumo);
 		$entity->setAccion(2);
+		$entity->setMotivo(10);
 		$entity->setCantidad($cantidad);
 		$usuario = $this->container->get('security.context')->getToken()->getUser();
 		$entity->setUsuario($usuario);
@@ -742,6 +664,7 @@ class ProcesoController extends Controller
 		$entity  = new MovimientoStock();
 		$entity->setElemento($producto);
 		$entity->setAccion(1);
+		$entity->setMotivo(1);
 		$entity->setCantidad($cantidad);
 		$usuario = $this->container->get('security.context')->getToken()->getUser();
 		$entity->setUsuario($usuario);
@@ -807,78 +730,173 @@ class ProcesoController extends Controller
 	}
 	
     
-    private function createDeleteForm($id)
-    {
-    	return $this->createFormBuilder(array('id' => $id))
-    	->add('id', 'hidden')
-    	->getForm()
-    	;
-    }
-    
-    public function listDeleteformAction($id)
-    {
-    	$deleteForm = $this->createDeleteForm($id);
-    
-    	return $this->render('CoobixAdminBundle:Default:list_delete_form.html.twig', array(
-    			'delete_form' => $deleteForm->createView(),
-    			'url' => $this->generateUrl('proceso_delete', array('id' => $id)),
-    			'id'=>$id,
-    			'msj'=>'¿Seguro desea eliminar el proceso?'
-    	));
-    }
-    
-    public function accionDeleteformAction($id)
-    {
-    	$deleteForm = $this->createDeleteForm($id);
-    
-    	return $this->render('CoobixAdminBundle:Default:accion_delete_form.html.twig', array(
-    			'delete_form' => $deleteForm->createView(),
-    			'url' => $this->generateUrl('proceso_delete', array('id' => $id)),
-    			'id'=>$id,
-    			'msj'=>'¿Seguro desea eliminar el proceso?'
-    	));
-    }
-    
 
-
-
-
-	/**
-	 * Deletes a Proceso entity.
-	 *
-	 */
-	public function deleteAction($id)
+	
+	
+	/* Esta no esta funcionando ahora */
+	public function actualizarAction ($id)
 	{
-	$form = $this->createDeleteForm($id);
-	$request = $this->getRequest();
-
-	$form->bindRequest($request);
-
-	if ($form->isValid()) {
+	
 		$em = $this->getDoctrine()->getEntityManager();
+	
 		$entity = $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
-
+	
 		if (!$entity) {
 			throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
 		}
-
-		$productosDelProceso = $this->getProductosDelProceso($id);
-
-		foreach ($productosDelProceso as $pp) {
-			$em->remove($pp);
-		}
-
-		//LOG
-		$log = $this->get('log');
-		$log->create($entity, "Proceso eliminado");
-
-		$em->remove($entity);
+	
+		/* Estimación de insumos a consumir */
+		$insumos = $this->calcularUsoDeInsumos($entity->getId());
+		$entity->setDatosInsumos(json_encode($insumos));
+		$em->persist($entity);
 		$em->flush();
-
-
+	
+		$log = $this->get('log');
+		$log->create($entity, "Proceso actualizado");
+	
+		$this->get('session')->setFlash('msj_info','El Proceso se actualizó correctamente.');
+	
+		return $this->redirect($this->generateUrl('proceso_show', array('id' => $id)));
+	
 	}
-
-	return $this->redirect($this->generateUrl('proceso'));
+	
+	
+	//METODOS RELACIONADOS CON LOS SECADORES
+	
+	public function asignarProductosSecadores ($id, $estadoSecador) {
+	
+		$em = $this->getDoctrine()->getEntityManager();
+	
+		$proceso= $em->getRepository('DecoyesoProduccionBundle:Proceso')->find($id);
+	
+		if (!$proceso) {
+			throw $this->createNotFoundException('ERROR: No se encontró el proceso.');
+		}
+	
+	
+		//Traigo productos del proceso
+		$productosDelProceso = $this->getProductosDelProceso($proceso->getId());
+	
+	
+		if (!$productosDelProceso) {
+			throw $this->createNotFoundException('ERROR: El proceso no tiene productos.');
+		}
+	
+		//Recorro los productos para juntarlos por placas o molduras
+		$placas = array();
+		$molduras = array();
+		foreach ($productosDelProceso as $pp):
+	
+		//Placas
+		if ($pp->getProducto()->getTipo() == 0) {
+			for ($i=0; $i<$pp->getCantidad(); $i++) {
+				$placas[] = $pp->getProducto();
+			}
+	
+		}
+		//Molduras
+		if ($pp->getProducto()->getTipo() == 1) {
+			for ($i=0; $i<$pp->getCantidad(); $i++) {
+				$molduras[] = $pp->getProducto();
+			}
+		}
+	
+		endforeach;
+	
+	
+	
+		//Si hay placas para producir
+		if (count($placas)>0) {
+	
+			//Busco Secadores de placas
+			$secadores = $em->getRepository('DecoyesoProduccionBundle:Secador')->findByTipo(0);
+	
+			if (!$secadores) {
+				throw $this->createNotFoundException('ERROR: No hay secadores.');
+			}
+	
+			if ($secadores) {
+				//Elijo el secador que conviene
+				//....
+				$secadoresParaElProceso = $secadores;
+	
+	
+				$cantidadPlacas = count($placas);
+				foreach ($secadoresParaElProceso as $sP):
+				$lugaresSecador = $sP->getLugaresSecador();
+				foreach ($lugaresSecador as $lP):
+				if ($cantidadPlacas < 1) break;
+				if (!$lP->getDisponible()) {
+					$cantidadPlacas--;
+					$lP->setDisponible($estadoSecador);
+					$lP->setProceso($proceso);
+					$lP->setFechaAsignado (new \DateTime);
+					//$lP->calcularDias();
+					$em->persist($lP);
+				}
+				endforeach;
+				endforeach;
+			}
+	
+			$em->flush();
+	
+	
+	
+		}
+	
+	
+		/*
+		 //Si hay placas para producir
+		if (count($molduras)>0) {
+	
+		//Busco Secadores de placas
+		$secadores = $em->getRepository('DecoyesoProduccionBundle:Secador')->findByTipo(1);
+	
+		if (!$secadores) {
+		throw $this->createNotFoundException('ERROR: No hay secadores.');
+		}
+	
+		if ($secadores) {
+		//Elijo el secador que conviene
+		//....
+		$secadoresParaElProceso = $secadores;
+	
+	
+		$cantidadPlacas = count($placas);
+		foreach ($secadoresParaElProceso as $sP):
+		$lugaresSecador = $sP->getLugaresSecador();
+		foreach ($lugaresSecador as $lP):
+		if ($cantidadPlacas < 1) break;
+		if (!$lP->getDisponible()) {
+		$cantidadPlacas--;
+		$lP->setDisponible(1);
+		$lP->setProceso($proceso);
+		$lP->setFechaAsignado (new \DateTime);
+		$em->persist($lP);
+		}
+		endforeach;
+		endforeach;
+		}
+	
+		$em->flush();
+	
+	
+	
+		}
+		*/
+	
+	}
+	
+	public function calcularDisponibilidadDeSecador($secador) {
+	
+		$lugaresLibres = 0;
+	
+		foreach($secador->getLugaresSecador() as $l):
+		if (!$l->getDisponible()) $lugaresLibres++;
+		endforeach;
+	
+		return $lugaresLibres;
+	
 	}
 	
 	

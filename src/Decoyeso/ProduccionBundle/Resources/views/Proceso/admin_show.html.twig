@@ -12,10 +12,11 @@
 {% block menuAcciones%}
 	{% if entity.estado < 1  %}
 		{% render "DecoyesoProduccionBundle:Proceso:accionDeleteform" with {'id': entity.id}  %}
-					
+		{#			
 		<a  href="{{ path('proceso_actualizar', { 'id': entity.id }) }}" class="btn_blue right" >
 		Actualizar
-		</a>	
+		</a>
+		#}	
 	{% endif %}
 	
 
