@@ -3,6 +3,17 @@
 {% block module_tit %}Editar Insumo{% endblock module_tit %}
 
 
+
+{% block menuAccionesItems%}
+<li>
+	<form action="" method="post">
+		{{ form_widget(delete_form) }}
+		<button id="clienteEliminarBtn" type="submit">Eliminar cliente</button>
+	</form>
+</li>
+{% endblock menuAccionesItems%}
+			
+
 {% block menuOpciones%}{% endblock menuOpciones%}
 	
 

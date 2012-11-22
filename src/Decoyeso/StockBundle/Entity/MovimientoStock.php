@@ -37,7 +37,7 @@ class MovimientoStock
     private $accion;
     
     /**
-     * @var integer $motivo-->1-nuevo, 2-Reingreso, 3-Mal Estado, 4-Rotura Accidental
+     * @var integer $motivo-->1-nuevo,2-Se retira en respuesta de solicitud  3-Reingreso, 4-Mal Estado, 6-Rotura Accidental, 8-otros, 10- Se retira para produccion
      *
      * @ORM\Column(name="motivo", type="integer")
      */

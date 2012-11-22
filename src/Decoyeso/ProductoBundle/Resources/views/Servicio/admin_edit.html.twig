@@ -1,6 +1,7 @@
 {% extends "CoobixAdminBundle:Default:edit.html.twig" %}
 
 {% block module_tit %}Editar Servicio{% endblock module_tit %}
+
 {% block menuOpciones%}{% endblock menuOpciones%}
 
 {% block list_path %}
@@ -53,41 +54,47 @@
 				<label class=" required" >Productos del servicio</label>
 				<div class="field_widget">
 				
-					<table  class="field_widget_productos" id="tableListProductos">
-						<tr>
-							<th>Nombre</th>
-							<th>Cantidad</th>
-							<th>Costo</th>
-							<th></th>
-						</tr>
-						<tr>
-							<td>
-								<select name="selectProductos" id="idSelectProducto" style="float:left;">
-									{% for producto in productos %}
-										<option value="{{producto.id}}@{{ producto.costo }}@{{ producto.unidad }}">{{producto.nombre}}</option>
-									{%else%}
-										<option value="0@@@">No existen productos para agregar</option>
-									{%endfor%}						
-								</select>
-							</td>
-							<td><input style="float:left;" maxlength="12" type="text" id="idProductoCantidad" name="productoCantidad" value=""></td>
-							<td id="idCostoProductoAgergar"></td>
-							<td><button type="button" style="float:left;" id="idAgregarProducto" >Agregar</button></td>
-						</tr>
-						{% set productosInicial='' %}
-						{% for producto in productosIncluidos %}						
-							<tr id="pro_tr_{{producto.producto.id}}">
-								<td id="pro_nom_{{producto.producto.id}}">{{producto.producto.nombre}}</td>
-								<td id="pro_cant_{{producto.producto.id}}">{{producto.cantidad}} {{ producto.producto.unidad}}</td>
-								<td id="pro_cost_{{producto.producto.id}}">{{ producto.producto.costo}}</td>
-								<td ><button class="eliminarProductoDeLista" type="button" value="{{producto.producto.id}}">X</button></td>
-								
-								{% set productosInicial=productosInicial~";"~producto.producto.id~"@"~producto.cantidad~"@"~producto.producto.costo~"@"~producto.producto.unidad~"@"~producto.producto.nombre %}
-								
-							</tr>
-						{% endfor %}
-					
-					</table>
+					<div class="tab_container border_radius">
+		
+						<table class="records_list field_widget_productos" id="tableListProductos">
+							<thead>
+								<tr>
+									<th>Nombre</th>
+									<th>Cantidad</th>
+									<th>Costo</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<select name="selectProductos" id="idSelectProducto" style="float:left;">
+											{% for producto in productos %}
+												<option value="{{producto.id}}@{{ producto.costo }}@{{ producto.unidad }}">{{producto.nombre}}</option>
+											{%else%}
+												<option value="0@@@">No existen productos para agregar</option>
+											{%endfor%}						
+										</select>
+									</td>
+									<td><input style="float:left;" maxlength="12" type="text" id="idProductoCantidad" name="productoCantidad" value=""></td>
+									<td id="idCostoProductoAgergar"></td>
+									<td><button type="button" style="float:left;" id="idAgregarProducto" >Agregar</button></td>
+								</tr>
+							
+							{% set productosInicial='' %}
+							{% for producto in productosIncluidos %}						
+								<tr id="pro_tr_{{producto.producto.id}}">
+									<td id="pro_nom_{{producto.producto.id}}">{{producto.producto.nombre}}</td>
+									<td id="pro_cant_{{producto.producto.id}}">{{producto.cantidad}} {{ producto.producto.unidad}}</td>
+									<td id="pro_cost_{{producto.producto.id}}">{{ producto.producto.costo}}</td>
+									<td ><button class="eliminarProductoDeLista" type="button" value="{{producto.producto.id}}">X</button></td>
+									
+									{% set productosInicial=productosInicial~";"~producto.producto.id~"@"~producto.cantidad~"@"~producto.producto.costo~"@"~producto.producto.unidad~"@"~producto.producto.nombre %}
+									
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
 					
 					
 				</div>
@@ -103,39 +110,47 @@
 				<label class=" required" for="producto_precio">Insumos del producto</label>
 				<div class="field_widget">
 				
-					<table  class="field_widget_insumos" id="tableListInsumos">
-						<tr>
-							<th>Nombre</th>
-							<th>Cantidad</th>
-							<th>Costo</th>												
-							<th></th>
-						</tr>
-						<tr>
-							<td>
-								<select name="selectInsumos" id="idSelectInsumo" style="float:left;">
-									{% for insumo in insumos%}
-										<option value="{{insumo.id}}@{{ insumo.costo }}@{{ insumo.unidad }}">{{insumo.nombre}}</option>
-									{% else %}
-										<option value="0@@@">No existen insumos para agregar</option>
-									{%endfor%}						
-								</select>
-							</td>
-							<td><input style="float:left;" maxlength="12" type="text" id="idInsumoCantidad" name="insumoCantidad" value=""></td>
-							<td id="idCostoInsumoAgergar"></td>		
-							<td><button type="button" style="float:left;" id="idAgregarInsumo" >Agregar</button></td>
-						</tr>
-						{% set insumosInicial='' %}
-						{% for insumo in insumosIncluidos %}						
-							<tr id="ins_tr_{{insumo.insumo.id}}">
-								<td id="ins_nom_{{insumo.insumo.id}}">{{insumo.insumo.nombre}}</td>
-								<td id="pro_cant_{{insumo.insumo.id}}">{{insumo.cantidad}} {{ insumo.insumo.unidad}}</td>
-								<td id="pro_cost_{{insumo.insumo.id}}">{{ insumo.insumo.costo}}</td>
-								<td ><button class="eliminarInsumoDeLista" type="button" value="{{insumo.insumo.id}}">X</button></td>
-								
-								{% set insumosInicial=insumosInicial~";"~insumo.insumo.id~"@"~insumo.cantidad~"@"~insumo.insumo.costo~"@"~insumo.insumo.unidad~"@"~insumo.insumo.nombre %}
-								
-							</tr>
-						{% endfor %}
+					
+					<div class="tab_container border_radius" >
+		
+						<table class="records_list field_widget_insumos" id="tableListProductos">
+							<thead>
+								<tr>
+									<th>Nombre</th>
+									<th>Cantidad</th>
+									<th>Costo</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<tr>
+									<td>
+										<select name="selectInsumos" id="idSelectInsumo" style="float:left;">
+											{% for insumo in insumos%}
+												<option value="{{insumo.id}}@{{ insumo.costo }}@{{ insumo.unidad }}">{{insumo.nombre}}</option>
+											{% else %}
+												<option value="0@@@">No existen insumos para agregar</option>
+											{%endfor%}						
+										</select>
+									</td>
+									<td><input style="float:left;" maxlength="12" type="text" id="idInsumoCantidad" name="insumoCantidad" value=""></td>
+									<td id="idCostoInsumoAgergar"></td>		
+									<td><button type="button" style="float:left;" id="idAgregarInsumo" >Agregar</button></td>
+								</tr>
+								{% set insumosInicial='' %}
+								{% for insumo in insumosIncluidos %}						
+									<tr id="ins_tr_{{insumo.insumo.id}}">
+										<td id="ins_nom_{{insumo.insumo.id}}">{{insumo.insumo.nombre}}</td>
+										<td id="pro_cant_{{insumo.insumo.id}}">{{insumo.cantidad}} {{ insumo.insumo.unidad}}</td>
+										<td id="pro_cost_{{insumo.insumo.id}}">{{ insumo.insumo.costo}}</td>
+										<td ><button class="eliminarInsumoDeLista" type="button" value="{{insumo.insumo.id}}">X</button></td>
+										
+										{% set insumosInicial=insumosInicial~";"~insumo.insumo.id~"@"~insumo.cantidad~"@"~insumo.insumo.costo~"@"~insumo.insumo.unidad~"@"~insumo.insumo.nombre %}
+										
+									</tr>
+								{% endfor %}
+						</tbody>
 					
 					</table>
 					

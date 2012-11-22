@@ -396,11 +396,13 @@ class PresupuestoController extends Controller
         	$IdPedido=$entity->getPedido()->getId();
         	
         	
-        	
+        	$bHabiaPresupuestoAprobado=0;
         	foreach($presupuestos as $p):
         		
         		if($p->getEstado()==1){
         		
+        				$bHabiaPresupuestoAprobado=1;
+        				
 		        		$bHuboMovimientoEnStock=0;
 		        		$elementosSalieronDeStock=array();
 		        		 
@@ -522,22 +524,7 @@ class PresupuestoController extends Controller
 		        					$InconsistenciasEnStock[$keyElementoSalieron]=$valueElementoSalieron;
 		        				}
 		        				
-		        			}
-		        			 
-		        			//////GENERAR LOGS
-		        			
-		        			$log=array();
-		        			foreach ($InconsistenciasEnStock as $key => $value) {
-		        				  $elemento=$em->getRepository('ProductoBundle:Elemento')->find($key);
-		        				  $log[$key] = $this->get('log');
-		        				  $log[$key]->setPrioridad(3);
-                           		  $log[$key]->setPermisos("ROLE_DEPOSITO");
-                           		  $log[$key]->create(false, 'Inconsistencia en Stock!!! La cantidad de '.$elemento->getNombre().' que salieron de stock debido al presupuesto '.$p->getNumero().' es menor a la cantidad presupuestada en '.$entity->getNumero().'. Para normalizar esta situación, deben reingresar a stock '.$value.' '.$elemento->getUnidad().' de '.$elemento->getNombre().' correspondientes al pedido '.$entity->getPedido()->getNumero().'.');
-                           		  $em->persist($log[$key]);
-                           		  
-                           		  echo $log[$key]->getLog()."<br><br>";
-		        			}
-		        			 
+		        			}        					        			 
 		        			
 		        		}
         			        		        		
@@ -564,14 +551,38 @@ class PresupuestoController extends Controller
             
             //Cambio el estado en el pedido
             $entity->getPedido()->setEstado(4);
+            
+            
+            
+            //LOG
+            $log = $this->get('log');
+            if($bHabiaPresupuestoAprobado==0){
+            	$log->setPrioridad(1);
+            	$log->create($entity, "Presupuesto aprobado");
+            }else{
+            	$log->setPrioridad(2);
+            	$log->create($entity, "Cambio presupuesto aprobado");
+            }
+            
+			if(count($InconsistenciasEnStock)>0){
+
+				$log=array();
+				foreach ($InconsistenciasEnStock as $key => $value) {
+					$elemento=$em->getRepository('ProductoBundle:Elemento')->find($key);
+					$log[$key] = $this->get('log');
+					$log[$key]->setPrioridad(3);
+					$log[$key]->setPermisos("ROLE_DEPOSITO");
+					$log[$key]->create(false, 'Inconsistencia en Stock!!! La cantidad de '.$elemento->getNombre().' que salieron de stock debido al presupuesto '.$p->getNumero().' es menor a la cantidad presupuestada en '.$entity->getNumero().'. Para normalizar esta situación, deben reingresar a stock '.$value.' '.$elemento->getUnidad().' de '.$elemento->getNombre().' correspondientes al pedido '.$entity->getPedido()->getNumero().'.');
+					$em->persist($log[$key]);
+				}
+				
+				
+			}
+             
         	
         	$em->flush();
 
             $this->get('session')->setFlash('msj_info','El presupuesto fue aprobado');
-            
-            //LOG
-            $log = $this->get('log');
-            $log->create($entity, "Presupuesto aprobado");
 
             return $this->redirect($this->generateUrl('presupuesto_edit', array('id' => $id)));
         }

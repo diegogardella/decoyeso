@@ -14,9 +14,9 @@
 
 {% block module_tit %}
 	{% if accion==1 %}
-		{% set tipoAccion='Agregar' %}
+		{% set tipoAccion='Agregar ' %}
 	{% else %}
-		{% set tipoAccion='Eliminar' %}
+		{% set tipoAccion='Eliminar ' %}
 	{% endif %}
 	
 	{% if tipo==1 %}
@@ -25,7 +25,13 @@
 		{% set tipoNombre='Insumos' %}
 	{% endif %}
 	
-	{{ tipoAccion }} {{ tipoNombre }} A Stock
+	{% if accion==1 %}
+		{{ tipoAccion }} {{ tipoNombre }} a Stock
+	{% else %}
+		{{ tipoAccion }} {{ tipoNombre }} de Stock
+	{% endif %}
+	
+	
 	
 {% endblock module_tit %}
 
