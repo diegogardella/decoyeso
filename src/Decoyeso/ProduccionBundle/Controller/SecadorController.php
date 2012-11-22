@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Decoyeso\ProduccionBundle\Entity\Secador;
 use Decoyeso\ProduccionBundle\Form\SecadorType;
 use Decoyeso\ProduccionBundle\Entity\LugarSecador;
+use Decoyeso\ProduccionBundle\Entity\Proceso;
 
 /**
  * Secador controller.
@@ -464,6 +465,8 @@ class SecadorController extends Controller
     	
     	foreach($entity->getLugaresSecador() as $l):
     	 	$l->setDisponible(0);
+    		$l->setFechaAsignado(NULL);
+    		$l->liberarDeProceso();
     	endforeach;
     	$em->persist($l);
     	$em->flush();
@@ -495,28 +498,6 @@ class SecadorController extends Controller
     
     	return $cantidad;
     }
-    
-    public function cantidadLugaresLibreEnSecadore($idSecador) {
-    
-    	$em = $this->getDoctrine()->getEntityManager();
-    
-    	$cantidad = 0;
-    
-    	$query = $em->createQuery('SELECT COUNT(lu.id) FROM DecoyesoProduccionBundle:LugarSecador lu
-    			JOIN lu.secador se
-    			WHERE se.id = :se_id AND
-    			lu.disponible = :lu_disponible
-    
-    			');
-    	$query->setParameters(array(
-    			'lu_disponible' => 0,
-    			'se_id' => $idSecador,
-    
-    	));
-    	$cantidad = $query->getSingleScalarResult();
-    
-    	return $cantidad;
-    }
-    
+  
     
 }

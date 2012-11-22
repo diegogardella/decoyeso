@@ -116,8 +116,11 @@ class LugarSecador
     	//Mojado = 2
     	if ($this->diasEnSecador() < $tiempoSecadoSecador/2) return 2;
     	
-    	
-  
+    }
+    
+    public function liberarDeProceso()
+    {
+    	$this->proceso = NULL;
     }
 
     /**

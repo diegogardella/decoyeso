@@ -223,25 +223,7 @@ class Producto extends Elemento
         return $this->productoInsumo;
     }
 
-    /**
-     * Add solicitudMovimientoElemento
-     *
-     * @param Decoyeso\StockBundle\Entity\SolicitudMovimientoElemento $solicitudMovimientoElemento
-     */
-    public function addSolicitudMovimientoElemento(\Decoyeso\StockBundle\Entity\SolicitudMovimientoElemento $solicitudMovimientoElemento)
-    {
-        $this->solicitudMovimientoElemento[] = $solicitudMovimientoElemento;
-    }
 
-    /**
-     * Get solicitudMovimientoElemento
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getSolicitudMovimientoElemento()
-    {
-        return $this->solicitudMovimientoElemento;
-    }
 
     /**
      * Set molde

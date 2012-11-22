@@ -38,13 +38,6 @@ class ProcesoController extends Controller
 	
 		$resultados=$buscador->exeBuscar();
 		
-
-		
-
-	
-
-		
-	
 		return $this->render('DecoyesoProduccionBundle:Proceso:admin_list.html.twig', array(
 				'entities' => $resultados["entities"],
 				'formBuscar'=>$resultados["form"]->createView(),
@@ -108,8 +101,7 @@ class ProcesoController extends Controller
 			$em->persist($entity);
 			$em->flush();
 			
-			/* Me fijo si hay lugar en secadores */
-			
+						
 	
 	
 			$log = $this->get('log');
@@ -153,8 +145,8 @@ class ProcesoController extends Controller
     	//Traigo productos del proceso
     	$productosDelProceso = $this->getProductosDelProceso($entity->getId());
     	
-    	//
-    	//$this->asignarProductosSecadores($entity->getId());
+    	
+    	//$this->asignarProductosSecadores($entity->getId(), 2);
 
     	$editForm = $this->createForm(new ProcesoType(), $entity);
 
@@ -402,10 +394,13 @@ class ProcesoController extends Controller
     
     	/* Descuento Insumos de Stock */
     	$datosInsumos = $entity->getDatosInsumos();
-    	foreach ($datosInsumos as $di) {
-    		$insumo = $em->getRepository('ProductoBundle:Insumo')->find($di["id"]);
-    		$this->descontarInsumos($insumo, $di["cantidadProducida"]);
+    	if ($datosInsumos) {
+    		foreach ($datosInsumos as $di) {
+    			$insumo = $em->getRepository('ProductoBundle:Insumo')->find($di["id"]);
+    			$this->descontarInsumos($insumo, $di["cantidadProducida"]);
+    		}	
     	}
+
     	
     	$log = $this->get('log');
     	$log->setPrioridad(1);
@@ -508,7 +503,7 @@ class ProcesoController extends Controller
 	
 	//METODOS RELACIONADOS CON LOS SECADORES
 	
-	public function asignarProductosSecadores ($id) {
+	public function asignarProductosSecadores ($id, $estadoSecador) {
 	
 		$em = $this->getDoctrine()->getEntityManager();
 	
@@ -573,7 +568,7 @@ class ProcesoController extends Controller
 						if ($cantidadPlacas < 1) break;
 						if (!$lP->getDisponible()) {
 							$cantidadPlacas--;
-							$lP->setDisponible(2);
+							$lP->setDisponible($estadoSecador);
 							$lP->setProceso($proceso);
 							$lP->setFechaAsignado (new \DateTime);
 							//$lP->calcularDias();

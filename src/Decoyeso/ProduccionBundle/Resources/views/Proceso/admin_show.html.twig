@@ -88,18 +88,20 @@
 		{% include 'DecoyesoProduccionBundle:Proceso:cuadro_datos_insumos.html.twig' with {'datos': datos} %}
 		{# CUADRO DATOS INSUMOS #}
 		
-		
+		{# CUADRO DATOS SECADORES 
 		{% if (entity.estado < 1) %}
-			{# CUADRO DATOS SECADORES #}
+			
 			{% render "DecoyesoProduccionBundle:Secador:disponibilidadSecadores" with {'datos': datos}  %}
-			{# CUADRO DATOS SECADORES #}
+			
 		{% endif %}
+		CUADRO DATOS SECADORES  #}
 		
 		
+		{# CUADRO ESTIMACION SECADORES 
 		
-		{# CUADRO ESTIMACION SECADORES #}
 		{% render "DecoyesoProduccionBundle:Secador:mostrarEstimacion"  %}
-		{# CUADRO ESTIMACION SECADORES #}
+		
+		CUADRO ESTIMACION SECADORES #}
 		
 		
 		

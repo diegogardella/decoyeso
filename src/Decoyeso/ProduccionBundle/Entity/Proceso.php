@@ -129,8 +129,7 @@ class Proceso
     	
     	return $nombreEstado[$this->estado];
     }
-
-
+    
 
     /**
      * Get id
