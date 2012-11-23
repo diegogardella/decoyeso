@@ -240,7 +240,7 @@ class PresupuestoController extends Controller
         
 
         $entity->setItems(json_encode($items));
-        $presupuestoElemento[]=array();
+        
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
@@ -248,15 +248,21 @@ class PresupuestoController extends Controller
             $em->persist($entity);
             $em->flush();
 			
+            
+            
             $log = $this->get('log');
             $log->create($entity, "Presupuesto Creado");
 
+            
             $pedido=$em->getRepository('PedidoBundle:Pedido')->find($IdPedido);
             $pedido->VerificarEstado();
             $em->persist($pedido);
             $em->flush();
             
+            
+            
             $items=json_decode($entity->getItems(),true);
+            $presupuestoElemento=array();
             
             for($i=0;$i<count($items);$i++){
             	
@@ -265,18 +271,18 @@ class PresupuestoController extends Controller
             	
             	$presupuestoElemento[$i]=new PresupuestoElemento();
             	$presupuestoElemento[$i]->setPresupuesto($entity);
+            	
             	$elemento=$em->getRepository('ProductoBundle:Elemento')->find($items[$i]['id']);
             	$presupuestoElemento[$i]->setElemento($elemento);
-            	$presupuestoElemento[$i]->setCantidad($items[$i]);
-            	 
+            	$presupuestoElemento[$i]->setCantidad($items[$i]["cantidad"]);
+            	
             	$em->persist($presupuestoElemento[$i]);
-            	
-            	
+
             }
-            	
+
             
             $em->flush();
-            	
+            
             
             
 	     	$this->get('session')->setFlash('msj_info','El presupuesto se ha creado correctamente');
