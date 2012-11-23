@@ -259,6 +259,7 @@ class SolicitudMovimientoController extends Controller
     		$movimientoStock[$j]->setElemento($elementoSolicitudMovimiento->getElemento());
     		$movimientoStock[$j]->setCantidad($value);
     		$movimientoStock[$j]->setAccion(2);
+    		$movimientoStock[$j]->setMotivo(2);
     		$movimientoStock[$j]->setUsuario($this->container->get('security.context')->getToken()->getUser());
     		$movimientoStock[$j]->setFechaHora(new \DateTime());
     		$movimientoStock[$j]->setObservacion('Se confirmo solicitud y se entrego producto y/o insumo');
