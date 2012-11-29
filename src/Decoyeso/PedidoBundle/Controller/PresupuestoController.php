@@ -282,8 +282,7 @@ class PresupuestoController extends Controller
 
             
             $em->flush();
-            
-            
+                        
             
 	     	$this->get('session')->setFlash('msj_info','El presupuesto se ha creado correctamente');
 
