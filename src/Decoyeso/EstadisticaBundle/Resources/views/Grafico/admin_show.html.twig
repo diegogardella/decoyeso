@@ -1,0 +1,12 @@
+{% extends "DecoyesoEstadisticaBundle:Grafico:admin_index.html.twig" %}
+
+
+
+{% block module_content_estadisticas%}
+		
+	{% if (modulo == "proceso") %}
+		{% include 'DecoyesoEstadisticaBundle:Grafico:graficos_proceso.html.twig' with {'graficos': graficos} %}
+	{% endif %} 
+			
+
+{% endblock module_content_estadisticas%}

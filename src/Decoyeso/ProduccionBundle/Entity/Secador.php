@@ -65,7 +65,7 @@ class Secador
     /**
      * @var lugaresSecador
      *
-     * @ORM\OneToMany(targetEntity="LugarSecador", mappedBy="secador", cascade={"remove","persist"})
+     * @ORM\OneToMany(targetEntity="LugarSecador", mappedBy="secador", cascade={"remove"})
      *
      */
     private $lugaresSecador;

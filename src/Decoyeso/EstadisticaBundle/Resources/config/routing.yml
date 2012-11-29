@@ -1,0 +1,7 @@
+DecoyesoEstadisticaBundle:
+    resource: "@DecoyesoEstadisticaBundle/Resources/config/routing/grafico.yml"
+    prefix:   /estadistica
+ 
+
+    
+    
