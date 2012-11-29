@@ -1,0 +1,76 @@
+{% extends "CoobixAdminBundle:Default:list.html.twig" %}
+
+{% block module_tit %}Listado de Mesas{% endblock module_tit %}			
+	
+
+{% block list_tits %}
+
+{% set widthCols =  94/2 %}
+
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'p.nombre')|raw }}</a></th>
+
+
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Capacidad', 'p.capacidad')|raw }}</a></th>
+
+
+
+
+{% endblock list_tits %}
+
+{% block list_item_texts %}
+<td >
+	<a href="{{ path('mesa_edit', { 'id': entity.id }) }}">
+		{{ entity.nombre }}
+	</a>
+</td>
+<td >
+	<a href="{{ path('mesa_edit', { 'id': entity.id }) }}">
+		
+		{{ entity.capacidad }}
+		
+	</a>
+</td>
+
+{% endblock list_item_texts %}
+
+
+
+
+{%block FormBuscar%}
+	<form method="post" action="{{path('mesa',{pararouting:"buscar"})}}" novalidate="true">
+{%endblock%}
+
+{%block camposFormBuscar%}
+	<div id="formBuscar">
+		
+		{{form_row(formBuscar._token)}}
+		{{form_row(formBuscar.p_nombre)}}
+		{{form_row(formBuscar.p_capacidad)}}
+		
+	</div>
+{%endblock%}
+
+{% block new_path %} 
+{{ path('mesa_new') }}
+{% endblock new_path %}
+
+{% block edit_path %} 
+{{ path('mesa_edit', { 'id': entity.id }) }} 
+{% endblock edit_path %}
+
+{% block delete_path %}
+{{ path('mesa_delete', { 'id': entity.id }) }}
+{% endblock delete_path %}
+
+{% block list_delete %}
+{% render "DecoyesoProduccionBundle:Mesa:listDeleteform" with {'id': entity.id}  %}
+{% endblock list_delete %}
+
+
+{% block menuOpciones %}
+{% endblock menuOpciones %}
+
+
+
+
+

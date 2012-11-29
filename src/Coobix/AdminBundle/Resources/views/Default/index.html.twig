@@ -69,6 +69,32 @@
 			</div>
 			
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
+
+			<div class="menuTab">
+				<div class="tabTit txt3" id="estadisticasTit">Informes</div>
+				<ul class="tabUl">
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('grafico_modulo', { 'modulo': "proceso" }) }}">Proceso</a></li>
+
+				</ul>
+				<ul class="tabUl">
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('grafico_modulo', { 'modulo': "pedido" }) }}">Pedidos</a></li>
+
+				</ul>
+								<ul class="tabUl">
+					<li class="itemsTabUl"><a class="txt16" href="{{ path('grafico_modulo', { 'modulo': "stock" }) }}">Stock</a></li>
+
+				</ul>
+			</div>
+			{% endif %}
+			
+			
+			
+
+			
+			
+			{##}
+			
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
 			<div class="menuTab">
 				<div class="tabTit txt3" id="miAccountTit">
 					<a class="txt3" href="{{ path('usuario') }}">Usuarios</a>
@@ -205,7 +231,7 @@
 			#}
 			
 
-			
+			{% if is_granted('ROLE_DEPOSITO') %}
 			<div class="menuTab">
 				<div class="tabTit txt3" id="stockTit">Stock</div>
 				<ul class="tabUl">
@@ -227,22 +253,8 @@
 
 				</ul>	
 			</div>
-			
-			
-			{#
-			{% if is_granted('ROLE_SUPER_ADMIN') %}
-
-			<div class="menuTab">
-				<div class="tabTit txt3" id="estadisticasTit">Informes</div>
-				<ul class="tabUl">
-					<li class="itemsTabUl"><a class="txt16" href="{{ path('proceso') }}">Procesos</a></li>
-
-				</ul>	
-			</div>
 			{% endif %}
-			#}
-			
-			
+					
 			{% if is_granted('ROLE_DEPOSITO') %}
 
 			<div class="menuTab">

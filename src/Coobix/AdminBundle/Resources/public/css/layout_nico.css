@@ -270,6 +270,38 @@ text-align: center;
     margin: 0;
 }
 
+.NfechasGraficos {
+	width: 100px;
+}
+
+.NBotonActualizar {
+	background: url(../images/icons/arrow_refresh.png)  no-repeat;
+	height: 16px;
+	width: 16px;
+	display: block;
+	float: left;
+	margin: 10px 0 0 10px;
+}
+
+.NcontChart {
+	float: left;
+	padding: 0 15px 15px 15px;
+}
+.NchartDiv {
+	float: left;
+	
+}
+
+.NImagenVerGrafico {
+	background: url(../images/icons/magnifier.png) 0 6px  no-repeat;
+	height: 16px;
+	width: 50px;
+	display: block;
+	float: left;
+	width: 50%;
+	padding: 5px 0 10px 20px;
+
+}
 
 
 

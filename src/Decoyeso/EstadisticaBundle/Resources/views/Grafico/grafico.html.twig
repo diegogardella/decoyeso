@@ -1,0 +1,10 @@
+	<div class="NcontChart" style="width: {{ grafico['ancho'] }}px">
+		<a href="" class="NImagenVerGrafico txt3">Ver más</a>
+		<div id="chartdiv{{ grafico['id'] }}" class="NchartDiv"></div>          
+	</div>
+
+    <script type="text/javascript">
+        var myChart{{ grafico['id'] }} = new FusionCharts('{{ asset("bundles/decoyesoestadistica/js/FusionCharts/Charts/") }}{{ grafico['grafico'].getTipo() }}', "myChartId", "{{ grafico['ancho'] }}", "{{ grafico['alto'] }}", "0", "0");
+        myChart{{ grafico['id'] }}.setDataXML('<chart {{ grafico['grafico'].getOpcionesString() |raw}}>{{ grafico['grafico'].getValores() |raw }}</chart>');
+        myChart{{ grafico['id'] }}.render("chartdiv{{ grafico['id'] }}");
+    </script>   

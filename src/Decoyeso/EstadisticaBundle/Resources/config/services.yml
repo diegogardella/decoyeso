@@ -1,0 +1,7 @@
+parameters:
+#    decoyeso_estadistica.example.class: Decoyeso\EstadisticaBundle\Example
+
+services:
+#    decoyeso_estadistica.example:
+#        class: %decoyeso_estadistica.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

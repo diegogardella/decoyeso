@@ -1,0 +1,75 @@
+{% extends "CoobixAdminBundle:Default:index.html.twig" %}
+
+
+{% block javascripts %}
+
+	<script type="text/javascript" src="{{ asset('bundles/decoyesoestadistica/js/FusionCharts/JSClass/FusionCharts.js') }}" /></script>
+	
+	<link type="text/css" href="{{ asset('bundles/pedido/js/jqueryui1824custom/development-bundle/themes/base/jquery.ui.all.css') }}" rel="stylesheet" />
+	<script type="text/javascript" src="{{ asset('bundles/pedido/js/jqueryui1824custom/js/jqueryCustom.js') }}" ></script>
+	<script type="text/javascript" src="{{ asset('bundles/pedido/js/jqueryui1824custom/development-bundle/ui/i18n/jquery.ui.datepicker-es.js') }}" ></script>
+	
+
+	
+	<script type="text/javascript" src="{{ asset('bundles/decoyesoestadistica/js/grafico.js') }}" ></script>
+	
+
+{% endblock javascripts %}
+
+{% block main_content %}
+
+
+
+<div class="module width_full">
+	{% block module_header%}
+		<div class="module_header">
+		
+			<div class="module_tit txt3">Desde: <input readonly="readonly" type="text" name="fechaDesde" id="fechaDesde" value="{{ fechas["desde"]|date("d/m/Y") }}" class="NfechasGraficos" /> </div>
+			<div class="module_tit txt3">Hasta: <input readonly="readonly" type="text" name="fechaaHasta" id="fechaaHasta" value="{{ fechas["hasta"]|date("d/m/Y") }}" class="NfechasGraficos"/></div>
+			
+			<a href="" class="NBotonActualizar"></a>
+			
+		
+		
+		
+			
+			
+		
+		
+		{% block module_tit %}{% endblock module_tit %}
+				{% block menuAcciones%}
+	
+				{% endblock menuAcciones%}
+				
+				{% block menuOpciones%}
+
+				{% endblock menuOpciones%}
+				
+				{%block opcionesGuia  %} {%endblock opcionesGuia  %}
+			
+		</div>
+	{% endblock module_header%}
+	
+	<hr>
+	
+	{% block module_content_antes%}{% endblock module_content_antes%}
+	
+	<div class="module_content">
+	
+		{% block module_content_estadisticas%}
+		
+
+		{% endblock module_content_estadisticas%}
+					
+	
+	
+	</div>
+</div>
+
+
+{% block otros %}{% endblock otros %}
+
+{% endblock main_content %}
+
+
+

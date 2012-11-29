@@ -215,4 +215,14 @@ class Producto extends Elemento
         return $this->productoInsumo;
     }
 
+
+    /**
+     * Add solicitudMovimientoElemento
+     *
+     * @param Decoyeso\StockBundle\Entity\SolicitudMovimientoElemento $solicitudMovimientoElemento
+     */
+    public function addSolicitudMovimientoElemento(\Decoyeso\StockBundle\Entity\SolicitudMovimientoElemento $solicitudMovimientoElemento)
+    {
+        $this->solicitudMovimientoElemento[] = $solicitudMovimientoElemento;
+    }
 }

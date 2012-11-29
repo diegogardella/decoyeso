@@ -1,0 +1,15 @@
+grafico:
+    pattern:  /
+    defaults: { _controller: "DecoyesoEstadisticaBundle:Grafico:index" }
+
+grafico_show:
+    pattern:  /{grafico}/show
+    defaults: { _controller: "DecoyesoEstadisticaBundle:Grafico:show" }
+
+
+grafico_modulo:
+    pattern:  /graficos/{modulo}
+    defaults: { _controller: "DecoyesoEstadisticaBundle:Grafico:mostrarGraficosModulo" }
+
+    
+
