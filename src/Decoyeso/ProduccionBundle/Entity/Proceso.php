@@ -30,9 +30,9 @@ class Proceso
     private $numero;
     
     /**
-     *
-     * @var $estado
      * 
+     * @var $estado
+     * 0 = creado 
      * @ORM\Column(name="estado", type="integer", nullable="true")
      *
      */

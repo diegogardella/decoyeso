@@ -1,9 +1,11 @@
 <?php
 
 namespace Decoyeso\EstadisticaBundle\Entity;
+	
+use Decoyeso\EstadisticaBundle\Entity\FusionCharts;
 
 
-class Grafico
+class Grafico extends FusionCharts
 {
 
     
@@ -17,22 +19,13 @@ class Grafico
      * @var string $opciones
      *
      */
-    private $opciones = array(
-	   		'caption' => '',
-    		'xAxisName' => '',
-    		'yAxisName' => '',
-    		'showValues' => '',
-    		'decimals' => '',
-    		'formatNumberScale' => '',
-    		'yAxisMinValue' => '',
-    		'numberPrefix' => '',
-    		);
+    private $opciones = array();
     
     /**
      * @var string $valores
      *
      */
-    private $valores;
+    //private $xml;
     
     
     
@@ -43,29 +36,13 @@ class Grafico
      */
     public function setOpciones($opciones)
     {
-    	$this->setOpcionesDefault($this->tipo);
+    	//$this->setOpcionesDefault($this->tipo);
     
     	foreach ($opciones as $k => $v) {
     		$this->opciones[$k] = $v;
     	}
     }
     
-    public function setOpcionesDefault($nombreGrafico) {
-    	switch ($nombreGrafico) {
-    		case "Column3D":
-    			$this->opciones = array(
-    			'caption' => 'Titulo',
-    			'xAxisName' => 'Xnombre',
-    			'yAxisName' => 'Ynombre',
-    			'showValues' => '1',
-    			'decimals' => '0',
-    			'formatNumberScale' => '0',
-    			);
-    
-    			break;
-    	}
-    
-    }
 
     public function getOpcionesString()
     {
@@ -91,6 +68,17 @@ class Grafico
     
     }
     
+    /*
+    public function setXML($xml)
+    {
+    	$this->xml = $xml;
+    }
+    
+    public function getXML($xml)
+    {
+    	return $this->xml;
+    }
+    */
     
     /*
      *

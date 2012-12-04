@@ -21,40 +21,26 @@
 
 
 <div class="module width_full">
-	{% block module_header%}
-		<div class="module_header">
-		
-			<div class="module_tit txt3">Desde: <input readonly="readonly" type="text" name="fechaDesde" id="fechaDesde" value="{{ fechas["desde"]|date("d/m/Y") }}" class="NfechasGraficos" /> </div>
-			<div class="module_tit txt3">Hasta: <input readonly="readonly" type="text" name="fechaaHasta" id="fechaaHasta" value="{{ fechas["hasta"]|date("d/m/Y") }}" class="NfechasGraficos"/></div>
-			
-			<a href="" class="NBotonActualizar"></a>
-			
-		
-		
-		
-			
-			
-		
-		
-		{% block module_tit %}{% endblock module_tit %}
-				{% block menuAcciones%}
-	
-				{% endblock menuAcciones%}
-				
-				{% block menuOpciones%}
-
-				{% endblock menuOpciones%}
-				
-				{%block opcionesGuia  %} {%endblock opcionesGuia  %}
-			
-		</div>
-	{% endblock module_header%}
-	
-	<hr>
-	
+	{% block module_header%}{% endblock module_header%}
 	{% block module_content_antes%}{% endblock module_content_antes%}
 	
 	<div class="module_content">
+	
+		{% block module_form_estadisticas %}
+		<form action="{% block formUrl %}{% endblock formUrl %}" class="NformGraficos" method="get">
+			{% block form_estadisticas_cont %}
+			
+			<div class="module_tit txt3">Desde: <input readonly="readonly" type="text" name="fechaDesde" id="fechaDesde" value="{{ request["fechaDesde"]|date("d-m-Y") }}" class="NfechasGraficos" /> </div>
+			<div class="module_tit txt3">Hasta: <input readonly="readonly" type="text" name="fechaaHasta" id="fechaaHasta" value="{{ request["fechaHasta"]|date("d-m-Y") }}" class="NfechasGraficos"/></div>
+			
+			{% endblock form_estadisticas_cont %}
+			<button class="btn_green_button right" type="submit">Actualizar</button>
+			
+			<div class="fix"></div>
+		</form>
+		{% endblock module_form_estadisticas %}
+	
+		
 	
 		{% block module_content_estadisticas%}
 		

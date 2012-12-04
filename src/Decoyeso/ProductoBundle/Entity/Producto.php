@@ -45,9 +45,9 @@ class Producto extends Elemento
 	/**
 	 * @var Molde $molde
 	 *
-	 * @ORM\OneToOne(targetEntity="\Decoyeso\ProduccionBundle\Entity\Molde", mappedBy="producto")
+	 * @ORM\OneToMany(targetEntity="\Decoyeso\ProduccionBundle\Entity\ProcesoProducto", mappedBy="producto" )
 	 */
-	//private $molde;
+	private $proceso;
 
 	
 	
@@ -150,9 +150,10 @@ class Producto extends Elemento
 
     public function __construct()
     {
-        $this->movimientoStock = new \Doctrine\Common\Collections\ArrayCollection();
-	    $this->productoInsumo = new \Doctrine\Common\Collections\ArrayCollection();
-	    $this->solicitudMovimientoElemento = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->movimientoStock = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->productoInsumo = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->solicitudMovimientoElemento = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->proceso = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -215,7 +216,6 @@ class Producto extends Elemento
         return $this->productoInsumo;
     }
 
-
     /**
      * Add solicitudMovimientoElemento
      *
@@ -224,5 +224,25 @@ class Producto extends Elemento
     public function addSolicitudMovimientoElemento(\Decoyeso\StockBundle\Entity\SolicitudMovimientoElemento $solicitudMovimientoElemento)
     {
         $this->solicitudMovimientoElemento[] = $solicitudMovimientoElemento;
+    }
+
+    /**
+     * Add proceso
+     *
+     * @param Decoyeso\ProduccionBundle\Entity\ProcesoProducto $proceso
+     */
+    public function addProcesoProducto(\Decoyeso\ProduccionBundle\Entity\ProcesoProducto $proceso)
+    {
+        $this->proceso[] = $proceso;
+    }
+
+    /**
+     * Get proceso
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getProceso()
+    {
+        return $this->proceso;
     }
 }

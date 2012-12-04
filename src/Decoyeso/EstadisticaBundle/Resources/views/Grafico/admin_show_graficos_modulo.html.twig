@@ -1,11 +1,16 @@
 {% extends "DecoyesoEstadisticaBundle:Grafico:admin_index.html.twig" %}
 
 
-
 {% block module_content_estadisticas%}
 		
 	{% if (modulo == "proceso") %}
 		{% include 'DecoyesoEstadisticaBundle:Grafico:graficos_proceso.html.twig' with {'graficos': graficos} %}
+	{% endif %} 
+	{% if (modulo == "pedido") %}
+		{% include 'DecoyesoEstadisticaBundle:Grafico:graficos_proceso.html.twig' with {'graficos': graficos} %}
+	{% endif %} 
+	{% if (modulo == "stock") %}
+		{% include 'DecoyesoEstadisticaBundle:Grafico:graficos_stock.html.twig' with {'graficos': graficos} %}
 	{% endif %} 
 			
 

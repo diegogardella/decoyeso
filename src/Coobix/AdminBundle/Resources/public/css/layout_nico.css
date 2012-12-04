@@ -274,18 +274,12 @@ text-align: center;
 	width: 100px;
 }
 
-.NBotonActualizar {
-	background: url(../images/icons/arrow_refresh.png)  no-repeat;
-	height: 16px;
-	width: 16px;
-	display: block;
-	float: left;
-	margin: 10px 0 0 10px;
-}
+
 
 .NcontChart {
 	float: left;
 	padding: 0 15px 15px 15px;
+	margin: 15px 0 0 0;
 }
 .NchartDiv {
 	float: left;
@@ -300,7 +294,26 @@ text-align: center;
 	float: left;
 	width: 50%;
 	padding: 5px 0 10px 20px;
+}
 
+
+.NformGraficos{
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #d5d5d5;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+}
+
+
+.NBotonActualizar {
+	background: url(../images/icons/arrow_refresh.png)  no-repeat;
+	height: 16px;
+	width: 16px;
+	display: block;
+	float: left;
+	margin: 10px 0 0 10px;
 }
 
 

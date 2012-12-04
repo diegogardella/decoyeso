@@ -52,6 +52,10 @@ class ProcesoProducto
      * @ORM\Column(name="cantidadIngresadaStock", type="float")
      */
     private $cantidadIngresadaStock;
+    
+    public function __toString() {
+    	return "PP: ".$this->id;
+    }
 
     /**
      * Set cantidad

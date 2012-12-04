@@ -269,9 +269,6 @@ class ClienteController extends Controller
 
         $form->bindRequest($request);
         
-        
-
-
         if ($form->isValid()) {
         	
             $em = $this->getDoctrine()->getEntityManager();
