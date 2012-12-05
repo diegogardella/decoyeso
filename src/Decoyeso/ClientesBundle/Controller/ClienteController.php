@@ -273,11 +273,13 @@ class ClienteController extends Controller
         
         $form->bindRequest($request);
         
+
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ClientesBundle:Cliente')->find($id);
         
 
         if ($form->isValid() and count($entity->getPedidos())==0) {
+
         	
 
 

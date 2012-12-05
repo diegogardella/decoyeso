@@ -84,4 +84,15 @@ knp_paginator:
     template:
         pagination: KnpPaginatorBundle:Pagination:sliding.html.twig     # sliding pagination controls template
         sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template
+        
+parameters:
+    grafico.swf.dir: /Decoyeso_arriba_test1/web/bundles/decoyesoestadistica/js/FusionCharts/Charts/
+    #grafico.swf.dir: %kernel.root_dir%/../web/bundles/decoyesoestadistica/js/FusionCharts/Charts/
+    
+
+    
+    
+    
+    
+    
 

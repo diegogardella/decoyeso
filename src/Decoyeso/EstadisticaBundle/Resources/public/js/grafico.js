@@ -3,7 +3,7 @@ $(document).ready(function(){
 	$( "#fechaDesde" ).datepicker({
 		changeMonth: true,
 		changeYear: true,
-		dateFormat: "dd/mm/yy",
+		dateFormat: "dd-mm-yy",
 		
 	});
 	
@@ -11,7 +11,7 @@ $(document).ready(function(){
 	$( "#fechaaHasta" ).datepicker({
 		changeMonth: true,
 		changeYear: true,
-		dateFormat: "dd/mm/yy",
+		dateFormat: "dd-mm-yy",
 	});
 	
 });

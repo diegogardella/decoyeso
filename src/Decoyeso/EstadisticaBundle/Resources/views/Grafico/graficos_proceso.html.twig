@@ -1,12 +1,15 @@
-{% set grafico = {'grafico': graficos['1'], 'ancho': 900, 'alto': 300, 'id': 1 } %}	
-	
-{% include 'DecoyesoEstadisticaBundle:Grafico:grafico.html.twig' with {'grafico': grafico} %}
-    
-{% set grafico1 = graficos['1'] %}
-    
 
-    
-    
+
+
+
+<div class="NcontChart" style="">
+		<a href="{{ path('grafico_show', { 'grafico': 10 }) }}" class="NImagenVerGrafico txt3">Ver más</a>
+		{{ graficos['1'].renderChart() }}        
+</div>			
+
+
+    {#
+    {% block formUrl %}{{ path('grafico_modulo', { 'modulo': "proceso" }) }}{% endblock formUrl %}
     <div class="NcontChart"  style="width: 450px">
 		<a href="" class="NImagenVerGrafico txt3">Ver más</a>
 		<div id="chartdiv2" class="NchartDiv"></div>          
@@ -14,11 +17,11 @@
 
     <script type="text/javascript">
         var myChart2 = new FusionCharts('{{ asset("bundles/decoyesoestadistica/js/FusionCharts/Charts/") }}Pie2D', "myChartId", "450", "300", "0", "0");
-        myChart2.setDataXML('<chart {{ grafico1.getOpcionesString() |raw}}>{{ grafico1.getValores() |raw }}</chart>');
+        myChart2.setDataXML('<chart palette="2" caption="Mas Fabricados" xAxisName="Month" yAxisName="Units" showValues="0" decimals="0" formatNumberScale="0" useRoundEdges="1"><set label="Jan" value="462"/><set label="Feb" value="857"/><set label="Mar" value="671"/><set label="Apr" value="494"/><set label="May" value="761"/><set label="Jun" value="960"/></chart>');
         myChart2.render("chartdiv2");
     </script>   
     
-    {% set grafico1 = graficos['1'] %}
+   
     
    <div class="NcontChart"  style="width: 450px">
 		<a href="" class="NImagenVerGrafico txt3">Ver más</a>
@@ -27,6 +30,7 @@
 
     <script type="text/javascript">
         var myChart3 = new FusionCharts('{{ asset("bundles/decoyesoestadistica/js/FusionCharts/Charts/") }}Bar2D', "myChartId", "450", "300", "0", "0");
-        myChart3.setDataXML('<chart {{ grafico1.getOpcionesString() |raw}}>{{ grafico1.getValores() |raw }}</chart>');
+        myChart3.setDataXML('<chart palette="2" caption="Productos por mes" xAxisName="Month" yAxisName="Units" showValues="0" decimals="0" formatNumberScale="0" useRoundEdges="1"><set label="Jan" value="462"/><set label="Feb" value="857"/><set label="Mar" value="671"/><set label="Apr" value="494"/><set label="May" value="761"/><set label="Jun" value="960"/></chart>');
         myChart3.render("chartdiv3");
     </script>   
+#}

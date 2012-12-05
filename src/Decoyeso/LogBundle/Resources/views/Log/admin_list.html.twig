@@ -45,18 +45,21 @@ Listado de Notificaciones
 	<tbody>
 	{% set fecha = 0 %}
 	{% for entity in entities %}
-		{% if (entity.getFechaCreado()| date ('d/m/Y') != fecha) %}
-		{% set fecha = entity.getFechaCreado()| date ('d/m/Y') %}
-
-		<tr class="trColor1">
-			<td colspan="4" style="text-align: center;">
-				<span  class="NfechaLog">
-				{{ entity.getFechaCreado | date ('d/m/Y')}}
-				</span>
-			</td>
-		</tr>
+		{% if is_granted(entity.getPermisos()) %}
+			{% if (entity.getFechaCreado()| date ('d/m/Y') != fecha) %}
+			{% set fecha = entity.getFechaCreado()| date ('d/m/Y') %}
+			
+			<tr class="trColor1">
+				<td colspan="4" style="text-align: center;">
+					<span  class="NfechaLog">
+					{{ entity.getFechaCreado | date ('d/m/Y')}}
+					</span>
+				</td>
+			</tr>
+			{##}
+			{% endif %}
+				
 		{% endif %}
-	
 	
 		{% if is_granted(entity.getPermisos()) %}
 		

@@ -1,0 +1,42 @@
+
+
+
+<div class="module_header">
+		
+
+{% set grafico = {'grafico': graficos['1'], 'ancho': 900, 'alto': 300, 'id': 1 } %}
+
+	<div class="NcontChart" style="width: {{ grafico['ancho'] }}px">
+		<a href="{{ path('grafico_show', { 'grafico': 1 }) }}" class="NImagenVerGrafico txt3">Ver más</a>
+		{% include 'DecoyesoEstadisticaBundle:Grafico:grafico.html.twig' with {'grafico': grafico} %}          
+	</div>	
+
+    
+{% set grafico1 = graficos['1'] %}
+    
+
+    
+    
+    <div class="NcontChart"  style="width: 450px">
+		<a href="" class="NImagenVerGrafico txt3">Ver más</a>
+		<div id="chartdiv2" class="NchartDiv"></div>          
+	</div>          
+
+    <script type="text/javascript">
+        var myChart2 = new FusionCharts('{{ asset("bundles/decoyesoestadistica/js/FusionCharts/Charts/") }}Pie2D', "myChartId", "450", "300", "0", "0");
+        myChart2.setDataXML('<chart {{ grafico1.getOpcionesString() |raw}}>{{ grafico1.getValores() |raw }}</chart>');
+        myChart2.render("chartdiv2");
+    </script>   
+    
+    {% set grafico1 = graficos['1'] %}
+    
+   <div class="NcontChart"  style="width: 450px">
+		<a href="" class="NImagenVerGrafico txt3">Ver más</a>
+		<div id="chartdiv3" class="NchartDiv"></div>          
+	</div>          
+
+    <script type="text/javascript">
+        var myChart3 = new FusionCharts('{{ asset("bundles/decoyesoestadistica/js/FusionCharts/Charts/") }}Bar2D', "myChartId", "450", "300", "0", "0");
+        myChart3.setDataXML('<chart {{ grafico1.getOpcionesString() |raw}}>{{ grafico1.getValores() |raw }}</chart>');
+        myChart3.render("chartdiv3");
+    </script>   

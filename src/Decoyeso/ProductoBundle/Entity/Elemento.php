@@ -78,6 +78,7 @@ class Elemento
     
 
     
+
     public function __toString(){
     	return $this->getNombre();
     }
@@ -113,6 +114,7 @@ class Elemento
         $this->presupuestoElemento = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
+
     /**
      * Get id
      *

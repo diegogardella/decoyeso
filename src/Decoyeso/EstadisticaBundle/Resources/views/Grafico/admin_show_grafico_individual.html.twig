@@ -1,0 +1,37 @@
+{% extends "DecoyesoEstadisticaBundle:Grafico:admin_index.html.twig" %}
+
+{% block form_estadisticas_cont %}
+			
+			{{ parent() }}
+			
+			
+			<div class="module_tit txt3">
+			Tipo: <select><option>Placas</option></select> 
+			</div>
+			
+			<div class="module_tit txt3">
+			Rango: <select><option>Semanal</option></select> 
+			</div>
+			
+			
+			<div class="module_tit txt3">
+			Producto: <select><option>Placa Técnica</option></select> 
+			</div>
+			
+			
+	{% endblock form_estadisticas_cont %}
+
+{% block module_content_estadisticas%}
+		
+	
+	
+	
+	<div class="NcontChart" style="">
+	{% include 'DecoyesoEstadisticaBundle:Grafico:grafico.html.twig' with {'grafico': grafico} %} 
+	</div>
+		
+		         
+	
+			
+
+{% endblock module_content_estadisticas%}
