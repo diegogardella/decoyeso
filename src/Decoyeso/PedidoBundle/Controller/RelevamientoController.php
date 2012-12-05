@@ -279,6 +279,19 @@ public function indexAction($pararouting="index")
         ;
     }
     
+    public function accionDeleteformAction($id,$extra="")
+    {
+    	$deleteForm = $this->createDeleteForm($id);
+    
+    	return $this->render('CoobixAdminBundle:Default:accion_delete_form.html.twig', array(
+    			'delete_form' => $deleteForm->createView(),
+    			'url' => $this->generateUrl('relevamiento_delete', array('id' => $id)),
+    			'id'=>$id,
+    			'msj'=>'¿Seguro desea eliminar el relevamiento?'
+    	));
+    
+    }
+    
     public function listDeleteformAction($id)
     {
     	$deleteForm = $this->createDeleteForm($id);

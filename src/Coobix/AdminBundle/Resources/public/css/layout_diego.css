@@ -1,22 +1,22 @@
 
-.field_widget_insumos tr th:first-child,.field_widget_productos tr th:first-child,.field_widget_elementos tr th:first-child{
+.panelAgregar{
+	float:left;
 	text-align: left;
-	
+	margin-bottom: 30px;
 }
 
-.field_widget_insumos tr td select,.field_widget_productos tr td select,.field_widget_elementos tr td select{
-	width: 500px;
+.panelAgregar table tr td select{
+	width: 350px;
 	padding:3px;
-	
 }
 
-.field_widget_insumos tr td input[type="text"],.field_widget_productos tr td input[type="text"],.field_widget_elementos tr td input[type="text"]{
+.panelAgregar table tr td input[type="text"]{
 	width: 50px;
 	height:10px;
 	padding:5px;
 }
 
-.field_widget_insumos tr td button,.field_widget_elementos tr td button{
+.panelAgregar table tr td button{
 	width: auto;
 	padding:0px 5px;
 	height: 30px;
@@ -68,8 +68,6 @@
 	width: auto;
 }
 
-
-
 hr{
 	float:left;
 	width: 100%;
@@ -79,4 +77,21 @@ hr{
 	border-right:none;
 	border-top:none;
 	border-bottom:solid 1px #ccc;
+}
+
+.tableDescripcionItems{
+	clear:left;
+	width: 95%;
+	margin:0px auto 10px auto;
+	border:none;
+}
+
+.tableDescripcionItems tr td{
+	border:none;
+	font-size: 12px;
+	padding: 10px 5px;
+}
+
+.tableDescripcionItems tr td span{
+	font-weight: bold;
 }

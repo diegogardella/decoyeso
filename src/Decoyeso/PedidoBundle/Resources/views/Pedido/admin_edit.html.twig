@@ -17,7 +17,7 @@
 {% endblock delete_path %}
 
 {% block menuAcciones %}
-		{{ parent() }}
+{% render "PedidoBundle:Pedido:accionDeleteform" with {'id': entity.id}  %}
 		<a class="btn_blue right" href="{{path('pedidos_por_cliente',{'cliente':entity.cliente.id})}}">Listar Pedidos del Cliente</a>	
 {% endblock menuAcciones %}
 

@@ -4,14 +4,9 @@
 
 
 
-{% block menuAccionesItems%}
-<li>
-	<form action="" method="post">
-		{{ form_widget(delete_form) }}
-		<button id="clienteEliminarBtn" type="submit">Eliminar cliente</button>
-	</form>
-</li>
-{% endblock menuAccionesItems%}
+{% block menuAcciones%}
+	{% render "ProductoBundle:Insumo:accionDeleteform" with {'id': entity.id}  %}
+{% endblock menuAcciones%}
 			
 
 {% block menuOpciones%}{% endblock menuOpciones%}

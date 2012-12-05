@@ -30,9 +30,9 @@ solicitudmovimiento_update:
     defaults: { _controller: "StockBundle:SolicitudMovimiento:update" }
     requirements: { _method: post }
 
-solicitudmovimiento_delete:
+solicitudmovimiento_cancelar:
     pattern:  /{id}/delete
-    defaults: { _controller: "StockBundle:SolicitudMovimiento:delete" }
+    defaults: { _controller: "StockBundle:SolicitudMovimiento:cancelar" }
     requirements: { _method: post }
 
 solicitudmovimiento_imprimir:

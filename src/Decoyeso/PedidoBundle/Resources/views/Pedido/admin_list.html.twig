@@ -7,11 +7,11 @@ Listado de Pedidos
 
 {% block list_tits %}
 
-{% set widthCols =  94/5  %}
-
+{% set widthCols =  85/6  %}
+<th style="width: {{ widthCols }}%" {% if entities.isSorted('p.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Número', 'p.numero')|raw }}</th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('c.apellido') %} class="sorted" {% endif %}>{{ entities.sortable('Cliente', 'c.apellido')|raw }}</th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'p.nombre')|raw }}</th>
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('p.fechaEntrega') %} class="sorted" {% endif %}>{{ entities.sortable('Entregar el', 'p.fechaEntrega')|raw }}</th>
+<th align="center" style="width: {{ widthCols }}%"{% if entities.isSorted('p.fechaEntrega') %} class="sorted" {% endif %}>{{ entities.sortable('Entregar el', 'p.fechaEntrega')|raw }}</th>
 <th align="center" style="width: {{ widthCols }}%"{% if entities.isSorted('p.prioridad') %} class="sorted" {% endif %}>{{ entities.sortable('Prioridad', 'p.prioridad')|raw }}</th>
 <th align="center" style="width: {{ widthCols }}%"{% if entities.isSorted('p.estado') %} class="sorted" {% endif %}>{{ entities.sortable('Estado', 'p.estado')|raw }}</th>
 
@@ -20,10 +20,10 @@ Listado de Pedidos
 
 {% block list_item_texts %}
 
-
+<td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.numero }}</a></td>
 <td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.getCliente }}</a></td>
 <td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
-<td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}"> {{ entity.fechaEntrega | date('d/m/Y') }}</a></td>
+<td align="center" ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}"> {{ entity.fechaEntrega | date('d/m/Y') }}</a></td>
 <td align="center"><a href="{{ path('pedido_edit', { 'id': entity.id }) }}" >{{entity.prioridadNombre}}</a></td>
 <td align="center"><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.estadoNombre }}</a></td>
 {% endblock list_item_texts %}

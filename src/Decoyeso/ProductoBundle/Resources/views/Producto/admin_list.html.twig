@@ -18,17 +18,19 @@ Listado de Productos
 {% set widthCols =  94/4  %}
 
 
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('s.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 's.nombre')|raw }}</th>
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('s.descripcion') %} class="sorted" {% endif %}>{{ entities.sortable('Descripción', 's.descripcion')|raw }}</a></th>
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('s.unidad') %} class="sorted" {% endif %}>{{ entities.sortable('Unidad', 's.unidad')|raw }}</th>
+<th style="width: {{ widthCols+20 }}%"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'p.nombre')|raw }}</th>
+<th align="center" style="width: {{ widthCols-4 }}%"{% if entities.isSorted('p.tipo') %} class="sorted" {% endif %}>{{ entities.sortable('Tipo', 'p.tipo')|raw }}</a></th>
+<th align="center" style="width: {{ widthCols-8 }}%"{% if entities.isSorted('p.unidad') %} class="sorted" {% endif %}>{{ entities.sortable('Unidad', 'p.unidad')|raw }}</th>
+<th align="center" style="width: {{ widthCols-8 }}%"{% if entities.isSorted('p.precio') %} class="sorted" {% endif %}>{{ entities.sortable('Precio', 'p.precio')|raw }}</th>
 
 {% endblock list_tits %}
 
 {% block list_item_texts %}
 
 <td ><a href="{{ path('producto_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
-<td ><a href="{{ path('producto_edit', { 'id': entity.id }) }}">{{ entity.descripcion }}</a></td>
-<td ><a href="{{ path('producto_edit', { 'id': entity.id }) }}">{{ entity.unidad }}</a></td>
+<td align="center" ><a href="{{ path('producto_edit', { 'id': entity.id }) }}">{{ entity.getTipoNombre }}</a></td>
+<td align="center" ><a href="{{ path('producto_edit', { 'id': entity.id }) }}">{{ entity.unidad }}</a></td>
+<td align="center" ><a href="{{ path('producto_edit', { 'id': entity.id }) }}">{{ entity.precio }} $</a></td>
 {% endblock list_item_texts %}
 
 {%block FormBuscar%}
@@ -39,7 +41,6 @@ Listado de Productos
 
 	{{form_row(formBuscar.p_nombre)}}
 	{{form_row(formBuscar.p_unidad)}}
-	{{form_row(formBuscar._token)}}	
 		
 {%endblock%}
 

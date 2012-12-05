@@ -175,6 +175,12 @@ class Producto extends Elemento
     {
         return $this->tipo;
     }
+    
+    public function getTipoNombre()
+    {	
+    	$tipo=array('Placas de Yeso','Molduras de Yeso','Otros');    	
+    	return $tipo[$this->tipo];
+    }
 
     /**
      * Add movimientoStock

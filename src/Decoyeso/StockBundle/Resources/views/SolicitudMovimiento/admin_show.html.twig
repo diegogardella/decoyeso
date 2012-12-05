@@ -2,11 +2,13 @@
 {% import "PedidoBundle:Pedido:macros.html.twig" as macrosPedido %}
 
 {%block main_path%}
-<ul>
-	<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
-	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombre}}</a></li>
-	<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('solicitudmovimiento_show',{'id':entity.id}) }}">Ver Solicitud a Stock</a></li>
-</ul>
+	{% if is_granted('ROLE_ADMINISTRACION') %}
+		<ul>
+			<li><a class="btn_back_to_list txt16 txt_green" href="{{ path('cliente_edit',{'id':entity.pedido.cliente.id}) }}">Cliente: {{entity.pedido.cliente}}</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('pedido_edit',{'id':entity.pedido.id}) }}">Pedido: {{entity.pedido.numero}}, {{entity.pedido.nombre}}</a></li>
+			<li> > <a class="btn_back_to_list txt16 txt_green" href="{{ path('solicitudmovimiento_show',{'id':entity.id}) }}">Ver Solicitud a Stock</a></li>
+		</ul>
+	{% endif %}
 {%endblock main_path%}
 
 {% block module_tit %}
@@ -32,12 +34,13 @@ Ver Solicitud a Stock
 	{% endif %}
 
 	{% if entity.estado==1 %}		
-		<a class="btn_red_button right right" href="{{ path('solicitudmovimiento_cambiarEstado', { 'id': entity.id,'estado':3 }) }}">
-			Cancelar Solicitud
-		</a>						
+		<form id="cancelarSolicitudAStock" action="{{ path('solicitudmovimiento_cancelar', { 'id': entity.id }) }}" method="post">
+			{{ form_widget(cancelar_form) }}
+			<button  class="btn_red_button right" type="submit">Cancelar Solicitud a Stock</button>
+		</form>					
 	{% endif  %}
 	
-	{% if is_granted('ROLE_ADMIN') %}
+	{% if is_granted('ROLE_ADMINISTRACION') %}
 		<a class="btn_blue right" href="{{path('solicitudmovimiento_por_pedido',{'pedido':entity.pedido.id})}}">Listar Solicitudes a Stock del Pedido</a>
 	{% endif %}
 
@@ -108,13 +111,13 @@ Ver Solicitud a Stock
 				<label class=" required" >Productos/Insumos</label>
 				<div class="field_widget">
 				
-					<div class="tab_container border_radius">
+					<div class="panelAgregar border_radius">
 						<table  class="records_list">
 							<thead>
 								<tr>
-									<th width="450">Nombre</th>
-									<th align="center">Cant. Solicitada</th>
-									<th align="center">Cant. Entregada</th>
+									<th width="350">Nombre</th>
+									<th width="120" align="center">Cant. Solicitada</th>
+									<th width="120" align="center">Cant. Entregada</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -151,6 +154,18 @@ Ver Solicitud a Stock
 	<div class="fix"></div>
 {% endblock form_content %}
 
-{% block javascript_extra %}
+{% block javascript_extra %}	
+
+	<script type="text/javascript">
 	
+		$("#cancelarSolicitudAStock").submit(function(){
+	
+			if(!confirm("¿Seguro desea cancelar Solicitud a Stock?")){
+				return false;			
+			}
+	
+		});
+	
+	</script>
+
 {% endblock javascript_extra %}

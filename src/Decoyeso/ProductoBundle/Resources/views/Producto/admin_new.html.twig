@@ -44,30 +44,34 @@ Crear Producto
 			
 				<label class=" required" >Productos del producto</label>
 				<div class="field_widget">
-				
-					<table  class="field_widget_productos" id="tableListProductos">
-						<tr>
-							<th>Nombre</th>
-							<th>Cantidad</th>
-							<th>Costo</th>
-							<th></th>
-						</tr>
-						<tr>
-							<td>
-								<select name="selectProductos" id="idSelectProducto" style="float:left;">
-									{% for producto in productos %}
-										<option value="{{producto.id}}@{{ producto.costo }}@{{ producto.unidad }}">{{producto.nombre}}</option>
-									{%else%}
-										<option value="0@0">No existen productos para agregar</option>
-									{%endfor%}						
-								</select>
-							</td>
-							<td><input style="float:left;" type="text" maxlength="12" id="idProductoCantidad" name="productoCantidad" value=""></td>
-							<td id="idCostoProductoAgergar"></td>
-							<td><button type="button" style="float:left;" id="idAgregarProducto" >Agregar</button></td>
-						</tr>
-						
-					</table>
+					<div class="border_radius panelAgregar">
+						<table  class="records_list field_widget_productos" id="tableListProductos">
+							<thead>
+								<tr>
+									<th>Nombre</th>
+									<th align="center">Cantidad</th>
+									<th align="center">Costo</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<select name="selectProductos" id="idSelectProducto" style="float:left;">
+											{% for producto in productos %}
+												<option value="{{producto.id}}@{{ producto.costo }}@{{ producto.unidad }}">{{producto.nombre}}</option>
+											{%else%}
+												<option value="0@0">No existen productos para agregar</option>
+											{%endfor%}						
+										</select>
+									</td>
+									<td align="center"><input style="float:left;" type="text" maxlength="12" id="idProductoCantidad" name="productoCantidad" value=""></td>
+									<td align="center" valign="top" id="idCostoProductoAgergar"></td>
+									<td align="center" ><button type="button" style="float:left;" id="idAgregarProducto" >Agregar</button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 					
 				</div>
 				
@@ -78,32 +82,35 @@ Crear Producto
 			
 				<label class=" required" for="producto_precio">Insumos del producto</label>
 				<div class="field_widget">
-				
-					<table  class="field_widget_insumos" id="tableListInsumos">
-						<tr>
-							<th>Nombre</th>
-							<th>Cantidad</th>
-							<th>Costo</th>					
-							<th></th>
-						</tr>
-						<tr>
-							<td>
-								<select name="selectInsumos" id="idSelectInsumo" style="float:left;">
-									{% for insumo in insumos%}
-										<option value="{{insumo.id}}@{{ insumo.costo }}@{{ insumo.unidad }}">{{insumo.nombre}}</option>
-									{% else %}
-										<option value="0@@@">No existen insumos para agregar</option>
-									{%endfor%}						
-								</select>
-							</td>
-							<td><input style="float:left;" type="text" maxlength="12" id="idInsumoCantidad" name="insumoCantidad" value=""></td>
-							<td id="idCostoInsumoAgergar"></td>
-							<td><button type="button" style="float:left;" id="idAgregarInsumo" >Agregar</button></td>
-						</tr>
+					<div class="border_radius panelAgregar">
+						<table  class="records_list field_widget_insumos" id="tableListInsumos">
+							<thead>
+								<tr>
+									<th>Nombre</th>
+									<th align="center">Cantidad</th>
+									<th align="center">Costo</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<select name="selectInsumos" id="idSelectInsumo" style="float:left;">
+											{% for insumo in insumos%}
+												<option value="{{insumo.id}}@{{ insumo.costo }}@{{ insumo.unidad }}">{{insumo.nombre}}</option>
+											{% else %}
+												<option value="0@@@">No existen insumos para agregar</option>
+											{%endfor%}						
+										</select>
+									</td>
+									<td align="center"  ><input style="float:left;" type="text" maxlength="12" id="idInsumoCantidad" name="insumoCantidad" value=""></td>
+									<td align="center" valign="top" id="idCostoInsumoAgergar"></td>
+									<td align="center" ><button type="button" style="float:left;" id="idAgregarInsumo" >Agregar</button></td>
+								</tr>
+							</tbody>
+						</table>
 					
-					</table>
-					
-					
+					</div>
 				</div>
 			
 			
@@ -130,7 +137,7 @@ Crear Producto
 	<script type="text/javascript" src="{{ asset('bundles/producto/js/producto.js') }}" /></script>
 	<script type="text/javascript">
 		$(window).ready(function(){
-			$('#productos_insumos').val('');
+			$('#producto_insumos').val('');
 			$('#producto_productos').val('');			
 		});	
 	</script>

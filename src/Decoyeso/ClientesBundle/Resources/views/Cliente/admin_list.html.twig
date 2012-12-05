@@ -6,7 +6,8 @@ Listado de Clientes
 
 {% block list_tits %}
 
-{% set widthCols =  94/5  %}
+{% set widthCols =  94/6  %}
+<th style="width: {{ widthCols }}%" {% if entities.isSorted('c.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Número', 'c.numero')|raw }}</th>
 <th style="width: {{ widthCols }}%" {% if entities.isSorted('c.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Apellido, Nombre', 'c.nombre')|raw }}</th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('c.telefono') %} class="sorted" {% endif %}>{{ entities.sortable('Teléfono', 'c.telefono')|raw }}</a></th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('c.celular') %} class="sorted" {% endif %}>{{ entities.sortable('Celular', 'c.celular')|raw }}</a></th>
@@ -16,7 +17,7 @@ Listado de Clientes
 {% endblock list_tits %}
 
 {% block list_item_texts %}
-
+<td ><a href="{{ path('cliente_edit', { 'id': entity.id }) }}">{{ entity.numero }}</a></td>
 <td ><a href="{{ path('cliente_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
 <td ><a href="{{ path('cliente_edit', { 'id': entity.id }) }}">{{entity.telefono}}</a></td>
 <td ><a href="{{ path('cliente_edit', { 'id': entity.id }) }}">{{entity.celular}}</a></td>

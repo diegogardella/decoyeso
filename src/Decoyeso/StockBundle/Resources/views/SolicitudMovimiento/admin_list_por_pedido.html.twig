@@ -37,6 +37,25 @@ Listado de Solicitudes a Stock
 
 
 {%block list_content_antes%}
+
+
+<table class="tableDescripcionItems" >		
+	<tbody>	
+		<tr>
+			<td ><span>CP</span>= Cantidad Presupuestada</td>
+			<td ><span>CPI</span>= Cantidad Presupuestada Indirectamente</td>					
+			<td ><span>CE</span>= Cantidad Entregada</td>
+		</tr>
+		<tr>
+			<td ><span>CP+CPI-CE</span>= Cantidad Presupuestada Total - Cantidad Entregada</td>
+			<td ><span>CSS</span>= Cantidad Solicitada a Stock</td>
+			<td><span>CTS</span>= Cantidad Total en Stock</td>
+		</tr>
+			
+	</tbody>
+			
+</table>
+
 <div class="tab_container border_radius">
 		
 			
@@ -44,21 +63,25 @@ Listado de Solicitudes a Stock
 			<thead>
 				<tr>					
 					<th width="450" >Producto/Insumo</th>
-					<th align="center" >Cant. Presupuestada</th>
-					<th align="center" >Cant. Solicitada</th>
-					<th align="center" >Cant. Entregada</th>
-					<th align="center" >Cant. En Stock</th>
+					<th align="center" >CP</th>
+					<th align="center" >CPI</th>
+					<th align="center" >CE</th>
+					<th align="center" >CP + CPI - CE</th>
+					<th align="center" >CSS</th>
+					<th align="center" >CTS</th>
 				</tr>
 			</thead>
 					
 			<tbody>
 			{% for arrayElementosCantidad in arrayElementosCantidades %}
 				<tr>
-					<td >{{ arrayElementosCantidad.designacion  }}</td>
-					<td align="center">{{ arrayElementosCantidad.cantidadPresupuesto  }}</td>
-					<td align="center">{{ arrayElementosCantidad.cantidadSolicitada  }}</td>
-					<td align="center">{{ arrayElementosCantidad.cantidadEntregada  }}</td>
-					<td align="center">{{ arrayElementosCantidad.cantidadEnStock  }}</td>
+					<td width="300" >{{ arrayElementosCantidad.designacion  }}</td>
+					<td width="100" align="center">{{ arrayElementosCantidad.cantidadPresupuesto  }}</td>
+					<td width="100" align="center">{{ arrayElementosCantidad.getCantidadPresupuestadaIndirectamenteAprobada  }}</td>
+					<td width="100" align="center">{{ arrayElementosCantidad.cantidadEntregada  }}</td>
+					<td width="100" align="center">{{ (arrayElementosCantidad.cantidadPresupuesto+arrayElementosCantidad.getCantidadPresupuestadaIndirectamenteAprobada)-arrayElementosCantidad.cantidadEntregada  }}</td>
+					<td width="100" align="center">{{ arrayElementosCantidad.cantidadSolicitada  }}</td>
+					<td width="100" align="center">{{ arrayElementosCantidad.cantidadEnStock  }}</td>
 				</tr>
 			{% endfor %}
 			</tbody>

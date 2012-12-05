@@ -20,7 +20,7 @@ var insumoObject={
 			
 			if(this.validar()){
 				
-				$('#tableListInsumos').append('<tr id="ins_tr_'+this.id+'"><td id="ins_nom_'+this.id+'">'+this.nombre+'</td><td id="ins_cant_'+this.id+'">'+this.cantidad+' '+this.unidad+'</td><td id="ins_cost_'+this.id+'">'+this.costo+'</td><td><button class="eliminarInsumoDeLista" type="button" value="'+this.id+'">X</button></td></tr>');
+				$('#tableListInsumos').append('<tr id="ins_tr_'+this.id+'"><td id="ins_nom_'+this.id+'">'+this.nombre+'</td><td align="center" id="ins_cant_'+this.id+'">'+this.cantidad+' '+this.unidad+'</td><td align="center" id="ins_cost_'+this.id+'">'+this.costo+'</td><td align="center"><button class="eliminarInsumoDeLista" type="button" value="'+this.id+'">X</button></td></tr>');
 				var text=$('#servicio_insumos').val()+";"+this.id+"@"+this.cantidad+"@"+this.costo+"@"+this.unidad+"@"+this.nombre;
 				$('#servicio_insumos').val(text);
 				
@@ -131,7 +131,7 @@ var productoObject={
 			
 			if(this.validar()){
 				
-				$('#tableListProductos').append('<tr id="pro_tr_'+this.id+'"><td id="pro_nom_'+this.id+'">'+this.nombre+'</td><td id="pro_cant_'+this.id+'">'+this.cantidad+' '+this.unidad+'</td><td id="pro_cost_'+this.id+'">'+this.costo+'</td><td><button class="eliminarProductoDeLista" type="button" value="'+this.id+'">X</button></td></tr>');
+				$('#tableListProductos').append('<tr id="pro_tr_'+this.id+'"><td id="pro_nom_'+this.id+'">'+this.nombre+'</td><td align="center" id="pro_cant_'+this.id+'">'+this.cantidad+' '+this.unidad+'</td><td align="center" id="pro_cost_'+this.id+'">'+this.costo+'</td><td align="center"><button class="eliminarProductoDeLista" type="button" value="'+this.id+'">X</button></td></tr>');
 				var text=$('#servicio_productos').val()+";"+this.id+"@"+this.cantidad+"@"+this.costo+"@"+this.unidad+"@"+this.nombre;
 				$('#servicio_productos').val(text);
 				

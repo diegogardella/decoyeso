@@ -79,6 +79,42 @@ class Elemento
 
     
 
+    public function __toString(){
+    	return $this->getNombre();
+    }
+       
+        
+    public function getCantidadPresupuestadaAprobada(){
+    	
+    	$cantidad=0;
+    	foreach($this->getPresupuestoElemento() as $presupuestoElemento){
+    		
+    		if($presupuestoElemento->getPresupuesto()->getEstado()==1 and $presupuestoElemento->getTipo()==1){
+    			
+    			$cantidad=$cantidad+$presupuestoElemento->getCantidad();
+    		}    		
+    	}
+    	return $cantidad;
+    }
+    
+    public function getCantidadPresupuestadaIndirectamenteAprobada(){
+    	 
+    	$cantidad=0;
+    	foreach($this->getPresupuestoElemento() as $presupuestoElemento){
+    		if($presupuestoElemento->getPresupuesto()->getEstado()==1 and $presupuestoElemento->getTipo()==2){
+    			$cantidad=$cantidad+$presupuestoElemento->getCantidad();
+    		}
+    	}
+    	return $cantidad;
+    }
+    
+    
+    public function __construct()
+    {
+        $this->presupuestoElemento = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+
     /**
      * Get id
      *
@@ -188,18 +224,7 @@ class Elemento
     {
         return $this->costo;
     }
-    
-   
-    
-    
-    public function __toString(){
-    	return $this->getNombre();
-    }
-    public function __construct()
-    {
-        $this->presupuestoElemento = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
+
     /**
      * Add presupuestoElemento
      *
@@ -219,19 +244,4 @@ class Elemento
     {
         return $this->presupuestoElemento;
     }
-    
-    
-    
-    public function getCantidadPresupuestadaAprobada(){
-    	
-    	$cantidad=0;
-    	foreach($this->getPresupuestoElemento() as $presupuestoElemento){    		
-    		if($presupuestoElemento->getPresupuesto()->getEstado()==1){
-    			$cantidad=$cantidad+$presupuestoElemento->getCantidad();
-    		}    		
-    	}
-    	return $cantidad;
-    }
-    
-    
 }
