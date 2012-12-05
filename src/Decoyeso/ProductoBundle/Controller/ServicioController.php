@@ -269,30 +269,16 @@ class ServicioController extends Controller
      */
     public function deleteAction($id)
     {
-    	
+    	$em = $this->getDoctrine()->getEntityManager();    	
         $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
-
-       
+        $request = $this->getRequest();       
         
         $form->bindRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            
-            $ServicioInsumos=$em->getRepository('ProductoBundle:ServicioInsumo')->findByServicio($id);
-            foreach ($ServicioInsumos as $si){
-            	$em->remove($si);
-            }
-            $em->flush();
-             
-            $ServicioProductos=$em->getRepository('ProductoBundle:ServicioProducto')->findByServicio($id);
-            foreach ($ServicioProductos as $sp){
-            	$em->remove($sp);
-            }
-            $em->flush();
-            
-            
+        
+        $servicioPresupuesto=$em->getRepository('PedidoBundle:PresupuestoElemento')->findByElemento($id);
+        
+        if ($form->isValid() and count($servicioPresupuesto)==0){
+     
             $entity = $em->getRepository('ProductoBundle:Servicio')->find($id);
 
             if (!$entity) {
@@ -312,6 +298,20 @@ class ServicioController extends Controller
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+    
+    
+     public function accionDeleteformAction($id,$extra="")
+    {
+    	$deleteForm = $this->createDeleteForm($id);
+    
+    	return $this->render('CoobixAdminBundle:Default:accion_delete_form.html.twig', array(
+    			'delete_form' => $deleteForm->createView(),
+    			'url' => $this->generateUrl('servicio_delete', array('id' => $id)),
+    			'id'=>$id,
+    			'msj'=>'¿Seguro desea eliminar el servicio?'
+    	));
+    
     }
     
     public function listDeleteformAction($id,$extra="")

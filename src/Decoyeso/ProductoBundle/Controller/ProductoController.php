@@ -267,37 +267,20 @@ class ProductoController extends Controller
      */
     public function deleteAction($id)
     {
-    	
+    	$em = $this->getDoctrine()->getEntityManager();
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
         $form->bindRequest($request);
        
+        $productoInsumos=$em->getRepository('ProductoBundle:ProductoInsumo')->findByProducto($id);
+        $productosProductos=$em->getRepository('ProductoBundle:ProductoProducto')->findByProducto($id);
+        $servicioProductos=$em->getRepository('ProductoBundle:ServicioProducto')->findByProducto($id);        
+        $productosPresupuesto=$em->getRepository('PedidoBundle:PresupuestoElemento')->findByElemento($id);
         
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-           
-            $ProductoInsumos=$em->getRepository('ProductoBundle:ProductoInsumo')->findByProducto($id);
-            foreach ($ProductoInsumos as $pi){
-            	$em->remove($pi);
-            	$em->flush();
-            }
-            
-            $ProductoProductos=$em->getRepository('ProductoBundle:ProductoProducto')->findByProducto($id);
-            foreach ($ProductoProductos as $pp){
-            	$em->remove($pp);
-            	$em->flush();
-            }
-           
-             
-            $ServicioProductos=$em->getRepository('ProductoBundle:ServicioProducto')->findByProducto($id);
-            foreach ($ServicioProductos as $sp){
-            	$em->remove($sp);
-            	$em->flush();
-            }
-            
-            
-          
+        if ($form->isValid() and count($productoInsumos)==0 and count($productosProductos)==0 and count($servicioProductos)==0 and count($productosPresupuesto)==0){
+        	
+                               
             
             $entity = $em->getRepository('ProductoBundle:Producto')->find($id);
 
@@ -325,6 +308,21 @@ class ProductoController extends Controller
         ;
     }
     
+    
+    
+    public function accionDeleteformAction($id,$extra="")
+    {
+    	$deleteForm = $this->createDeleteForm($id);
+    
+    	return $this->render('CoobixAdminBundle:Default:accion_delete_form.html.twig', array(
+    			'delete_form' => $deleteForm->createView(),
+    			'url' => $this->generateUrl('producto_delete', array('id' => $id)),
+    			'id'=>$id,
+    			'msj'=>'¿Seguro desea eliminar el producto?'
+    	));
+    
+    }
+    
     public function listDeleteformAction($id,$extra="")
     {
     	$deleteForm = $this->createDeleteForm($id);
@@ -333,7 +331,7 @@ class ProductoController extends Controller
     			'delete_form' => $deleteForm->createView(),
     			'url' => $this->generateUrl('producto_delete', array('id' => $id)),
     			'id'=>$id,
-    			'msj'=>'¿Seguro desea eliminar el producto? ATENCIÓN !! El producto también será eliminado de los servicios con lo que este relacionado.'
+    			'msj'=>'¿Seguro desea eliminar el producto?'
     	));
     
     }

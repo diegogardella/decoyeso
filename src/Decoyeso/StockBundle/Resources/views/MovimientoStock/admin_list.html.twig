@@ -16,25 +16,49 @@
 
 {% set widthCols =  94/4  %}
 
-
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('s.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 's.nombre')|raw }}</th>
-<th align="center">Cant. Presupuestada Sin Procesar</th>
-<th align="center">Cant. Solicitada a Stock sin Procesar</th>
-<th align="center">Cant. en Stock</th>
+	<th style="width: 350px"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'p.nombre')|raw }}</th>
+	<th width="100" align="center" >CP</th>
+	<th width="100" align="center" >CPI</th>
+	<th width="100" align="center" >CE</th>
+	<th width="100" align="center" >CP + CPI - CE</th>
+	<th width="100" align="center" >CSS</th>
+	<th width="100" align="center" >CTS</th>
 
 {% endblock list_tits %}
 
 {% block list_item_texts %}
 
 <td >{{ entity.nombre }}</td>
-<td align="center">{{ (entity.getCantidadPresupuestadaAprobada-entity.getCantidadEntregadaStock) }}</td>
+<td align="center">{{ entity.getCantidadPresupuestadaAprobada}}</td>
+<td align="center">{{ entity.getCantidadPresupuestadaIndirectamenteAprobada }}</td>
+<td align="center">{{ entity.getCantidadEntregadaStock }}</td>
+<td align="center">{{ ((entity.getCantidadPresupuestadaAprobada+entity.getCantidadPresupuestadaINdirectamenteAprobada)-entity.getCantidadEntregadaStock) }}</td>
 <td align="center">{{ entity.getCantidadSolicitadaStock }}</td>
 <td align="center">{{ entity.cantidadEnStock }}</td>
-<td   style="width: 6%" >&nbsp;</td>
+<td   style="width: 1px" >&nbsp;</td>
 
 {% endblock list_item_texts %}
 
 {%block buscador%}{%endblock buscador%}
+
+{%block list_content_antes%}
+	<table class="tableDescripcionItems" >		
+		<tbody>	
+			<tr>
+				<td ><span>CP</span>= Cantidad Presupuestada</td>
+				<td ><span>CPI</span>= Cantidad Presupuestada Indirectamente</td>					
+				<td ><span>CE</span>= Cantidad Entregada</td>
+			</tr>
+			<tr>
+				<td ><span>CP+CPI-CE</span>= Cantidad Presupuestada Total - Cantidad Entregada</td>
+				<td ><span>CSS</span>= Cantidad Solicitada a Stock</td>
+				<td><span>CTS</span>= Cantidad Total en Stock</td>
+			</tr>
+				
+		</tbody>
+				
+	</table>
+{%endblock list_content_antes%}
 
 {% block list_buttons %}{% endblock list_buttons %}
 

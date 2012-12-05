@@ -83,11 +83,11 @@ class SolicitudMovimientoController extends Controller
             throw $this->createNotFoundException('Unable to find SolicitudMovimiento entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $cancelarForm = $this->createCancelarForm($id);
 
         return $this->render('StockBundle:SolicitudMovimiento:admin_show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+            'cancelar_form' => $cancelarForm->createView(),
         ));
     }
     
@@ -222,12 +222,12 @@ class SolicitudMovimientoController extends Controller
         
         
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
+        $cancelarForm = $this->createCancelarForm($id);
 
         return $this->render('StockBundle:SolicitudMovimiento:admin_edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'cancelar_form' => $cancelarForm->createView(),
         	'arrayElementosCantidades'=>$elementosYCantidades['cantidades'],
         ));
     }
@@ -286,29 +286,39 @@ class SolicitudMovimientoController extends Controller
      * Deletes a SolicitudMovimiento entity.
      *
      */
-    public function deleteAction($id)
+    public function cancelarAction($id)
     {
-        $form = $this->createDeleteForm($id);
+        $form = $this->createCancelarForm($id);
         $request = $this->getRequest();
 
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            
+        	$em = $this->getDoctrine()->getEntityManager();
             $entity = $em->getRepository('StockBundle:SolicitudMovimiento')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find SolicitudMovimiento entity.');
-            }
-
-            $em->remove($entity);
+            }            
+                        
+             
+            $entity->setEstado(3);
+            $entity->setUsuarioCerro($this->container->get('security.context')->getToken()->getUser());
+            $entity->setFechaHoraCierre(new \Datetime());
+             
+            $em->persist($entity);
             $em->flush();
+            
+            return $this->redirect($this->generateUrl('solicitudmovimiento_show',array('id'=>$entity->getId())));
+
+         
         }
 
-        return $this->redirect($this->generateUrl('solicitudmovimiento'));
+         return $this->redirect($this->generateUrl('solicitudmovimiento_show',array('id'=>$id)));
     }
 
-    private function createDeleteForm($id)
+    private function createCancelarForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
@@ -378,7 +388,7 @@ class SolicitudMovimientoController extends Controller
     	
     					if(array_key_exists($id,$arrayElementosCantidades)){
     						 
-    						$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$arrayElementosCantidades[$id]["cantidadPresupuesto"]+($value["cantidad"]*$servicioProducto->getCantidad());
+    						$arrayElementosCantidades[$id]["getCantidadPresupuestadaIndirectamenteAprobada"]=$arrayElementosCantidades[$id]["getCantidadPresupuestadaIndirectamenteAprobada"]+($servicioProducto->getProducto()->getCantidadPresupuestadaIndirectamenteAprobada());
     						 
     					}else{
     						 
@@ -388,7 +398,8 @@ class SolicitudMovimientoController extends Controller
     						 
     						$idsElementos.=",".$id;
     						 
-    						$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$servicioProducto->getCantidad();
+    						$arrayElementosCantidades[$id]["cantidadPresupuesto"]=0;
+    						$arrayElementosCantidades[$id]["getCantidadPresupuestadaIndirectamenteAprobada"]=$servicioProducto->getProducto()->getCantidadPresupuestadaIndirectamenteAprobada();
     						$arrayElementosCantidades[$id]["cantidadEnStock"]=$servicioProducto->getProducto()->getCantidadEnStock();
     						$arrayElementosCantidades[$id]["cantidadSolicitada"]=$servicioProducto->getProducto()->getCantidadSolicitadaStock($paramPedido);
     						$arrayElementosCantidades[$id]["cantidadEntregada"]=$servicioProducto->getProducto()->getCantidadEntregadaStockSolicitud($paramPedido);
@@ -407,7 +418,7 @@ class SolicitudMovimientoController extends Controller
     					 
     					if(array_key_exists($id,$arrayElementosCantidades)){
     	
-    						$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$arrayElementosCantidades[$id]["cantidadPresupuesto"]+($value["cantidad"]*$servicioInsumo->getCantidad());
+    						$arrayElementosCantidades[$id]["getCantidadPresupuestadaIndirectamenteAprobada"]=$arrayElementosCantidades[$id]["getCantidadPresupuestadaIndirectamenteAprobada"]+($servicioInsumo->getInsumo()->getCantidadPresupuestadaIndirectamenteAprobada());
     	
     					}else{
     	
@@ -415,7 +426,8 @@ class SolicitudMovimientoController extends Controller
     						$arrayElementosCantidades[$id]["designacion"]=$servicioInsumo->getInsumo()->getNombre();
     						$arrayElementosCantidades[$id]["unidad"]=$servicioInsumo->getInsumo()->getUnidad();
     						 
-    						$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$servicioInsumo->getCantidad();
+    						$arrayElementosCantidades[$id]["cantidadPresupuesto"]=0;
+    						$arrayElementosCantidades[$id]["getCantidadPresupuestadaIndirectamenteAprobada"]=$servicioInsumo->getInsumo()->getCantidadPresupuestadaIndirectamenteAprobada();
     						$arrayElementosCantidades[$id]["cantidadEnStock"]=$servicioInsumo->getInsumo()->getCantidadEnStock();
     						$arrayElementosCantidades[$id]["cantidadSolicitada"]=$servicioInsumo->getInsumo()->getCantidadSolicitadaStock($paramPedido);
     						$arrayElementosCantidades[$id]["cantidadEntregada"]=$servicioInsumo->getInsumo()->getCantidadEntregadaStockSolicitud($paramPedido);
@@ -444,6 +456,7 @@ class SolicitudMovimientoController extends Controller
     					$idsElementos.=",".$id;
     	
     					$arrayElementosCantidades[$id]["cantidadPresupuesto"]=$value["cantidad"];
+    					$arrayElementosCantidades[$id]["getCantidadPresupuestadaIndirectamenteAprobada"]=0;
     					$arrayElementosCantidades[$id]["cantidadEnStock"]=$elemento->getCantidadEnStock();
     					$arrayElementosCantidades[$id]["cantidadSolicitada"]=$elemento->getCantidadSolicitadaStock($paramPedido);
     					$arrayElementosCantidades[$id]["cantidadEntregada"]=$elemento->getCantidadEntregadaStockSolicitud($paramPedido);
@@ -454,7 +467,6 @@ class SolicitudMovimientoController extends Controller
     	
     		}
     	}
-    	
     	
     	
     	return array('idsElementosEnPresupuesto'=>$idsElementos,'cantidades'=>$arrayElementosCantidades);

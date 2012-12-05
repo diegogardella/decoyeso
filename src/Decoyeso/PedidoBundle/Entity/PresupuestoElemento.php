@@ -11,26 +11,67 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PresupuestoElemento
 {
+	
+	/**
+	 *@ORM\Id
+	 *@ORM\Column(name="id", type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	private $id;
+	
     /**
-     *@ORM\Id
      * @ORM\ManyToOne(targetEntity="Presupuesto", inversedBy="presupuestoElemento")
      */
     private $presupuesto;
 
     /**
-     *
-     *@ORM\Id
      * @ORM\ManyToOne(targetEntity="Decoyeso\ProductoBundle\Entity\Elemento", inversedBy="presupuestoElemento")
      */
     private $elemento;
 
     /**
-     *
+     * 1=explicito,2=implicito (que se agrega a un presupuesto por componer al servicio)
+     * @ORM\Column(name="tipo", type="integer")
+     */
+    private $tipo;
+    
+    
+    /**
      * @ORM\Column(name="cantidad", type="float")
      */
     private $cantidad;
 
+	
 
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param integer $tipo
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return integer 
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
 
     /**
      * Set cantidad

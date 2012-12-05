@@ -198,6 +198,10 @@ class ClienteController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+    
+    
+    
+    
 
     /**
      * Edits an existing Cliente entity.
@@ -266,16 +270,16 @@ class ClienteController extends Controller
     {
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
-
+        
         $form->bindRequest($request);
         
+        $em = $this->getDoctrine()->getEntityManager();
+        $entity = $em->getRepository('ClientesBundle:Cliente')->find($id);
         
 
-
-        if ($form->isValid()) {
+        if ($form->isValid() and count($entity->getPedidos())==0) {
         	
-            $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('ClientesBundle:Cliente')->find($id);
+
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Cliente entity.');
@@ -304,6 +308,19 @@ class ClienteController extends Controller
         ;
     }
     
+	 public function accionDeleteformAction($id,$extra="")
+    {
+    	$deleteForm = $this->createDeleteForm($id);
+    
+    	return $this->render('CoobixAdminBundle:Default:accion_delete_form.html.twig', array(
+    			'delete_form' => $deleteForm->createView(),
+    			'url' => $this->generateUrl('cliente_delete', array('id' => $id)),
+    			'id'=>$id,
+    			'msj'=>'¿Seguro desea eliminar el cliente?'
+    	));
+    
+    }
+    
     public function listDeleteformAction($id,$extra="")
     {
     	$deleteForm = $this->createDeleteForm($id);
@@ -312,9 +329,11 @@ class ClienteController extends Controller
     			'delete_form' => $deleteForm->createView(),
     			'url' => $this->generateUrl('cliente_delete', array('id' => $id)),
     			'id'=>$id,
-    			'msj'=>'¿Seguro desea eliminar el cliente? ¡¡ADVERTENCIA!! Al eliminar un cliente también se eliminaran los pedidos, relevamientos y presupuestos correspondientes al mismo.'
+    			'msj'=>'¿Seguro desea eliminar el cliente? '
     	));
     
     }
+    
+    
     
 }

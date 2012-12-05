@@ -128,8 +128,7 @@ class PresupuestoController extends Controller
     			'entities' => $resultados["entities"],
     			'formBuscar'=>$resultados["form"]->createView(),
     	));
-    
-    
+        
     }
 
     public function presupuestoPorPedidoAction($pedido){
@@ -264,23 +263,74 @@ class PresupuestoController extends Controller
             $items=json_decode($entity->getItems(),true);
             $presupuestoElemento=array();
             
+            $u=0;
             for($i=0;$i<count($items);$i++){
             	
             	if (trim($items[$i]['designacion'])=='')
             		continue;
             	
-            	$presupuestoElemento[$i]=new PresupuestoElemento();
-            	$presupuestoElemento[$i]->setPresupuesto($entity);
+            	$presupuestoElemento[$u]=new PresupuestoElemento();
+            	$presupuestoElemento[$u]->setPresupuesto($entity);
             	
             	$elemento=$em->getRepository('ProductoBundle:Elemento')->find($items[$i]['id']);
-            	$presupuestoElemento[$i]->setElemento($elemento);
-            	$presupuestoElemento[$i]->setCantidad($items[$i]["cantidad"]);
+            	$presupuestoElemento[$u]->setElemento($elemento);
+            	$presupuestoElemento[$u]->setCantidad($items[$i]["cantidad"]);
+            	$presupuestoElemento[$u]->setTipo(1);
             	
-            	$em->persist($presupuestoElemento[$i]);
+            	$em->persist($presupuestoElemento[$u]);
+            	
+            	
+            	$cla=explode('\\',get_class($elemento));
+            	$nombreDeClase=$cla[count($cla)-1];
+            	 
+	            	if($nombreDeClase=="Servicio"){
+	            			            		 
+	            	   $servicioProductos=$em->getRepository('ProductoBundle:ServicioProducto')->findByServicio($elemento->getId());
+	            	   foreach($servicioProductos as $servicioProducto){
+	            			 
+	            	   		$u++;
+	            			$cantidad=$items[$i]["cantidad"]*$servicioProducto->getCantidad();
+	            			
+	            			$presupuestoElemento[$u]=new PresupuestoElemento();
+	            			$presupuestoElemento[$u]->setPresupuesto($entity);
+	            			 
+	            			$presupuestoElemento[$u]->setElemento($servicioProducto->getProducto());
+	            			$presupuestoElemento[$u]->setCantidad($cantidad);
+	            			$presupuestoElemento[$u]->setTipo(2);
+	            			
+	            			$em->persist($presupuestoElemento[$u]);
+	            
+	            		}
+	            		
+	            		
+	            		
+	            		
+	            		$servicioInsumos=$em->getRepository('ProductoBundle:ServicioInsumo')->findByServicio($elemento->getId());
+	            		foreach($servicioInsumos as $servicioInsumo){
+	            			 
+	            			$u++;
+	            			$cantidad=$items[$i]["cantidad"]*$servicioInsumo->getCantidad();
+	            		
+	            		
+	            			$presupuestoElemento[$u]=new PresupuestoElemento();
+	            			$presupuestoElemento[$u]->setPresupuesto($entity);
+	            			 
+	            			$presupuestoElemento[$u]->setElemento($servicioInsumo->getInsumo());
+	            			$presupuestoElemento[$u]->setCantidad($cantidad);
+	            			$presupuestoElemento[$u]->setTipo(2);
+	            		
+	            			$em->persist($presupuestoElemento[$u]);
+	            			 
+	            		}
+	            		
+	            		
+	            	}
+
+	            	$u++;
 
             }
 
-            
+
             $em->flush();
                         
             
@@ -379,8 +429,9 @@ class PresupuestoController extends Controller
     public function aprobarAction($id)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-    
     	$entity = $em->getRepository('PedidoBundle:Presupuesto')->find($id);
+    	
+    	$InconsistenciasEnStock=array();
     
     	if (!$entity) {
     		throw $this->createNotFoundException('Unable to find Presupuesto entity.');
@@ -424,6 +475,7 @@ class PresupuestoController extends Controller
 		        				if($solicitudesDelPedido->getEstado()==2){
 		        					
 		        					$bHuboMovimientoEnStock=1;
+		        					
 		        					foreach($solicitudesDelPedido->getSolicitudMovimientoElemento() as $solicitudMovimientoElemento){
 		        						 
 		        						$id=$solicitudMovimientoElemento->getMovimientoStock()->getElemento()->getId();
@@ -442,10 +494,11 @@ class PresupuestoController extends Controller
 		        				 
 		        			}
 		        		
+		        			$em->persist($solicitudesDelPedido);
 		        		}
 		        		
 
-		        		$em->persist($solicitudesDelPedido);        		
+		        		     		
         		
 		        		if($bHuboMovimientoEnStock==1){
 		        			
@@ -513,7 +566,7 @@ class PresupuestoController extends Controller
 		        			
 		        			
 		        			
-		        			$InconsistenciasEnStock=array();
+		        			
 		        			
 		        			foreach ($elementosSalieronDeStock as $keyElementoSalieron => $valueElementoSalieron) {
 		        				
@@ -651,6 +704,21 @@ class PresupuestoController extends Controller
             ->getForm()
         ;
     }
+    
+    
+	public function accionDeleteformAction($id,$extra="")
+    {
+    	$deleteForm = $this->createDeleteForm($id);
+    
+    	return $this->render('CoobixAdminBundle:Default:accion_delete_form.html.twig', array(
+    			'delete_form' => $deleteForm->createView(),
+    			'url' => $this->generateUrl('presupuesto_delete', array('id' => $id)),
+    			'id'=>$id,
+    			'msj'=>'¿Seguro desea eliminar el presupuesto?'
+    	));
+    
+    }
+    
     
     public function listDeleteformAction($id)
     {

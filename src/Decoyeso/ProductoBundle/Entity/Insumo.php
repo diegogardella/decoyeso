@@ -75,11 +75,18 @@ class Insumo extends Elemento
     
     public function getCantidadEntregadaStock(){
     	$cantidad=0;
-    	foreach($this->getMovimientoStock() as $insumoStock){
-    		if($insumoStock->getAccion()==2){
-    			$cantidad=$cantidad+$insumoStock->getCantidad();
+    	foreach($this->getMovimientoStock() as $productoStock){
+    		if($productoStock->getAccion()==2){
+    			if($productoStock->getMotivo()==2){
+    				$cantidad=$cantidad+$productoStock->getCantidad();
+    			}
+    		}else{
+    			if($productoStock->getMotivo()==3){
+    				$cantidad=$cantidad-$productoStock->getCantidad();
+    			}
     		}
     	}
+    
     	return $cantidad;
     }
     

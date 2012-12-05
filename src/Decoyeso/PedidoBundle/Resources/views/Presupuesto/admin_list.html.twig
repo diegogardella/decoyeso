@@ -6,7 +6,8 @@ Listado de Presupuestos
 
 {% block list_tits %}
 
-{% set widthCols =  94/3  %}
+{% set widthCols =  80/4  %}
+<th style="width: {{ widthCols }}%" {% if entities.isSorted('pre.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Número', 'pre.numero')|raw }}</th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('pre.pedido.cliente.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Cliente', 'pre.pedido.cliente.nombre')|raw }}</a></a></th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('pre.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Número', 'pre.numero')|raw }}</a></a></th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('p.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Pedido', 'p.numero')|raw }}</a></a></th>
@@ -14,6 +15,7 @@ Listado de Presupuestos
 {% endblock list_tits %}
 
 {% block list_item_texts %}
+<td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.numero }}</a></td>
 <td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.pedido.cliente.nombre }}</a></td>
 <td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.numero }}</a></td>
 <td ><a href="{{ path('presupuesto_edit', { 'id': entity.id }) }}">{{ entity.pedido.numero }}-{{ entity.pedido.nombre }}</a></td>

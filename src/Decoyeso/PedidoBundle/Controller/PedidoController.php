@@ -298,10 +298,13 @@ public function indexAction($pararouting="index")
         $request = $this->getRequest();
 
         $form->bindRequest($request);
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $entity = $em->getRepository('PedidoBundle:Pedido')->find($id);
+        
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('PedidoBundle:Pedido')->find($id);
+        if ($form->isValid() and count($entity->getPresupuestos())==0) {
+           
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Pedido entity.');
@@ -326,6 +329,20 @@ public function indexAction($pararouting="index")
         ;
     }
     
+    
+    public function accionDeleteformAction($id,$extra="")
+    {
+    	$deleteForm = $this->createDeleteForm($id);
+    
+    	return $this->render('CoobixAdminBundle:Default:accion_delete_form.html.twig', array(
+    			'delete_form' => $deleteForm->createView(),
+    			'url' => $this->generateUrl('pedido_delete', array('id' => $id)),
+    			'id'=>$id,
+    			'msj'=>'¿Seguro desea eliminar el pedido?'
+    	));
+    
+    }
+    
     public function listDeleteformAction($id)
     {
     	$deleteForm = $this->createDeleteForm($id);
@@ -334,7 +351,7 @@ public function indexAction($pararouting="index")
     			'delete_form' => $deleteForm->createView(),
     			'url' => $this->generateUrl('pedido_delete', array('id' => $id)),
     			'id'=>$id,
-    			'msj'=>'¿Seguro desea eliminar el pedido? ¡¡ADVERTENCIA!! Al eliminar un un pedido también se eliminaran los relevamientos y presupuestos correspondientes al mismo.'
+    			'msj'=>'¿Seguro desea eliminar el pedido?'
     	));
     
     }

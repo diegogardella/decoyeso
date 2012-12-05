@@ -18,10 +18,7 @@
 		<div class="module_header">
 			<div id="tituloContenido" class="module_tit txt3">Datos del presupuesto</div>
 			
-			<form action="{{ path('presupuesto_delete', { 'id': entity.id }) }}" method="post">
-				{{ form_widget(delete_form) }}
-				<button id="pedidoEliminarBtn" class="btn_red_button right" type="submit">Eliminar</button>
-			</form>
+			{% render "PedidoBundle:Presupuesto:accionDeleteform" with {'id': entity.id}  %}
 
 			<a id="pedidoListarBtn" class="btn_blue right" href="{{path('presupuesto')}}">Ir al listado</a>
 

@@ -62,6 +62,8 @@
 				<form method="post" action="{{path('',{pararouting:"buscar"})}}" novalidate="true">
 			{%endblock%}
 			
+				{{form_widget(formBuscar._token)}}
+				
 				{%block camposFormBuscar%}
 					{{form_widget(formBuscar)}}
 				{%endblock%}

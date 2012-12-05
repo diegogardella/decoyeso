@@ -104,14 +104,16 @@ class MovimientoStockController extends Controller
             $em->flush();
 
             if($tipo=="1"){
-            	$ruta='producto_edit';
+            	
+            	return $this->redirect($this->generateUrl('movimientostock', array('pararouting' => 'producto')));	$ruta='producto_edit';
+            
             }else{
-            	$ruta='insumo_edit';
+            	return $this->redirect($this->generateUrl('movimientostock', array('pararouting' => 'insumo')));
             }
             
 
             
-            return $this->redirect($this->generateUrl($ruta, array('id' => $entity->getElemento()->getId())));
+            
             
         }
 

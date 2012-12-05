@@ -200,26 +200,19 @@ public function indexAction($pararouting="index")
      */
     public function deleteAction($id)
     {
+    	$em = $this->getDoctrine()->getEntityManager();
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
         $form->bindRequest($request);
 
-        if ($form->isValid()) {
+        $productoInsumos=$em->getRepository('ProductoBundle:ProductoInsumo')->findByInsumo($id);
+        $servicioInsumos=$em->getRepository('ProductoBundle:ServicioInsumo')->findByInsumo($id);
+        $insumoPresupuesto=$em->getRepository('PedidoBundle:PresupuestoElemento')->findByElemento($id);
+        
+        if ($form->isValid() and count($productoInsumos)==0 and count($servicioInsumos)==0 and count($insumoPresupuesto)==0){
         	
-        	$em = $this->getDoctrine()->getEntityManager();
         	
-        	$ProductoInsumos=$em->getRepository('ProductoBundle:ProductoInsumo')->findByInsumo($id);
-        	foreach ($ProductoInsumos as $pi){
-        		$em->remove($pi);
-        	}
-        	$em->flush();
-        	
-        	$ServicioInsumos=$em->getRepository('ProductoBundle:ServicioInsumo')->findByInsumo($id);
-        	foreach ($ServicioInsumos as $si){
-        		$em->remove($si);
-        	}
-        	$em->flush();
         	
             
             $entity = $em->getRepository('ProductoBundle:Insumo')->find($id);
@@ -244,15 +237,28 @@ public function indexAction($pararouting="index")
     }
     
     
-    public function listDeleteformAction($id,$extra="")
+    public function accionDeleteformAction($id,$extra="")
     {
     	$deleteForm = $this->createDeleteForm($id);
     
+    	return $this->render('CoobixAdminBundle:Default:accion_delete_form.html.twig', array(
+    			'delete_form' => $deleteForm->createView(),
+    			'url' => $this->generateUrl('insumo_delete', array('id' => $id)),
+    			'id'=>$id,
+    			'msj'=>'¿Seguro desea eliminar el insumo?'
+    	));
+    
+    }
+    
+    public function listDeleteformAction($id,$extra="")
+    {
+    	$deleteForm = $this->createDeleteForm($id);
+    	    
     	return $this->render('CoobixAdminBundle:Default:list_delete_form.html.twig', array(
     			'delete_form' => $deleteForm->createView(),
     			'url' => $this->generateUrl('insumo_delete', array('id' => $id)),
     			'id'=>$id,
-    			'msj'=>'¿Seguro desea eliminar el insumo? ¡¡ ATENCIÓN !! El insumo también será eliminado de los productos o servicios con lo que este relacionado.'
+    			'msj'=>'¿Seguro desea eliminar el insumo?'
     	));
     
     }

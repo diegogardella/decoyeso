@@ -22,7 +22,7 @@
 {% endblock delete_path %}
 
 {% block menuAcciones %}
-		{{ parent() }}
+		{% render "PedidoBundle:Relevamiento:accionDeleteform" with {'id': entity.id}  %}
 		<a  class="btn_blue right" href="{{ path('relevamiento_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Relevamientos del Pedido</a>
 {% endblock menuAcciones %}	
 

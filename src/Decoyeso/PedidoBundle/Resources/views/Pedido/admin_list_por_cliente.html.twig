@@ -13,26 +13,28 @@
 
 {% block list_tits %}
 
-{% set widthCols =  94/5  %}
+{% set widthCols =  90/5  %}
 
-<th style="width: {{ widthCols }}">Nombre</th>
-<th style="width: {{ widthCols }}">Entregar el</th>
-<th align="center" style="width: {{ widthCols }}">Prioridad</th>
-<th align="center" style="width: {{ widthCols }}">Estado</th>
-
-
+	<th style="width: {{ widthCols }}px">Número</th>
+	<th style="width: {{ widthCols }}px">Nombre</th>
+	<th style="width: {{ widthCols }}px">Entregar el</th>
+	<th align="center" style="width: {{ widthCols }}px">Prioridad</th>
+	<th align="center" style="width: {{ widthCols }}px">Estado</th>
+	
 {% endblock list_tits %}
 
 {% block list_item_texts %}
-<td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
-<td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}"> {{ entity.fechaEntrega | date('d/m/Y') }}</a></td>
-<td align="center"><a href="{{ path('pedido_edit', { 'id': entity.id }) }}" >{{entity.prioridadNombre}}</a></td>
-<td align="center"><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.estadoNombre }}</a></td>
+
+	<td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.numero }}</a></td>
+	<td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
+	<td ><a href="{{ path('pedido_edit', { 'id': entity.id }) }}"> {{ entity.fechaEntrega | date('d/m/Y') }}</a></td>
+	<td align="center"><a href="{{ path('pedido_edit', { 'id': entity.id }) }}" >{{entity.prioridadNombre}}</a></td>
+	<td align="center"><a href="{{ path('pedido_edit', { 'id': entity.id }) }}">{{ entity.estadoNombre }}</a></td>
+	
 {% endblock list_item_texts %}
 
 
-{%block buscador %}
-{%endblock buscador %}
+{%block buscador %}{%endblock buscador %}
 
 
 {% block menuOpciones %}{% endblock menuOpciones %}
@@ -42,10 +44,12 @@
 {% endblock menuAcciones%}
 
 {% block edit_path %} 
-{{ path('pedido_edit', { 'id': entity.id }) }} 
+	{{ path('pedido_edit', { 'id': entity.id }) }} 
 {% endblock edit_path %}
 
 {% block list_navigation %}
 {% endblock list_navigation %}
 
-
+{% block list_delete %}
+	{% render "PedidoBundle:Pedido:listDeleteform" with {'id': entity.id}  %}
+{% endblock list_delete %}

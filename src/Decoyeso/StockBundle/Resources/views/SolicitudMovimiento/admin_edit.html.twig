@@ -9,22 +9,18 @@
 Confirmar Solicitud a Stock
 {% endblock module_tit %}
 
-{% block menuOpcionesItems %}
-	{{ macrosPedido.menuOpciones(entity.pedido) }}		
-{% endblock menuOpcionesItems %}
-
-{% block menuAccionesItems %}
-	<li>
-		<a  href="{{ path('solicitudmovimiento_cambiarEstado', { 'id': entity.id,'estado':3 }) }}">
-			Cancelar Solicitud
-		</a>
-	</li>		
-{% endblock menuAccionesItems %}
 
 
-{%block opcionesGuia  %}
-	{{ macrosPedido.guia(entity.pedido) }}
-{%endblock opcionesGuia  %}
+{% block menuAcciones %}
+
+		<form id="cancelarSolicitudAStock" action="{{ path('solicitudmovimiento_cancelar', { 'id': entity.id }) }}" method="post">
+			{{ form_widget(cancelar_form) }}
+			<button  class="btn_red_button right" type="submit">Cancelar Solicitud a Stock</button>
+		</form>
+
+{% endblock menuAcciones %}
+
+
 
 {% block list_path %}
 	{{ path('solicitudmovimiento') }}
@@ -128,13 +124,13 @@ Confirmar Solicitud a Stock
 				<label class=" required" >Productos/Insumos</label>
 				<div class="field_widget">
 				
-						<div class="tab_container border_radius">
-						<table  class="records_list field_widget_elementos">
+					<div class="panelAgregar border_radius">
+						<table  class="records_list">
 						  	<thead>
 								<tr>
-									<th width="300">Nombre</th>
-									<th>Cant. Solicitada</th>
-									<th>Cant. Entregada</th>
+									<th width="350">Nombre</th>
+									<th width="120" align="center">Cant. Solicitada</th>
+									<th width="120" align="center">Cant. Entregada</th>
 								</tr>
 							 </thead>
 						{% set i=0 %}
@@ -142,8 +138,8 @@ Confirmar Solicitud a Stock
 						{% for elemento in entity.solicitudMovimientoElemento %}
 								<tr>
 									<td >{{ elemento.elemento.nombre }}</td>
-									<td >{{ elemento.cantidadSolicitada }} {{ elemento.elemento.unidad }}</td>
-									<td ><input type="text" value="{{ elemento.cantidadSolicitada }}"  name="form[solicitudMovimientoElementoCantidadEntregada][{{ elemento.id }}]" /> {{ elemento.elemento.unidad }}</td>
+									<td align="center">{{ elemento.cantidadSolicitada }} {{ elemento.elemento.unidad }}</td>
+									<td align="center"><input type="text" value="{{ elemento.cantidadSolicitada }}"  name="form[solicitudMovimientoElementoCantidadEntregada][{{ elemento.id }}]" /> {{ elemento.elemento.unidad }}</td>
 									{% set i=i+1 %}
 								</tr>
 						{%else%}
@@ -172,4 +168,17 @@ Confirmar Solicitud a Stock
 {% endblock form_content %}
 
 {% block javascript_extra %}	
+
+<script type="text/javascript">
+
+	$("#cancelarSolicitudAStock").submit(function(){
+
+		if(!confirm("¿Seguro desea cancelar Solicitud a Stock?")){
+			return false;			
+		}
+
+	});
+
+</script>
+
 {% endblock javascript_extra %}

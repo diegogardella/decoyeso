@@ -90,33 +90,35 @@ Crear solicitud
 				<label class=" required" >Productos/Insumos</label>
 				<div class="field_widget">
 				
-				<div class="tab_container border_radius">
-					<table  class="records_list field_widget_elementos" id="tableListElementos">
-					  <thead>
-						<tr>
-							<th>Nombre</th>
-							<th>Cantidad</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<select name="selectElementos" id="idSelectElemento" style="float:left;">
-									{% for elemento in elementos %}
-										<option value="{{elemento.id}}@{{ elemento.unidad }}">{{elemento.nombre}}</option>
-									{%else%}
-										<option value="0@0">No existen productos o insumos para agregar</option>
-									{%endfor%}						
-								</select>
-							</td>
-							<td><input style="float:left;" type="text" maxlength="12" id="idElementoCantidad" name="elementoCantidad" value=""></td>
-							<td><button type="button" style="float:left;" id="idAgregarElemento" >Agregar</button></td>
-						</tr>
-					 </tbody>
+				<div class="border_radius panelAgregar">
+					<table  class="records_list" id="tableListElementos">
+						  <thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Cantidad</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<select name="selectElementos" id="idSelectElemento" style="float:left;">
+										{% for elemento in elementos %}
+											<option value="{{elemento.id}}@{{ elemento.unidad }}">{{elemento.nombre}}</option>
+										{%else%}
+											<option value="0@0">No existen productos o insumos para agregar</option>
+										{%endfor%}						
+									</select>
+								</td>
+								<td><input style="float:left;" type="text" maxlength="12" id="idElementoCantidad" name="elementoCantidad" value=""></td>
+								<td><button type="button" style="float:left;" id="idAgregarElemento" >Agregar</button></td>
+							</tr>
+						 </tbody>
 					</table>
-					
+
 				</div>
+					
+				
 				
 			</div>
 			
