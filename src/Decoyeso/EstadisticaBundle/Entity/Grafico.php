@@ -25,9 +25,15 @@ class Grafico extends FusionCharts
      * @var string $valores
      *
      */
-    //private $xml;
+    private $ancho;
     
+    public function getAncho() {
+    	return $this->ancho;
+    }
     
+    public function setAncho($ancho) {
+    	$this->ancho = $ancho;
+    }
     
     /**
      * Set opciones

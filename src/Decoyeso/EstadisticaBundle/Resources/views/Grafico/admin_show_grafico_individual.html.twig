@@ -4,18 +4,29 @@
 			
 			{{ parent() }}
 			
+
 			
 			<div class="module_tit txt3">
-			Tipo: <select><option>Placas</option></select> 
+			Tipo: <select name="tipoProducto">
+					<option 
+					{% if request["tipoProducto"] == -1 %}selected="selected"{% endif %} 
+					value ="-1">Todos</option>
+					<option
+					{% if request["tipoProducto"] == 0 %}selected="selected"{% endif %} 
+					 value ="0">Placas</option>
+					<option
+					{% if request["tipoProducto"] == 1 %}selected="selected"{% endif %} 
+					 value ="1">Molduras</option>
+				  </select> 
 			</div>
 			
-			<div class="module_tit txt3">
-			Rango: <select><option>Semanal</option></select> 
-			</div>
+			
 			
 			
 			<div class="module_tit txt3">
-			Producto: <select><option>Placa Técnica</option></select> 
+			Producto: <select name="producto">
+						<option>Todas</option>
+						</select> 
 			</div>
 			
 			

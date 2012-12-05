@@ -24,6 +24,8 @@
 	{% block module_header%}{% endblock module_header%}
 	{% block module_content_antes%}{% endblock module_content_antes%}
 	
+	
+	{% block module_content %}
 	<div class="module_content">
 	
 		{% block module_form_estadisticas %}
@@ -32,6 +34,25 @@
 			
 			<div class="module_tit txt3">Desde: <input readonly="readonly" type="text" name="fechaDesde" id="fechaDesde" value="{{ request["fechaDesde"]|date("d-m-Y") }}" class="NfechasGraficos" /> </div>
 			<div class="module_tit txt3">Hasta: <input readonly="readonly" type="text" name="fechaaHasta" id="fechaaHasta" value="{{ request["fechaHasta"]|date("d-m-Y") }}" class="NfechasGraficos"/></div>
+			
+			<div class="module_tit txt3">
+			Intervalo: 
+			<select name="intervalo">
+				<option  
+				{% if request["intervalo"] == 1 %}selected="selected"{% endif %} 
+				value="1">Diario</option>
+				<option
+				{% if request["intervalo"] == 7 %}selected="selected"{% endif %}  
+				 value="7">Semanal</option>
+				<option
+				{% if request["intervalo"] == 30 %}selected="selected"{% endif %} 
+				 value="30">Mensual</option>
+				<option
+				{% if request["intervalo"] == 365 %}selected="selected"{% endif %} 
+				 value="365">Anual</option>
+				
+			</select> 
+			</div>
 			
 			{% endblock form_estadisticas_cont %}
 			<button class="btn_green_button right" type="submit">Actualizar</button>
@@ -50,6 +71,7 @@
 	
 	
 	</div>
+	{% endblock module_content %}
 </div>
 
 

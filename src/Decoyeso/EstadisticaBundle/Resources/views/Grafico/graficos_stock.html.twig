@@ -1,16 +1,32 @@
+{% extends "DecoyesoEstadisticaBundle:Grafico:admin_index.html.twig" %}
+
+
+{% block module_form_estadisticas %}
+		
+		{% endblock module_form_estadisticas %}
+
+
+{% block module_content_estadisticas%}
 
 <div class="NcontChart" style="">
+		{#
 		<a href="{{ path('grafico_show', { 'grafico': 30 }) }}" class="NImagenVerGrafico txt3">Ver más</a>
+		#}
 		{{ graficos[1].renderChart() }}        
 </div>	
 
 
 <div class="NcontChart" style="">
+		{#
 		<a href="{{ path('grafico_show', { 'grafico': 31 }) }}" class="NImagenVerGrafico txt3">Ver más</a>
+		#}
 		{{ graficos[2].renderChart() }}        
 </div>	
 
 <div class="NcontChart" style="">
+		{#
 		<a href="{{ path('grafico_show', { 'grafico': 31 }) }}" class="NImagenVerGrafico txt3">Ver más</a>
+		#}
 		{{ graficos[3].renderChart() }}        
 </div>	
+{% endblock module_content_estadisticas%}
