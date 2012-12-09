@@ -53,10 +53,10 @@ class SolicitudMovimientoController extends Controller
     public function solicitudMovimientoPorPedidoAction($pedido){
     
     	$em = $this->getDoctrine()->getEntityManager();
-    
+    	
     	$pedidoDeSolicitud = $em->getRepository('PedidoBundle:Pedido')->find($pedido);
     
-    	$entity = $em->getRepository('StockBundle:SolicitudMovimiento')->findBy(array('pedido'=>$pedido),array('estado'=>'ASC','fechaHoraRequerido'=>'DESC','id'=>'DESC'));
+    	$entity = $em->getRepository('StockBundle:SolicitudMovimiento')->findBy(array('pedido'=>$pedido),array('estado'=>'ASC','fechaHoraRequerido'=>'ASC','id'=>'DESC'));
      
     	$elementosYCantidades=$this->getCantidades($pedido);
 

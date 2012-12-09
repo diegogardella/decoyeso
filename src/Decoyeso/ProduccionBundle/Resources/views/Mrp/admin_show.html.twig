@@ -1,0 +1,88 @@
+{% extends "CoobixAdminBundle:Default:new.html.twig" %}
+{% import "PedidoBundle:Pedido:macros.html.twig" as macrosPedido %}
+
+{%block main_path%}
+	{% if is_granted('ROLE_ADMINISTRACION') %}
+	{% endif %}
+{%endblock main_path%}
+
+{% block module_tit %}
+	Planificación de Materiales: {{ entity.nombre }}
+{% endblock module_tit %}
+
+
+
+{% block menuAcciones %}{% endblock menuAcciones %}
+
+{% block menuOpciones %}{% endblock menuOpciones %}
+
+
+
+
+{% block form_content %}
+
+		
+				
+					<div class="panelAgregar border_radius">
+						<table  class="records_list">
+							<thead>
+								<tr>
+									<th width="300"></th>
+									{% for matriz in matrizMRP %}
+										<th width="100" align="center"> Semana {{ matriz.numeroSemana }}</th>
+									{% endfor %}
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Necesidad Bruta</td>
+									{% for matriz in matrizMRP %}
+										<td align="center">{{ matriz.necesidadBruta }}</td>
+									{% endfor %}
+								</tr>
+								<tr>
+									<td >Disponibilidad</td>
+									{% for matriz in matrizMRP %}
+										<td align="center">{{ matriz.disponibilidad }}</td>
+									{% endfor %}
+								</tr>
+								<tr>
+									<td>Stock de Seguridad</td>
+									{% for matriz in matrizMRP %}
+										<td align="center">{{ matriz.stockSeguridad }}</td>
+									{% endfor %}
+									
+								</tr>
+								<tr>
+									<td>Necesidad Neta</td>
+									{% for matriz in matrizMRP %}
+											<td align="center">{{ matriz.necesidadNeta }}</td>
+									{% endfor %}
+								</tr>
+								<tr>
+									<td>EOP</td>
+									{% for matriz in matrizMRP %}
+										<td align="center">{{ matriz.emisionOrdenPlanificada }}</td>
+									{% endfor %}
+								</tr>
+							</tbody>						
+						</table>
+				
+					</div>
+			
+						
+			
+		
+		
+	<div class="fix"></div>
+{% endblock form_content %}
+
+{% block javascript_extra %}	
+
+	<script type="text/javascript">
+	
+	
+	
+	</script>
+
+{% endblock javascript_extra %}

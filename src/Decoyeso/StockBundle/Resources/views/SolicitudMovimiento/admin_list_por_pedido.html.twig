@@ -19,18 +19,26 @@ Listado de Solicitudes a Stock
 {% block list_tits %}
 
 	{% set widthCols =  94/4  %}
-	<th style="width: {{ widthCols }}">Creado el</th>
-	<th style="width: {{ widthCols }}">Requerido el</th>
-	<th style="width: {{ widthCols }}">Procesado el</th>
-	<th style="width: {{ widthCols }}">Estado</th>
+	<th align="center" style="width: {{ widthCols }}">Creado el</th>
+	<th align="center" style="width: {{ widthCols }}">Requerido el</th>
+	<th align="center" style="width: {{ widthCols }}">Procesado el</th>
+	<th align="center" style="width: {{ widthCols }}">Estado</th>
 
 {% endblock list_tits %}
 
 {% block list_item_texts %}
-	<td ><a href="{{ path('solicitudmovimiento_show', { 'id': entity.id }) }}" >{{entity.fechaHoraCreado | date('d/m/Y')}}</a></td>
-	<td ><a href="{{ path('solicitudmovimiento_show', { 'id': entity.id }) }}" >{{entity.fechaHoraRequerido | date('d/m/Y')}}</a></td>
-	<td ><a href="{{ path('solicitudmovimiento_show', { 'id': entity.id }) }}" >{{entity.fechaHoraCierre | date('d/m/Y')}}</a></td>
-	<td ><a href="{{ path('solicitudmovimiento_show', { 'id': entity.id }) }}">{{ entity.estadoNombre }}</a></td>
+	<td align="center" ><a href="{{ path('solicitudmovimiento_show', { 'id': entity.id }) }}" >{{entity.fechaHoraCreado | date('d/m/Y')}}</a></td>
+	<td align="center" ><a href="{{ path('solicitudmovimiento_show', { 'id': entity.id }) }}" >{{entity.fechaHoraRequerido | date('d/m/Y')}}</a></td>
+	<td align="center" >
+		{% if entity.fechaHoraCierre!=null %}
+			<a href="{{ path('solicitudmovimiento_show', { 'id': entity.id }) }}" >
+				{{entity.fechaHoraCierre | date('d/m/Y')}}
+			</a>
+		{% else %}
+			-- -- ----
+		{% endif %}
+	</td>
+	<td align="center" ><a href="{{ path('solicitudmovimiento_show', { 'id': entity.id }) }}">{{ entity.estadoNombre }}</a></td>
 {% endblock list_item_texts %}
 
 
