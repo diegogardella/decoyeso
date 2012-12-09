@@ -13,3 +13,7 @@ MesaBundle:
 SecadorBundle:
     resource: "@DecoyesoProduccionBundle/Resources/config/routing/secador.yml"
     prefix:   /secador
+
+MrpBundle:
+    resource: "@DecoyesoProduccionBundle/Resources/config/routing/mrp.yml"
+    prefix:   /mrp
