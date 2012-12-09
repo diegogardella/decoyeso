@@ -9,7 +9,7 @@ class FusionCharts
 	var $chartID;				  # ID of the Chart for JS interactivity(optional)
 	var $SWFFile; 				  # Name of the required FusionCharts SWF file 
 	var $SWFPath;                 # Relative path to FusionCharts SWF files
-	var $width;                   # FusionCharts width
+	public $width;                   # FusionCharts width
 	var $height;                  # FusionCharts height
 
 	# Separator/Delimiter for list of Parameters
@@ -84,12 +84,23 @@ class FusionCharts
     var $styleDefCounter;             # Define counter
 	var $styleAppCounter;             # Apply counter
 	
+	
+	public function getAncho() {
+		return $this->width;
+	}
+	
+	public function getId() {
+		return $this->chartID;
+	}
+	
+	
+	
 
 	 # FusionCharts Constructor
 	 # while creating FusionCharts object, the Constructor will initialize the object with values passed to it as arguments i.e.
 	 # chats parameters like chartType, width, height, chartID
 	 //function FusionCharts($chartType="column2d",$width="400",$height="300",$chartID="",$isTransparent=""){
-	function __construct($chartType="column2d",$width="400",$height="300",$chartID="",$isTransparent=""){
+	function __construct($chartType="column2d",$width="400",$height="300",$chartID="",$isTransparent="transparent"){
 		
 		  #Set mode to Transparent
 		  $this->wMode=$isTransparent;
@@ -801,7 +812,7 @@ class FusionCharts
 	 }
 
 	 # The renderChart() function generates the chart 
-	 function renderChart($renderAsHTML=false,  $display=true){
+	 function renderChart($renderAsHTML=true,  $display=true){
 		
 		$this->strXML=$this->getXML();	
 		$this->SWFFile=$this->SWFPath . $this->chartSWF[$this->chartType][0]  . ".swf";

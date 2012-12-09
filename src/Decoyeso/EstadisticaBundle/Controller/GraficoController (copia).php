@@ -124,7 +124,7 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     	
     	//tipo producto
     	if (!isset($r["tipoProducto"]) || ($r["tipoProducto"] != -1 && $r["tipoProducto"] != 0 && $r["tipoProducto"] != 1  )){
-    		$r["tipoProducto"] = -1;
+    		$r["intervalo"] = -1;
     	}
     	
     	
@@ -139,20 +139,6 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     	if (!isset($r["costoTotal"])){
     		$r["costoTotal"] = 0;
     	}
-    	
-    	if (!isset($r["cantidadYeso"])){
-    		$r["cantidadYeso"] = 0;
-    	}
-    	
-    	if (!isset($r["cantidadFibra"])){
-    		$r["cantidadFibra"] = 0;
-    	}
-    	
-    	if (!isset($r["cantidadPorosil"])){
-    		$r["cantidadPorosil"] = 0;
-    	}
-    	
-    	
     	
     	
     
@@ -207,12 +193,12 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     	
     	$em = $this->getDoctrine()->getEntityManager();
     	$query = $em->createQuery('
-    			SELECT SUM(pp.cantidadProducida) as cantidadProducida, prod.id as prodId,  proc.fechaFin FROM DecoyesoProduccionBundle:ProcesoProducto pp
+    			SELECT   SUM(pp.cantidadProducida) as cantidadProducida, prod.tipo, proc.fechaFin FROM DecoyesoProduccionBundle:ProcesoProducto pp
     			JOIN pp.proceso proc
     	    	JOIN pp.producto prod
     			WHERE
     			proc.estado = :proc_estado AND
-    			prod.tipo = 0 AND
+    		
        			proc.fechaFin >= :proc_fechaDesde AND
        			proc.fechaFin <= :proc_fechaHasta 
     			GROUP BY prod.tipo, proc.fechaFin 
@@ -229,84 +215,99 @@ else {echo "No es correcto el formato de fecha: $valor";}}
 		   		
    		//Cargo array de categorias
    		$fecha = $this->crearDateTime($request["fechaDesde"]);
-
-   		
-   		# Create FusionCharts PHP Class object for single series column3d chart
-   		$grafico = new grafico("MSColumn3DLineDY",$o["ancho"],$o["alto"], 10);
-   		
-   		
+   		$arrCatNames = array();
+   		$i=0;
    		while ($fecha < $request["fechaHasta"] ) {
-   			$grafico->addCategory($fecha->format('d-m-Y'));
-   			$fecha->modify('+'.$request["intervalo"].' day');
+   			$arrCatNames[$i] = $fecha->format('d-m-Y');
+   			$fecha->modify('+1 day');
+   			$i++;
    		}
    		
    		
-    	//Cargo array de datos de la primera serie 1
-   		$grafico->addDataset("Placas");
+   		//Cargo array de datos de la primera serie 1
    		$fecha = $this->crearDateTime($request["fechaDesde"]);
+   		$serie = 0;
+   		$nombreSerie = "Placas";
+   		$arrData[$serie][0] = $nombreSerie;
+   		$arrData[$serie][1] = "";
    		$valorAmostrar = "cantidadProducida";
    		$campoFechaTope = "fechaFin";	
+   		$arrData[$serie][2] = 0;
    		
-   		//print_r($res);
-   		$i = 0;
-   		$valor = 0;
-   		$grafico->addChartData(0);
-   		$insumosTotales = array();
    		
+   		$i = 2;
    		while ($fecha < $request["fechaHasta"] ) {
-   			$i++;
-   			  			  			
+   			
+   			if (!isset($arrData[$serie][$i])) $arrData[$serie][$i] = 0;
+   			  			
    			foreach ($res as $r) {
+   				//print_r($r);
+   				//echo "<br>";
    				$fechaTope = new \DateTime();
    				$auxFecha = explode("-",$r[$campoFechaTope]);
    				$fechaTope->setDate($auxFecha[0], $auxFecha[1], $auxFecha[2]);
-   				
-   				if ($fechaTope->format('d-m-Y') == $fecha->format('d-m-Y') ) {	
-   					$valor += $r[$valorAmostrar];
-   					
-   					$producto = $em->getRepository('ProductoBundle:Producto')->find($r["prodId"]);
-   					$insumosDelProducto = $producto->getProductoInsumo();
-   					foreach ($insumosDelProducto as $ip):
-   					if (!isset($insumosTotales[$ip->getInsumo()->getId()]["cantidad"]))
-   						$insumosTotales[$ip->getInsumo()->getId()]["cantidad"] = 0;
-   					$insumosTotales[$ip->getInsumo()->getId()]["cantidad"] += $valor * $ip->getCantidad();
-   					endforeach;
+   				if ($fechaTope->format('d-m-Y') == $fecha->format('d-m-Y') ) {		
+   					if ($r["tipo"] == 0) {
+	   					$arrData[$serie][$i] = $r[$valorAmostrar];
+	   					break;
+	   				}
    				}
-   				
-   			}
-   			
-   			if ($i % $request["intervalo"] == 0) {
-   				$grafico->addChartData($valor);	
-   				$valor = 0;
-   			}
-   			
-   		  	$fecha->modify('+1 day');
+   			}	
+   			$i++;
+   			$fecha->modify('+1 day');
    		}
+		
    		
-   		
-   	//	$insumosTotales
-   		
-   		//if ($request["cantidadYeso"]) {
-   			$grafico->addDataset("Yeso ($)","parentYAxis=S");
-   			while ($fecha < $request["fechaHasta"] ) {
-   				$grafico->addChartData(10);
-   			}
-   			
-   			/*
-   			for ($i=0; $i<count($res); $i++) {
-   				$producto = $em->getRepository('ProductoBundle:Producto')->find($res[$i]["prodId"]);
-   				$sum = $res[$i]["cantidadProducida"] * $producto->getCosto();
-   				$grafico->addChartData($sum);
-   			}
-   			*/
-   		//}
-   		
+   		/*
+   		//Acomodo intervalo
    	
+   		$p = count($arrCatNames);
+   		for ($i=0; $i<$p; $i++) {
+   			if (($i % floatval($request["intervalo"])) != 0 ) {
+  				unset($arrCatNames[$i]);
+   			}  
+  		}
+  		
+		for ($i=0; $i<count($arrData); $i++) {
+			$p = count($arrData[$i]);
+			
+			//exit();
+			$sum = 0;
+			for ($o=3; $o<$p; $o++) {
+				if (($o % floatval($request["intervalo"])) != 0 ) {
+					$sum += $arrData[$i][$o];
+					unset($arrData[$i][$o]);
+				}
+				else {
+					$arrData[$i][$o] += $sum;
+					$sum = 0;
+				}
+			}
+			
+  		}	
+  		*/
+  		//echo count ($arrData);
+  		//print_r($arrCatNames);
+  		//echo "<br>";
+   		//print_r($arrData);
    		
    		
    		
+/*
+   		 		$fechaTope = new \DateTime();
+   				$auxFecha = explode("-",$r["fechaFin"]);
+   				$fechaTope->setDate($auxFecha[0], $auxFecha[1], $auxFecha[2]);
+   				$diaSiguiente = $this->crearDateTime($fechaTope);
+   				$diaSiguiente->modify('+1 day');
+   				$diasConIntervalo = $this->crearDateTime($fechaTope);
+   				$intervalo = $request["intervalo"] -1;
+   				$diasConIntervalo->modify('-'.$intervalo.' day');
+   				*/
+   				//if ($fecha < $diaSiguiente && $fecha > $diasConIntervalo ) {
+   		 
+	
     	# Create FusionCharts PHP Class object for single series column3d chart
-    	//$grafico = new grafico("MSLine",$o["ancho"],$o["alto"]);
+    	$grafico = new grafico("MSLine",$o["ancho"],$o["alto"]);
     	# Set Relative Path of swf file.
       	$grafico->setSWFPath($this->container->getParameter("grafico.swf.dir"));
     	# Define chart attributes
@@ -333,7 +334,7 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     	# Set chart attributes
     	$grafico->setChartParams($strParam);
     	## call FusionCharts PHP Class Function to add data from the array
-    	//$grafico->addChartDataFromArray($arrData, $arrCatNames);
+    	$grafico->addChartDataFromArray($arrData, $arrCatNames);
 
     	
     	return $grafico;
@@ -502,13 +503,10 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     	
     	$res = $query->getResult();
     	
-    	$cantidadTotal = 0;
-    	$costoTotal = 0;
     	for ($i=0; $i<count($res); $i++) {
     		$arrData[$i][0] = $res[$i]->getNombre();
     		$arrData[$i][1] = $res[$i]->getCantidadEnStock();
-    		$cantidadTotal += $res[$i]->getCantidadEnStock();
-    		$costoTotal += $res[$i]->getCantidadEnStock() * $res[$i]->getCosto();
+  		
     	}
     	
     	# Create FusionCharts PHP Class object for single series column3d chart
@@ -518,7 +516,7 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     	# Define chart attributes
     	$parametros = array(
     			'caption' => 'STOCK DE PLACAS',
-    			'subcaption' => "Cantidad Total: ".$cantidadTotal." - Costo Total: $".number_format($costoTotal, 2, ',', '.'),
+    			//'subcaption' => "".$request["fechaDesde"]->format("d-m-Y")."  a  ".$request["fechaHasta"]->format("d-m-Y") ,
     			'yAxisName' => "Cantidad",
     			'showLabels' => 1,
     			'slantLabels' =>'1',
@@ -565,13 +563,10 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     
     	$res = $query->getResult();
     	
-    	$cantidadTotal = 0;
-    	$costoTotal = 0;
+    
     	for ($i=0; $i<count($res); $i++) {
 	   		$arrData[$i][0] = $res[$i]->getNombre();
     		$arrData[$i][1] = $res[$i]->getCantidadEnStock();
-    		$cantidadTotal += $res[$i]->getCantidadEnStock();
-    		$costoTotal += $res[$i]->getCantidadEnStock() * $res[$i]->getCosto();
     	}
     	
  
@@ -583,7 +578,6 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     	# Define chart attributes
     	$parametros = array(
     			'caption' => 'STOCK DE MOLDURAS',
-    			'subcaption' => "Cantidad Total: ".$cantidadTotal." - Costo Total: $".number_format($costoTotal, 2, ',', '.'),
     			'yAxisName' => "Cantidad",
     			'showLabels' => 1,
     			'slantLabels' =>'1',

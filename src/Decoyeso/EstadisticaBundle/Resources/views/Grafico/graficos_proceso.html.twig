@@ -5,26 +5,30 @@
 		<form action="{% block formUrl %}{% endblock formUrl %}" class="NformGraficos" method="get">
 			{% block form_estadisticas_cont %}
 			
-			<div class="module_tit txt3">Desde: <input readonly="readonly" type="text" name="fechaDesde" id="fechaDesde" value="{{ request["fechaDesde"]|date("d-m-Y") }}" class="NfechasGraficos" /> </div>
-			<div class="module_tit txt3">Hasta: <input readonly="readonly" type="text" name="fechaaHasta" id="fechaaHasta" value="{{ request["fechaHasta"]|date("d-m-Y") }}" class="NfechasGraficos"/></div>
-			
-			<div class="module_tit txt3">
-			Intervalo: 
-			<select name="intervalo">
-				<option  
-				{% if request["intervalo"] == 1 %}selected="selected"{% endif %} 
-				value="1">Diario</option>
-				<option
-				{% if request["intervalo"] == 7 %}selected="selected"{% endif %}  
-				 value="7">Semanal</option>
-				<option
-				{% if request["intervalo"] == 30 %}selected="selected"{% endif %} 
-				 value="30">Mensual</option>
-				<option
-				{% if request["intervalo"] == 365 %}selected="selected"{% endif %} 
-				 value="365">Anual</option>
+			<div class="NFormCentrado">
+
+				<div class="module_tit txt3">Desde: <input readonly="readonly" type="text" name="fechaDesde" id="fechaDesde" value="{{ request["fechaDesde"]|date("d-m-Y") }}" class="NfechasGraficos" /> </div>
+				<div class="module_tit txt3">Hasta: <input readonly="readonly" type="text" name="fechaaHasta" id="fechaaHasta" value="{{ request["fechaHasta"]|date("d-m-Y") }}" class="NfechasGraficos"/></div>
 				
-			</select> 
+				<div class="module_tit txt3">
+					Intervalo: 
+					<select name="intervalo">
+						<option  
+						{% if request["intervalo"] == 1 %}selected="selected"{% endif %} 
+						value="1">Diario</option>
+						<option
+						{% if request["intervalo"] == 7 %}selected="selected"{% endif %}  
+						 value="7">Semanal</option>
+						<option
+						{% if request["intervalo"] == 30 %}selected="selected"{% endif %} 
+						 value="30">Mensual</option>
+						<option
+						{% if request["intervalo"] == 365 %}selected="selected"{% endif %} 
+						 value="365">Anual</option>
+						
+					</select> 
+				</div>
+				
 			</div>
 			
 			{% endblock form_estadisticas_cont %}
@@ -32,7 +36,7 @@
 			
 			<div class="fix"></div>
 		</form>
-		{% endblock module_form_estadisticas %}
+{% endblock module_form_estadisticas %}
 
 {% block module_content_estadisticas %}
 <div class="NcontChart" style="">

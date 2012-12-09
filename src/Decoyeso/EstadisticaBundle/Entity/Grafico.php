@@ -21,20 +21,11 @@ class Grafico extends FusionCharts
      */
     private $opciones = array();
     
-    /**
-     * @var string $valores
-     *
-     */
-    private $ancho;
+   
     
-    public function getAncho() {
-    	return $this->ancho;
-    }
+
     
-    public function setAncho($ancho) {
-    	$this->ancho = $ancho;
-    }
-    
+   
     /**
      * Set opciones
      *

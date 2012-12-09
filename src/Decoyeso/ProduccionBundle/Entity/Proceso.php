@@ -46,14 +46,7 @@ class Proceso
      */
     private $datosInsumos;
      
-    /**
-     * @var lugaresSecador
-     *
-     * @ORM\OneToMany(targetEntity="LugarSecador", mappedBy="proceso")
-     *
-     */
-    //private $lugaresSecador;
-    
+   
     
     /**
      * @var date $fechaCreado
@@ -264,30 +257,6 @@ class Proceso
         return $this->fechaFin;
     }
     
-    public function __construct()
-    {
-        $this->lugaresSecador = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add lugaresSecador
-     *
-     * @param Decoyeso\ProduccionBundle\Entity\LugarSecador $lugaresSecador
-     */
-    public function addLugarSecador(\Decoyeso\ProduccionBundle\Entity\LugarSecador $lugaresSecador)
-    {
-        $this->lugaresSecador[] = $lugaresSecador;
-    }
-
-    /**
-     * Get lugaresSecador
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getLugaresSecador()
-    {
-        return $this->lugaresSecador;
-    }
 
     /**
      * Set datosInsumos

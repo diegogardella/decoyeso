@@ -1,36 +1,104 @@
 {% extends "DecoyesoEstadisticaBundle:Grafico:admin_index.html.twig" %}
 
-{% block form_estadisticas_cont %}
+{% block module_form_estadisticas %}
+		<form action="{% block formUrl %}{% endblock formUrl %}" class="NformGraficos" method="get">
+			{% block form_estadisticas_cont %}
 			
-			{{ parent() }}
-			
-
-			
-			<div class="module_tit txt3">
-			Tipo: <select name="tipoProducto">
-					<option 
-					{% if request["tipoProducto"] == -1 %}selected="selected"{% endif %} 
-					value ="-1">Todos</option>
-					<option
-					{% if request["tipoProducto"] == 0 %}selected="selected"{% endif %} 
-					 value ="0">Placas</option>
-					<option
-					{% if request["tipoProducto"] == 1 %}selected="selected"{% endif %} 
-					 value ="1">Molduras</option>
-				  </select> 
+			<div class="">
+				<div class="module_tit txt3">Desde: <input readonly="readonly" type="text" name="fechaDesde" id="fechaDesde" value="{{ request["fechaDesde"]|date("d-m-Y") }}" class="NfechasGraficos" /> </div>
+				<div class="module_tit txt3">Hasta: <input readonly="readonly" type="text" name="fechaaHasta" id="fechaaHasta" value="{{ request["fechaHasta"]|date("d-m-Y") }}" class="NfechasGraficos"/></div>
+				
+				{# LISTADO DE PLACAS #}
+				{% if (grafico['grafico'].getId() == 11) %}
+				<select name="productos[]" multiple="true"  >
+					{% for producto in productos %}
+						{% if (producto.tipo) == 0 %}
+					<option value="{{ producto.id }}">
+						{{ producto.nombre }}
+					</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+				{% endif %}
+				{# LISTADO DE PLACAS #}
+				
+				{# LISTADO DE PLACAS #}
+				{% if (grafico['grafico'].getId() == 12) %}
+				<select name="productos[]" multiple="true"  >
+					{% for producto in productos %}
+						{% if (producto.tipo) == 0 %}
+					<option value="{{ producto.id }}">
+						{{ producto.nombre }}
+					</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+				{% endif %}
+				{# LISTADO DE PLACAS #}
+				
+				
+				{# CHECK COSTO INDIVUDUAL Y TOTAL #}
+				{% if (grafico['grafico'].getId() == 12 or grafico['grafico'].getId() == 11 ) %}
+					<div class="fix"></div>
+					<div class="module_tit txt3">Costo Indiv: 
+					<input 
+					{% if(request["costoIndividual"]) %} 
+					checked="checked"
+					{% endif %}
+					type="checkbox"  name="costoIndividual">  
+					
+					</div>
+					<div class="module_tit txt3">Costo Total: <input type="checkbox"
+					{% if(request["costoTotal"]) %} 
+					checked="checked"
+					{% endif %}
+					 name="costoTotal">  </div>
+				{% endif %}
+				{# CHECK COSTO INDIVUDUAL Y TOTAL #}
+				 
+				 
+				 
+				{# CHECK INSUMOS #}
+				{% if (grafico['grafico'].getId() == 10)  %}
+					<div class="module_tit txt3">Yeso: 
+					<input 
+					{% if(request["cantidadYeso"]) %} 
+					checked="checked"
+					{% endif %}
+					type="checkbox"  name="cantidadYeso">  
+					</div>
+					
+					<div class="module_tit txt3">Porosil: 
+					<input 
+					{% if(request["cantidadPorosil"]) %} 
+					checked="checked"
+					{% endif %}
+					type="checkbox"  name="cantidadPorosil">  
+					</div>
+					
+					<div class="module_tit txt3">Fibra: 
+					<input 
+					{% if(request["cantidadFibra"]) %} 
+					checked="checked"
+					{% endif %}
+					type="checkbox"  name="cantidadFibra">  
+					</div>
+				{% endif %}
+				{# CHECK INSUMOS #}
+				
+				
+				
+				
+				
 			</div>
 			
+			{% endblock form_estadisticas_cont %}
+			<button class="btn_green_button right" type="submit">Actualizar</button>
+			<a href="{{ path('grafico_show', { 'grafico': 10 }) }}" class="btn_green_button right">Limpiar</a>
 			
-			
-			
-			<div class="module_tit txt3">
-			Producto: <select name="producto">
-						<option>Todas</option>
-						</select> 
-			</div>
-			
-			
-	{% endblock form_estadisticas_cont %}
+			<div class="fix"></div>
+		</form>
+{% endblock module_form_estadisticas %}
 
 {% block module_content_estadisticas%}
 		
