@@ -21,6 +21,7 @@ twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
 
+
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
@@ -86,6 +87,7 @@ knp_paginator:
         sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template
         
 parameters:
+    
     #grafico.swf.dir: /bundles/decoyesoestadistica/js/FusionCharts/Charts/
     grafico.swf.dir: /Decoyeso_arriba_test1/web/bundles/decoyesoestadistica/js/FusionCharts/Charts/
     

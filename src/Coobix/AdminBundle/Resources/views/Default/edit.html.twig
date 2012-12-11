@@ -62,7 +62,7 @@
 
 					{% block module_header_delete%}
 					
-						<form action="{% block delete_path %}{{ path('admin_entity_delete', { 'id': entity.id }) }}{% endblock delete_path %}" method="post">
+						<form  action="{% block delete_path %}{{ path('admin_entity_delete', { 'id': entity.id }) }}{% endblock delete_path %}" method="post">
 							{{ form_widget(delete_form) }}
 							<button  class="btn_red_button right" type="submit">Eliminar</button>
 						</form>

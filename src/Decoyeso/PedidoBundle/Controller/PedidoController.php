@@ -93,7 +93,7 @@ public function indexAction($pararouting="index")
         $entity = $em->getRepository('PedidoBundle:Pedido')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Pedido entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró el pedido.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -198,7 +198,7 @@ public function indexAction($pararouting="index")
 		            
 		            //LOG
 		            $log = $this->get('log');
-		            $log->create($entity, "Pedido Creado");
+		            $log->create($entity, "Pedido creado");
 		
 		            return $this->redirect($this->generateUrl('pedido_edit',array('id'=>$entity->getId())));
 		            
@@ -221,7 +221,7 @@ public function indexAction($pararouting="index")
         $entity = $em->getRepository('PedidoBundle:Pedido')->find($id);
         
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Pedido entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró el pedido.');
         }
 
         $editForm = $this->createForm(new PedidoType(), $entity);
@@ -246,7 +246,7 @@ public function indexAction($pararouting="index")
         $entity = $em->getRepository('PedidoBundle:Pedido')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Pedido entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró el pedido.');
         }
         
         $provincia=$em->getRepository('UbicacionBundle:Provincia')->find($f['provincia']);
@@ -276,7 +276,7 @@ public function indexAction($pararouting="index")
             
             //LOG
             $log = $this->get('log');
-            $log->create($entity, "Pedido Actualizado");
+            $log->create($entity, "Pedido actualizado");
 
             return $this->redirect($this->generateUrl('pedido_edit', array('id' => $id)));
         }
@@ -303,19 +303,24 @@ public function indexAction($pararouting="index")
         $entity = $em->getRepository('PedidoBundle:Pedido')->find($id);
         
 
-        if ($form->isValid() and count($entity->getPresupuestos())==0) {
+        if ($form->isValid() ) {
            
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Pedido entity.');
+               throw $this->createNotFoundException('ERROR: no se encontró el pedido.');
             }
             
-            //LOG
-            $log = $this->get('log');
-            $log->create($entity, "Pedido Eliminado");
+            try {
+	            $em->remove($entity);
+	            $log = $this->get('log');
+	            $log->create($entity, "Pedido eliminado");
+	            $em->flush();
+            }
+            catch (\Exception $e) {
+            	$this->get('session')->setFlash('msj_info','El pedido no se pudo eliminar. Debido a que tiene datos asociados.');
+            	return $this->redirect($this->generateUrl('pedido_edit', array('id' => $id)));
+            }
 
-            $em->remove($entity);
-            $em->flush();
         }
 
         return $this->redirect($this->generateUrl('pedido'));

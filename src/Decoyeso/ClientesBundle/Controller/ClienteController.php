@@ -64,7 +64,7 @@ class ClienteController extends Controller
         $entity = $em->getRepository('ClientesBundle:Cliente')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Cliente entity.');
+            throw $this->createNotFoundException('ERROR: No se encontró el cliente.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -145,7 +145,7 @@ class ClienteController extends Controller
         
         
         
-        $form    = $this->createForm(new ClienteType(), $entity);
+        $form = $this->createForm(new ClienteType(), $entity);
         
         if($bErrorUbicacion==''){
         
@@ -158,7 +158,7 @@ class ClienteController extends Controller
 		            
 		            //LOG
 		            $log = $this->get('log');
-		            $log->create($entity, "Cliente Creado");
+		            $log->create($entity, "Cliente creado");
 		
 		            $this->get('session')->setFlash('msj_info','El cliente se ha creado correctamente');
 		            
@@ -184,7 +184,7 @@ class ClienteController extends Controller
         $entity = $em->getRepository('ClientesBundle:Cliente')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Cliente entity.');
+            throw $this->createNotFoundException('ERROR: No se encontró el cliente.');
         }
         
         
@@ -217,7 +217,7 @@ class ClienteController extends Controller
         $entity = $em->getRepository('ClientesBundle:Cliente')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Cliente entity.');
+            throw $this->createNotFoundException('ERROR: No se encontró el cliente.');
         }
         
         $provincia=$em->getRepository('UbicacionBundle:Provincia')->find($f['provincia']);
@@ -245,7 +245,7 @@ class ClienteController extends Controller
             
             //LOG
             $log = $this->get('log');
-            $log->create($entity, "Cliente Actualizado");
+            $log->create($entity, "Cliente actualizado");
 
             $this->get('session')->setFlash('msj_info','El cliente se ha modificado correctamente');
             
@@ -278,21 +278,26 @@ class ClienteController extends Controller
         $entity = $em->getRepository('ClientesBundle:Cliente')->find($id);
         
 
-        if ($form->isValid() and count($entity->getPedidos())==0) {
+        if ($form->isValid() ) {
 
         	
 
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Cliente entity.');
+                throw $this->createNotFoundException('ERROR: No se encontró el cliente.');
             }
-
-            //LOG
-            $log = $this->get('log');
-            $log->create($entity, "Cliente Eliminado");
+            try {
+            	//LOG
+                $em->remove($entity);
+                $log = $this->get('log');
+                $log->create($entity, "Cliente eliminado");
+            	$em->flush();
+            }
+            catch (\Exception $e) {
+            	$this->get('session')->setFlash('msj_info','El cliente no se pudo eliminar. Debido a que tiene datos asociados.');
+            	return $this->redirect($this->generateUrl('cliente_edit', array('id' => $id)));
+            }
             
-            $em->remove($entity);
-            $em->flush();
             
 
         }

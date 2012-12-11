@@ -56,6 +56,7 @@ class MovimientoStock
      *
      * @ORM\Column(name="cantidad", type="float")
      * @assert\NotBlank(message="Por favor, ingrese cantidad") 
+	 * @assert\Type(type="integer", message="EL valor de precio solo puede ser un número entero o decimal")
      */
     private $cantidad;
 

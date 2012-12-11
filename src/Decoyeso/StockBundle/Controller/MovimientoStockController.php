@@ -95,8 +95,8 @@ class MovimientoStockController extends Controller
         if ($form->isValid()) {
         	
            $em = $this->getDoctrine()->getEntityManager();
-           $usu=$em->getRepository('UsuarioBundle:Usuario')->find(3);
-            
+           $usu=$this->get('security.context')->getToken()->getUser();
+           
             $entity->setUsuario($usu);
             $entity->setFechaHora(new \DateTime());            
             

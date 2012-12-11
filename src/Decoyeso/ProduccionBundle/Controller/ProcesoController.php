@@ -178,6 +178,8 @@ class ProcesoController extends Controller
     	$request = $this->getRequest();
     
     	$editForm->bindRequest($request);
+    	
+    	
     
     	if ($editForm->isValid()) {
     

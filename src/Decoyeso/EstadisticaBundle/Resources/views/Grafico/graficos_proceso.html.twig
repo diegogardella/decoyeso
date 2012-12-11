@@ -2,13 +2,13 @@
 
 
 {% block module_form_estadisticas %}
-		<form action="{% block formUrl %}{% endblock formUrl %}" class="NformGraficos" method="get">
+		<form action="{% block formUrl %}{% endblock formUrl %}" class="NformGraficos" id="NformGraficos" method="get">
 			{% block form_estadisticas_cont %}
 			
 			<div class="NFormCentrado">
 
 				<div class="module_tit txt3">Desde: <input readonly="readonly" type="text" name="fechaDesde" id="fechaDesde" value="{{ request["fechaDesde"]|date("d-m-Y") }}" class="NfechasGraficos" /> </div>
-				<div class="module_tit txt3">Hasta: <input readonly="readonly" type="text" name="fechaaHasta" id="fechaaHasta" value="{{ request["fechaHasta"]|date("d-m-Y") }}" class="NfechasGraficos"/></div>
+				<div class="module_tit txt3">Hasta: <input readonly="readonly" type="text" name="fechaHasta" id="fechaaHasta" value="{{ request["fechaHasta"]|date("d-m-Y") }}" class="NfechasGraficos"/></div>
 				
 				<div class="module_tit txt3">
 					Intervalo: 
@@ -39,18 +39,18 @@
 {% endblock module_form_estadisticas %}
 
 {% block module_content_estadisticas %}
-<div class="NcontChart" style="">
-		<a href="{{ path('grafico_show', { 'grafico': 10 }) }}" class="NImagenVerGrafico txt3">Ver más</a>
+<div class="NcontChart" style="width: {{ graficos[1].getAncho() }}px;">
+		<a href="{{ path('grafico_show', { 'grafico': graficos[1].getId() }) }}" class="NImagenVerGrafico txt3">Ver más</a>
 		{{ graficos['1'].renderChart() }}        
 </div>
 
-<div class="NcontChart" style="width:{{ graficos['2'].getAncho() }}px; ">
-		<a href="{{ path('grafico_show', { 'grafico': 11 }) }}" class="NImagenVerGrafico txt3">Ver más</a>
+<div class="NcontChart" style="width: {{ graficos[2].getAncho() }}px;">
+		<a href="{{ path('grafico_show', { 'grafico': graficos[2].getId() }) }}" class="NImagenVerGrafico txt3">Ver más</a>
 		{{ graficos['2'].renderChart() }}        
 </div>	
 
-<div class="NcontChart" style="width:{{ graficos['3'].getAncho() }}px; ">
-		<a href="{{ path('grafico_show', { 'grafico': 12 }) }}" class="NImagenVerGrafico txt3">Ver más</a>
+<div class="NcontChart" style="width: {{ graficos[3].getAncho() }}px;">
+		<a href="{{ path('grafico_show', { 'grafico': graficos[3].getId() }) }}" class="NImagenVerGrafico txt3">Ver más</a>
 		{{ graficos['3'].renderChart() }}        
 </div>	
 
