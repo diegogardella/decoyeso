@@ -89,7 +89,7 @@ class MovimientoStockController extends Controller
         }else{
         	$form= $this->createForm(new MovimientoStockInsumoType(), $entity);
         }
-        
+       
         $form->bindRequest($request);
 
         if ($form->isValid()) {
@@ -102,7 +102,7 @@ class MovimientoStockController extends Controller
             
             $em->persist($entity);
             $em->flush();
-
+			
             if($tipo=="1"){
             	
             	return $this->redirect($this->generateUrl('movimientostock', array('pararouting' => 'producto')));	$ruta='producto_edit';

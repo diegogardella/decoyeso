@@ -203,7 +203,7 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     			JOIN pp.proceso proc
     	    	JOIN pp.producto prod
     			WHERE
-    			proc.estado = :proc_estado AND
+    			proc.estado > :proc_estado AND
     			prod.tipo = 0 AND
        			proc.fechaFin >= :proc_fechaDesde AND
        			proc.fechaFin <= :proc_fechaHasta 
@@ -211,7 +211,7 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     			ORDER BY proc.fechaFin ASC
     			');
        	$query->setParameters(array(
-    			'proc_estado' => 2,
+    			'proc_estado' => 1,
     			'proc_fechaDesde' => $request["fechaDesde"],
     			'proc_fechaHasta' => $request["fechaHasta"],
        	));
@@ -256,6 +256,9 @@ else {echo "No es correcto el formato de fecha: $valor";}}
    			$i++;
    			  			  			
    			foreach ($res as $r) {
+   				
+   				//print_r($r);
+   				//echo "<br>";
    				$fechaTope = new \DateTime();
    				$auxFecha = explode("-",$r[$campoFechaTope]);
    				$fechaTope->setDate($auxFecha[0], $auxFecha[1], $auxFecha[2]);
@@ -285,7 +288,7 @@ else {echo "No es correcto el formato de fecha: $valor";}}
    				JOIN pp.proceso proc
    				JOIN pp.producto prod
    				WHERE
-   				proc.estado = :proc_estado AND
+   				proc.estado > :proc_estado AND
    				prod.tipo = 1 AND
    				proc.fechaFin >= :proc_fechaDesde AND
    				proc.fechaFin <= :proc_fechaHasta
@@ -293,7 +296,7 @@ else {echo "No es correcto el formato de fecha: $valor";}}
    				ORDER BY proc.fechaFin ASC
    				');
    		$query->setParameters(array(
-   				'proc_estado' => 2,
+   				'proc_estado' => 1,
    				'proc_fechaDesde' => $request["fechaDesde"],
    				'proc_fechaHasta' => $request["fechaHasta"],
    		));

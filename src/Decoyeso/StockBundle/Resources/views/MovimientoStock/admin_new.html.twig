@@ -43,7 +43,7 @@
 
 {% block form_content %}
 	{% block errorMsj %}{% endblock errorMsj %}
-	<form  action="{% block create_path %}{{ path('movimientostock_create',{'tipo':tipo}) }}{% endblock create_path %}" method="post" {{ form_enctype(form) }}>
+	<form novalidate action="{% block create_path %}{{ path('movimientostock_create',{'tipo':tipo}) }}{% endblock create_path %}" method="post" {{ form_enctype(form) }}>
 		{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 		{{ form_widget(form.accion,{'attr':{'value': accion } }) }}
 		{{ form_rest(form) }}
