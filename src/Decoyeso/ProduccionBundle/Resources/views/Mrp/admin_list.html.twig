@@ -1,0 +1,55 @@
+{% extends "CoobixAdminBundle:Default:list.html.twig" %}
+
+{%block main_path%} {%endblock main_path%}
+
+{% block module_tit %}
+	Listado de Presupuestos del Pedido
+{% endblock module_tit %}
+
+
+{% block list_content %}
+
+ 
+	<table class="records_list">
+
+		<thead>
+			<tr>
+				<th>Producto</th>
+				{% for dia in dias %}
+					<th align="center">{{ dia | date('d/m') }}</th>
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+			{% for matrizMrpProducto in matrizMrpProductos %}
+				<tr>		
+					<td><a href="{{ path("mrp_show",{"id":matrizMrpProducto.producto.id}) }}">{{ matrizMrpProducto.producto.nombre }}</a></td>				
+					{% for matriz in matrizMrpProducto.mrp %}
+							<td align="center">
+								{% if matriz.emisionOrdenPlanificada>240 %}
+									<span style="color:red; font-weight: bold">{{ matriz.emisionOrdenPlanificada }}</span>
+								{% else %}
+									{{ matriz.emisionOrdenPlanificada }}
+								{% endif %}
+							</td>
+					{% endfor %}
+				</tr>
+			{% else %}
+				<tr>	
+					<td colspan="11">No hay ordenes de productos a producir</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	
+	</table>
+	
+
+{% endblock list_content %}
+
+
+
+{%block buscador %}{%endblock buscador %}
+{% block menuAcciones %}{% endblock menuAcciones %}
+{% block menuOpciones %}{% endblock menuOpciones %}
+{% block list_navigation %}
+{% endblock list_navigation %}
