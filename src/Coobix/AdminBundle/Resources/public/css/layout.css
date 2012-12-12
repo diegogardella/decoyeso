@@ -335,6 +335,7 @@ background: #ffffff;
 .width_full {
 width: 99%;
 margin: 20px 1% 0 ;
+min-width: 950px;
 }
 
 .border_radius {

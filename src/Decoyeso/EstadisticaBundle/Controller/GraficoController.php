@@ -613,6 +613,8 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     			$graficos[1] =  $this->graficoProductosPedidos();
     			$graficos[2] =  $this->graficoProductoMasPedidos(array("producto"=> 0));
     			$graficos[3] =  $this->graficoProductoMasPedidos(array("producto"=> 1));
+    			//$graficos[4] =  $this->graficoNivelesPedidos();
+    			
     			break;
     		case "stock":
     			$graficos[1] =  $this->graficoCantidadDePlacas();
@@ -945,7 +947,7 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     			$grafico->addChartData($res[$i]["cantidadPedida"]);
     		}
     
-    		$grafico->addDataset("$ en venta estimada","parentYAxis=S");
+    		$grafico->addDataset("Ganancia estimada","parentYAxis=S");
     		$sum = 0;
     		for ($i=0; $i<count($res); $i++) {
     			$producto = $em->getRepository('ProductoBundle:Producto')->find($res[$i]["prodId"]);
@@ -992,6 +994,129 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     	return $grafico;
     
     
+    	}
+    	
+    	
+    	/*
+    	 * Grafico 1: Cantidad de Productos Pedidos
+    	*/
+    	
+    	public function graficoNivelesPedidos($opciones = "") {
+    	
+    		$o["ancho"] = "900";
+    		if (isset($opciones["ancho"])) $o["ancho"] = $opciones["ancho"];
+    		$o["alto"] = "300";
+    		if (isset($opciones["alto"])) $o["alto"] = $opciones["alto"];
+    	
+    	
+    		$request = $this->getDatosRequest();
+    	
+    		$em = $this->getDoctrine()->getEntityManager();
+    	
+    	
+    	
+    		$query = $em->createQuery('
+    				SELECT SUM(pe.cantidad) AS cantidadPedida, el.id AS prodId,  pres.fechaCreado
+    				FROM PedidoBundle:PresupuestoElemento pe
+    				JOIN pe.elemento el
+    				JOIN pe.presupuesto pres
+    				WHERE
+    				pres.estado = :pres_estado AND
+    				pres.fechaCreado >= :pres_fechaDesde AND
+    				pres.fechaCreado <= :pres_fechaHasta
+    				
+    				ORDER BY pres.fechaCreado ASC
+    				');
+    		$query->setParameters(array(
+    				'pres_estado' => 1,
+    				'pres_fechaDesde' => $request["fechaDesde"],
+    				'pres_fechaHasta' => $request["fechaHasta"],
+    		));
+    		$res = $query->getResult();
+    		
+    		
+    		$grafico = new grafico("MSLine2D",$o["ancho"],$o["alto"], 34);
+    		
+    		
+    		
+    		$fecha = $this->crearDateTime($request["fechaDesde"]);
+    		
+    		while ($fecha < $request["fechaHasta"] ) {
+    			$grafico->addCategory($fecha->format('d-m-Y'));
+    			$fecha->modify('+'.$request["intervalo"].' day');
+    		}
+    		
+    		
+    		//Cargo array de datos de la primera serie 1
+    		$grafico->addDataset("Placas");
+    		
+    		$fecha = $this->crearDateTime($request["fechaDesde"]);
+    		$valorAmostrar = "cantidadPedida";
+    		$campoFechaTope = "fechaCreado";
+    		
+    		//print_r($res);
+    		$i = 0;
+    		$valor = 0;
+    		$grafico->addChartData(0);
+    		$insumosTotales = array();
+    		
+    		while ($fecha < $request["fechaHasta"] ) {
+    			$i++;
+    		
+    			foreach ($res as $r) {
+    		
+    			
+    				$fechaTope = new \DateTime();
+    				$auxFecha = explode("-",$r[$campoFechaTope]);
+    				$fechaTope->setDate($auxFecha[0], $auxFecha[1], $auxFecha[2]);
+    		
+    				if ($fechaTope->format('d-m-Y') == $fecha->format('d-m-Y') ) {
+    					//echo $r[0]->getId();
+    					$valor += $r[$valorAmostrar];
+    				}
+    			}
+    		
+	    		if ($i % $request["intervalo"] == 0) {
+		    		$grafico->addChartData($valor);
+		    		$valor = 0;
+	    		}
+    		
+    			$fecha->modify('+1 day');
+    		}
+    		
+    		
+    		
+    		
+    	
+    	
+    		
+    	
+    	
+    		
+    		# Define chart attributes
+    		$parametros = array(
+    		'caption' => 'PRODUCTOS PEDIDOS',
+    		'subcaption' => "".$request["fechaDesde"]->format("d-m-Y")."  a  ".$request["fechaHasta"]->format("d-m-Y") ,
+    		'yAxisName' => "Cantidad",
+    		'showLabels' => 1,
+    		'slantLabels' =>'1',
+    		'formatNumberScale' => '0',
+    		'decimalSeparator' =>',',
+    		'thousandSeparator' => '.',
+    		);
+    		$strParam = "";
+    		foreach ($parametros as $k => $v) {
+    			$strParam .= $k."=".$v.";";
+    		}
+    	
+    		# Set chart attributes
+    		$grafico->setChartParams($strParam);
+    	
+    	
+    	
+    		return $grafico;
+    	
+    	
     	}
     
     
