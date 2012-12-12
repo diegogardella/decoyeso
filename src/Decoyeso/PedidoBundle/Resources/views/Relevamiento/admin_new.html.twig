@@ -28,7 +28,7 @@
 
 {% block form_content %}
 			{% block errorMsj %}{% endblock errorMsj %}
-			<form novalidate action="{% block create_path %}{{ path('relevamiento_create') }}{% endblock create_path %}" method="post" {{ form_enctype(form) }}>
+			<form  action="{% block create_path %}{{ path('relevamiento_create') }}{% endblock create_path %}" method="post" {{ form_enctype(form) }}>
 			{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 			
 			<div style="display:none">{{ form_widget(form.pedido) }}</div>

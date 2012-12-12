@@ -81,10 +81,11 @@ else {echo "No es correcto el formato de fecha: $valor";}}
     	$request = $this->getRequest();
     	$r = $request->query->all();
     
-    
+    	/*
     	if (isset($r["fechaDesde"])){
 	    	$auxFecha = explode('-', $r["fechaDesde"]);
 	    	foreach ($auxFecha as $f) {
+	    		
 	    		if (!is_int($f)) {
 	    			unset($r["fechaDesde"]);
 	    		}
@@ -98,7 +99,7 @@ else {echo "No es correcto el formato de fecha: $valor";}}
 	    		}
 	    	}
     	}
-    	
+    	*/
     	if (!isset($r["fechaDesde"])){
     		$today = new \DateTime('today');
     		$r["fechaDesde"] = $today->modify("-30 day");

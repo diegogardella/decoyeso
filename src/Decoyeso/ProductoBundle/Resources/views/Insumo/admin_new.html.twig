@@ -19,7 +19,7 @@ Crear Insumo
 
 {% block form_content %}
 	{% block errorMsj %}{% endblock errorMsj %}
-	<form name="producto" novalidate action="{{ path('insumo_create') }}" method="post" {{ form_enctype(form) }}>
+	<form name="producto"  action="{{ path('insumo_create') }}" method="post" {{ form_enctype(form) }}>
 	
 	  {% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 				

@@ -10,7 +10,7 @@ Crear Servicio
 
 {% block form_content %}
 	{% block errorMsj %}{% endblock errorMsj %}
-	<form name="servicio" novalidate action="{{ path('servicio_create') }}" method="post" {{ form_enctype(form) }}>
+	<form name="servicio"  action="{{ path('servicio_create') }}" method="post" {{ form_enctype(form) }}>
 	
 	  {% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 				
