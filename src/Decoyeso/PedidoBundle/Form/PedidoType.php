@@ -14,9 +14,29 @@ class PedidoType extends AbstractType
     	
     	$provincia=$builder->getData()->getProvincia()->getId();
     	$departamento=$builder->getData()->getDepartamento()->getId();
+    	$cliente = false;
+    	if ($builder->getData()->getCliente())
+    		$cliente= $builder->getData()->getCliente()->getId();
     	
         $builder
-        	->add('cliente','entity', array('class'=>'Decoyeso\\ClientesBundle\\Entity\\Cliente','label'=>'Cliente','empty_value'=>"Seleccione cliente",'multiple'=>false, 'expanded'=>false))
+        	//->add('cliente','entity', array('class'=>'Decoyeso\\ClientesBundle\\Entity\\Cliente','label'=>'Cliente','empty_value'=>"Seleccione cliente",'multiple'=>false, 'expanded'=>false))
+        ->add('cliente','entity',array(
+        		'label'=>'Cliente',
+        		'class'=>'Decoyeso\\ClientesBundle\\Entity\\Cliente',
+        		'query_builder'=>function(EntityRepository $em) use ($cliente){
+        		if ($cliente) {
+        			return $em->createQueryBuilder('d')->where('d.id= :cliente')->setParameter('cliente',$cliente);
+        		}
+        		else 
+        			return $em->createQueryBuilder('d')->where('d.id != :cliente')->setParameter('cliente',$cliente);
+        		
+        
+        }
+        
+        ))
+        	
+        	
+        	
         	->add('tipo', 'choice', array('label'=>'Tipo','choices'=>array('1'=>'Venta directa','2'=>'Obra de construcción')))
         	->add('nombre')
         	->add('provincia','entity',array(

@@ -89,20 +89,20 @@ class MovimientoStockController extends Controller
         }else{
         	$form= $this->createForm(new MovimientoStockInsumoType(), $entity);
         }
-        
+       
         $form->bindRequest($request);
 
         if ($form->isValid()) {
         	
            $em = $this->getDoctrine()->getEntityManager();
-           $usu=$em->getRepository('UsuarioBundle:Usuario')->find(3);
-            
+           $usu=$this->get('security.context')->getToken()->getUser();
+           
             $entity->setUsuario($usu);
             $entity->setFechaHora(new \DateTime());            
             
             $em->persist($entity);
             $em->flush();
-
+			
             if($tipo=="1"){
             	
             	return $this->redirect($this->generateUrl('movimientostock', array('pararouting' => 'producto')));	$ruta='producto_edit';

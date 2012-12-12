@@ -1,36 +1,59 @@
+{% extends "DecoyesoEstadisticaBundle:Grafico:admin_index.html.twig" %}
 
 
+{% block module_form_estadisticas %}
+		<form action="{% block formUrl %}{% endblock formUrl %}" class="NformGraficos" id="NformGraficos" method="get">
+			{% block form_estadisticas_cont %}
+			
+			<div class="NFormCentrado">
 
+				<div class="module_tit txt3">Desde: <input readonly="readonly" type="text" name="fechaDesde" id="fechaDesde" value="{{ request["fechaDesde"]|date("d-m-Y") }}" class="NfechasGraficos" /> </div>
+				<div class="module_tit txt3">Hasta: <input readonly="readonly" type="text" name="fechaHasta" id="fechaaHasta" value="{{ request["fechaHasta"]|date("d-m-Y") }}" class="NfechasGraficos"/></div>
+				
+				<div class="module_tit txt3">
+					Intervalo: 
+					<select name="intervalo">
+						<option  
+						{% if request["intervalo"] == 1 %}selected="selected"{% endif %} 
+						value="1">Diario</option>
+						<option
+						{% if request["intervalo"] == 7 %}selected="selected"{% endif %}  
+						 value="7">Semanal</option>
+						<option
+						{% if request["intervalo"] == 30 %}selected="selected"{% endif %} 
+						 value="30">Mensual</option>
+						<option
+						{% if request["intervalo"] == 365 %}selected="selected"{% endif %} 
+						 value="365">Anual</option>
+						
+					</select> 
+				</div>
+				
+			</div>
+			
+			{% endblock form_estadisticas_cont %}
+			<button class="btn_green_button right" type="submit">Actualizar</button>
+			
+			<div class="fix"></div>
+		</form>
+{% endblock module_form_estadisticas %}
 
-<div class="NcontChart" style="">
-		<a href="{{ path('grafico_show', { 'grafico': 10 }) }}" class="NImagenVerGrafico txt3">Ver más</a>
+{% block module_content_estadisticas %}
+<div class="NcontChart" style="width: {{ graficos[1].getAncho() }}px;">
+		<a href="{{ path('grafico_show', { 'grafico': graficos[1].getId() }) }}" class="NImagenVerGrafico txt3">Ver más</a>
 		{{ graficos['1'].renderChart() }}        
-</div>			
+</div>
+
+<div class="NcontChart" style="width: {{ graficos[2].getAncho() }}px;">
+		<a href="{{ path('grafico_show', { 'grafico': graficos[2].getId() }) }}" class="NImagenVerGrafico txt3">Ver más</a>
+		{{ graficos['2'].renderChart() }}        
+</div>	
+
+<div class="NcontChart" style="width: {{ graficos[3].getAncho() }}px;">
+		<a href="{{ path('grafico_show', { 'grafico': graficos[3].getId() }) }}" class="NImagenVerGrafico txt3">Ver más</a>
+		{{ graficos['3'].renderChart() }}        
+</div>	
 
 
-    {#
-    {% block formUrl %}{{ path('grafico_modulo', { 'modulo': "proceso" }) }}{% endblock formUrl %}
-    <div class="NcontChart"  style="width: 450px">
-		<a href="" class="NImagenVerGrafico txt3">Ver más</a>
-		<div id="chartdiv2" class="NchartDiv"></div>          
-	</div>          
+{% endblock module_content_estadisticas %}
 
-    <script type="text/javascript">
-        var myChart2 = new FusionCharts('{{ asset("bundles/decoyesoestadistica/js/FusionCharts/Charts/") }}Pie2D', "myChartId", "450", "300", "0", "0");
-        myChart2.setDataXML('<chart palette="2" caption="Mas Fabricados" xAxisName="Month" yAxisName="Units" showValues="0" decimals="0" formatNumberScale="0" useRoundEdges="1"><set label="Jan" value="462"/><set label="Feb" value="857"/><set label="Mar" value="671"/><set label="Apr" value="494"/><set label="May" value="761"/><set label="Jun" value="960"/></chart>');
-        myChart2.render("chartdiv2");
-    </script>   
-    
-   
-    
-   <div class="NcontChart"  style="width: 450px">
-		<a href="" class="NImagenVerGrafico txt3">Ver más</a>
-		<div id="chartdiv3" class="NchartDiv"></div>          
-	</div>          
-
-    <script type="text/javascript">
-        var myChart3 = new FusionCharts('{{ asset("bundles/decoyesoestadistica/js/FusionCharts/Charts/") }}Bar2D', "myChartId", "450", "300", "0", "0");
-        myChart3.setDataXML('<chart palette="2" caption="Productos por mes" xAxisName="Month" yAxisName="Units" showValues="0" decimals="0" formatNumberScale="0" useRoundEdges="1"><set label="Jan" value="462"/><set label="Feb" value="857"/><set label="Mar" value="671"/><set label="Apr" value="494"/><set label="May" value="761"/><set label="Jun" value="960"/></chart>');
-        myChart3.render("chartdiv3");
-    </script>   
-#}

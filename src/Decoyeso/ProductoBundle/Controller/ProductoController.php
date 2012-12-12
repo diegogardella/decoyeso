@@ -62,7 +62,7 @@ class ProductoController extends Controller
         $entity = $em->getRepository('ProductoBundle:Producto')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Producto entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró el producto.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -113,7 +113,11 @@ class ProductoController extends Controller
         if ($form->isValid()) {
         	            
             $em->persist($entity);
-            $em->flush();           
+            $em->flush();   
+
+            //LOG
+            $log = $this->get('log');
+            $log->create($entity, "Producto creado");
 
             $this->gestionarProducto($formProductos['insumos'],$formProductos['productos'],$entity);
             $this->get('session')->setFlash('msj_info','El producto se ha creado correctamente.');
@@ -176,7 +180,7 @@ class ProductoController extends Controller
         
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Producto entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró el producto.');
         }
 
         $editForm = $this->createForm(new ProductoType(), $entity);
@@ -205,7 +209,7 @@ class ProductoController extends Controller
         $entity = $em->getRepository('ProductoBundle:Producto')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Producto entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró el producto.');
         }
 
         $editForm   = $this->createForm(new ProductoType(), $entity);
@@ -220,6 +224,10 @@ class ProductoController extends Controller
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
+            
+            //LOG
+            $log = $this->get('log');
+            $log->create($entity, "Producto actualizado");
             
             $this->gestionarProducto($formProductos['insumos'],$formProductos['productos'],$entity);
             
@@ -278,7 +286,7 @@ class ProductoController extends Controller
         $servicioProductos=$em->getRepository('ProductoBundle:ServicioProducto')->findByProducto($id);        
         $productosPresupuesto=$em->getRepository('PedidoBundle:PresupuestoElemento')->findByElemento($id);
         
-        if ($form->isValid() and count($productoInsumos)==0 and count($productosProductos)==0 and count($servicioProductos)==0 and count($productosPresupuesto)==0){
+        if ($form->isValid() ){
         	
                                
             
@@ -288,12 +296,20 @@ class ProductoController extends Controller
             
             
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Producto entity.');
+                throw $this->createNotFoundException('ERROR: no se encontró el producto.');
             }
 
-            $em->remove($entity);
             
-            $em->flush();
+            try {
+	            $em->remove($entity);
+	            $log = $this->get('log');
+	            $log->create($entity, "Producto Eliminado");
+	            $em->flush();
+            }
+            catch (\Exception $e) {
+            	$this->get('session')->setFlash('msj_info','El producto no se pudo eliminar. Debido a que tiene datos asociados.');
+            	return $this->redirect($this->generateUrl('producto_edit', array('id' => $id)));
+            }
         
         }
 

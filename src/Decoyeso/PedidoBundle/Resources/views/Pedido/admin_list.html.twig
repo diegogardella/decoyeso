@@ -9,7 +9,7 @@ Listado de Pedidos
 
 {% set widthCols =  85/6  %}
 <th style="width: {{ widthCols }}%" {% if entities.isSorted('p.numero') %} class="sorted" {% endif %}>{{ entities.sortable('Número', 'p.numero')|raw }}</th>
-<th style="width: {{ widthCols }}%"{% if entities.isSorted('c.apellido') %} class="sorted" {% endif %}>{{ entities.sortable('Cliente', 'c.apellido')|raw }}</th>
+<th style="width: {{ widthCols }}%"{% if entities.isSorted('c.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Cliente', 'c.nombre')|raw }}</th>
 <th style="width: {{ widthCols }}%"{% if entities.isSorted('p.nombre') %} class="sorted" {% endif %}>{{ entities.sortable('Nombre', 'p.nombre')|raw }}</th>
 <th align="center" style="width: {{ widthCols }}%"{% if entities.isSorted('p.fechaEntrega') %} class="sorted" {% endif %}>{{ entities.sortable('Entregar el', 'p.fechaEntrega')|raw }}</th>
 <th align="center" style="width: {{ widthCols }}%"{% if entities.isSorted('p.prioridad') %} class="sorted" {% endif %}>{{ entities.sortable('Prioridad', 'p.prioridad')|raw }}</th>

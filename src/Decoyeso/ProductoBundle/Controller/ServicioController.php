@@ -66,7 +66,7 @@ class ServicioController extends Controller
         $entity = $em->getRepository('ProductoBundle:Servicio')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Servicio entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró el servicio.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -176,7 +176,7 @@ class ServicioController extends Controller
         
         
         if (!$entity) {
-        	throw $this->createNotFoundException('Unable to find Servicio entity.');
+        	throw $this->createNotFoundException('ERROR: no se encontró el servicio.');
         }
         
         
@@ -207,7 +207,7 @@ class ServicioController extends Controller
         $entity = $em->getRepository('ProductoBundle:Servicio')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Servicio entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró el servicio.');
         }
 
         $editForm   = $this->createForm(new ServicioType(), $entity);
@@ -277,16 +277,24 @@ class ServicioController extends Controller
         
         $servicioPresupuesto=$em->getRepository('PedidoBundle:PresupuestoElemento')->findByElemento($id);
         
-        if ($form->isValid() and count($servicioPresupuesto)==0){
+        if ($form->isValid()){
      
             $entity = $em->getRepository('ProductoBundle:Servicio')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Servicio entity.');
+                throw $this->createNotFoundException('ERROR: no se encontró el servicio.');
             }
 
-            $em->remove($entity);
-            $em->flush();
+            try {
+            	$em->remove($entity);
+            	$log = $this->get('log');
+            	$log->create($entity, "Servicio eliminado");
+            	$em->flush();
+            }
+            catch (\Exception $e) {
+            	$this->get('session')->setFlash('msj_info','El servicio no se pudo eliminar. Debido a que tiene datos asociados.');
+            	return $this->redirect($this->generateUrl('insumo_edit', array('id' => $id)));
+            }
         }
 
         return $this->redirect($this->generateUrl('servicio'));

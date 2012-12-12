@@ -60,7 +60,7 @@ $(document).ready(function(){
 	$("#presupuestoForm").submit(function(){
 		$("#numFilas").val(contarFilas());
 	});
-
+	
 	
 		
 	//Operacion CANTIDAD * PRECIO UNIT. 
@@ -103,11 +103,12 @@ $(document).ready(function(){
 			}
 		});
 		$("#decoyeso_pedidobundle_presupuestotype_subTotal, #decoyeso_pedidobundle_presupuestotype_total").val(subTotal);
+		$("#decoyeso_pedidobundle_presupuestotype_total, #decoyeso_pedidobundle_presupuestotype_precioEntrega").trigger('onLoad');
 		
 	});
 	
 	//Calculo de casilla saldo
-	$("#decoyeso_pedidobundle_presupuestotype_total, #decoyeso_pedidobundle_presupuestotype_precioEntrega").live('change',function(){
+	$("#decoyeso_pedidobundle_presupuestotype_total, #decoyeso_pedidobundle_presupuestotype_precioEntrega").live('change onLoad',function(){
 		
 		if ( 
 			$("#decoyeso_pedidobundle_presupuestotype_total").val() != "" &&

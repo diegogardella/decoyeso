@@ -12,7 +12,7 @@ Crear Producto
 
 {% block form_content %}
 	{% block errorMsj %}{% endblock errorMsj %}
-	<form name="producto" novalidate action="{{ path('producto_create') }}" method="post" {{ form_enctype(form) }}>
+	<form name="producto"  action="{{ path('producto_create') }}" method="post" {{ form_enctype(form) }}>
 	
 	  {% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 	

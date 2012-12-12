@@ -14,6 +14,14 @@ $(document).ready(function(){
 		dateFormat: "dd-mm-yy",
 	});
 	
+	$( "#NformGraficos" ).submit({
+		//if ($("#fechaDesde" ) && $( "#fechaaHasta" )) alert("hola");
+		
+		
+	});
+	
+	
+	
 });
 		
 

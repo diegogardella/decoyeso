@@ -191,7 +191,24 @@ height:100px;
 
 		<table class="presupuestoEncabezado">
 			<tr> 
-				<td> <img class="imgPresupuesto" src="http://{{app.request.server.get('HTTP_HOST') }}/decoyeso/web/imagenes/logo_decoyeso.jpg" />	</td>
+			{#
+				<td>
+				
+				http://{{app.request.server.get('HTTP_HOST') }}{{app.request.server.get('SCRIPT_NAME') }}/../imagenes/logo_decoyeso.jpg			<br>
+				
+				http://{{app.request.server.get('HTTP_HOST') }}/decoyeso/web/imagenes/logo_decoyeso.jpg
+				
+				 <img class="imgPresupuesto" src="http://{{app.request.server.get('HTTP_HOST') }}/decoyeso/web/imagenes/logo_decoyeso.jpg" />	</td>#}
+				 
+				 	<td>
+				
+						
+				
+				
+				 <img class="imgPresupuesto" src="http://{{app.request.server.get('HTTP_HOST') }}{{app.request.server.get('SCRIPT_NAME') }}/../imagenes/logo_decoyeso.jpg" />
+				 
+				 
+				 
 			</tr>
 			<tr>
 			

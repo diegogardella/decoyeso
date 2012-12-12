@@ -34,7 +34,7 @@
 
 	<div id="datosClienteContenido">
 
-				<form action="{% block update_path %}{{ path('cliente_update', { 'id': entity.id }) }}{% endblock update_path %}" method="post" {{ form_enctype(edit_form) }}>
+				<form  action="{% block update_path %}{{ path('cliente_update', { 'id': entity.id }) }}{% endblock update_path %}" method="post" {{ form_enctype(edit_form) }}>
 				{% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 				
 				<div class="form_row">

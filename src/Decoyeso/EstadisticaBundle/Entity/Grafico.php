@@ -21,14 +21,11 @@ class Grafico extends FusionCharts
      */
     private $opciones = array();
     
-    /**
-     * @var string $valores
-     *
-     */
-    //private $xml;
+   
     
+
     
-    
+   
     /**
      * Set opciones
      *

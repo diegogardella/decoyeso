@@ -34,9 +34,12 @@ class LogController extends Controller
 
 		
 		
-		$buscador->setSql('SELECT l FROM LogBundle:Log l join l.usuario u 
-				WHERE l.prioridad != '.$prioridad.' 
-				order by l.fechaHoraCreado DESC');
+		$buscador->setSql("SELECT l FROM LogBundle:Log l join l.usuario u 
+				WHERE l.prioridad != ".$prioridad." AND
+				    			
+    			( l.permisos = 'ROLE_ADMIN' OR
+    			l.permisos = '".$this->get('security.context')->getToken()->getUser()->getPermisos()."' )
+				order by l.fechaHoraCreado DESC");
 	
 		$opciones=array(
 				
@@ -67,8 +70,23 @@ class LogController extends Controller
     public function logsPorUsuarioAction($entity)
     {
     	$em = $this->getDoctrine()->getEntityManager();
+    	
+    	$query = $em->createQuery('
+    			SELECT l FROM LogBundle:Log l
+    			WHERE
+    			l.permisos = :l_permisos OR
+    			l.permisos = :l_permisos_user
+    	
+    			ORDER BY l.fechaCreado ASC
+    			');
+    	$query->setParameters(array(
+    			'l_permisos' => "ROLE_ADMIN",
+    			'l_permisos_user' => $this->get('security.context')->getToken()->getUser()->getPermisos(),
+    			
+    	));
+    	$entities = $query->getResult();
     
-    	$entities = $em->getRepository('LogBundle:Log')->findAll();
+    	//$entities = $em->getRepository('LogBundle:Log')->findAll();
     
     	return $this->render('LogBundle:Log:index.html.twig', array(
     			'entities' => $entities

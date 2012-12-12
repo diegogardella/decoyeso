@@ -31,7 +31,7 @@ class PresupuestoType extends AbstractType
             				
             				'multiple'=> "true",
             				"expanded"=> "true",
-            				"label"=>"Precios Unitarios"))
+            				"label"=>"Mostrar columnas"))
          
             ->add('subTotal', 'text', array('label'=>"",'attr'=> array('class'=>'inputCorto')))
             ->add('total', 'text', array('label'=>"",'attr'=> array('class'=>'inputCorto')))

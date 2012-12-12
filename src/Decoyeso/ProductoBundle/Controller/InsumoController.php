@@ -62,7 +62,7 @@ public function indexAction($pararouting="index")
         $entity = $em->getRepository('ProductoBundle:Insumo')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Insumo entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró el insumo.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -104,6 +104,9 @@ public function indexAction($pararouting="index")
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
             $em->flush();
+            
+            $log = $this->get('log');
+            $log->create($entity, "Insumo creado");
 
             $this->get('session')->setFlash('msj_info','El insumo se ha creado correctamente.');
             
@@ -141,7 +144,7 @@ public function indexAction($pararouting="index")
         
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Insumo entity.');
+            throw $this->createNotFoundException('ERROR: no se encontró el insumo.');
         }
 
         
@@ -169,7 +172,7 @@ public function indexAction($pararouting="index")
         $entity = $em->getRepository('ProductoBundle:Insumo')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Insumo entity.');
+           throw $this->createNotFoundException('ERROR: no se encontró el insumo.');
         }
 
         $editForm   = $this->createForm(new InsumoType(), $entity);
@@ -182,6 +185,9 @@ public function indexAction($pararouting="index")
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
+            
+            $log = $this->get('log');
+            $log->create($entity, "Insumo actualizado");
             
             $this->get('session')->setFlash('msj_info','El insumo se ha modificado correctamente.');
             return $this->redirect($this->generateUrl('insumo_edit', array('id' => $id)));
@@ -210,19 +216,26 @@ public function indexAction($pararouting="index")
         $servicioInsumos=$em->getRepository('ProductoBundle:ServicioInsumo')->findByInsumo($id);
         $insumoPresupuesto=$em->getRepository('PedidoBundle:PresupuestoElemento')->findByElemento($id);
         
-        if ($form->isValid() and count($productoInsumos)==0 and count($servicioInsumos)==0 and count($insumoPresupuesto)==0){
+        if ($form->isValid()){
         	
-        	
-        	
-            
+ 
             $entity = $em->getRepository('ProductoBundle:Insumo')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Insumo entity.');
+                throw $this->createNotFoundException('ERROR: no se encontró el insumo.');
             }
 
-            $em->remove($entity);
-            $em->flush();
+            
+            try {
+            	$em->remove($entity);
+            	$log = $this->get('log');
+            	$log->create($entity, "Insumo Eliminado");
+            	$em->flush();
+            }
+            catch (\Exception $e) {
+            	$this->get('session')->setFlash('msj_info','El insumo no se pudo eliminar. Debido a que tiene datos asociados.');
+            	return $this->redirect($this->generateUrl('insumo_edit', array('id' => $id)));
+            }
         }
 
         return $this->redirect($this->generateUrl('insumo'));

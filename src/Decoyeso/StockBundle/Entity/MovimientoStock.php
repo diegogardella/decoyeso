@@ -56,6 +56,7 @@ class MovimientoStock
      *
      * @ORM\Column(name="cantidad", type="float")
      * @assert\NotBlank(message="Por favor, ingrese cantidad") 
+	 
      */
     private $cantidad;
 
