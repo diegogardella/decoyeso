@@ -208,7 +208,7 @@ class PresupuestoController extends Controller
     	$em = $this->getDoctrine()->getEntityManager();
         $entity  = new Presupuesto();
         $request = $this->getRequest();
-        
+        $items=array();
         $form    = $this->createForm(new PresupuestoType(), $entity);
         $form->bindRequest($request);
         
@@ -269,63 +269,65 @@ class PresupuestoController extends Controller
             	if (trim($items[$i]['designacion'])=='')
             		continue;
             	
-            	$presupuestoElemento[$u]=new PresupuestoElemento();
-            	$presupuestoElemento[$u]->setPresupuesto($entity);
-            	
-            	$elemento=$em->getRepository('ProductoBundle:Elemento')->find($items[$i]['id']);
-            	$presupuestoElemento[$u]->setElemento($elemento);
-            	$presupuestoElemento[$u]->setCantidad($items[$i]["cantidad"]);
-            	$presupuestoElemento[$u]->setTipo(1);
-            	
-            	$em->persist($presupuestoElemento[$u]);
-            	
-            	
-            	$cla=explode('\\',get_class($elemento));
-            	$nombreDeClase=$cla[count($cla)-1];
-            	 
-	            	if($nombreDeClase=="Servicio"){
-	            			            		 
-	            	   $servicioProductos=$em->getRepository('ProductoBundle:ServicioProducto')->findByServicio($elemento->getId());
-	            	   foreach($servicioProductos as $servicioProducto){
-	            			 
-	            	   		$u++;
-	            			$cantidad=$items[$i]["cantidad"]*$servicioProducto->getCantidad();
-	            			
-	            			$presupuestoElemento[$u]=new PresupuestoElemento();
-	            			$presupuestoElemento[$u]->setPresupuesto($entity);
-	            			 
-	            			$presupuestoElemento[$u]->setElemento($servicioProducto->getProducto());
-	            			$presupuestoElemento[$u]->setCantidad($cantidad);
-	            			$presupuestoElemento[$u]->setTipo(2);
-	            			
-	            			$em->persist($presupuestoElemento[$u]);
-	            
-	            		}
-	            		
-	            		
-	            		
-	            		
-	            		$servicioInsumos=$em->getRepository('ProductoBundle:ServicioInsumo')->findByServicio($elemento->getId());
-	            		foreach($servicioInsumos as $servicioInsumo){
-	            			 
-	            			$u++;
-	            			$cantidad=$items[$i]["cantidad"]*$servicioInsumo->getCantidad();
-	            		
-	            		
-	            			$presupuestoElemento[$u]=new PresupuestoElemento();
-	            			$presupuestoElemento[$u]->setPresupuesto($entity);
-	            			 
-	            			$presupuestoElemento[$u]->setElemento($servicioInsumo->getInsumo());
-	            			$presupuestoElemento[$u]->setCantidad($cantidad);
-	            			$presupuestoElemento[$u]->setTipo(2);
-	            		
-	            			$em->persist($presupuestoElemento[$u]);
-	            			 
-	            		}
-	            		
-	            		
-	            	}
-
+	            	if($items[$i]['id']!=''){            		
+	            	
+		            	$presupuestoElemento[$u]=new PresupuestoElemento();
+		            	$presupuestoElemento[$u]->setPresupuesto($entity);
+		            	
+		            	$elemento=$em->getRepository('ProductoBundle:Elemento')->find($items[$i]['id']);
+		            	$presupuestoElemento[$u]->setElemento($elemento);
+		            	$presupuestoElemento[$u]->setCantidad($items[$i]["cantidad"]);
+		            	$presupuestoElemento[$u]->setTipo(1);
+		            	
+		            	$em->persist($presupuestoElemento[$u]);
+		            	
+		            	
+		            	$cla=explode('\\',get_class($elemento));
+		            	$nombreDeClase=$cla[count($cla)-1];
+		            	 
+			            	if($nombreDeClase=="Servicio"){
+			            			            		 
+			            	   $servicioProductos=$em->getRepository('ProductoBundle:ServicioProducto')->findByServicio($elemento->getId());
+			            	   foreach($servicioProductos as $servicioProducto){
+			            			 
+			            	   		$u++;
+			            			$cantidad=$items[$i]["cantidad"]*$servicioProducto->getCantidad();
+			            			
+			            			$presupuestoElemento[$u]=new PresupuestoElemento();
+			            			$presupuestoElemento[$u]->setPresupuesto($entity);
+			            			 
+			            			$presupuestoElemento[$u]->setElemento($servicioProducto->getProducto());
+			            			$presupuestoElemento[$u]->setCantidad($cantidad);
+			            			$presupuestoElemento[$u]->setTipo(2);
+			            			
+			            			$em->persist($presupuestoElemento[$u]);
+			            
+			            		}
+			            		
+			            		
+			            		
+			            		
+			            		$servicioInsumos=$em->getRepository('ProductoBundle:ServicioInsumo')->findByServicio($elemento->getId());
+			            		foreach($servicioInsumos as $servicioInsumo){
+			            			 
+			            			$u++;
+			            			$cantidad=$items[$i]["cantidad"]*$servicioInsumo->getCantidad();
+			            		
+			            		
+			            			$presupuestoElemento[$u]=new PresupuestoElemento();
+			            			$presupuestoElemento[$u]->setPresupuesto($entity);
+			            			 
+			            			$presupuestoElemento[$u]->setElemento($servicioInsumo->getInsumo());
+			            			$presupuestoElemento[$u]->setCantidad($cantidad);
+			            			$presupuestoElemento[$u]->setTipo(2);
+			            		
+			            			$em->persist($presupuestoElemento[$u]);
+			            			 
+			            		}
+			            		
+			            	}	
+			            }
+	
 	            	$u++;
 
             }
@@ -632,8 +634,7 @@ class PresupuestoController extends Controller
 					$log[$key]->setPermisos("ROLE_DEPOSITO");
 					$log[$key]->create(false, 'Inconsistencia en Stock!!! La cantidad de '.$elemento->getNombre().' que salieron de stock debido al presupuesto '.$p->getNumero().' es menor a la cantidad presupuestada en '.$entity->getNumero().'. Para normalizar esta situación, deben reingresar a stock '.$value.' '.$elemento->getUnidad().' de '.$elemento->getNombre().' correspondientes al pedido '.$entity->getPedido()->getNumero().'.');
 					$em->persist($log[$key]);
-				}
-				
+				}				
 				
 			}
              
@@ -679,24 +680,35 @@ class PresupuestoController extends Controller
         $form->bindRequest($request);
 
         if ($form->isValid()) {
+        	
             $em = $this->getDoctrine()->getEntityManager();
             $entity = $em->getRepository('PedidoBundle:Presupuesto')->find($id);
-
+            
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Presupuesto entity.');
+            	throw $this->createNotFoundException('Unable to find Presupuesto entity.');
             }
             
-            //LOG
-            $log = $this->get('log');
-            $log->create($entity, "Presupuesto Eliminado");
-
-            $em->remove($entity);
-            $em->flush();
+            if($entity->getEstado()!=1){
+                
+	            //LOG
+	            $log = $this->get('log');
+	            $log->create($entity, "Presupuesto Eliminado");
+	
+	            $em->remove($entity);
+	            $em->flush();
+	            
+            }else{
+            	$this->get('session')->setFlash('msj_info','El presupuesto no se pudo eliminar. Este se encuentra en estado Aprobado.');
+            	return $this->redirect($this->generateUrl('presupuesto_edit',array('id'=>$id)));
+            }
         }
 
         return $this->redirect($this->generateUrl('presupuesto'));
     }
 
+    
+   
+    
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))

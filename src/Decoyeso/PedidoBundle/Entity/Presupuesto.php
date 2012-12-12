@@ -138,7 +138,7 @@ class Presupuesto
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Decoyeso\PedidoBundle\Entity\PresupuestoElemento", mappedBy="presupuesto")
+     * @ORM\OneToMany(targetEntity="Decoyeso\PedidoBundle\Entity\PresupuestoElemento", mappedBy="presupuesto", cascade={"persist","remove"})
      */
     private $presupuestoElemento;
     

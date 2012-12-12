@@ -16,12 +16,12 @@
 	Datos del Presupuesto
 {% endblock module_tit %}
 
-{% block delete_path %}
-	{{ path('presupuesto_delete', { 'id': entity.id }) }}
-{% endblock delete_path %}
+
 
 {% block menuAcciones %}
-		{{ parent() }}
+		
+		{% render "PedidoBundle:Presupuesto:accionDeleteform" with {'id': entity.id}  %}
+		
 		<a  class="btn_blue right" href="{{ path('presupuesto_por_pedido',{'pedido': entity.pedido.id}) }}">Listar Presupuestos del Pedido</a>
 		<a target="_blank" class="btn_blue right" href="{{ path('presupuesto_imprimir', { 'id': entity.id }) }}">
 			<span class="print_icon"></span>
