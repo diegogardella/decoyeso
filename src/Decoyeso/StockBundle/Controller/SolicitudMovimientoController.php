@@ -153,7 +153,32 @@ class SolicitudMovimientoController extends Controller
         
         $pedido=$em->getRepository('PedidoBundle:Pedido')->find($paramPedido);
         $entity->setPedido($pedido);
-        $entity->setDireccionDestino($entity->getPedido()->getProvincia()->getNombre().",".$entity->getPedido()->getDepartamento()->getNombre().", ".$entity->getPedido()->getLocalidad()->getNombre()." - ".$entity->getPedido()->getDireccionBarrio().", ".$entity->getPedido()->getDireccionCalle().", ".$entity->getPedido()->getDireccionNumero());
+		$dire="";
+        
+        if($entity->getPedido()->getDireccionBarrio()!=""){
+        	$dire="BARRIO ".$entity->getPedido()->getDireccionBarrio();
+        }
+        
+        if($entity->getPedido()->getDireccionCalle()!=""){
+        	if($dire!=""){
+        		$prefix=", ";
+        	}
+        	$dire=$dire.$prefix."CALLE".$entity->getPedido()->getDireccionCalle();
+        }
+        
+        if($entity->getPedido()->getDireccionNumero()!=""){
+        	if($dire!=""){
+        		$prefix=", ";
+        	}
+        	$dire=$dire.$prefix."NÚMERO ".$entity->getPedido()->getDireccionNumero();
+        }
+        
+
+        if($dire!=""){
+        	$dire=" - ".$dire;
+        }
+        
+        $entity->setDireccionDestino($entity->getPedido()->getProvincia()->getNombre().",".$entity->getPedido()->getDepartamento()->getNombre().", ".$entity->getPedido()->getLocalidad()->getNombre().$dire);
         $entity->setFechaHoraRequerido(new \DateTime('tomorrow 08:00'));
         
         $elementosYCantidades=$this->getCantidades($paramPedido);
@@ -242,38 +267,38 @@ class SolicitudMovimientoController extends Controller
     	$request=$this->getRequest();	
     	$form=$request->request->get('form');
     	
-        $entity = $em->getRepository('StockBundle:SolicitudMovimiento')->find($id);
-        $entity->getPedido()->setEstado(6);
-        $entity->setEstado(2);
-        $entity->setUsuarioCerro($this->container->get('security.context')->getToken()->getUser());
-        $entity->setFechaHoraCierre(new \Datetime());
-        $em->persist($entity);
-            	
-    	$movimientoStock=array();
-    	$j=0;
-    	foreach($form['solicitudMovimientoElementoCantidadEntregada'] as $key =>$value){
-    	
-    		$elementoSolicitudMovimiento=$em->getRepository('StockBundle:SolicitudMovimientoElemento')->find($key);
-    		
-    		$movimientoStock[$j]=new MovimientoStock();
-    		$movimientoStock[$j]->setElemento($elementoSolicitudMovimiento->getElemento());
-    		$movimientoStock[$j]->setCantidad($value);
-    		$movimientoStock[$j]->setAccion(2);
-    		$movimientoStock[$j]->setMotivo(2);
-    		$movimientoStock[$j]->setUsuario($this->container->get('security.context')->getToken()->getUser());
-    		$movimientoStock[$j]->setFechaHora(new \DateTime());
-    		$movimientoStock[$j]->setObservacion('Se confirmo solicitud y se entrego producto y/o insumo');
-    	
-    		$em->persist($movimientoStock[$j]);
-    		$em->flush();
-    		
-    		$elementoSolicitudMovimiento->setMovimientoStock($movimientoStock[$j]);
-    		$em->persist($elementoSolicitudMovimiento);
-    		$em->flush();
-
-    		$j++;
-    	
-    	}
+	        $entity = $em->getRepository('StockBundle:SolicitudMovimiento')->find($id);
+	        $entity->getPedido()->setEstado(6);
+	        $entity->setEstado(2);
+	        $entity->setUsuarioCerro($this->container->get('security.context')->getToken()->getUser());
+	        $entity->setFechaHoraCierre(new \Datetime());
+	        $em->persist($entity);
+	            	
+	    	$movimientoStock=array();
+	    	$j=0;
+	    	foreach($form['solicitudMovimientoElementoCantidadEntregada'] as $key =>$value){
+	    	
+	    		$elementoSolicitudMovimiento=$em->getRepository('StockBundle:SolicitudMovimientoElemento')->find($key);
+	    		
+	    		$movimientoStock[$j]=new MovimientoStock();
+	    		$movimientoStock[$j]->setElemento($elementoSolicitudMovimiento->getElemento());
+	    		$movimientoStock[$j]->setCantidad($value);
+	    		$movimientoStock[$j]->setAccion(2);
+	    		$movimientoStock[$j]->setMotivo(2);
+	    		$movimientoStock[$j]->setUsuario($this->container->get('security.context')->getToken()->getUser());
+	    		$movimientoStock[$j]->setFechaHora(new \DateTime());
+	    		$movimientoStock[$j]->setObservacion('Se confirmo solicitud y se entrego producto y/o insumo');
+	    	
+	    		$em->persist($movimientoStock[$j]);
+	    		$em->flush();
+	    		
+	    		$elementoSolicitudMovimiento->setMovimientoStock($movimientoStock[$j]);
+	    		$em->persist($elementoSolicitudMovimiento);
+	    		$em->flush();
+	
+	    		$j++;
+	    	
+	    	}
     	
     	
     	

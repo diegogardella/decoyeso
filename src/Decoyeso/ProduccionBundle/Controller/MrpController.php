@@ -21,6 +21,8 @@ class MrpController extends Controller
 	
 	public function indexAction(){
 		
+		$matrizMrpProductos=array();
+		
 		$cantidadDeDias=10;
 		$dias=array();
 		for($i=0;$i<$cantidadDeDias;$i++){
@@ -47,9 +49,10 @@ class MrpController extends Controller
     {
     	$em = $this->getDoctrine()->getEntityManager();    
     	$entity = $em->getRepository('ProductoBundle:Elemento')->find($id);
-    	
     	$cantidadDeDias=10;
     	$dias=array();
+    	$matrizMRP=array();
+    	
     	for($i=0;$i<$cantidadDeDias;$i++){
     		$dias[]=strtotime('NOW + '.$i.' day');
     	}
@@ -72,12 +75,13 @@ class MrpController extends Controller
     	$em = $this->getDoctrine()->getEntityManager();
     	$entity = $em->getRepository('ProductoBundle:Producto')->findBy(array(),array('tipo'=>'ASC','nombre'=>'ASC'));
     	$cantidadDeDias=10;
-    	$matrizProductos=array();
+    	$matrizMrpProductos=array();
+    	$bHayPlan=0;
     	
     	$cantidadProductosEnIntervalo=0;
     	foreach($entity as $producto){
     		if($producto->getCantidadSolicitadaStock()>0){
-    	
+    			$bHayPlan=1;
     			$bSiEstaEnElIntervalo=0;
     			foreach ($producto->getSolicitudMovimientoElemento() as $solicitudesElementos){
     				$fechaHoraSolicitud=(int)$solicitudesElementos->getSolicitudMovimiento()->getFechaHoraRequerido()->format('z');
@@ -100,70 +104,69 @@ class MrpController extends Controller
     	}
     	
     	    	
+    	if($bHayPlan==1){
+    		
     	
-    	// calculo las cantidades eop acumuldas por día
-    	$arrayCantidadesEomAcumuladas=array();    	
-    	foreach($matrizMrpProductos as $elementosMatrizMrpProductos =>$valorElementoMatrizMrpProductos ){
-    		
-    		foreach($valorElementoMatrizMrpProductos['mrp'] as $elementosEOP){
-    			    			
-    			if(array_key_exists($elementosEOP["numeroDia"],$arrayCantidadesEomAcumuladas)){
-    				$arrayCantidadesEomAcumuladas[$elementosEOP["numeroDia"]]=$arrayCantidadesEomAcumuladas[$elementosEOP["numeroDia"]]+$elementosEOP["emisionOrdenPlanificada"];
-    				
-    			}else{
-    				$arrayCantidadesEomAcumuladas[$elementosEOP["numeroDia"]]=$elementosEOP["emisionOrdenPlanificada"];
-    			}
-    			
-    		}
-    		
+	    	// calculo las cantidades eop acumuldas por día
+	    	$arrayCantidadesEomAcumuladas=array();    	
+	    	foreach($matrizMrpProductos as $elementosMatrizMrpProductos =>$valorElementoMatrizMrpProductos ){
+	    		
+	    		foreach($valorElementoMatrizMrpProductos['mrp'] as $elementosEOP){
+	    			    			
+	    			if(array_key_exists($elementosEOP["numeroDia"],$arrayCantidadesEomAcumuladas)){
+	    				$arrayCantidadesEomAcumuladas[$elementosEOP["numeroDia"]]=$arrayCantidadesEomAcumuladas[$elementosEOP["numeroDia"]]+$elementosEOP["emisionOrdenPlanificada"];
+	    				
+	    			}else{
+	    				$arrayCantidadesEomAcumuladas[$elementosEOP["numeroDia"]]=$elementosEOP["emisionOrdenPlanificada"];
+	    			}
+	    			
+	    		}
+	    		
+	    	}
+    	
+    	
+    	
+		    	// recalculo las eop por día
+		    	$cantidadReal=0;
+		    	$cantidadRealAcumuladaTotal=0;
+		    	$cantidadRealAcumuladaElemento=array();
+		    	$hoy=(int)date('z',strtotime('NOW'));
+		    	$hoyMacantidadDeDias=(int)date('z',strtotime('NOW + '.$cantidadDeDias.' DAY'))-1;
+		    	
+		    	
+		    	
+		    	for($d=$hoyMacantidadDeDias;$d>=$hoy;$d--){
+		    		
+		    		$arrayCantidadesEomAcumuladas[$d]=$arrayCantidadesEomAcumuladas[$d]+$cantidadRealAcumuladaTotal;
+		    		$cantidadRealAcumuladaTotal=0;
+		    		
+		    		for($j=0;$j<count($matrizMrpProductos);$j++){
+		    			
+		    			if($d<$hoyMacantidadDeDias-1){
+		    				
+		    				$matrizMrpProductos[$j]['mrp'][$d]['emisionOrdenPlanificada']=$matrizMrpProductos[$j]['mrp'][$d]['emisionOrdenPlanificada']+$cantidadRealAcumuladaElemento[$d+1][$j];
+		    			}
+		    			
+		    			
+		    			if($arrayCantidadesEomAcumuladas[$d]>240 and $d>$hoy){
+		    			
+		    				$cantidadReal=round(($matrizMrpProductos[$j]['mrp'][$d]['emisionOrdenPlanificada']/$arrayCantidadesEomAcumuladas[$d])*240);
+		    				$cantidadRealAcumuladaElemento[$d][$j]=($matrizMrpProductos[$j]['mrp'][$d]['emisionOrdenPlanificada']-$cantidadReal);
+		    				$cantidadRealAcumuladaTotal=$cantidadRealAcumuladaTotal+ ($matrizMrpProductos[$j]['mrp'][$d]['emisionOrdenPlanificada']-$cantidadReal);
+		    				
+		    				$matrizMrpProductos[$j]['mrp'][$d]['emisionOrdenPlanificada']=$cantidadReal;
+		    				 
+		    			}else{
+		    				$cantidadRealAcumuladaElemento[$d][$j]=0;
+		    			}
+		    			
+		    		}
+		    	}
+    	
     	}
     	
-    	
-    	
-    	// recalculo las eop por día
-    	$cantidadReal=0;
-    	$cantidadRealAcumuladaTotal=0;
-    	$cantidadRealAcumuladaElemento=array();
-    	$hoy=(int)date('z',strtotime('NOW'));
-    	$hoyMacantidadDeDias=(int)date('z',strtotime('NOW + '.$cantidadDeDias.' DAY'))-1;
-    	
-    	
-    	
-    	for($d=$hoyMacantidadDeDias;$d>=$hoy;$d--){
-    		
-    		$arrayCantidadesEomAcumuladas[$d]=$arrayCantidadesEomAcumuladas[$d]+$cantidadRealAcumuladaTotal;
-    		$cantidadRealAcumuladaTotal=0;
-    		
-    		for($j=0;$j<count($matrizMrpProductos);$j++){
-    			
-    			if($d<$hoyMacantidadDeDias-1){
-    				
-    				$matrizMrpProductos[$j]['mrp'][$d]['emisionOrdenPlanificada']=$matrizMrpProductos[$j]['mrp'][$d]['emisionOrdenPlanificada']+$cantidadRealAcumuladaElemento[$d+1][$j];
-    			}
-    			
-    			
-    			if($arrayCantidadesEomAcumuladas[$d]>240 and $d>$hoy){
-    			
-    				$cantidadReal=round(($matrizMrpProductos[$j]['mrp'][$d]['emisionOrdenPlanificada']/$arrayCantidadesEomAcumuladas[$d])*240);
-    				$cantidadRealAcumuladaElemento[$d][$j]=($matrizMrpProductos[$j]['mrp'][$d]['emisionOrdenPlanificada']-$cantidadReal);
-    				$cantidadRealAcumuladaTotal=$cantidadRealAcumuladaTotal+ ($matrizMrpProductos[$j]['mrp'][$d]['emisionOrdenPlanificada']-$cantidadReal);
-    				
-    				$matrizMrpProductos[$j]['mrp'][$d]['emisionOrdenPlanificada']=$cantidadReal;
-    				 
-    			}else{
-    				$cantidadRealAcumuladaElemento[$d][$j]=0;
-    			}
-    			
-    		}
-    	}
-    	
-    	
-    	
-    	
-    	if($entityId==0){
-    		$valorRetornado=$matrizMrpProductos;
-    	}else{
-    		
+    	$valorRetornado=$matrizMrpProductos;
+    	if($entityId!=0 and $bHayPlan==1){
     		for($i=0;$i<count($matrizMrpProductos);$i++){
     			if($matrizMrpProductos[$i]['producto']->getId()==$entityId){
     				$valorRetornado=$matrizMrpProductos[$i]['mrp'];
