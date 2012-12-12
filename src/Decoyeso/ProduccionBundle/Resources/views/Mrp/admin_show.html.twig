@@ -28,8 +28,8 @@
 							<thead>
 								<tr>
 									<th width="300"></th>
-									{% for matriz in matrizMRP %}
-										<th width="100" align="center"> Semana {{ matriz.numeroSemana }}</th>
+									{% for dia in dias %}
+										<th width="100" align="center">{{ dia | date('d/m') }}</th>
 									{% endfor %}
 								</tr>
 							</thead>
@@ -60,10 +60,17 @@
 									{% endfor %}
 								</tr>
 								<tr>
-									<td>EOP</td>
+									<td>Cantidad a Producir</td>
 									{% for matriz in matrizMRP %}
-										<td align="center">{{ matriz.emisionOrdenPlanificada }}</td>
+										<td align="center">
+											{% if matriz.emisionOrdenPlanificada>240 %}
+												<span style="color:red; font-weight: bold">{{ matriz.emisionOrdenPlanificada }}</span>
+											{% else %}
+												{{ matriz.emisionOrdenPlanificada }}
+											{% endif %}
+										</td>
 									{% endfor %}
+									
 								</tr>
 							</tbody>						
 						</table>

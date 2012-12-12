@@ -124,6 +124,62 @@ class Producto extends Elemento
     	return $cantidad;    	 
     }
     
+    public function getStockOptimo(){
+    	
+    	$arrayCantidadesOptimas=array();
+    	$i=0;
+    	$sumatoria=0;
+    	$sumatoriaDesvio=0;
+    	$xMenosMediaAlCuadrado=0;
+    	$amplitudIntervalo=0;
+    	$desvioEstandar=0;
+    	$media=0;
+    	
+    	
+    	
+    	foreach($this->getSolicitudMovimientoElemento() as $solicitudMovimientoElemento){
+    		
+    		if($solicitudMovimientoElemento->getSolicitudMovimiento()->getEstado()==2){
+    			
+				if($solicitudMovimientoElemento->getSolicitudMovimiento()->getFechaHoraRequerido()->format('y')>=(date('y',strtotime('now -1 YEAR -2 MONTH')))){
+					
+    				$arrayCantidadesOptimas[$i]=$solicitudMovimientoElemento->getCantidadSolicitada();
+    				$sumatoria=$sumatoria+$solicitudMovimientoElemento->getCantidadSolicitada();
+    				$i=$i+1;
+    				
+    			}	
+    		}
+    	}
+    	
+
+    	
+    	//nivelar muestra cuando existan menos de 10 muestras
+    	if(count($arrayCantidadesOptimas)<10){
+    		for($i=count($arrayCantidadesOptimas);$i<10;$i++){
+    			$arrayCantidadesOptimas[$i]=0;
+    		}	
+    	}
+    	
+    	    	
+    	if(count($arrayCantidadesOptimas)>0){
+    		$media=$sumatoria/count($arrayCantidadesOptimas);
+    		sort($arrayCantidadesOptimas, SORT_NUMERIC);
+    	}
+    	    	
+	
+
+    	for($k=0;$k<count($arrayCantidadesOptimas);$k++){
+    		$sumatoriaDesvio=$sumatoriaDesvio+(pow(($arrayCantidadesOptimas[$k]-$media),2));
+    	}
+    	
+    	if(count($arrayCantidadesOptimas)>0){
+    		$desvioEstandar=round(sqrt($sumatoriaDesvio/count($arrayCantidadesOptimas)));
+    	}
+
+    	return $desvioEstandar+$media;
+    	
+    }
+    
     
     public function getCantidadEntregadaStockSolicitud($pedido=0){
     	

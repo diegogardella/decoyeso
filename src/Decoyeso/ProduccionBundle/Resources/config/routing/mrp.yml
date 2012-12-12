@@ -1,3 +1,7 @@
+mrp_index:
+    pattern: /
+    defaults: {_controller: "DecoyesoProduccionBundle:Mrp:index"}
+    
 mrp_show:
     pattern:  /{id}/show
     defaults: { _controller: "DecoyesoProduccionBundle:Mrp:show" }
