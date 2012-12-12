@@ -73,6 +73,7 @@ class MrpController extends Controller
     	$entity = $em->getRepository('ProductoBundle:Producto')->findBy(array(),array('tipo'=>'ASC','nombre'=>'ASC'));
     	$cantidadDeDias=10;
     	$matrizProductos=array();
+    	$matrizMrpProductos = array();
     	
     	$cantidadProductosEnIntervalo=0;
     	foreach($entity as $producto){

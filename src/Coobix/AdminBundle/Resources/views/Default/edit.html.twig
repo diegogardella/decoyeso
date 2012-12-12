@@ -113,7 +113,7 @@
 	{%endblock msj_info%}
 		
 	{% block form_content %}
-		<form novalidate action="{% block update_path %}{{ path('admin_entity_update') }}{% endblock update_path %}" method="post" {{ form_enctype(edit_form) }}>
+		<form  action="{% block update_path %}{{ path('admin_entity_update') }}{% endblock update_path %}" method="post" {{ form_enctype(edit_form) }}>
 		{% form_theme edit_form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 		{{ form_widget(edit_form) }}
 			<p>

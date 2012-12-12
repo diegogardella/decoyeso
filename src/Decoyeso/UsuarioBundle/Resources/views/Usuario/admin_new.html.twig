@@ -18,7 +18,7 @@
 
 		{% block form_content %}
 			{% block errorMsj %}{% endblock errorMsj %}
-			<form novalidate action="{{ path('usuario_create') }}" method="post" {{ form_enctype(form) }}>
+			<form action="{{ path('usuario_create') }}" method="post" {{ form_enctype(form) }}>
 			{% form_theme form 'CoobixAdminBundle:Form:Fields.html.twig' %}
 			
 			
