@@ -266,6 +266,17 @@ class SolicitudMovimientoController extends Controller
     	$em=$this->getDoctrine()->getEntityManager();
     	$request=$this->getRequest();	
     	$form=$request->request->get('form');
+    	$bError=0;
+    	
+    	foreach($form['solicitudMovimientoElementoCantidadEntregada'] as $key =>$value){
+    		$elementoSolicitudMovimiento=$em->getRepository('StockBundle:SolicitudMovimientoElemento')->find($key);
+    		
+    		if($value=='' or $value>$elementoSolicitudMovimiento->getCantidadSolicitada()){
+    			$bError=1;
+    		}
+    	}
+    	
+    	if($bError==0){
     	
 	        $entity = $em->getRepository('StockBundle:SolicitudMovimiento')->find($id);
 	        $entity->getPedido()->setEstado(6);
@@ -300,7 +311,9 @@ class SolicitudMovimientoController extends Controller
 	    	
 	    	}
     	
-    	
+    	}else{
+    		$this->get('session')->setFlash('msj_info','No se pudo confirmar. Verifique que las cantidades entregadas no sean mayores a las solicitadas o nulas');
+    	}
     	
     	
         return $this->redirect($this->generateUrl('solicitudmovimiento_edit', array('id' => $id)));

@@ -1,7 +1,7 @@
 {% macro menuOpciones(pedido) %}
 
 
-			{% if (pedido.estado > 3) %}
+			{% if (pedido.estado > 3 and is_granted('ROLE_SUPER_ADMIN')) %}
 				<li><a href="{{path('solicitudmovimiento_por_pedido',{'pedido':pedido.id})}}">Listar Solicitudes a Stock</a></li>
 				<li><a href="{{path('solicitudmovimiento_new',{'paramPedido':pedido.id})}}">Crear Solicitud a Stock</a></li>
 				<li class="separador"></li>
@@ -41,7 +41,7 @@
 		<a  href="{{ path('presupuesto_por_pedido',{'pedido': pedido.id}) }}" class="btn_blue right">Listar Presupuestos Candidatos a Ser Aprobados</a>
 	{% endif %}
 	
-	{% if (pedido.estado == 4 ) %}
+	{% if (pedido.estado == 4 ) and is_granted('ROLE_SUPER_ADMIN') %}
 		<a  href="{{path('solicitudmovimiento_new',{'paramPedido':pedido.id})}}" class="btn_blue right">Crear Solicitud a Stock</a>
 	{% endif %}
 		

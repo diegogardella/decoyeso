@@ -176,7 +176,7 @@ class Producto extends Elemento
     		$desvioEstandar=round(sqrt($sumatoriaDesvio/count($arrayCantidadesOptimas)));
     	}
 
-    	return $desvioEstandar+$media;
+    	return round($desvioEstandar+$media);
     	
     }
     

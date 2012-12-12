@@ -26,12 +26,12 @@
 {% endblock menuOpcionesItems %}
 
 {%block opcionesGuia  %}
-	{% if (entity.estado ==6 or entity.estado ==8) %}
+	{# if (entity.estado ==6 or entity.estado ==8) %}
 		<a  href="{{ path('pedido_cambiarEstado',{'id': entity.id,'estado':7}) }}" class="btn_green_button right">Finalizar Pedido</a>
 	{% endif %}
 	{% if (entity.estado ==7 ) %}
 		<a  href="{{ path('pedido_cambiarEstado',{'id': entity.id,'estado':8}) }}" class="btn_green_button right">Reabrir Pedido</a>
-	{% endif %}
+	{% endif #}
 	
 	{{ macrosPedido.guia(entity) }}
 	
